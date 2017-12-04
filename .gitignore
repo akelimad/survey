@@ -1,0 +1,5 @@
+apps/upload
+vendor
+composer.lock
+error_log
+error.log
