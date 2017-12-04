@@ -60,9 +60,6 @@ class View {
      * @author Mhamed Chanchaf
      */
     public static function getPage($viewPath, $variables=[], $file=null){
-        $variables['site'] = site_url();
-        $variables['jsurl'] = site_url('assets/js/');
-        $variables['cssurl'] = site_url('assets/css/');
 
         if(session_id() == '' || !isset($_SESSION)) {
             session_start();
@@ -71,12 +68,14 @@ class View {
         global $lang;
         global $languages;
 
-        $variables['lang'] = $lang;
+        $variables['lang']      = $lang;
         $variables['languages'] = $languages;
-        $variables['roles'] = getDB()->prepare("SELECT * FROM root_roles WHERE login=?", [$_SESSION['abb_admin']], true);
+        $variables['roles']     = getDB()->findOne('root_roles', 'login', $_SESSION['abb_admin']) ?: [];
+        $variables['site']      = site_url();
+        $variables['jsurl']     = site_url('assets/js/');
+        $variables['cssurl']    = site_url('assets/css/');
+        $variables['ariane']    = implode(' > ', array_map('ucfirst', $variables['breadcrumbs']));
         $variables['nom_page_site'] = implode(' || ', array_map('strtoupper', $variables['breadcrumbs']));;
-        $variables['ariane'] = implode(' > ', array_map('ucfirst', $variables['breadcrumbs']));
-
         ob_start(); // Initiate the output buffer
         ob_clean();
         self::get($viewPath, $variables, $file);

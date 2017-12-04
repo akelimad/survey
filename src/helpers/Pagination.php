@@ -34,7 +34,7 @@ class Pagination
         'max_pages_to_fetch'            => 1000000,
         'url'                           => '',
         'url_page_number_var'           => '*VAR*',
-        'text_prev'                     => '&laquo; PrÃ©cÃ©dent',
+        'text_prev'                     => '&laquo; Précédent',
         'text_next'                     => 'Suivant &raquo;',
         'text_first'                    => '&laquo; Premier',
         'text_last'                     => 'Dernier &raquo;',

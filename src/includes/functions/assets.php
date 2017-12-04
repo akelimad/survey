@@ -63,6 +63,7 @@ function add_js($unique_id, $params=[]){
 	print $output;
 });
 
+
 /**
  * Register global CSS and JS
  */
@@ -91,6 +92,15 @@ add_css('font-awesome', [
 	'admin' => true
 ]);
 
+// iziToast
+add_js('iziToast', [
+	'src' => SITE_URL .'assets/vendors/izi-toast/css/iziToast.min.css', 
+	'admin' => true
+]);
+add_css('iziToast', [
+	'src'=> SITE_URL .'assets/vendors/izi-toast/js/iziToast.min.js', 
+	'admin' => true
+]);
 
 add_js('jquery-validate', [
 	'src' => SITE_URL .'assets/js/jquery.validate.min.js', 

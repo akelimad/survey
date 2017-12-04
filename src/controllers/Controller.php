@@ -1,14 +1,20 @@
 <?php
-/** 
+/**
  * Controller
  *
- * @author Mhamed Chanchaf
+ * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ *
+ * @package app.controllers
+ * @version 1.0
+ * @since 1.5.0
  */
 namespace App\Controllers; 
 
 
 class Controller
 {
+
+	
 
 	/**
 	 * Get Prev Key From array

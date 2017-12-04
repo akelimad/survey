@@ -41,8 +41,8 @@ return array(
     'validate_valid_json_string'    => 'Le champ {field} doit avoir un format JSON',
 
     // custom messages
-    'validate_cim_string' => 'Le champ {field} ne doit pas contenir des caractÃ¨res spÃ©ciaux',
-    'validate_cim_alpha_non_numeric' => 'Le champ {field} ne doit pas contenir des chiffres ou caractÃ¨res spÃ©ciaux',
-    'validate_cim_alpha_numeric' => 'Le champ {field} ne doit pas contenir des caractÃ¨res spÃ©ciaux',
-    'validate_cim_phone' => 'Le champ {field} n\'est pas un numero de tÃ©lÃ©phone valid.',
+    'validate_cim_string' => 'Le champ {field} ne doit pas contenir des caractères spéciaux',
+    'validate_cim_alpha_non_numeric' => 'Le champ {field} ne doit pas contenir des chiffres ou caractères spéciaux',
+    'validate_cim_alpha_numeric' => 'Le champ {field} ne doit pas contenir des caractères spéciaux',
+    'validate_cim_phone' => 'Le champ {field} n\'est pas un numero de téléphone valid.',
 );
