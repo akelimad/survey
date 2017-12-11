@@ -215,11 +215,11 @@ div#menuBG_bottom{border-top:1px solid white; 	margin:0 0 8px;width:160px;height
  background-repeat: no-repeat;	background-position: center right;cursor: pointer;
 }
 /* tables jquery */
-table.tablesorter {background-color: #e8f0f0;margin:10px 0 15px;width: 100%;text-align: left;}
-table.tablesorter thead tr th, table.tablesorter tfoot tr th {background-color: #e6EEEE;border: 1px solid #FFF;	font-size: 8pt;padding: 4px;}
-table.tablesorter thead tr .header {background-repeat: no-repeat;	background-position: center right;cursor: pointer;}
+table.tablesorter, #chm-table {background-color: #e8f0f0;margin:10px 0 15px;width: 100%;text-align: left;}
+table.tablesorter thead tr th, table.tablesorter tfoot tr th, #chm-table thead tr th, #chm-table tfoot tr th {background-color: #e6EEEE;border: 1px solid #FFF;	font-size: 8pt;padding: 4px;}
+table.tablesorter thead tr .header, #chm-table thead tr .header {background-repeat: no-repeat;	background-position: center right;cursor: pointer;}
 /*   taha enlever l'espace vide dans la table des offres environement:employeur padding: 4px;*/
-table.tablesorter tbody td {color: #3D3D3D;background-color: #e8f0f0;vertical-align: top;}
+table.tablesorter tbody td, #chm-table tbody td {color: #3D3D3D;background-color: #e8f0f0;vertical-align: top;}
 table.tablesorter tbody tr.odd td {}
 /*table.tablesorter tbody tr.marked td {background-color:#FC9;}*/
 table.tablesorter thead tr .headerSortUp { }
@@ -1038,4 +1038,41 @@ ul.pagination {
 }
 .pagination-right {
   text-align: right;
+}
+
+
+#chm-table{
+  width:100% !important;
+}
+
+#chm-table thead th, #chm-table thead th a, #chm-table thead th a>*{
+  color: #fff !important;
+}
+
+.panel-default hr{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.panel-body h5{
+  color: #777;
+}
+
+.list-group-item {
+  padding: 6px 15px !important;
+  border: none !important;
+  border-width: 0 !important;
+  border-left: 3px solid #fff !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+
+.list-group-item-info {
+  background: <?= css_bg_from_hex($color_bg, 0.3); ?> !important;
+}
+
+.btn-primary {
+  background-color: <?= $color_bg ?> !important;
+  border-color: <?= css_bg_from_hex($color_bg, 0.2); ?> !important;
 }

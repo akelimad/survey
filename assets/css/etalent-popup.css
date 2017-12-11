@@ -1,0 +1,110 @@
+.popup, .alert-popup, .cancel-popup {
+  position: relative;
+  background: #f7f6f5;
+  color: #665f5d;
+  margin: 20px auto;
+  padding: 48px 15px 15px;
+  max-width: 100%;
+  display: table;
+}
+
+.white-popup {
+    position: relative;
+    background: #FFF;
+    width: auto;
+    max-width: 550px;
+    margin: 20px auto;
+    padding: 20px 15px 15px;
+}
+
+.mfp-close {
+  width: 20px !important;
+  height: 20px !important;
+  background: transparent; 
+  color: #282828;
+}
+
+.mfp-close:before {
+    top: -4px !important;
+        right: 0px;
+    position: absolute !important;
+}
+
+.mfp-close:hover {
+  color: #fff;
+}
+
+.cancel-popup .mfp-close {
+  display: none;
+}
+
+.popup-header{
+  position: absolute;
+  top: 0px;
+  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: 400;
+  background: #e32b2b;
+  width: 100%;
+  left: 0px;
+  color: #fff;
+  padding: 1px 14px 4px;
+}
+
+.cancel-popup .message {
+  border: 2px solid #a1a09c;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  color: #a1a09c;
+  font-size: 16px;
+  padding: 10px 0;
+  margin-bottom: 10px;
+}
+
+.cancel-popup .buttons a {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  border-radius: 0;
+}
+
+.cancel-popup .buttons a.btn-danger {
+  background-color: #e30613;
+  border-color: #e30613;
+}
+
+
+.cancel-popup .buttons a.btn-default,
+.cancel-popup .buttons a.btn-default:hover {
+  background-color: #665f5d !important;
+  border-color: #665f5d !important;
+  color: #fff !important;
+}
+
+
+/* Popup with title */
+.with-title {
+    padding: 45px 15px 15px !important;
+}
+
+.with-title .popup-title{
+  background-color: #c83926;
+  color: #fff;
+  position: absolute;
+  width: 100%;
+  left: 0px;
+  top: 0;
+  text-transform: uppercase;
+  padding: 2px 15px 5px 10px;
+}
+
+.with-title .mfp-close {
+  color: #fff !important;
+  opacity: .5;
+}
+
+.with-title .mfp-close:hover {
+    background-color: transparent !important;
+    opacity: 1;
+    color: #fff;
+}
