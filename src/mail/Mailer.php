@@ -65,7 +65,7 @@ class Mailer
 				// $mail->SMTPDebug = SMTP::DEBUG_SERVER; // 2
 				$mail->Host       = SMTP_host;
 				$mail->Port       = SMTP_port;
-				$mail->Username   = SMTP_user_name;
+				$mail->Username   = SMTP_username;
 				$mail->Password   = SMTP_password;
 			}
 

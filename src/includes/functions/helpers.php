@@ -1,16 +1,10 @@
 <?php
 /**
- * Unlink file
+ * Helpers
  *
- * @return string $path
+ * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @since 04/10/2017
  */
-function unlinkFile($path) {
-	chown($path, 666);
-	if (unlink($path))
-		return true;
-
-	return false;
-}
 
 
 /**
@@ -29,6 +23,18 @@ function redirect($url, $timer=null) {
 }
 
 
+/**
+ * Tell if a page is being called via Ajax
+ *
+ * @return bool
+ */
+function is_ajax() {
+	return ( 
+		isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+		strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'
+	);
+}
+
 
 /**
  * Get breadcrumbs
@@ -41,33 +47,33 @@ function redirect($url, $timer=null) {
 function get_breadcrumbs($page_title, $args=[]) {
 	$class = (!empty($args['buttons'])) ? 'col-md-9' : 'col-md-12';
 	$breadcrumbs = '<section id="titlebar2"><div class="container"><div class="row mb-0"><div class="'. $class .'">
-	<h2 id="cim_page_title">'. $page_title .'</h2><nav id="breadcrumbs"><ul><li>Vous Ãªtes ici :</li><li><a href="'. site_url() .'">Accueil</a></li>';
+        <h2 id="cim_page_title">'. $page_title .'</h2><nav id="breadcrumbs"><ul><li>Vous êtes ici :</li><li><a href="'. site_url() .'">Accueil</a></li>';
 
-	if( !empty($args['items']) ) : foreach ($args['items'] as $key => $item) :
-		$breadcrumbs .= '<li><a href="'. $item['url'] .'">'. $item['name'] .'</a></li>';
-	endforeach; endif;
+		if( !empty($args['items']) ) : foreach ($args['items'] as $key => $item) :
+			$breadcrumbs .= '<li><a href="'. $item['url'] .'">'. $item['name'] .'</a></li>';
+		endforeach; endif;
 
 	$breadcrumbs .= '<li>'. $page_title .'</li></ul></nav></div>';
 
-	if(!empty($args['buttons'])) :
-		$breadcrumbs .= '<div class="col-md-3">';
-		foreach ($args['buttons'] as $key => $btnArgs) :
-			$btnDefaultArgs = array(
-				'text'  => 'Sans titre',
-				'href'  => '#',
-				'class' => 'btn btn-default',
-				'icon'  => ''
-			);
-			$args = array_merge($btnDefaultArgs, $btnArgs);
+    if(!empty($args['buttons'])) :
+   		$breadcrumbs .= '<div class="col-md-3">';
+   		foreach ($args['buttons'] as $key => $btnArgs) :
+   			$btnDefaultArgs = array(
+		        'text'  => 'Sans titre',
+		        'href'  => '#',
+		        'class' => 'btn btn-default',
+		        'icon'  => ''
+		    );
+   		$args = array_merge($btnDefaultArgs, $btnArgs);
 
-			$icon = ($args['icon']!='') ? '<i class="'. $args['icon'] .'"></i>&nbsp;' : '';
-			$breadcrumbs .= '<a class="'. $args['class'] .'" href="'. $args['href'] .'">'. $icon . $args['text'] .'</a>';
+   		$icon = ($args['icon']!='') ? '<i class="'. $args['icon'] .'"></i>&nbsp;' : '';
+   		$breadcrumbs .= '<a class="'. $args['class'] .'" href="'. $args['href'] .'">'. $icon . $args['text'] .'</a>';
 
-		endforeach;
-		$breadcrumbs .= '</div>';
-	endif;
+   		endforeach;
+   		$breadcrumbs .= '</div>';
+    endif;
 
-	$breadcrumbs .= '</div></section>';
+    $breadcrumbs .= '</div></section>';
 
 	print($breadcrumbs);
 }
@@ -107,29 +113,13 @@ function letters_limit($content, $limit) {
 	$content = strip_tags($content);
 	if (strlen($content) > $limit) {
 	    // truncate content
-		$stringCut = substr($content, 0, $limit);
+	    $stringCut = substr($content, 0, $limit);
 	    // make sure it ends in a word so assassinate doesn't become ass...
-		$content = substr($stringCut, 0, strrpos($stringCut, ' ')).'...'; 
+	    $content = substr($stringCut, 0, strrpos($stringCut, ' ')).'...'; 
 	}
 	return $content;
 }
 
-
-/**
- * Get alert
- *
- * @param string $type
- * @param mixt $messages
- * @param bool $dismiss
- *
- * @author Mhamed Chanchaf
- */
-function get_alert($type, $messages, $dismiss=true){
-	\App\View::get('alerts/'.$type, [
-		'messages' => (is_array($messages)) ? $messages : array($messages),
-		'dismissible' => $dismiss
-	]);
-}
 
 
 /**
@@ -160,33 +150,14 @@ function isBackend(){
 function isLogged($accountType){
 	switch ($accountType) {
 		case 'candidat':
-		return ( isset($_SESSION['abb_login_candidat']) );
-		break;
-		case 'employeur':
-		return ( isset($_SESSION['login']) );
-		break;
+			return ( isset($_SESSION['abb_login_candidat']) );
+			break;
 		case 'admin':
-		return ( isset($_SESSION['abb_admin']) );
-		break;
-		case 'agentcom':
-		return ( isset($_SESSION['agentcom']) );
-		break;
+			return ( isset($_SESSION['abb_admin']) );
+			break;
 	}
 	return false;
 }
-
-
-/**
- * Get logged candidat ID
- *
- * @return $candidat_id
- *
- * @author Mhamed Chanchaf
- */
-function get_candidat_id(){
-	return $_SESSION['abb_id_candidat'] ?: false;
-}
-
 
 
 /**
@@ -223,114 +194,6 @@ function get_page_number() {
 
 
 /**
- * Get candidat pertinance
- *
- * @param int $id_candidat
- *
- * @return $pertinance
- *
- * @author Mhamed Chanchaf
- */
-function get_candidat_offre_pertinence($id_candidat, $id_offre) {
-	$db = getDB();
-	$candidat = $db->_prepare("SELECT domaine, experience FROM candidats WHERE candidats_id=?", [$id_candidat], true);
-	$offre = $db->_prepare("SELECT id_sect, id_expe FROM offre WHERE id_offre=?", [$id_offre], true);
-
-	if( !$candidat || !$offre )
-		return false;
-
-	// Calculate pertinance
-	if( $candidat->domaine != $offre->id_sect && $candidat->experience != $offre->id_expe )
-	{
-		$pertinence = 0;
-	} else if(
-		( $candidat->domaine == $offre->id_sect && $candidat->experience != $offre->id_expe ) || 
-		( $candidat->domaine != $offre->id_sect && $candidat->experience == $offre->id_expe )
-	) {
-		$pertinence = 50;
-	} else {
-		$pertinence = 100;
-	}
-	return $pertinence;
-}
-
-
-/**
- * Validate date format
- *
- * @param date $date
- *
- * @return bool
- *
- * @author Mhamed Chanchaf
- */
-function isValidDate($date)
-{
-	$d = DateTime::createFromFormat('Y-m-d', $date);
-	return $d && $d->format('Y-m-d') === $date;
-}
-
-
-
-
-
-/**
- * Get config value
- *
- * @param string $name
- * @return string
- *
- * @author Mhamed Chanchaf
- */
-function get_config($name){
-	$config = getDB()->findByColumn('configuration', 'name', $name, ['limit'=>1]);
-	return ( isset($config->value) ) ? json_decode($config->value, true) : false;
-}
-
-
-/**
- * Get config value
- *
- * @param string $name
- * @param string $value
- * @return string
- *
- * @author Mhamed Chanchaf
- */
-function save_config($name, $value){
-	$db = getDB();
-	$config = get_config($name);
-
-	if( is_array($value) ) {
-		$value = json_encode($value, JSON_UNESCAPED_UNICODE);
-	}
-
-	if( empty($config) ) {
-		return $db->create('configuration', [
-			'name' => $name,
-			'value' => $value
-		]);
-	} else {
-		return $db->update('configuration', 'name', $name, [
-			'value' => $value
-		]);
-	}
-}
-
-/**
- * Delete config value
- *
- * @param string $name
- * @return boolean
- *
- * @author Mhamed Chanchaf
- */
-function remove_config($name){
-	return getDB()->delete('configuration', 'name', $name);
-}
-
-
-/**
  * Hyphens and dashes to camelcase
  *
  * @param string $string
@@ -341,11 +204,103 @@ function remove_config($name){
  */
 function dashesToCamelCase($string, $capitalizeFirstCharacter = true) 
 {
-	$str = str_replace(' ', '', ucwords(preg_replace('/[-_]/', ' ', $string)));
-	if (!$capitalizeFirstCharacter) {
-		$str[0] = strtolower($str[0]);
+  $str = str_replace(' ', '', ucwords(preg_replace('/[-_]/', ' ', $string)));
+  if (!$capitalizeFirstCharacter) {
+    $str[0] = strtolower($str[0]);
+  }
+  return $str;
+}
+
+
+/**
+ * GENERATE RANDOM REFERENCE
+ *
+ * @param string $length number of caracters.
+ * @param int    $length number of caracters.
+ *
+ * @return string $reference.
+ */
+function generate_reference($table, $length=8) {
+	$lastID = getDb()->read($table, array('id'), true);
+	$lastID = ($lastID) ? $lastID->id : 0;
+	$reference = intval($lastID) + 1;
+	$char_length = $length - strlen( $reference );
+	$characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	$charactersLength = strlen($characters);
+	for ($i = 0; $i < $char_length; $i++) {
+		$reference .= $characters[rand(0, $charactersLength - 1)];
 	}
-	return $str;
+	return str_shuffle($reference);
+}
+
+
+/**
+ * Sort a 2 dimensional array based on 1 or more indexes.
+ * 
+ * array_sort() can be used to sort a rowset like array on one or more
+ * 'headers' (keys in the 2th array).
+ * 
+ * @param array        $array      The array to sort.
+ * @param string|array $key        The index(es) to sort the array on.
+ * @param int          $sort_flags The optional parameter to modify the sorting 
+ *                                 behavior. This parameter does not work when 
+ *                                 supplying an array in the $key parameter. 
+ * 
+ * @return array The sorted array.
+ */
+function etalent_array_sort($array, $key, $sort_flags = SORT_REGULAR) {
+	if (is_array($array) && count($array) > 0) {
+		if (!empty($key)) {
+			$mapping = array();
+			foreach ($array as $k => $v) {
+				$sort_key = '';
+				if (!is_array($key)) {
+					$sort_key = $v[$key];
+				} else {
+					// This should be fixed, now it will be sorted as string
+					foreach ($key as $key_key) {
+						$sort_key .= $v[$key_key];
+					}
+					$sort_flags = SORT_STRING;
+				}
+				$mapping[$k] = $sort_key;
+			}
+			asort($mapping, $sort_flags);
+			$sorted = array();
+			foreach ($mapping as $k => $v) {
+				$sorted[] = $array[$k];
+			}
+			return $sorted;
+		}
+	}
+	return $array;
+}
+
+
+function isAssoc(array $arr)
+{
+    if (array() === $arr) return false;
+    return array_keys($arr) !== range(0, count($arr) - 1);
+}
+
+
+function cim_date_diff($date1, $date2) {
+    $s = strtotime($date2) - strtotime($date1);
+    $d = intval($s / 86400) + 1;
+    return "$d";
+}
+
+
+function is_valid_int($number){
+  return is_numeric($number) && $number >= 0;
+}
+
+
+// if array_column does not exist the below solution will work.
+if(!function_exists("array_column")) {
+	function array_column($array, $column_name) {
+	  return array_map(function($element) use($column_name){return $element[$column_name];}, $array);
+	}
 }
 
 
@@ -386,4 +341,33 @@ function hex2rgb( $colour ) {
 function css_bg_from_hex($colour, $opacity=0) {
 	$rgb = hex2rgb($colour);
 	return "rgba(". $rgb['red'] .", ". $rgb['green'] .", ". $rgb['blue'] .", ". $opacity .")";
+}
+
+
+function safe_show($value){  
+  $str_value =str_replace('"', "'", $value); 
+   return addslashes($str_value); 
+} 
+
+function safe($value){ 
+   return mysql_real_escape_string($value); 
+} 
+
+
+/**
+ * Debug var
+ *
+ * @param mixed $var
+ *
+ * @return string
+ */
+function dump($var, $exit=true) {
+	echo '<pre>';
+	if( is_array($var) ) {
+		print_r($var);
+	} else {
+		var_dump($var);
+	}
+	echo '</pre>';
+	if( $exit ) exit;
 }

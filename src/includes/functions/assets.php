@@ -94,11 +94,11 @@ add_css('font-awesome', [
 
 // iziToast
 add_js('iziToast', [
-	'src' => SITE_URL .'assets/vendors/izi-toast/css/iziToast.min.css', 
+	'src' => SITE_URL .'assets/vendors/izi-toast/js/iziToast.min.js', 
 	'admin' => true
 ]);
 add_css('iziToast', [
-	'src'=> SITE_URL .'assets/vendors/izi-toast/js/iziToast.min.js', 
+	'src'=> SITE_URL .'assets/vendors/izi-toast/css/iziToast.min.css', 
 	'admin' => true
 ]);
 
@@ -119,13 +119,21 @@ add_js('ckeditor', [
 
 // Etalent
 add_js('eta-functions', [
-	'src' => SITE_URL .'assets/js/functions.js', 
-	'admin' => true
+	'src' => SITE_URL .'assets/js/etalent-functions.js', 
+	'admin' => true,
+	'version' => time()
+]);
+
+add_js('eta-scripts', [
+	'src' => SITE_URL .'assets/js/etalent-scripts.js', 
+	'admin' => true,
+	'version' => time()
 ]);
 
 add_css('style_admin', [
 	'src'=> SITE_URL .'assets/css/style_admin.php', 
-	'admin' => true
+	'admin' => true,
+	'version' => time()
 ]);
 
 add_css('menuprincipal', [
@@ -133,7 +141,20 @@ add_css('menuprincipal', [
 	'admin' => true
 ]);
 
-add_css('alerts', [
-	'src'=> SITE_URL .'assets/css/alerts.css', 
-	'admin' => true
+add_css('eta-alerts', [
+	'src'=> SITE_URL .'assets/css/etalent-alerts.css', 
+	'admin' => true,
+	'version' => time()
+]);
+
+add_css('eta-popup', [
+	'src'=> SITE_URL .'assets/css/etalent-popup.css', 
+	'admin' => true,
+	'version' => time()
+]);
+
+add_css('eta-styles', [
+	'src'=> SITE_URL .'assets/css/etalent-styles.css', 
+	'admin' => true,
+	'version' => time()
 ]);

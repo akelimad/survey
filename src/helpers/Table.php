@@ -153,6 +153,14 @@ class Table extends Pagination {
      */
     protected $templates;
 
+    /**
+     * $columnAttributes
+     *
+     * @access protected
+     * @var    array
+     */
+    protected $columnAttributes;
+
 
     /**
      * Table classes
@@ -169,7 +177,7 @@ class Table extends Pagination {
      * @access protected
      * @var    string
      */
-    protected $table_id = 'cimTable';
+    protected $table_id = 'etaTable';
 
 
     /**
@@ -346,7 +354,7 @@ class Table extends Pagination {
         $table_id = (!is_null($this->table_id)) ? 'id="'. $this->table_id .'"' : '';
 
         // Table Classess
-        $table_classes = (!empty($this->table_classes)) ? 'class="'. implode(' ', $this->table_classes) .' cimTable"' : 'cimTable';
+        $table_classes = (!empty($this->table_classes)) ? 'class="'. implode(' ', $this->table_classes) .' etaTable"' : 'etaTable';
 
         // if( $this->total_results > 0 ) {
             $html .= '<form method="get" action="" class="form-inline" id="cim-table-filter">';
@@ -382,7 +390,7 @@ class Table extends Pagination {
                 }
                 $html .= '<div class="form-group">';
                     // $html .= '<label for="status">Afficher par</label>';
-                    $html .= '<select id="'.$this->table_id.'_perpage" class="cimTable_perpage">';
+                    $html .= '<select id="'.$this->table_id.'_perpage" class="etaTable_perpage">';
                     foreach ($this->perpages as $key => $value) {
                         $selected = ($this->perpage==$value) ? 'selected' : '';
                         $html .= '<option value="'.$value.'" '.$selected.'>'.$value.'</option>';
@@ -407,7 +415,7 @@ class Table extends Pagination {
                 $html .= '<thead><tr>';
 
                     if( $this->_options['bulk_actions'] && $this->hasBulkActions() ) :
-                        $thead .= '<th><input type="checkbox" value="" class="'.$this->table_id.'_checkAll cimTable_checkAll"></th>';
+                        $thead .= '<th><input type="checkbox" value="" class="'.$this->table_id.'_checkAll etaTable_checkAll"></th>';
                         $rowspan += 1;
                     elseif( $this->_options['show_increment'] ) :
                         $thead .= '<th>#</th>';
@@ -415,6 +423,15 @@ class Table extends Pagination {
                     endif;
 
                     foreach ($this->headers as $key => $header) {
+
+                        $colAttrs = '';
+                        $this->columnAttributes[$key]['class'] .= ' '.$key;
+                        if( !empty($this->columnAttributes[$key]) ) : 
+                            foreach ($this->columnAttributes[$key] as $k => $v) :
+                                $colAttrs .= $k.'="'.$v.'"';
+                            endforeach; 
+                        endif;
+
                         if( !empty($this->sortables) && in_array($key, $this->sortables) ) {
                             if( $this->orderby == $key ) {
                                 $sort = (strtolower($this->order)=='asc') ? 'desc' : 'asc';
@@ -423,9 +440,9 @@ class Table extends Pagination {
                             }
                             
                             $sort_link = $this->getSortLink($key);
-                            $thead .= '<th><a title="Trier par: '. $header .'" href="'. $sort_link .'"><i class="fa fa-sort-amount-'. $sort .'"></i>&nbsp;'. $header .'</a></th>';
+                            $thead .= '<th '.$colAttrs.'><a title="Trier par: '. $header .'" href="'. $sort_link .'"><i class="fa fa-sort-amount-'. $sort .'"></i>&nbsp;'. $header .'</a></th>';
                         } else {
-                            $thead .= '<th>'. $header .'</th>';
+                            $thead .= '<th '.$colAttrs.'>'. $header .'</th>';
                         }
                     }
                     if( $this->_options['actions'] ) :
@@ -443,7 +460,7 @@ class Table extends Pagination {
                     $columns = array_merge(array_flip($headers), (array) $row);
 
                     if( $this->_options['bulk_actions'] && $this->hasBulkActions() ) :
-                        $html .= '<td class="bulk-cb"><input type="checkbox" name="'. $this->table_id .'_items[]" value="'. $columns[$this->primary_key] .'" class="'. $this->table_id .'_cb cimTable_cb"></td>';
+                        $html .= '<td class="bulk-cb"><input type="checkbox" name="'. $this->table_id .'_items[]" value="'. $columns[$this->primary_key] .'" class="'. $this->table_id .'_cb etaTable_cb"></td>';
                     elseif( $this->_options['show_increment'] ) :
                         $html .= '<td>'. $this->getIncrement() .'</td>';
                         $rowspan += 1;
@@ -470,7 +487,7 @@ class Table extends Pagination {
                     $html .= '</tr>';
                 endforeach; else :
 
-                    $html .= '<tr><td colspan="'. $rowspan .'" style="text-align: center;    border-top: 3px solid #e32b2b !important;">Aucune donnée à afficher.</td></tr>';
+                    $html .= '<tr><td colspan="'. $rowspan .'" style="text-align: center; border-top: 3px solid #e32b2b !important; border-bottom: 3px solid #e32b2b !important;">Aucune donnée à afficher.</td></tr>';
 
                 endif; // END Table
             $html .= '</tbody>';
@@ -500,7 +517,7 @@ class Table extends Pagination {
                         $html .= '</select>&nbsp;';
                         $html .= '<input type="submit" class="espace_candidat" value="Appliquer" style="padding: 0px 8px;border: 0px;margin-right: 5px;">';
                         $html .= '<div class="form-group">';
-                            $html .= '<select id="'.$this->table_id.'_perpage" class="cimTable_perpage">';
+                            $html .= '<select id="'.$this->table_id.'_perpage" class="etaTable_perpage">';
                             foreach ($this->perpages as $key => $value) {
                                 $selected = ($this->perpage==$value) ? 'selected' : '';
                                 $html .= '<option value="'.$value.'" '.$selected.'>'.$value.'</option>';
@@ -915,10 +932,11 @@ class Table extends Pagination {
      * @return void
      * @since 2017-10-30
      */
-    public function addColumn($id, $name, $callback)
+    public function addColumn($id, $name, $callback, $attributes=[])
     {
         if( !isset($this->headers[$id]) ) $this->headers[$id] = $name;
         $this->templates[$id] = $callback;
+        $this->columnAttributes[$id] = $attributes;
     }
     
 

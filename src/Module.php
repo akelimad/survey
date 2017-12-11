@@ -26,6 +26,10 @@ class Module {
             $modulePath = str_replace('index.php', '', $moduleIndex);
             $moduleName = basename($modulePath);
             $autoloader->setPsr4('Modules\\'. ucfirst($moduleName) .'\\', $modulePath);
+
+            $autoloader->setPsr4('Modules\\'. ucfirst($moduleName) .'\\Controllers\\', $modulePath.'controllers/');
+            $autoloader->setPsr4('Modules\\'. ucfirst($moduleName) .'\\Models\\', $modulePath.'models/');
+
             require_once($moduleIndex);
         }
     }

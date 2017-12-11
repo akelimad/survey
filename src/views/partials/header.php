@@ -6,6 +6,8 @@
 		'nom_site' => $nom_site
 	]);
 	?>
+	<base href="<?= site_url(); ?>">
+	<link rel="website" href="<?= site_url(); ?>">
 	<?php \App\Event::trigger('head'); ?>
 </head>
 <body>
