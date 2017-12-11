@@ -8,7 +8,7 @@
 
   <td colspan="4"><div class="subscription" style="margin: 10px 0pt;width: 720px; ">
 
-      <h1> Expérience professionnelle </h1>
+      <h1> Dernière expérience professionnelle</h1>
 
     </div></td>
 
@@ -22,29 +22,6 @@
 
 <td colspan="3"> 
 
-
-
-<table style="width:580px;">
-
-
-
-<tr height="20px">
-
-<td colspan="3">
-
-<!---->
-
-<div id="div1"  ><b><u>Derni&egrave;re expérience professionnelle </u></b>  <a  href="#"  class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
-
-
-
-     <em><span></span>  Afin d’alléger votre inscription, vous pouvez saisir une expérience. Pour en rajouter d'autres et renrechir votre CV, vous pouvez le faire sur votre espace (mon CV). </em></div>
-
-</td>
-
-</tr>
-
-</table>
 
 
 
@@ -408,9 +385,19 @@ while ($poste = mysql_fetch_array($req_poste)) {
 
 <div style="width:33%; display:inline-table;"><br/>
 
+<label>Copie de l’attestation de l’expérience</label>
+
+  <br />
+
+<input type="file" class="upload-file" title="Veuillez joindre la copie de l’attestation de l’expérience" name="copie_attestation" id="copie_attestation" style="width: 250px;" accept=".gif,.jpeg,.jpg,.png,.pdf,.doc,.docx"/>
+
+</div>
+
+<div style="width:33%; display:inline-table;"><br/>
+
 <label>Description du poste </label><br />
 
-<textarea name="description_poste" rows="5" style="width:500px" id="description_poste"  pattern="[a-zA-Z0-9ÀÁÂÄàáâäÒÓÔÖòóôöÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ' ]+" ><?php if(isset($desc_exp)){
+<textarea name="description_poste" rows="5" style="width:100%;" id="description_poste"  pattern="[a-zA-Z0-9ÀÁÂÄàáâäÒÓÔÖòóôöÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ' ]+" ><?php if(isset($desc_exp)){
 
 $desc_exp = str_replace($tag_ckedit, "", $desc_exp); echo stripslashes(htmlentities($desc_exp));}?></textarea>
 

@@ -121,38 +121,96 @@ if(isset($messages) and !empty($messages))  {
 			 $details =str_replace("'", "\'", $details);
 			  $profils =str_replace("'", "\'", $profils);
 									 
+      // Prepare attachements
+      $formData = array(
+          'avis_concours' => '',
+          'decisions_recrutement' => '',
+          'candidats_convoques' => '',
+          'resultats_concours' => ''
+      );
+
+      $uploadFiles = [
+          'avis_concours' => [
+              'errorMessage' => "Impossible d'envoyer l'avis de concours",
+              'name' => '',
+              'extensions' => ['doc', 'docx', 'pdf']
+          ],
+          'decisions_recrutement' => [
+              'errorMessage' => "Impossible d'envoyer la décisions de recrutement",
+              'name' => '',
+              'extensions' => ['doc', 'docx', 'pdf']
+          ],
+          'candidats_convoques' => [
+              'errorMessage' => "Impossible d'envoyer la liste des candidats convoqués",
+              'name' => '',
+              'extensions' => ['doc', 'docx', 'pdf']
+          ],
+          'resultats_concours' => [
+              'errorMessage' => "Impossible d'envoyer les résultats des concour",
+              'name' => '',
+              'extensions' => ['doc', 'docx', 'pdf']
+          ],
+      ];
+
+      // upload formation attachement
+      foreach ($uploadFiles as $key => $file) {
+          if( isset($_FILES[$key]) && intval($_FILES[$key]['size']) > 0 ) {
+              $upload = \App\Media::upload($_FILES[$key], [
+                  'uploadDir' => 'apps/upload/frontend/offre/'. $key .'/',
+                  'extensions' => $file['extensions'],
+                  'maxSize' => (isset($file['maxSize'])) ? $file['maxSize'] : 0.300
+              ]);
+              if( isset($upload['files'][0]) ) {
+                  $formData[$key] = $uploadFiles[$key]['name'] = $upload['files'][0];
+              } else {
+                  $errorMessage = $uploadFiles[$key]['errorMessage'];
+                  if( isset($upload['errors'][0][0]) ) $errorMessage .= ': ('. $upload['errors'][0][0] .')';
+                  array_push($messages,"<li style='color:#FF0000'>". $errorMessage ."</li>");
+              }
+          }
+      }                
+                     
       $insertion = getDB()->create('offre', [
-        'reference' => $ref, 
-        'Name' => $intitule, 
-        'id_sect' => $secteur,
-        'Details' => $details, 
-        'Profil' => $profils, 
-        'Contact' => $contact_email, 
-        'Photo_offre' => $photo_offre_name, 
-        'id_entreprise' => 1, 
-        'Email' => $email, 
-        'date_insertion' => $date_insertion, 
-        'date_expiration' => $date_expiration, 
-        'id_expe' => $exp, 
-        'id_localisation' => $lieu, 
-        'id_tpost' => $poste, 
-        'mobilite' => $mobilite, 
-        'niveau_mobilite' => $niveau, 
-        'taux_mobilite' => $taux, 
-        'vue' => 0, 
-        'candidature' => 0,
-        'status' => 'Archivée', 
-        'anonymat' => $anonymat, 
-        'send_candidature' => $send_candidature, 
-        'ordre' => $ordre, 
-        'id_fonc' => $fonction, 
-        'id_nfor' => $formation, 
-        'ref_filiale' => $_SESSION['ref_filiale_role']
+          'reference' => $ref, 
+          'Name' => $intitule, 
+          'id_sect' => $secteur,
+          'Details' => $details, 
+          'Profil' => $profils, 
+          'Contact' => $contact_email, 
+          'Photo_offre' => $photo_offre_name, 
+          'id_entreprise' => 1, 
+          'Email' => $email, 
+          'date_insertion' => $date_insertion, 
+          'date_expiration' => $date_expiration, 
+          'id_expe' => $exp, 
+          'id_localisation' => $lieu, 
+          'id_tpost' => $poste, 
+          'mobilite' => $mobilite, 
+          'niveau_mobilite' => $niveau, 
+          'taux_mobilite' => $taux, 
+          'vue' => 0, 
+          'candidature' => 0,
+          'status' => 'Archivée', 
+          'anonymat' => $anonymat, 
+          'send_candidature' => $send_candidature, 
+          'ordre' => $ordre, 
+          'id_fonc' => $fonction, 
+          'id_nfor' => $formation, 
+          'ref_filiale' => $_SESSION['ref_filiale_role'],
+          'avis_concours' => $formData['avis_concours'],
+          'decisions_recrutement' => $formData['decisions_recrutement'],
+          'candidats_convoques' => $formData['candidats_convoques'],
+          'resultats_concours' => $formData['resultats_concours']
       ]);
 
+      // Fire after offre form submit event
+      if( $insertion > 0 ) {
+          \App\Event::trigger('offre_form_submit', ['id_offre' => $insertion, 'data' => $_POST]);
+      }
+
       // Fire initial status
-      if( $insertion > 0 && method_exists('\modules\workflows\models\Workflow', 'addInitialStatus') ) {
-        \modules\workflows\models\Workflow::addInitialStatus($_SESSION['id_role'], $insertion);
+      if( $insertion > 0 && method_exists('\Modules\Workflows\Models\Workflow', 'addInitialStatus') ) {
+          \Modules\Workflows\Models\Workflow::addInitialStatus($_SESSION['id_role'], $insertion);
       }
 
 

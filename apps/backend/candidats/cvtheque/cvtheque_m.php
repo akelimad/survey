@@ -1,4 +1,11 @@
-
+<?php 
+if( isset($_POST['cua_cid']) && !empty($_POST['cua_cid']) ) {
+    $can_update_account = ($_POST['cua']==0) ? 1 : 0;
+    getDB()->update('candidats', 'candidats_id', $_POST['cua_cid'], [
+        'can_update_account' => $can_update_account
+    ]);
+}
+?>
 
 <br/>
 

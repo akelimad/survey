@@ -1,6 +1,3 @@
-
-
-
 <?php
 if (isset($_SESSION['abb_id_candidat']) and !empty($_SESSION['abb_id_candidat'])) {
 if($retenu_page=strpos($_SERVER['REQUEST_URI'],'/compte/'))
@@ -22,8 +19,15 @@ if($retenu_page=strpos($_SERVER['REQUEST_URI'],'/mettre_en_veille_compte/'))
 if($retenu_page=strpos($_SERVER['REQUEST_URI'],'/supprimer_compte/'))
 {$active9 ="style='color:".$color_bg_menu."' ";}
 
-
+$canUpdateAccount = \Modules\Candidat\Models\Candidat::canUpdateAccount();
 ?>
+<style>
+.disabledLink, .disabledLink:hover,  .disabledLink:focus {
+	text-decoration: line-through;
+	cursor: not-allowed;
+    border-bottom: none;
+}
+</style>
 <div id="espacecandidat">
 	<div id="bloc_espace_haut">&nbsp;</div>
 	<div id="bloc_espace_fond">
@@ -70,22 +74,22 @@ if($retenu_page=strpos($_SERVER['REQUEST_URI'],'/supprimer_compte/'))
 		 href="<?php  echo $urlcandidat;  ?>/cv/">Mon CV</a></li>
 		<li  style="list-style:none;padding:0px 0px 0px 20px"><i class="fa fa-cog fa-lg" style="color:<?php echo $color_bg;?>;"></i> 
 		<a <?php if(isset($active4)){echo $active4;} ?>
-		href="<?php  echo $urlcandidat;  ?>/cv/informations/">Informations personnelles</a></li>
+		href="<?= (!$canUpdateAccount) ? '#' : $urlcandidat .'/cv/informations/'; ?>" <?= (!$canUpdateAccount) ? 'class="disabledLink"' : ''; ?>>Informations personnelles</a></li>
 		<li  style="list-style:none;padding:3px 0px 0px 20px"><i class="fa fa-cog fa-lg" style="color:<?php echo $color_bg;?>;"></i> 
 		</span> <a <?php if(isset($active5)){echo $active5;} ?>
-		href="<?php  echo $urlcandidat;  ?>/cv/formations/">Formations</a></li>
+		href="<?= (!$canUpdateAccount) ? '#' : $urlcandidat .'/cv/formations/'; ?>" <?= (!$canUpdateAccount) ? 'class="disabledLink"' : ''; ?>>Formations</a></li>
 		<li  style="list-style:none;padding:3px 0px 0px 20px"><i class="fa fa-cog fa-lg" style="color:<?php echo $color_bg;?>;"></i> 
 		<a <?php if(isset($active6)){echo $active6;} ?>
-		href="<?php  echo $urlcandidat;  ?>/cv/experiences/">Expériences </a></li>
+		href="<?= (!$canUpdateAccount) ? '#' : $urlcandidat .'/cv/experiences/'; ?>" <?= (!$canUpdateAccount) ? 'class="disabledLink"' : ''; ?>>Expériences </a></li>
 		<li  style="list-style:none;padding:3px 0px 5px 20px"><i class="fa fa-cog fa-lg" style="color:<?php echo $color_bg;?>;"></i> 
 		<a <?php if(isset($active7)){echo $active7;} ?>
-		href="<?php  echo $urlcandidat;  ?>/cv/langues_pj/">Langues et pièces jointes</a></li>
-		<li  style="list-style:none;padding:5px 0px"><i class="fa fa-cog fa-lg" style="color:<?php echo $color_bg;?>;"></i> 
-		</span> <a <?php if(isset($active8)){echo $active8;} ?>
-		href="<?php  echo $urlcandidat;  ?>/mettre_en_veille_compte/"  > Mettre en veille mon compte </a></li>
+		href="<?= (!$canUpdateAccount) ? '#' : $urlcandidat .'/cv/langues_pj/'; ?>" <?= (!$canUpdateAccount) ? 'class="disabledLink"' : ''; ?>>Langues et pièces jointes</a></li>
+		<!--li  style="list-style:none;padding:5px 0px"><i class="fa fa-cog fa-lg" style="color:<?php //echo $color_bg;?>;"></i> 
+		</span> <a <?php //if(isset($active8)){echo $active8;} ?>
+		href="<?php  //echo $urlcandidat;  ?>/mettre_en_veille_compte/"  > Mettre en veille mon compte </a></li-->
 		<li  style="list-style:none;padding:5px 0px"><i class="fa fa-cog fa-lg" style="color:<?php echo $color_bg;?>;"></i> 
 		 <a <?php if(isset($active9)){echo $active9;} ?>
-		 href="<?php  echo $urlcandidat;  ?>/supprimer_compte/"  > Supprimer mon compte </a></li>
+		 href="<?= (!$canUpdateAccount) ? '#' : $urlcandidat .'/supprimer_compte/'; ?>" <?= (!$canUpdateAccount) ? 'class="disabledLink"' : ''; ?>> Supprimer mon compte </a></li>
 		</ul>
 		</td>
 		</tr>

@@ -308,7 +308,7 @@ if (isset($_POST['envoi'])) {
 
     $modifier_candidat = mysql_query($sql_updt);
 
-	   array_push($messages_succ,"<li style='color:#468847'>les informations persononnelles à été modifié avec succés</li>");
+	   array_push($messages_succ,"<li style='color:#468847'>Les informations personnelles ont été modifiées avec succés.</li>");
 
 
 

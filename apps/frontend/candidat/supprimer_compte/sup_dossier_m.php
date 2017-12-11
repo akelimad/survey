@@ -58,14 +58,15 @@ $rep= mysql_fetch_array($req);
 
 
 
-  mysql_query("DELETE from `candidats` WHERE `candidats_id` = '".safe($id_candidat)."'");
+  // mysql_query("DELETE from `candidats` WHERE `candidats_id` = '".safe($id_candidat)."'");
 
 
 
-  $affected = mysql_affected_rows($con);
+  // $affected = mysql_affected_rows($con);
 
 
 
+  $affected = getDB()->update('candidats', 'candidats_id', $id_candidat, ['status' => 0]);
     
 
 
@@ -78,7 +79,7 @@ $rep= mysql_fetch_array($req);
 
 
 
-  mysql_query("DELETE from `candidature` WHERE `candidats_id` = '".safe($id_candidat)."'");
+  // mysql_query("DELETE from `candidature` WHERE `candidats_id` = '".safe($id_candidat)."'");
 
 
 
@@ -86,7 +87,7 @@ $rep= mysql_fetch_array($req);
 
 
 
-  mysql_query("DELETE from `cvs_attribues` WHERE `id_candidat` = '".safe($id_candidat)."'");
+  // mysql_query("DELETE from `cvs_attribues` WHERE `id_candidat` = '".safe($id_candidat)."'");
 
 
 
@@ -94,7 +95,7 @@ $rep= mysql_fetch_array($req);
 
 
 
-  mysql_query("DELETE from `candidature_spontanee` WHERE `candidats_id` = '".safe($id_candidat)."'");
+  // mysql_query("DELETE from `candidature_spontanee` WHERE `candidats_id` = '".safe($id_candidat)."'");
 
   
 
@@ -102,7 +103,7 @@ $rep= mysql_fetch_array($req);
 
 
 
-  mysql_query("DELETE from `candidature_stage` WHERE `candidats_id` = '".safe($id_candidat)."'");
+  // mysql_query("DELETE from `candidature_stage` WHERE `candidats_id` = '".safe($id_candidat)."'");
 
   
 
@@ -110,7 +111,7 @@ $rep= mysql_fetch_array($req);
 
 
 
-  mysql_query("DELETE from `dossier_candidat` WHERE `candidats_id` = '".safe($id_candidat)."'");
+  // mysql_query("DELETE from `dossier_candidat` WHERE `candidats_id` = '".safe($id_candidat)."'");
 
   
 
@@ -118,7 +119,7 @@ $rep= mysql_fetch_array($req);
 
 
 
-  mysql_query("DELETE from `formations` WHERE `candidats_id` = '".safe($id_candidat)."'");
+  // mysql_query("DELETE from `formations` WHERE `candidats_id` = '".safe($id_candidat)."'");
 
   
 
@@ -126,7 +127,7 @@ $rep= mysql_fetch_array($req);
 
 
 
-  mysql_query("DELETE from `experience_pro` WHERE `candidats_id` = '".safe($id_candidat)."'");
+  // mysql_query("DELETE from `experience_pro` WHERE `candidats_id` = '".safe($id_candidat)."'");
 
 
 

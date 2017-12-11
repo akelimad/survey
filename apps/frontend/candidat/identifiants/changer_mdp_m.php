@@ -42,7 +42,7 @@
 
     if($pass!=$reponse['mdp'])
 
-     array_push($messages,"<li style='color:#FF0000'>Le mot de passe actuel que vous avez entré, n\'est pas correct !</li>");
+     array_push($messages,"<li style='color:#FF0000'>Le mot de passe actuel que vous avez entré, n'est pas correct !</li>");
 
 
 

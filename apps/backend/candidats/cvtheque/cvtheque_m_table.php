@@ -13,7 +13,7 @@
     <th><b>N°</b></th>
     <th ><b>Informations Candidats</b></th>
     <th   colspan="3" ><b>Détails</b></th>
-    
+    <th></th>
     <th  align="center" width="13%" ><b> Actions </b></th>
   </tr>
 
@@ -340,10 +340,20 @@ $r_historique_cvtheq = mysql_query($s_historique_cvtheq);
          ?></td>
 
 
-
+         <td width="5%" align="center">
+          <?php $canUpdateAccount = \Modules\Candidat\Models\Candidat::canUpdateAccount($resultat); ?>
+           <form method="post" action="">
+              <input type="hidden" name="cua" value="<?= $resultat['can_update_account']; ?>">
+              <input type="hidden" name="cua_cid" value="<?= $resultat['candidats_id']; ?>">
+              <button type="submit"><i class="fa fa-<?= ($canUpdateAccount) ? 'unlock' : 'lock'; ?>"></i></button>
+            </form>
+         </td>
          <td >
+
              <?php
-    
+
+             
+        
             if ($councv) {
 				
                 

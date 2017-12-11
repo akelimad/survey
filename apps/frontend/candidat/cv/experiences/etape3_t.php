@@ -14,7 +14,8 @@ session_start();
 
 
 
- 	header('Location: ../../compte/');   
+ 	// header('Location: ../../compte/');   
+		redirect(site_url('compte/'));
 
 
 
@@ -30,7 +31,8 @@ if(!isset($_SESSION["abb_login_candidat"]) || $_SESSION["abb_login_candidat"] ==
 
 
 
-  		header("Location: ../") ;
+  		// header("Location: ../") ;
+  		redirect(site_url());
 
 
 

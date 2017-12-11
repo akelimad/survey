@@ -218,9 +218,7 @@ $motivation1 =str_replace("'", "\'", $motivation);
 
             $date = date('Y-m-d'); 
 
-            $insertion = mysql_query("INSERT INTO candidature VALUES ('','".safe($id_candidat)."', '".safe($id_cv)."' ,
-
-                '".safe($id_lettre)."','".safe($id_offre)."','".safe($motivation1)."','".safe($date)."','En attente','".safe($r_note_finale)."','' )");
+            $insertion = mysql_query("INSERT INTO candidature VALUES ('','".safe($id_candidat)."', '".safe($id_cv)."', '".safe($id_lettre)."','".safe($id_offre)."','".safe($motivation1)."','".safe($date)."','0', '".safe($r_note_finale)."','' )");
 
 
 
@@ -255,6 +253,8 @@ $insertion_historique=mysql_query("INSERT INTO historique
             if($succes > 0)
 
             {
+
+                getDB()->update('candidats', 'candidats_id', $id_candidat, ['can_update_account'=>0]);
 
 $messagesuc=array(); 
 
@@ -392,7 +392,7 @@ $reception_candidature = mysql_query("SELECT * from offre where id_offre=".safe(
 
         ?>
 
-        <form action="<?php echo($_SERVER['REQUEST_URI']); ?>" method="post">
+        <form action="<?php echo($_SERVER['REQUEST_URI']); ?>" method="post" onsubmit="return confirm('Etes vous sur ? après la confirmation vous ne pouvez plus editer vos informations.');">
 
           <?php include('postuler_m_form.php'); ?>
 

@@ -312,17 +312,27 @@ $month_dd='';$year_dd='';$month_df='';$year_df='';
 
 			 }	else	{	
 
-$s__r2="INSERT INTO formations VALUES ('','".safe($id_candidat)."','".safe($etablissement)."','".safe($dd_formation)."',
+/*$s__r2="INSERT INTO formations VALUES ('','".safe($id_candidat)."','".safe($etablissement)."','".safe($dd_formation)."',
 
-    '".safe($df_formation)."','".safe($diplome)."','".safe($desc_form)."','".safe($nivformation)."','".safe($nom_etablissement)."')";
+    '".safe($df_formation)."','".safe($diplome)."','".safe($desc_form)."','".safe($nivformation)."','".safe($nom_etablissement)."')";*/
 
 
+    $insertion_formation = getDB()->create('formations', [
+		'candidats_id' => $id_candidat,
+		'id_ecol' => $etablissement,
+		'date_debut' => $dd_formation,
+		'date_fin' => $df_formation,
+		'diplome' => $diplome,
+		'description' => $desc_form,
+		'nivformation' => $nivformation,
+		'ecole' => $nom_etablissement
+    ]);
 
 mysql_query("UPDATE candidats SET last_connexion = '".safe($last_connexion)."' WHERE candidats_id = '".safe($id_candidat)."'");	
 
 
 
-$insertion_formation = mysql_query($s__r2);
+// $insertion_formation = mysql_query($s__r2);
 
 array_push($messages_succc,"<li style='color:#468847'>la formation à été ajoutée avec succés</li>");
 
@@ -592,7 +602,8 @@ if (isset($_SESSION['erreur']) and !empty($_SESSION['erreur'])) {
 
 												   
 
-											header("location:./");
+											// header("location:./");
+											redirect(site_url());
 
 											
 

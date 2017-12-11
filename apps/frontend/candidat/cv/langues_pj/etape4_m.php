@@ -144,7 +144,8 @@ if ( isset($_POST['envoi'])) {
 
         if (isset($_FILES['upload']) and !empty($_FILES['upload'])) {
 
-   $dossier = dirname(__FILE__) . $file_lm3;
+   // $dossier = dirname(__FILE__) . $file_lm3;
+   $dossier = SITE_BASE .'/apps/upload/frontend/lmotivation/';
 
    $taille_maxi_ko = 400;
 
@@ -348,7 +349,8 @@ if ( isset($_POST['envoi'])) {
 
         if (isset($_FILES['upload1']) and !empty($_FILES['upload1'])) {
 
-   $dossier = dirname(__FILE__) . $file_cv3;
+   // $dossier = dirname(__FILE__) . $file_cv3;
+    $dossier = SITE_BASE .'/apps/upload/frontend/cv/';
 
    $taille_maxi_ko = 400;
 
@@ -494,7 +496,7 @@ if ( isset($_POST['envoi'])) {
 
  if($isprincipal ){ $principal = 0;}else{$principal = 1;}
 
- if (mysql_query("insert into cv values('','$candidats_id','$fich','$fich','$principal','1')")) {
+ if (mysql_query("insert into cv values('', '$candidats_id','$fich','$fich','$principal','1')")) {
 
 	$CVdateMAJ=date("Y-m-d")." ".date("H:i:s");	
 
@@ -634,9 +636,9 @@ if (  isset($_POST['envoi'])) {
 
                        {
 
-						$extensions_img = array('.gif', '.jpeg', '.jpg','.GIF', '.JPEG', '.JPG'  );
+						$extensions_img = array('gif', 'jpeg', 'jpg', 'png');
 
-						$extension_photo = strrchr($_FILES['photo']['name'], '.');
+						// $extension_photo = strrchr($_FILES['photo']['name'], '.');
 
                        $ext_p = pathinfo($pname , PATHINFO_EXTENSION);  
 
@@ -644,11 +646,11 @@ if (  isset($_POST['envoi'])) {
 
                        
 
-						if (in_array($extension_photo, $extensions_img)) { 
+						if (in_array(strtolower($ext_p), $extensions_img)) { 
 
-						  $folder_p = dirname(__FILE__).$file_photos3;
+						  // $folder_p = dirname(__FILE__).$file_photos3;
 
-						   $photo = $folder_p . $pname;
+						   $photo = SITE_BASE .'/apps/upload/frontend/photo_candidats/' . $pname;
 
 						   copy($ptmp, $photo);
 

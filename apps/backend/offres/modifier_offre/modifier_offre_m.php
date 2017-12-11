@@ -127,18 +127,109 @@ if(isset($messages) and !empty($messages))  {
             
 
 			// Update offre Set        -04122014-> changer  En cours  par   Archivée
-			$sql_a="Update offre Set   `Name`='".safe($intitule)."', `id_sect`='".safe($secteur)."', `Details`='".safe($details)."', `Profil`='".safe($profils)."', `Contact`='".safe($contact_email)."',
+			/*$sql_a="Update offre Set   `Name`='".safe($intitule)."', `id_sect`='".safe($secteur)."', `Details`='".safe($details)."', `Profil`='".safe($profils)."', `Contact`='".safe($contact_email)."',
       `Photo_offre`='".safe($photo_offre_name)."',
          `date_expiration`='".safe($date_expiration)."', `id_expe`='".safe($exp)."', `id_localisation`='".safe($lieu)."', `id_tpost`='".safe($poste)."', `mobilite`='".safe($mobilite)."', `niveau_mobilite`='".safe($niveau)."', `taux_mobilite`='".safe($taux)."',  `id_fonc`='".safe($fonction)."', `id_nfor`='".safe($formation)."'  Where id_offre=".$id_off_m." ";
 			
 			//echo $sql_a;
 				// echo $sql_a;
-				$insertion = mysql_query($sql_a);
+				$insertion = mysql_query($sql_a);*/
 
-      // Fire initial status
-      if( method_exists('\modules\workflows\models\Workflow', 'addInitialStatus') ) {
-        \modules\workflows\models\Workflow::addInitialStatus($_SESSION['id_role'], $id_off_m);
-      }
+      
+        // Prepare attachements
+        $offreData = getDB()->findByColumn('offre', 'id_offre', $id_off_m, ['limit' => 1]);
+        
+        $formData = array(
+            'avis_concours' => $offreData->avis_concours,
+            'decisions_recrutement' => $offreData->decisions_recrutement,
+            'candidats_convoques' => $offreData->candidats_convoques,
+            'resultats_concours' => $offreData->resultats_concours,
+            'attachements' => json_decode($offreData->attachements, true)
+        );
+
+        $uploadFiles = [
+            'avis_concours' => [
+                'errorMessage' => "Impossible d'envoyer l'avis de concours",
+                'name' => '',
+                'extensions' => ['doc', 'docx', 'pdf']
+            ],
+            'decisions_recrutement' => [
+                'errorMessage' => "Impossible d'envoyer la décisions de recrutement",
+                'name' => '',
+                'extensions' => ['doc', 'docx', 'pdf']
+            ],
+            'candidats_convoques' => [
+                'errorMessage' => "Impossible d'envoyer la liste des candidats convoqués",
+                'name' => '',
+                'extensions' => ['doc', 'docx', 'pdf']
+            ],
+            'resultats_concours' => [
+                'errorMessage' => "Impossible d'envoyer les résultats des concour",
+                'name' => '',
+                'extensions' => ['doc', 'docx', 'pdf']
+            ],
+            'attachements' => [
+                'errorMessage' => "Impossible d'envoyer les pièces joints",
+                'name' => '',
+                'extensions' => ['doc', 'docx', 'pdf']
+            ],
+        ];
+
+        // upload formation attachement
+        foreach ($uploadFiles as $key => $file) {
+            if( isset($_FILES[$key]) && intval($_FILES[$key]['size']) > 0 ) {
+                $upload = \App\Media::upload($_FILES[$key], [
+                    'uploadDir' => 'apps/upload/frontend/offre/'. $key .'/',
+                    'extensions' => $file['extensions'],
+                    'maxSize' => (isset($file['maxSize'])) ? $file['maxSize'] : 0.300
+                ]);
+                if( isset($upload['files'][0]) ) {
+                  if( $key == 'attachements' ) {
+                    $formData[$key] = array_merge($formData[$key], $upload['files']);
+                  } else {
+                    if( $formData[$key] != '' ) {
+                        unlinkFile(site_base('apps/upload/frontend/offre/'. $key .'/'. $formData[$key]));
+                    }
+                    $formData[$key] = $upload['files'][0];
+                  }                  
+                } else {
+                    $errorMessage = $uploadFiles[$key]['errorMessage'];
+                    if( isset($upload['errors'][0][0]) ) $errorMessage .= ': ('. $upload['errors'][0][0] .')';
+                    array_push($messages,"<li style='color:#FF0000'>". $errorMessage ."</li>");
+                }
+            }
+        }                
+                 
+        $insertion = getDB()->update('offre', 'id_offre', $id_off_m, [
+            'Name' => $intitule, 
+            'id_sect' => $secteur,
+            'Details' => $details, 
+            'Profil' => $profils, 
+            'Contact' => $contact_email, 
+            'Photo_offre' => $photo_offre_name, 
+            'date_expiration' => $date_expiration, 
+            'id_expe' => $exp, 
+            'id_localisation' => $lieu, 
+            'id_tpost' => $poste, 
+            'mobilite' => $mobilite, 
+            'niveau_mobilite' => $niveau, 
+            'taux_mobilite' => $taux, 
+            'id_fonc' => $fonction, 
+            'id_nfor' => $formation, 
+            'avis_concours' => $formData['avis_concours'],
+            'decisions_recrutement' => $formData['decisions_recrutement'],
+            'candidats_convoques' => $formData['candidats_convoques'],
+            'resultats_concours' => $formData['resultats_concours'],
+            'attachements' => json_encode($formData['attachements'])
+        ]);
+
+        // Fire after offre form submit event
+        \App\Event::trigger('offre_form_submit', ['id_offre' => $id_off_m, 'data' => $_POST]);
+
+        // Fire initial status
+        if( method_exists('\modules\workflows\models\Workflow', 'addInitialStatus') ) {
+          \modules\workflows\models\Workflow::addInitialStatus($_SESSION['id_role'], $id_off_m);
+        }
 
 				          
 				$date_his_role = date("Y-m-d H:i:s");
@@ -617,6 +708,87 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
 		 0000000000000000000000000000000000000000000000000000000000000000000000000000000
          -->                 
   </div>
+
+
+  <tr>
+      <td colspan="2">
+          <div class="subscription" style="margin: 10px 0 5px;">
+              <h1>Avis de concours</h1>
+          </div>
+      </td>
+  </tr>
+  <tr>
+      <td colspan="2"><input type="file" id="avis_concours" name="avis_concours" /></td>
+      <?php if(isset($r01['avis_concours']) && $r01['avis_concours'] != '') : ?>
+          <a href="<?= site_url('apps/upload/frontend/offre/avis_concours/'.$r01['avis_concours']) ;?>" style="margin-top: 10px;display: block;"><i class="fa fa-download"></i>&nbsp;Télécharger (<?= $r01['avis_concours']; ?>)</a>
+      <?php endif; ?>
+  </tr>
+
+  <tr>
+      <td colspan="2">
+          <div class="subscription" style="margin: 10px 0 5px;">
+              <h1>Décisions de recrutement</h1>
+          </div>
+      </td>
+  </tr>
+  <tr>
+      <td colspan="2"><input type="file" id="decisions_recrutement" name="decisions_recrutement" /></td>
+      <?php if(isset($r01['decisions_recrutement']) && $r01['decisions_recrutement'] != '') : ?>
+          <a href="<?= site_url('apps/upload/frontend/offre/decisions_recrutement/'.$r01['decisions_recrutement']) ;?>" style="margin-top: 10px;display: block;"><i class="fa fa-download">&nbsp;Télécharger (<?= $r01['decisions_recrutement']; ?>)</i></a>
+      <?php endif; ?>
+  </tr>
+  </tr>
+
+  <tr>
+      <td colspan="2">
+          <div class="subscription" style="margin: 10px 0 5px;">
+              <h1>Liste des candidats convoqués</h1>
+          </div>
+      </td>
+  </tr>
+  <tr>
+      <td colspan="2"><input type="file" id="candidats_convoques" name="candidats_convoques" /></td>
+      <?php if(isset($r01['candidats_convoques']) && $r01['candidats_convoques'] != '') : ?>
+          <a href="<?= site_url('apps/upload/frontend/offre/candidats_convoques/'.$r01['candidats_convoques']) ;?>" style="margin-top: 10px;display: block;"><i class="fa fa-download"></i>&nbsp;Télécharger (<?= $r01['candidats_convoques']; ?>)</a>
+      <?php endif; ?>
+  </tr>
+  </tr>
+
+  <tr>
+      <td colspan="2">
+          <div class="subscription" style="margin: 10px 0 5px;">
+              <h1>Résultats des concours</h1>
+          </div>
+      </td>
+  </tr>
+  <tr>
+      <td colspan="2"><input type="file" id="resultats_concours" name="resultats_concours" />
+      <?php if(isset($r01['resultats_concours']) && $r01['resultats_concours'] != '') : ?>
+          <a href="<?= site_url('apps/upload/frontend/offre/resultats_concours/'.$r01['resultats_concours']) ;?>" style="margin-top: 10px;display: block;"><i class="fa fa-download"></i>&nbsp;Télécharger (<?= $r01['resultats_concours']; ?>)</a>
+      <?php endif; ?></td>
+  </tr>
+
+  <tr>
+      <td colspan="2">
+          <div class="subscription" style="margin: 10px 0 5px;">
+              <h1>Pièces joints (visible seulement pour administrateurs)</h1>
+          </div>
+      </td>
+  </tr>
+  <tr>
+      <td colspan="2"><input type="file" id="attachements" name="attachements[]" multiple />
+      <?php if(isset($r01['attachements']) && !empty(json_decode($r01['attachements'], true))) : ?>
+        <ul style="margin-top: 10px;display: block;">
+          <?php foreach (json_decode($r01['attachements'], true) as $key => $attachement): ?>
+            <li style="list-style: none;">
+              <a href="<?= site_url('apps/upload/frontend/offre/attachements/'.$attachement) ;?>"><i class="fa fa-download"></i>&nbsp;Télécharger (<?= $attachement; ?>)</a>
+            </li>
+          <?php endforeach ?>
+        </ul>
+      <?php endif; ?><br></td>
+  </tr>
+
+  <?php \App\Event::trigger('after_offre_fields', ['id_offre' => $_POST['id']]); ?>
         
 
 		  	
@@ -633,8 +805,7 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
 				  //echo '<br>'.$id_off_m;
                        
                  ?>
- 						
-      <br/>          
+ 						        
 			
 <?php  
 
@@ -642,9 +813,9 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
 		 
 		
 ?>
-	       <div class="subscription" style="margin: 10px 0pt;">
+	       <!--div class="subscription" style="margin: 10px 0pt;">
                          <h1>Notation du poste </h1>
-                     </div> 
+                     </div--> 
 												
 											
 												
@@ -660,12 +831,13 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
 			  
             
 			
-<?php   include ("./modifier_offre_m_note.php"); ?>
+<?php   //include ("./modifier_offre_m_note.php"); ?>
               
         <tr><td colspan="2"><div class="ligneBleu"></div></td></tr>
          </table>
 
-         <p><strong style="color:#CC0000">P.S: Attention, la modification de la notation va recalculer et écraser les anciennes notes de tout les candidatures de l'offre.<br/> les champs marqués par (*) sont obligatoires.</strong><br/>  <br/>
+        <!--p><strong style="color:#CC0000">P.S: Attention, la modification de la notation va recalculer et écraser les anciennes notes de tout les candidatures de l'offre.<br/> les champs marqués par (*) sont obligatoires.</strong><br/>  <br/-->
+         <p><strong style="color:#CC0000">Les champs marqués par (*) sont obligatoires.</strong><br/>  <br/>
   <?php  
  
     }

@@ -189,7 +189,7 @@ php_value docref_root 0
 php_value docref_ext 0
 
 # specify path to php error log
-php_value error_log "D:\web\projects\lycom\etalent\1.5.0\error.log"
+php_value error_log "D:\web\projects\lycom\etalent\1.5.0\error_log"
 
 # specify recording of all php errors
 # [see footnote 3] # php_value error_reporting 999999999

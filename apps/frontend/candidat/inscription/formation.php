@@ -40,7 +40,7 @@ $year_df=(empty($orderdate_dd[2])) ? $orderdate_dd[1] : $orderdate_dd[2];
 
 <td colspan="4"><div class="subscription" style="margin: 10px 0pt;width: 720px;">
 
-<h1> Formation </h1>
+<h1>Dernière formation</h1>
 
 </div>
 
@@ -51,24 +51,6 @@ $year_df=(empty($orderdate_dd[2])) ? $orderdate_dd[1] : $orderdate_dd[2];
 <tr>
 
 <td id="erreurs_formation" colspan="4">
-
-<table  border="0">
-
-<tr height="20px">
-
-<td colspan="4">
-
-<b><u>Derni&egrave;re formation </u></b>   <a  href="#"  class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
-
-
-
-     <em><span></span>Afin d’alléger votre inscription, vous pouvez saisir une formation. Pour en rajouter d'autres et renrechir votre CV, vous pouvez le faire sur votre espace (mon CV).</em>
-
-</td>
-
-</tr>
-
-</table>
 
 
 
@@ -376,8 +358,18 @@ echo '<option value="'.$filieres_id.'">'.$filieres_desc.'</option>';
 
 </div>
 
-<div style="width:100%; display:inline-table;">
+<div style="width:33%; display:inline-table;">
 
+<label>Copie du diplôme</label>
+
+  <br />
+
+<input type="file" class="upload-file" title="Veuillez joindre la copie du diplôme" name="copie_diplome" id="copie_diplome" style="width: 250px;" accept=".gif,.jpeg,.jpg,.png,.pdf,.doc,.docx"/>
+
+</div>
+
+<div style="width:100%; display:inline-table;">
+<br />
 <label>Description de la formation </label>
 
 <br />

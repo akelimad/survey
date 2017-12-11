@@ -29,7 +29,8 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
                 </td>
 
              </tr>
-        <?php \app\Event::trigger('wf_offre_form_fields'); ?>
+
+            <?php \app\Event::trigger('wf_offre_form_fields'); ?>
 
              <tr>
 
@@ -529,6 +530,54 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
 
              </tr>
 
+
+            <tr>
+                <td colspan="2">
+                    <div class="subscription" style="margin: 10px 0 5px;">
+                        <h1>Avis de concours</h1>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="file" id="avis_concours" name="avis_concours" /></td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <div class="subscription" style="margin: 10px 0 5px;">
+                        <h1>Décisions de recrutement</h1>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="file" id="decisions_recrutement" name="decisions_recrutement" /></td>
+            </tr>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <div class="subscription" style="margin: 10px 0 5px;">
+                        <h1>Liste des candidats convoqués</h1>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="file" id="candidats_convoques" name="candidats_convoques" /></td>
+            </tr>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <div class="subscription" style="margin: 10px 0 5px;">
+                        <h1>Résultats des concour</h1>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="file" id="resultats_concours" name="resultats_concours" /></td>
+            </tr>
+
+            <?php \App\Event::trigger('after_offre_fields'); ?>
             
 
               <?php 
@@ -543,7 +592,7 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
 
 	if($_SESSION['r_prm_note']==0){
 
-	 include ("./ajouter_offre_m_note.php"); 
+	 //include ("./ajouter_offre_m_note.php"); 
 
 	}
 

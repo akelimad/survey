@@ -1,6 +1,6 @@
 <?php
 // Composer Autoloader
-include_once SITE_BASE .'/vendor/autoload.php';
+$autoloader = require_once SITE_BASE .'/vendor/autoload.php';
 include_once SITE_BASE .'/config/parameters.php';
 include_once SITE_BASE .'/config/database.php';
 
@@ -23,6 +23,11 @@ define('SITE_URL', $scheme ."://".$_SERVER['SERVER_NAME'].PHYSICAL_URI);
 
 // Include functions
 include_once SITE_BASE .'/src/includes/functions/global.php';
+
+$autoloader->setPsr4('App\\Helpers\\', site_base('src/helpers'));
+$autoloader->setPsr4('App\\Models\\', site_base('src/models'));
+$autoloader->setPsr4('App\\Controllers\\', site_base('src/controllers'));
+$autoloader->setPsr4('App\\Mail\\', site_base('src/mail'));
 
 // Initialise modules
 \App\Module::init();

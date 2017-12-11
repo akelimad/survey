@@ -240,19 +240,34 @@ $poste ='';$entreprise ='';$ville_exp='';$desc_exp='';$salair_pecu='';
 
 			 
 
-$s__r2="INSERT INTO experience_pro VALUES ('','".safe($id_candidat)."','".safe($secteur)."','".safe($fonction_exp)."',
+/*$s__r2="INSERT INTO experience_pro VALUES ('','".safe($id_candidat)."','".safe($secteur)."','".safe($fonction_exp)."',
 
                 '".safe($type_poste)."','".safe($pays_exp)."','".safe($dd_exp)."','".safe($df_exp)."','".safe($poste)."',
 
-                '".safe($entreprise)."','".safe($ville_exp)."','".safe($desc_exp)."','".safe($salair_pecu)."')";
+                '".safe($entreprise)."','".safe($ville_exp)."','".safe($desc_exp)."','".safe($salair_pecu)."')";*/
 
+
+$insertion_exp = getDB()->create('experience_pro', [
+	'candidats_id' => $id_candidat,
+	'id_sect' => $secteur,
+	'id_fonc' => $fonction_exp,
+	'id_tpost' => $type_poste,
+	'id_pays' => $pays_exp,
+	'date_debut' => $dd_exp,
+	'date_fin' => $df_exp,
+	'poste' => $poste,
+	'entreprise' => $entreprise,
+	'ville' => $ville_exp,
+	'description' => $desc_exp,
+	'salair_pecu' => $salair_pecu
+]);
 
 
 mysql_query("UPDATE candidats SET last_connexion = '".safe($last_connexion)."' WHERE candidats_id = '".safe($id_candidat)."'");
 
 
 
-$insertion_exp = mysql_query($s__r2);
+// $insertion_exp = mysql_query($s__r2);
 
 array_push($messages_succc,"<li style='color:#468847'>l'expérience professionnelle à été ajoutée avec succés</li>");
 
@@ -524,7 +539,9 @@ if (isset($_SESSION['erreur']) and !empty($_SESSION['erreur'])) {
 
 		   
 
-											header("location:./");
+											// header("location:./");
+
+											redirect(site_url());
 
                                         } else {
 

@@ -1,6 +1,7 @@
-	<!--MENU PRINCIPAL -->
-
+<!--MENU PRINCIPAL -->
 <?php	
+use \Modules\Candidatures\Models\Candidatures;
+
 
 $_SESSION['link']=isset($_GET['a'])	 ? $_GET['a']      : $_SESSION['link_bak_a'];
  
@@ -182,114 +183,11 @@ if ($_SESSION['menu4'] == 1)
 
 		
 		<ul class="secondLevel">
-
-
-			<li>
-
-				<a href="<?php  echo $urlad_candatur  ?>/" >Etat des candidatures</a>
-
-			</li>
-
- 
-<?php 	if(isset( $_SESSION['menu1_c']) and  ($_SESSION['menu1_c'] == 1)) {  ?>
-
-			<li>
-
-				<a href="<?php  echo $urlad_candatur  ?>/nouvelle_candidature/">Nouvelles candidatures</a>					
-
-			</li>
-
-<?php 	} ?>
-<?php 	if(isset( $_SESSION['menu2_c']) and  ($_SESSION['menu2_c'] == 1)) {  ?>
-
-			<li>
-
-				<a href="<?php  echo $urlad_candatur  ?>/candidature_en_cours/">Candidatures en cours</a>	 
-
-			</li>
-			
-<?php 	} ?>
-<?php 	if(isset( $_SESSION['menu3_c']) and  ($_SESSION['menu3_c'] == 1)) {  ?>
-
-			<li>
-
-				<a href="<?php  echo $urlad_candatur  ?>/candidature_retenu/">Candidatures retenues</a>
-
-			</li> 
-			
-<?php 	} ?>
-<?php 	if(isset( $_SESSION['menu4_c']) and  ($_SESSION['menu4_c'] == 1)) {  ?>
-
-			<li>
-
-				<a href="<?php  echo $urlad_candatur  ?>/candidature_recruter/">Candidatures recruté</a>
-
-			</li> 
-			
-<?php 	} ?>
-<?php 	if(isset( $_SESSION['menu5_c']) and  ($_SESSION['menu5_c'] == 1)) {  ?> 
-			<li>
-
-				<a href="<?php  echo $urlad_candatur  ?>/candidature_non_retenu/">Candidatures non retenues</a>
-
-			</li> 
-			
-<?php 	} ?> 
-
-			
-<?php  
-
-	if($_SESSION['r_prm_note']==0){
-		 
-		
-?>
-
-<?php 	if(!(isset( $_SESSION['compte_v']) and  $_SESSION['compte_v'] > 0)) {  ?>
-			<li>
-
-				<a href="<?php  echo $urlad_candatur  ?>/historique_note/">Historique des notes</a>
-
-			</li> 
-			 
-<?php 	} ?>
-	
-<?php  
- 
-		}
-		
-?>
-
-
-<?php 	if(isset( $_SESSION['menu6_c']) and  ($_SESSION['menu6_c'] == 1)) {  ?>
-
-			<li>
-
-				<a href="<?php  echo $urlad_candatur  ?>/candidature_spontannee/" >Candidatures spontanées</a>
-
-			</li>
-
-<?php 	} ?>
-<?php 	if(isset( $_SESSION['menu7_c']) and  ($_SESSION['menu7_c'] == 1)) {  ?>
-			<li>
-
-				<a href="<?php  echo $urlad_candatur  ?>/candidature_stage/" >Candidatures pour stage</a>
-
-			</li> 
-			
-<?php 	} ?>
-
-			<!--
-			<?php if (isset($_SESSION['ref_filiale_role']) and $_SESSION['ref_filiale_role']=='0'){  ?> 
-		
-			<li>
-
-				<a href="<?php  echo $urlad_candatur  ?>/historique_candidats/">Historique des candidats</a>
-
-			</li>
-
-			<?php }  ?>
-			-->
-			 
+			<?php foreach (Candidatures::getStatus() as $key => $status) : ?>
+				<li>
+					<a href="<?= site_url('backend/module/candidatures/candidature/list/'. $status->id_prm_statut_c); ?>"><?= $status->statut; ?></a>
+				</li>
+			<?php endforeach; ?>
 		</ul>
 
 
@@ -508,6 +406,19 @@ if ($_SESSION['menu7'] == 1)
 				<a href="<?php  echo $urlad_admi  ?>/problemes_signales/">Gestion des problèmes signalés</a>
 
 			</li> 
+
+			<?php if(isModuleEnabled('workflows')) : ?>
+				<li>
+					<a href="<?= site_url('backend/module/workflows/workflow'); ?>">Gestion des workflows</a>		
+				</li>
+			<?php endif; ?>
+
+			<?php if(isModuleEnabled('fiches')) : ?>
+				<li>
+					<a href="<?= site_url('backend/module/fiches/fiche'); ?>">Fiches de présélection / evaluation</a>		
+				</li>
+			<?php endif; ?>
+			
 			<li>
 
 				<a href="<?php  echo $urlad_admi  ?>/historique_connexion/">Historique de connexion</a>

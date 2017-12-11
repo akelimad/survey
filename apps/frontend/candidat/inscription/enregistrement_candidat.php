@@ -1706,9 +1706,21 @@ if($id_max_ini < $id_max )	{
 
 				//	1 insertion dans la table formations		
 
-	$insertion_formation1 = mysql_query('INSERT INTO formations VALUES ("","'.safe($id_max).'","'.safe($etablissement).'","'.safe($dd_formation).'",
+	/*$insertion_formation1 = mysql_query('INSERT INTO formations VALUES ("","'.safe($id_max).'","'.safe($etablissement).'","'.safe($dd_formation).'",
 
-		"'.safe($df_formation).'","'.safe($diplome).'","'.safe($desc_form).'","'.safe($nivformation).'","'.safe($nom_etablissement).'" )');
+		"'.safe($df_formation).'","'.safe($diplome).'","'.safe($desc_form).'","'.safe($nivformation).'","'.safe($nom_etablissement).'" )');*/
+
+
+	$insertion_formation1 = getDB()->create('formations', [
+		'candidats_id' => $id_max,
+		'id_ecol' => $etablissement,
+		'date_debut' => $dd_formation,
+		'date_fin' => $df_formation,
+		'diplome' => $diplome,
+		'description' => $desc_form,
+		'nivformation' => $nivformation,
+		'ecole' => $nom_etablissement
+    ]);
 
 				 
 
@@ -1730,12 +1742,21 @@ if($id_max_ini < $id_max )	{
 
 		"'.safe($dd_exp).'","'.safe($df_exp).'","'.safe($poste).'","'.safe($entreprise).'","'.safe($ville_exp).'","'.safe($desc_exp).'","'.safe($salair_pecu).'")');
 
-				 
-
-
-
-
-
+	
+		$insertion_exp1 = getDB()->create('experience_pro', [
+			'candidats_id' => $id_max,
+			'id_sect' => $secteur,
+			'id_fonc' => $fonction_exp,
+			'id_tpost' => $type_poste,
+			'id_pays' => $pays_exp,
+			'date_debut' => $dd_exp,
+			'date_fin' => $df_exp,
+			'poste' => $poste,
+			'entreprise' => $entreprise,
+			'ville' => $ville_exp,
+			'description' => $desc_exp,
+			'salair_pecu' => $salair_pecu
+		]);
 
 
 				$requet = mysql_query("SELECT * from candidats WHERE email = '".safe($email1_req)."' AND status=1"); 
