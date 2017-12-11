@@ -20,7 +20,7 @@ class CandidatureController extends AdminController
 
 
 
-  public function actionNouvelle()
+  public function actionIndex($id=null)
   {
     $this->addAssets();
     $table = new TableController();
@@ -33,26 +33,44 @@ class CandidatureController extends AdminController
   }
 
 
+  public function actionList($id)
+  {
+    return $this->actionIndex($id);
+  }
+
+
+  public function actionStatus($id)
+  {
+    echo '<h1>En maintenance...</h1>';    
+  }
+
+
+  public function actionHistorique($id)
+  {
+    echo '<h1>En maintenance...</h1>';    
+  }
+
+
   private function addAssets()
   {
-    \app\Assets::addJS('tagsinput', [
+    \App\Assets::addJS('tagsinput', [
       'src' => site_url('assets/vendors/tagsinput/bootstrap-tagsinput.min.js'), 
       'admin' => true
     ]);
     
-    \app\Assets::addCSS('tagsinput', [
+    \App\Assets::addCSS('tagsinput', [
       'src' => site_url('assets/vendors/tagsinput/bootstrap-tagsinput.css'), 
       'admin' => true
     ]);
 
-    \app\Assets::addCSS('cand-table', [
+    \App\Assets::addCSS('cand-table', [
       'src' => module_url(__FILE__, 'assets/css/candidatures.css'), 
       'admin' => true,
       'front' => false,
       'version' => time()
     ]);
     
-    \app\Assets::addJS('cand-table', [
+    \App\Assets::addJS('cand-table', [
       'src' => module_url(__FILE__, 'assets/js/candidatures.js'), 
       'admin' => true,
       'version' => time()

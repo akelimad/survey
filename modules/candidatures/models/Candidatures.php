@@ -49,6 +49,11 @@ class Candidatures {
 	}
 
 
+	public function countByStatus($status_id)
+	{
+		return getDB()->prepare("SELECT COUNT(*) AS count FROM candidature WHERE status=?", [$status_id], true)->count;
+	}
+
 
 
 

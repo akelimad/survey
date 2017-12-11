@@ -108,14 +108,14 @@ return array(
 		'sortOrder' => 110,
 		'options' => getDB()->prepare("SELECT id_situ AS value, situation AS text FROM prm_situation")
 	],
-	[
+	/*[
 		'name' => 'campagne',
 		'type' => 'select',
 		'value' => '',
 		'label' => 'Par campagne de recrutement',
 		'sortOrder' => 120,
 		'options' => getDB()->prepare("SELECT id_compagne AS value, titre_compagne AS text FROM compagne_recrutement")
-	],
+	],*/
 	[
 		'name' => 'pertinence',
 		'type' => 'select',

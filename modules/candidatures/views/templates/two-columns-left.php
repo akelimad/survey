@@ -43,21 +43,21 @@
 		<div class="col-md-3">
 			<ul id="menu_site_carriere" style="padding: 1px;">
 				<li>
-					<a href="<?= site_url('backend/candidatures/'); ?>"><i class="fa fa-pie-chart"></i>&nbsp;État des candidatures</a>
+					<a href="<?= site_url('backend/module/candidatures/candidature/status'); ?>"><i class="fa fa-pie-chart"></i>&nbsp;État des candidatures</a>
 				</li>
 				<li>
-					<a href="<?= site_url('backend/candidatures/nouvelle_candidature/'); ?>"><i class="fa fa-spinner"></i>&nbsp;Nouvelles candidatures</a>
+					<a href="<?= site_url('backend/module/candidatures/candidature/list/0'); ?>"><i class="fa fa-spinner"></i>&nbsp;Nouvelles candidatures</a>
 				</li>
 				<li>
-					<a href="<?= site_url('backend/candidatures/candidature_en_cours/'); ?>"><i class="fa fa-list-ol"></i>&nbsp;Candidatures en cours</a>
+					<a href="<?= site_url('backend/module/candidatures/candidature'); ?>"><i class="fa fa-list-ol"></i>&nbsp;Candidatures en cours</a>
 				</li>
 				<?php foreach ($status as $key => $status) : ?>
 					<li>
-						<a href="<?= site_url('backend/candidatures/'. $status->slug .'/'); ?>"><i class="fa fa-tasks"></i>&nbsp;<?= $status->statut; ?></a>
+						<a href="<?= site_url('backend/module/candidatures/candidature/list/'. $status->id_prm_statut_c); ?>"><i class="fa fa-tasks"></i>&nbsp;<?= $status->statut; ?><span class="badge pull-right"><?= \Modules\Candidatures\Models\Candidatures::countByStatus($status->id_prm_statut_c); ?></span></a>
 					</li>
 				<?php endforeach; ?>
 				<li>
-					<a href="<?= site_url('backend/candidatures/historique_note/'); ?>"><i class="fa fa-history"></i>&nbsp;Historique des notes</a>
+					<a href="<?= site_url('backend/module/candidatures/candidature/historique'); ?>"><i class="fa fa-history"></i>&nbsp;Historique des notes</a>
 				</li>
 			</ul>
 		</div>

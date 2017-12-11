@@ -10,8 +10,6 @@
  */
 namespace Modules\Candidatures\Controllers;
 
-namespace modules\candidatures\controllers;
-
 use App\Ajax;
 
 class AjaxController
@@ -55,7 +53,7 @@ class AjaxController
     ob_start();
     $fields = include_once module_base(__FILE__, 'resources/filter-fields.php');
     $fields = array_merge($fields, json_decode($data['fields'], true));
-    $data['fields'] = etalent_array_sort($fields, 'sortOrder');
+    $data['fields'] = \etalent_array_sort($fields, 'sortOrder');
     $data['url_params'] = json_decode($data['params'], true);
 
     get_view('admin/candidature/partials/filter', $data, __FILE__);
@@ -133,7 +131,7 @@ class AjaxController
       ]);*/
 
       $receiver = (isset($parts[1])) ? $parts[1] : $parts[0];
-      return \app\Mail::send($receiver, $data['subject'], $data['message'], [
+      return \App\Mail\Mailer::send($receiver, $data['subject'], $data['message'], [
         'isHTML' => true,
       ]);
     }

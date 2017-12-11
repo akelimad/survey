@@ -58,10 +58,11 @@ class TableController
 		'filterFields' => [],
 		'options' => [
 			'bulk_actions' => true,
-      'actions' => true,
-      'show_thead' => true,
-      'show_footer' => true,
-      'show_increment' => false
+			'actions' => true,
+			'show_thead' => true,
+			'show_footer' => true,
+			'show_increment' => false,
+			'show_links_first_last' => false
 		],
 		'actions' => [
 			'send_mail' => true
@@ -115,31 +116,49 @@ class TableController
 			$html .= '<div id="show_h_'. $row->candidats_id .'" class="hidden">';
 			$html .= '<table class="table table-history">';
 			foreach ($history as $key => $h) :
-				$html .= '<tr><td width="110">'. date('d.m.Y H:i:s', strtotime($h->date_modification)) .'</td><td>'. $h->status .'</td><td>'. $h->utilisateur .'</td></tr>';
+				$html .= '<tr><td width="110">'. date('d.m.Y H:i', strtotime($h->date_modification)) .'</td><td>'. $h->status .'</td><td>'. $h->utilisateur .'</td></tr>';
 			endforeach;
 			$html .= '</table></div>';
 			return $html;
 		});
 
-		$table->addColumn('col2', '', function($row){
-			return '<strong>Expérience<br>Salaire souhaité<br>FraÃ®cheur du cv<br>Mobilité<strong>';
-		});
-
-		$table->addColumn('col3', '', function($row){
+		$table->addColumn('exp_salr', '', function($row){
 			$mobilite = (isset($row->mobilite) && $row->mobilite!='') ? ucfirst($row->mobilite) : 'Non';
 			$mobiliteClass = ($mobilite=='Oui') ? 'success' : 'default';
-			return Candidat::getExperienceNameByID($row->id_expe) .'<br>'. Candidat::getSalaireNameByID($row->id_salr) .'<br>'. timeAgo($row->dateMAJ) .'<br><span class="label label-'.$mobiliteClass.'">'. $mobilite .'</span>';
-		});
+
+			$html  = '<table>';
+				$html .= '<tbody>';
+				$html .= '<tr>';
+					$html .= '<th width="88px">Expérience</th>';
+					$html .= '<td>'.Candidat::getExperienceNameByID($row->id_expe).'</td>';
+				$html .= '</tr>';
+				$html .= '<tr>';
+					$html .= '<th>Salaire souhaité</th>';
+					$html .= '<td>'.Candidat::getSalaireNameByID($row->id_salr).'</td>';
+				$html .= '</tr>';
+				$html .= '<tr>';
+					$html .= '<th>Fraicheur du cv</th>';
+					$html .= '<td>'.timeAgo($row->dateMAJ).'</td>';
+				$html .= '</tr>';
+				$html .= '<tr>';
+					$html .= '<th>Mobilité</th>';
+					$html .= '<td><span class="label label-'.$mobiliteClass.'">'. $mobilite .'</span></td>';
+				$html .= '</tr>';
+				$html .= '</tbody>';
+			$html .= '</table>';
+			
+			return $html;
+		}, ['width'=> '180px']);
 
 		$table->addColumn('details', 'Détails', function($row){
 			$details = '';
 			if( intval($row->id_cv) > 0 ) {
-				$cv_ext = \app\models\Cv::getExtension($row->id_cv);
+				$cv_ext = \App\Models\Cv::getExtension($row->id_cv);
 				$icon = $this->getIconByExtention($cv_ext);
 				$details .= '<a href="'. site_url('backend/module/candidatures/candidat/cv/'.$row->id_cv) .'" title="Télécharger le CV"><i class="'.$icon.'"></i></a>';
 			}
 			if( intval($row->id_lettre) > 0 ) {
-				$lettre_ext = \app\models\Lettre::getExtension($row->id_lettre);
+				$lettre_ext = \App\Models\Lettre::getExtension($row->id_lettre);
 				$icon = $this->getIconByExtention($lettre_ext);
 				$details .= '&nbsp;<a href="'. site_url('backend/module/candidatures/candidat/lettre/'.$row->id_lettre) .'" title="Télécharger la lettre de motivation"><i class="'.$icon.'"></i></a>';
 			}
@@ -168,7 +187,7 @@ class TableController
 
 		$table->addColumn('titre_offre', 'Titre du poste', function($row){
 			return $row->titre_offre;
-		});
+		}, ['width'=> '200px']);
 
 		$table->addColumn('date_cand', 'Date', function($row){
 			return '<b>'. date ("d.m.Y", strtotime($row->date_candidature)) .'</b>';
@@ -192,7 +211,7 @@ class TableController
   {
   	$andWhere = $this->getAndWhereStatement();
   	$joints   = $this->getJoints();
-  	$query = "SELECT c.candidats_id, CONCAT(c.nom, ' ',c.prenom) AS fullname, c.email, c.titre, c.id_situ, c.id_tfor, c.id_nfor, c.id_expe, c.id_sect, c.id_fonc, c.mobilite, c.id_pays, c.id_salr, c.dateMAJ, c.CVdateMAJ, cand.* FROM candidature cand INNER JOIN candidats c ON c.candidats_id = cand.candidats_id {$joints} WHERE cand.status='En attente' AND cand.dernier_status='En attente' {$andWhere} GROUP BY cand.id_candidature";
+  	$query = "SELECT c.candidats_id, CONCAT(c.nom, ' ',c.prenom) AS fullname, c.email, c.titre, c.id_situ, c.id_tfor, c.id_nfor, c.id_expe, c.id_sect, c.id_fonc, c.mobilite, c.id_pays, c.id_salr, c.dateMAJ, c.CVdateMAJ, cand.* FROM candidature cand INNER JOIN candidats c ON c.candidats_id = cand.candidats_id {$joints} WHERE cand.status='". $_GET['id'] ."' {$andWhere} GROUP BY cand.id_candidature";
   	return $query;
   }
 

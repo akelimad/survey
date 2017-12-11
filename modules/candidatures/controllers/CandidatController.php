@@ -23,7 +23,7 @@ class CandidatController
   public function actionCv($id_cv)
   {
   	if( !isLogged('admin') ) redirect( site_url('backend/login') );
-    $cv = \app\models\Cv::getByID($id_cv);
+    $cv = \App\Models\Cv::getByID($id_cv);
     $cvPath = site_base('apps/upload/frontend/cv/'. $cv->lien_cv);
     if(file_exists($cvPath)) {
 	    header("Content-Description: Téléchargement de CV"); 
@@ -46,7 +46,7 @@ class CandidatController
   public function actionLettre($id_lettre)
   {
   	if( !isLogged('admin') ) redirect( site_url('backend/login') );
-    $lettre = \app\models\Lettre::getByID($id_lettre);
+    $lettre = \App\Models\Lettre::getByID($id_lettre);
     $lettrePath = site_base('apps/upload/frontend/lmotivation/'. $lettre->lettre);
     if(file_exists($lettrePath)) {
 	    header("Content-Description: Téléchargement de lettre de motivation"); 

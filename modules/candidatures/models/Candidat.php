@@ -107,7 +107,7 @@ class Candidat {
 	public static function getSalaireNameByID($id_salaire)
 	{
 		$salaire = getDB()->prepare("SELECT salaire AS name FROM prm_salaires where id_salr=?", [$id_salaire], true);
-		return (isset($salaire->name)) ? $salaire->name : '';
+		return (isset($salaire->name)) ? $salaire->name : '---';
 	}
 
 
