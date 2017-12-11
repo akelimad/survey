@@ -62,7 +62,7 @@ $prename   =str_replace("\\", "", $prename);
 
 
 
-              $hd='Content-Type: multipart/mixed; charset=iso-8859-1' . "\r\n";
+              $hd='Content-Type: multipart/mixed; charset=utf-8' . "\r\n";
 
              
 
@@ -98,7 +98,7 @@ $prename   =str_replace("\\", "", $prename);
 
              else {
 
-                $hd='Content-type: text/html; charset=iso-8859-1' . "\r\n";
+                $hd='Content-type: text/html; charset=utf-8' . "\r\n";
 
                  
 

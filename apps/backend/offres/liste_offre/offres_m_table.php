@@ -20,7 +20,7 @@
         {
         $objet = "Offre d'emploi de ".$nom_site;
         $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
         $headers .= 'From: '.$nom_site.' <'.$admin_email.'>' . "\r\n"; 
         
         $id_offre = isset($_POST['id_offre'])  ? $_POST['id_offre'] : "";

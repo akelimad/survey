@@ -58,7 +58,7 @@ $email = $data4['email'];
                 $msg_pj='';
             if($reponse["p_joint"]!='')  {
 
-              $hd='Content-Type: multipart/mixed; charset=iso-8859-1' . "\r\n";
+              $hd='Content-Type: multipart/mixed; charset=utf-8' . "\r\n";
              
                 
             //=====Lecture et mise en forme de la pièce jointe.
@@ -76,7 +76,7 @@ $email = $data4['email'];
             }
 
              else {
-                $hd='Content-type: text/html; charset=iso-8859-1' . "\r\n";
+                $hd='Content-type: text/html; charset=utf-8' . "\r\n";
        
              
                 }

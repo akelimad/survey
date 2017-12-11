@@ -114,7 +114,7 @@ if( isset($_POST['email2']) && $_POST['email2'] != '' )
 
   $message .= "--" . $boundary . "\n";
 
-  $message .= "Content-Type: text/html; charset=\"iso-8859-1\"\n";
+  $message .= "Content-Type: text/html; charset=\"utf-8\"\n";
 
   $message .= "Content-Transfer-Encoding: 8bit\n\n";
 		

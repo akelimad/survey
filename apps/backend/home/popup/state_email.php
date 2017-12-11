@@ -68,7 +68,7 @@ $msg_pj="";
 
 if($reponse1["p_joint"]!='')  {
 
-$hd='Content-Type: multipart/mixed; charset=iso-8859-1' . "\r\n";
+$hd='Content-Type: multipart/mixed; charset=utf-8' . "\r\n";
 
 //=====Lecture et mise en forme de la pièce jointe.
 
@@ -90,7 +90,7 @@ $msg_pj= "Content-Type: application/msword; name=\"$p_joint\"\r\n".
 
 else {          
 
-                $hd='Content-type: text/html; charset=iso-8859-1' . "\r\n";              
+                $hd='Content-type: text/html; charset=utf-8' . "\r\n";              
 
                 //$from_email=$admin_email;
 

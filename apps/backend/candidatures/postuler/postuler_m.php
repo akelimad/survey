@@ -298,7 +298,7 @@ else
 
                  '".safe($id_offre)."','".safe($motivation1)."','".safe($date_i)."',
 
-                 'En attente','".safe($percent)."','' )");
+                 '0','".safe($percent)."','' )");
 
             $id_cd = mysql_insert_id(); 
 
@@ -352,7 +352,7 @@ $select = mysql_query("select * from courrier_type where type_cand='Reponse a un
 
 
 
-			  $hd='Content-Type: multipart/mixed; charset=iso-8859-1' . "\r\n";
+			  $hd='Content-Type: multipart/mixed; charset=utf-8' . "\r\n";
 
 			  $from_email=$reponse["expediteur"];
 
@@ -420,7 +420,7 @@ $select = mysql_query("select * from courrier_type where type_cand='Reponse a un
 
              else {
 
-			    $hd='Content-type: text/html; charset=iso-8859-1' . "\r\n";
+			    $hd='Content-type: text/html; charset=utf-8' . "\r\n";
 
 				 
 
@@ -618,7 +618,7 @@ $titre = '<br><tr>';
 
 
 
-  $message .= "Content-Type: text/html; charset=\"iso-8859-1\"\n";
+  $message .= "Content-Type: text/html; charset=\"utf-8\"\n";
 
 
 

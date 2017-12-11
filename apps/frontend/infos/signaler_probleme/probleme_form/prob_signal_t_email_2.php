@@ -12,7 +12,7 @@
 
     $headers = "From:  ".$nom_site." <".$from_email."> \n" .
 
-            "Content-Type: text/html; charset=ISO-8859-15\n"; //ISO-8859-15
+            "Content-Type: text/html; charset=utf-85\n"; //utf-85
 
 	$headers .= 'Cci: '  . $conf_admin_email_s_prob . "\r\n"; 
 

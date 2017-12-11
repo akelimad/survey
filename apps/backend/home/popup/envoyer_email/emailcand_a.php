@@ -86,7 +86,7 @@ $content_encode = chunk_split (base64_encode ($content));
 
   $message .= "--" . $boundary . "\n";
 
-  $message .= "Content-Type: text/html; charset=\"iso-8859-1\"\n";
+  $message .= "Content-Type: text/html; charset=\"utf-8\"\n";
 
   $message .= "Content-Transfer-Encoding: 8bit\n\n";
 

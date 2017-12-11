@@ -22,7 +22,7 @@ $from_email=$reponse["email"];
     $emailfrom = $to;
 
     $headers = "From: $emailfrom \n" .
-            "Content-Type: text/html; charset=utf8\n"; //ISO-8859-15
+            "Content-Type: text/html; charset=utf8\n"; //utf-85
 	 
 //*/
     $body = "<p>Bonjour</p>";
@@ -135,7 +135,7 @@ $message.= "Content-Type: multipart/alternative;".$passage_ligne." boundary=\"$b
 $message.= $passage_ligne."--".$boundary_alt.$passage_ligne;
 
 //=====Ajout du message au format texte.
-$message.= "Content-Type: text/plain; charset=\"ISO-8859-1\"".$passage_ligne;
+$message.= "Content-Type: text/plain; charset=\"utf-8\"".$passage_ligne;
 $message.= "Content-Transfer-Encoding: 8bit".$passage_ligne;
 $message.= $passage_ligne.$message_txt.$passage_ligne;
 //==========
@@ -143,7 +143,7 @@ $message.= $passage_ligne.$message_txt.$passage_ligne;
 $message.= $passage_ligne."--".$boundary_alt.$passage_ligne;
  
 //=====Ajout du message au format HTML.
-$message.= "Content-Type: text/html; charset=\"ISO-8859-1\"".$passage_ligne;
+$message.= "Content-Type: text/html; charset=\"utf-8\"".$passage_ligne;
 $message.= "Content-Transfer-Encoding: 8bit".$passage_ligne;
 $message.= $passage_ligne.$message_html.$passage_ligne;
 //==========
@@ -172,7 +172,7 @@ $message.= $passage_ligne."--".$boundary."--".$passage_ligne;
 //==========//==========//==========//==========// 
 	
 	$header  = "From: ".$nom_site." <".$from_email.">".$passage_ligne;
-    $header .= "Content-Type: text/html;  charset=\"ISO-8859-1\" \n";  
+    $header .= "Content-Type: text/html;  charset=\"utf-8\" \n";  
 	$header .= 'Cc:  ' . $from_email_cc . $passage_ligne;
  
 	$message= $passage_ligne.$message_html.$passage_ligne;

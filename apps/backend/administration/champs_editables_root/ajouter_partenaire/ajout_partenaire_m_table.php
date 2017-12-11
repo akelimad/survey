@@ -28,7 +28,7 @@
 
 
 
-   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <script type="text/javascript" src="<?php echo $jsurl; ?>/jquery/jquery-1.11.2.min.js"></script> 
 

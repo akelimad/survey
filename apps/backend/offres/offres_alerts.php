@@ -132,7 +132,7 @@ while ($data4 = mysql_fetch_assoc($query1)){
 
 												$headers1  = 'MIME-Version: 1.0' . "\r\n";      
 
-												$headers1 .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+												$headers1 .= 'Content-type: text/html; charset=utf-8' . "\r\n";
 
 												$headers1 .= "From: $nom_site <$info_contact>" . "\r\n";
 
