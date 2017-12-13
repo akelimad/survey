@@ -1,3 +1,4 @@
+<?php use Modules\Candidatures\Models\Candidatures; ?>
 <div id="container">
 	<div class="row" style="margin-bottom: 20px;">
 		<div class="col-md-12">
@@ -51,9 +52,9 @@
 				<li>
 					<a href="<?= site_url('backend/module/candidatures/candidature'); ?>"><i class="fa fa-list-ol"></i>&nbsp;Candidatures en cours</a>
 				</li>
-				<?php foreach ($status as $key => $status) : ?>
-					<li>
-						<a href="<?= site_url('backend/module/candidatures/candidature/list/'. $status->id_prm_statut_c); ?>"><i class="fa fa-tasks"></i>&nbsp;<?= $status->statut; ?><span class="badge pull-right"><?= \Modules\Candidatures\Models\Candidatures::countByStatus($status->id_prm_statut_c); ?></span></a>
+				<?php foreach (Candidatures::getStatus() as $key => $status) : ?>
+					<li <?= (isset($_GET['id']) && $_GET['id']==$status->id_prm_statut_c) ? 'class="menufo-active"' : ''; ?>>
+						<a href="<?= site_url('backend/module/candidatures/candidature/list/'. $status->id_prm_statut_c); ?>"><i class="fa fa-tasks"></i>&nbsp;<?= $status->statut; ?><span class="badge pull-right"><?= Candidatures::countByStatus($status->id_prm_statut_c); ?></span></a>
 					</li>
 				<?php endforeach; ?>
 				<li>

@@ -1,14 +1,16 @@
 <form action="" method="GET" id="candidatures-filter">
+	<input type="hidden" name="page" value="1" />
 	<?php if(!empty($url_params)) : 
 		unset(
 			$url_params['module'],
-			$url_params['method'],
+			$url_params['controller'],
+			$url_params['action'],
 			$url_params['id']
 		);
 		foreach ($url_params as $key => $value) :
 		$field_key = array_search($key, array_column($fields, 'name'));
 		if( $field_key === false ) :
-		if( $key == 'page') $value = 1;
+		if( $key == 'page') continue;
 	?>
 	<input type="hidden" name="<?= $key; ?>" value="<?= $value; ?>" />
 	<?php endif; endforeach; endif; ?>

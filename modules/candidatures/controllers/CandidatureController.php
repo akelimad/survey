@@ -24,7 +24,6 @@ class CandidatureController extends AdminController
   {
     $this->addAssets();
     $table = new TableController();
-    $this->data['status'] = Candidatures::getStatus();
     $this->data['table'] = $table->getTable();
     $this->data['params'] = $table->params;
     $this->data['template'] = 'two-columns-left';
@@ -39,13 +38,16 @@ class CandidatureController extends AdminController
   }
 
 
-  public function actionStatus($id)
+  public function actionStatus()
   {
-    echo '<h1>En maintenance...</h1>';    
+    $this->addAssets();
+    $this->data['template'] = 'two-columns-left';
+    $this->data['breadcrumbs'] = ['Candidatures', 'Etat des candidatures'];
+    return get_page('admin/candidature/status', $this->data, __FILE__);  
   }
 
 
-  public function actionHistorique($id)
+  public function actionHistorique()
   {
     echo '<h1>En maintenance...</h1>';    
   }

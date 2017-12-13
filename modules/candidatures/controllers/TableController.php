@@ -40,6 +40,17 @@ class TableController
 	];
 
 	private $actions = [
+		'change_status' => [
+			'label' => 'Editer le statut de cette candidature',
+			'bulk_label' => 'Editer le statut',
+			'patern' => '#',
+			'icon' => 'fa fa-pencil',
+			'callback' => 'showChangeSatatusPopup',
+			'bulk_action' => false,
+			'attributes' => [
+				'class' => 'btn btn-success btn-xs',
+			]
+		],
 		'send_mail' => [
 			'label' => 'Envoyer un email au candidat',
 			'bulk_label' => 'Envoyer un email',
@@ -88,7 +99,7 @@ class TableController
 	 */
   public function getTable()
   {
-  	$query = $this->buildQuery();
+  		$query = $this->buildQuery();
 		$table = new \App\Helpers\Table($query, 'id_candidature', $this->params['options']);
 		$table->setTableClass(['table', 'table-striped', 'table-hover']);
 		$table->setTableId('candidatureTable');
@@ -96,16 +107,24 @@ class TableController
 		$table->setTrigger('table_notes', [$this, 'getPertinenceNotice']);
 		$table->setOrderby('cand.date_candidature');
 		$table->setOrder('DESC');
-  	// Add custom actions
+  		// Add custom actions
 		foreach ($this->actions as $key => $attributes) {
 			if( isset($this->params['actions'][$key]) && $this->params['actions'][$key] == false ) continue;
 			$table->setAction($key, $attributes);
 		}
 
 		// Add table columns
-		$table->addColumn('infos', 'Informations Candidats', function($row){
-			$html = '<a href="'. site_url('backend/cv/?candid='.$row->candidats_id) .'" target="_blank" class="cname" title="Voir le profile"><i class="fa fa-user"></i>&nbsp;'. $row->fullname .'</a><br>';
-			$html .= Candidat::getPaysByID($row->id_pays);
+		$table->addColumn('sinfos', 'Informations Candidats', function($row){
+			$html = '<a href="'. site_url('backend/cv/?candid='.$row->candidats_id) .'" target="_blank" class="cname" title="Voir le profile"><i class="fa fa-user"></i>&nbsp;'. $row->fullname .'</a>';
+
+			if( !is_null($row->date_n) ) {
+				$birthday = date('Y-m-d', french_to_english_date($row->date_n));
+				$age = (time() - strtotime($birthday)) / 3600 / 24 / 365;
+				$html .= '<br><b>'.number_format($age, 0).' ans</b>';
+			}
+
+			$html .= '<br>'. $row->ville .'&nbsp;|&nbsp;'. Candidat::getPaysByID($row->id_pays);
+
 			return $html;
 		});
 
@@ -154,28 +173,38 @@ class TableController
 			$details = '';
 			if( intval($row->id_cv) > 0 ) {
 				$cv_ext = \App\Models\Cv::getExtension($row->id_cv);
-				$icon = $this->getIconByExtention($cv_ext);
-				$details .= '<a href="'. site_url('backend/module/candidatures/candidat/cv/'.$row->id_cv) .'" title="Télécharger le CV"><i class="'.$icon.'"></i></a>';
+				if( !is_null($cv_ext) ) {
+					$icon = $this->getIconByExtention($cv_ext);
+					$details .= '<a href="'. site_url('backend/module/candidatures/candidat/cv/'.$row->id_cv) .'" title="Télécharger le CV"><i class="'.$icon.'"></i></a>';
+				}
 			}
 			if( intval($row->id_lettre) > 0 ) {
 				$lettre_ext = \App\Models\Lettre::getExtension($row->id_lettre);
-				$icon = $this->getIconByExtention($lettre_ext);
-				$details .= '&nbsp;<a href="'. site_url('backend/module/candidatures/candidat/lettre/'.$row->id_lettre) .'" title="Télécharger la lettre de motivation"><i class="'.$icon.'"></i></a>';
+				if( !is_null($lettre_ext) ) {
+					$icon = $this->getIconByExtention($lettre_ext);
+					$details .= '&nbsp;<a href="'. site_url('backend/module/candidatures/candidat/lettre/'.$row->id_lettre) .'" title="Télécharger la lettre de motivation"><i class="'.$icon.'"></i></a>';
+				}
 			}
 			return $details;
 		});
 
 		$table->addColumn('pertinence', 'P', function($row){
 			$p = Candidat::getPertinance($row->candidats_id, $row->id_offre);
-			$pscores = $this->getPertinanceScores($p);
-			$html = '<i class="fa fa-circle" style="font-size: 1.3em;color:'. $this->getPertinanceColor($p->total_p) .'" data-toggle="popover" data-trigger="hover" data-popover-content="#show_p_'. $row->candidats_id .'"></i>';
+			$total_p = (isset($p->total_p)) ? $p->total_p : 0;
+			$html = '<i class="fa fa-circle" style="font-size: 1.3em;color:'. $this->getPertinanceColor($total_p) .'" data-toggle="popover" data-trigger="hover" data-popover-content="#show_p_'. $row->candidats_id .'"></i>';
 			$html .= '<div id="show_p_'. $row->candidats_id .'" class="hidden">';
-			$html .= '<table class="table table-pertinance">';
-			foreach ($pscores as $key => $score) :
-				$html .= '<tr><td>'. $key .'</td><td>=</td><td>'. $score .'&nbsp;%</td></tr>';
-			endforeach;
-				$html .= '<tr><td><strong>Pertinence total</strong></td><td>=</td><td><strong>'. $p->total_p .'&nbsp;%</strong></td></tr>';
-			$html .= '</table></div>';
+			if( isset($p->total_p) ) {
+				$html .= '<table class="table table-pertinance">';
+				$pscores = $this->getPertinanceScores($p);
+				foreach ($pscores as $key => $score) :
+					$html .= '<tr><td>'. $key .'</td><td>=</td><td>'. $score .'&nbsp;%</td></tr>';
+				endforeach;
+					$html .= '<tr><td><strong>Pertinence total</strong></td><td>=</td><td><strong>'. $p->total_p .'&nbsp;%</strong></td></tr>';
+				$html .= '</table>';
+			} else {
+				$html .= 'Aucun résultat.</div>';
+			}
+			$html .= '</div>';
 			return $html;
 		});
 
@@ -187,7 +216,7 @@ class TableController
 
 		$table->addColumn('titre_offre', 'Titre du poste', function($row){
 			return $row->titre_offre;
-		}, ['width'=> '200px']);
+		}, ['width'=> '140px']);
 
 		$table->addColumn('date_cand', 'Date', function($row){
 			return '<b>'. date ("d.m.Y", strtotime($row->date_candidature)) .'</b>';
@@ -211,7 +240,7 @@ class TableController
   {
   	$andWhere = $this->getAndWhereStatement();
   	$joints   = $this->getJoints();
-  	$query = "SELECT c.candidats_id, CONCAT(c.nom, ' ',c.prenom) AS fullname, c.email, c.titre, c.id_situ, c.id_tfor, c.id_nfor, c.id_expe, c.id_sect, c.id_fonc, c.mobilite, c.id_pays, c.id_salr, c.dateMAJ, c.CVdateMAJ, cand.* FROM candidature cand INNER JOIN candidats c ON c.candidats_id = cand.candidats_id {$joints} WHERE cand.status='". $_GET['id'] ."' {$andWhere} GROUP BY cand.id_candidature";
+  	$query = "SELECT c.candidats_id, CONCAT(c.nom, ' ',c.prenom) AS fullname, c.email, c.titre, c.ville, c.id_situ, c.id_tfor, c.id_nfor, c.id_expe, c.id_sect, c.id_fonc, c.mobilite, c.id_pays, c.id_salr, c.date_n, c.dateMAJ, c.CVdateMAJ, cand.* FROM candidature cand INNER JOIN candidats c ON c.candidats_id = cand.candidats_id {$joints} WHERE cand.status='". $_GET['id'] ."' {$andWhere} GROUP BY cand.id_candidature";
   	return $query;
   }
 
@@ -376,13 +405,13 @@ class TableController
    */
   public function getPertinanceScores($cp) {
   	$scores = array();
-  	if( $this->pertinence->prm_titre == 1 ) 	$scores['Pertinence Titre'] 				 	= $cp->prm_titre;
-  	if( $this->pertinence->prm_expe == 1 )  	$scores['Pertinence expérience'] 	 	 	= $cp->prm_expe;
-  	if( $this->pertinence->prm_local == 1 ) 	$scores['Pertinence Ville'] 				 	= $cp->prm_local;
-  	if( $this->pertinence->prm_tpost == 1 ) 	$scores['Pertinence Type de poste']  	= $cp->prm_tpost;
-  	if( $this->pertinence->prm_fonc == 1 )  	$scores['Pertinence Fonction'] 		 	 	= $cp->prm_fonc;
-  	if( $this->pertinence->prm_nfor == 1 )  	$scores['Pertinence Formation'] 		 	= $cp->prm_nfor;
-  	if( $this->pertinence->prm_mobil == 1 ) 	$scores['Pertinence Moblité'] 			 	= $cp->prm_mobil;
+  	if( $this->pertinence->prm_titre == 1 )   $scores['Pertinence Titre']			= $cp->prm_titre;
+  	if( $this->pertinence->prm_expe == 1 )    $scores['Pertinence expérience']		= $cp->prm_expe;
+  	if( $this->pertinence->prm_local == 1 )   $scores['Pertinence Ville']			= $cp->prm_local;
+  	if( $this->pertinence->prm_tpost == 1 )   $scores['Pertinence Type de poste']  	= $cp->prm_tpost;
+  	if( $this->pertinence->prm_fonc == 1 )    $scores['Pertinence Fonction']		= $cp->prm_fonc;
+  	if( $this->pertinence->prm_nfor == 1 )    $scores['Pertinence Formation']		= $cp->prm_nfor;
+  	if( $this->pertinence->prm_mobil == 1 )   $scores['Pertinence Moblité']			= $cp->prm_mobil;
   	if( $this->pertinence->prm_n_mobil == 1 ) $scores['Pertinence Niveau Mobilité'] = $cp->prm_n_mobil;
   	if( $this->pertinence->prm_t_mobil == 1 ) $scores['Pertinence Taux Mobilité']   = $cp->prm_t_mobil;
   	return $scores;

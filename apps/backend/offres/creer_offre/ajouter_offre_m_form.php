@@ -30,7 +30,7 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
 
              </tr>
 
-            <?php \app\Event::trigger('wf_offre_form_fields'); ?>
+            <?php \App\Event::trigger('wf_offre_form_fields'); ?>
 
              <tr>
 

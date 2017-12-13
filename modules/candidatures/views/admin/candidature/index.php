@@ -10,6 +10,7 @@
 </table>
 
 <input type="hidden" id="url_params" value="<?= htmlentities(json_encode($_GET)); ?>">
+<input type="hidden" id="current_statut_id" value="<?= (isset($_GET['id'])) ? $_GET['id'] : ''; ?>">
 <input type="hidden" id="filterFields" value="<?= htmlentities(json_encode($params['filterFields'])); ?>">
 
 <div data-toggle="collapse" data-target="#candidatures-filter-wrap" class="subscription filter-candidatures-title<?= (read_cookie('eta_filter')==0) ? ' collapsed' : ''; ?>"><h1>Options de filtrage</h1></div>

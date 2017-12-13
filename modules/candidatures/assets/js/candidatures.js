@@ -6,8 +6,8 @@ jQuery(document).ready(function($){
 
 	showModal = function(ajax_args) {
 		$('#candidaturesModal').modal({
-	    backdrop: 'static',
-	    keyboard: false
+			backdrop: 'static',
+			keyboard: false
 		})
 		ajax_handler(ajax_args, function(response){
 			if( typeof response.content != undefined ) {
@@ -47,14 +47,26 @@ jQuery(document).ready(function($){
 		})
 	}
 
+	// show change status popup
+	showChangeSatatusPopup = function(event, candidatures) {
+		event.preventDefault()
+		showModal({
+			data: {
+				'action': 'cand_change_status_popup',
+				'candidatures': candidatures,
+				'id_statut': $('input#current_statut_id').val()
+			}
+		})
+	}
+
 	$.fn.getWidthInPercent = function () {
-    var width = parseFloat($(this).css('width'))/parseFloat($(this).parent().css('width'));
-    return Math.round(100*width);
-  };
+		var width = parseFloat($(this).css('width'))/parseFloat($(this).parent().css('width'));
+		return Math.round(100*width);
+	};
 
 	$('#candidaturesModal').on('hidden.bs.modal', function () {
-    $('#candidaturesModal .modal-header h4').html(modalTitle)
-    $('#candidaturesModal .modal-body').empty().hide()
+		$('#candidaturesModal .modal-header h4').html(modalTitle)
+		$('#candidaturesModal .modal-body').empty().hide()
 	})
 	
 	$(document).on('click', '#refresh-candidatures-filter', function(event){

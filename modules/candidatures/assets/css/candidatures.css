@@ -150,3 +150,11 @@
 .candidatureTable_pagination li>a>i, .candidatureTable_pagination li>span>i{
   vertical-align: baseline !important;
 }
+
+.actions .fa-pencil{
+  font-size: 12px !important;
+}
+
+ul#menu_site_carriere li a {
+    padding: 5px;
+}

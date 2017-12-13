@@ -27,9 +27,10 @@ class AjaxController
   public function __construct()
   {
     Ajax::add('cand_filter_form', [$this, 'showCandidaturesFilterForm']);
-    Ajax::add('cand_sendemail_popup', [$this, 'showSendEmailPopup']);
     Ajax::add('cand_send_email', [$this, 'sendEmail']);
     Ajax::add('cand_type_email', [$this, 'getTypeEmail']);
+    Ajax::add('cand_sendemail_popup', [$this, 'showSendEmailPopup']);
+    Ajax::add('cand_change_status_popup', [$this, 'showChangeSatatusPopup']);
   }
   
 
@@ -87,6 +88,38 @@ class AjaxController
 
     return ['content' => $content, 'title' => 'ENVOYER E-MAIL AU CANDIDAT'];
   }
+
+
+
+  /**
+   * Show change status
+   * 
+   * @author M'hamed Chanchaf
+   */
+  public function showChangeSatatusPopup($data)
+  {
+    if( empty($data['candidatures']) ) return;
+
+    $candidature = getDB()->prepare("
+      SELECT cand.id_candidature AS cid, concat(c.nom, ' ', c.prenom) AS displayName 
+      FROM candidats c 
+      JOIN candidature AS cand ON cand.candidats_id=c.candidats_id 
+      WHERE cand.id_candidature=?
+    ", [$data['candidatures'][0]], true);
+
+    if( empty($candidature) ) return;
+
+    ob_start();
+    get_view('admin/candidature/popup/change-status', [
+      'candidature' => $candidature,
+      'id_statut' => $data['id_statut']
+    ], __FILE__);
+    $content = ob_get_clean();
+
+    return ['content' => $content, 'title' => 'FORMULAIRE D\'ÉDITION DE STATUT DE LA CANDIDATURE'];
+  }
+  
+
 
 
   /**

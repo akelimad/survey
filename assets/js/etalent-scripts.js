@@ -69,6 +69,7 @@ $('.etaTable_cb').change(function(){
 
 $('.etaTable_perpage').change(function(){
 	var perpage = $(this).val()
+	change_url_param('page', 1)
 	change_url_param('perpage', perpage)
 	location.reload()
 })

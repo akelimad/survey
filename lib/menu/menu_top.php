@@ -179,8 +179,7 @@ if ($_SESSION['menu4'] == 1)
 ?> 
 	<li class="<?php echo $cls4; ?>">
 
-		<a href="<?php  echo $urlad_candatur  ?>/">Candidatures</a>	
-
+		<a href="<?= site_url('backend/module/candidatures/candidature/status'); ?>">Candidatures</a>	
 		
 		<ul class="secondLevel">
 			<?php foreach (Candidatures::getStatus() as $key => $status) : ?>

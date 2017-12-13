@@ -417,7 +417,7 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
                  title="Intitulé du poste" required/>
                  <!--<input id="intitule1" type="text" name="intitule" value="<?php echo $r_email; ?>"  maxlength="80" style="width:504px" title="Intitulé du poste" required/>--></td>
              </tr>
-            <?php \app\Event::trigger('wf_offre_form_fields'); ?>
+            <?php \App\Event::trigger('wf_offre_form_fields'); ?>
          <tr>
              <td><!-- Secteur d’activit&eacute;<span style="color:red">*</span> --></td>
              <td>
