@@ -138,21 +138,10 @@ echo '<span class="badge badge-error">'.$accept.'</span> ';?>
 
 <td width="80%"><b>Nouvelles candidatures :</b></td>
 
-<td   style="float: right;"><?php 
+<td   style="float: right;">
+<a href="<?= site_url('backend/module/candidatures/candidature/list/0'); ?>" title="Consulter">
 
-if ($new)
-
-echo '<a href="'.$urlad_candatur.'/nouvelle_candidature/" title="Consulter">
-
-<span class="badge badge-success">
-
- ' . $new . ' </span></a>';
-
-else
-
-echo ' <span class="badge badge-error">
-
-'.$new.' </span>'; ?>
+<span class="badge badge-success"><?= \Modules\Candidatures\Models\Candidatures::countByStatus(0); ?></span>
 
 </td>
 
