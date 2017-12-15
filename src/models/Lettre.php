@@ -1,12 +1,14 @@
 <?php
 /**
- * Lettre model
+ * Lettre
  *
  * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
- * @package app.models
- * @since 27/10/2017
+ *
+ * @package app.assets
+ * @version 1.0
+ * @since 1.5.0
  */
-namespace app\models; 
+namespace App\Models; 
 
 class Lettre {
 

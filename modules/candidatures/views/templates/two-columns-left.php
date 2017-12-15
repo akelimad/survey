@@ -57,9 +57,9 @@
 						<a href="<?= site_url('backend/module/candidatures/candidature/list/'. $status->id_prm_statut_c); ?>"><i class="fa fa-tasks"></i>&nbsp;<?= $status->statut; ?><span class="badge pull-right"><?= Candidatures::countByStatus($status->id_prm_statut_c); ?></span></a>
 					</li>
 				<?php endforeach; ?>
-				<li>
-					<a href="<?= site_url('backend/module/candidatures/candidature/historique'); ?>"><i class="fa fa-history"></i>&nbsp;Historique des notes</a>
-				</li>
+				<!--li>
+					<a href="<?//= site_url('backend/module/candidatures/candidature/historique'); ?>"><i class="fa fa-history"></i>&nbsp;Historique des notes</a>
+				</li-->
 			</ul>
 		</div>
 		<div class="col-md-9">

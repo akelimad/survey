@@ -32,6 +32,9 @@ class EventController
 		// Candidature change status events
 		Event::add('change_status_form_fields', [$this, 'changeStatusFormFields']);
 		Event::add('change_status_form_submit', [$this, 'changeStatusFormSubmit']);
+
+		// Add custom params to candidature table
+		Event::add('before_run_candidature_table', [$this, 'beforeRunCandidatureTable']);
 	}
 	
 
@@ -44,26 +47,26 @@ class EventController
 	}
 
 
-	public function afterOffreFields($args)
+	public function afterOffreFields($data)
 	{
 		return View::get('admin/offre/fields', [
 			'fiche' 	 => $fiche,
 			'ficheTypes' => $this->ficheTypes,
-			'id_offre'   => $args['id_offre'] ?: null
+			'id_offre'   => $data['id_offre'] ?: null
 		], __FILE__);
 	}
 
 
-	public function afterFormSubmit($args)
+	public function afterFormSubmit($data)
 	{
-		if( isset($args['id_offre']) && !empty($args['data']['offre_fiche_type']) ) {
+		if( isset($data['id_offre']) && !empty($data['data']['offre_fiche_type']) ) {
 			$db = getDB();
-			foreach ($args['data']['offre_fiche_type'] as $key => $id_fiche) {
+			foreach ($data['data']['offre_fiche_type'] as $key => $id_fiche) {
 				if( $id_fiche == '' || !is_numeric($id_fiche) ) continue;
 				if( !$db->exists('fiche_offre', 'id_fiche', $id_fiche) ) {
 					$db->create('fiche_offre', [
 						'id_fiche' => $id_fiche,
-						'id_offre' => $args['id_offre'] ?: null
+						'id_offre' => $data['id_offre'] ?: null
 					]);
 				}
 			}
@@ -71,9 +74,9 @@ class EventController
 	}
 
 
-	public function changeStatusFormFields($args)
+	public function changeStatusFormFields($data)
 	{
-		$id_candidature = $args['candidature']->id_candidature;
+		$id_candidature = $data['candidature']->id_candidature;
 		return View::get('admin/candidature/fields', [
 			'ficheTypes' => $this->ficheTypes,
 			'fiche_candidature' => getDB()->findOne('fiche_candidature', 'id_candidature', $id_candidature) ?: new \stdClass,
@@ -82,7 +85,7 @@ class EventController
 	}
 
 
-	public function changeStatusFormSubmit($args)
+	public function changeStatusFormSubmit($data)
 	{
 		/*if( isset($args['id_offre']) && !empty($args['data']['offre_fiche_type']) ) {
 			$db = getDB();
@@ -96,6 +99,14 @@ class EventController
 				}
 			}
 		}*/
+	}
+
+
+	public function beforeRunCandidatureTable($data)
+	{
+		$abc = $data['table'];
+		// dump($abc);
+		// return $data['table'];
 	}
 
 

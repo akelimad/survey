@@ -11,6 +11,7 @@
 namespace Modules\Candidatures\Controllers;
 
 use App\Ajax;
+use App\Models\Cv;
 
 class AjaxController
 {
@@ -29,7 +30,10 @@ class AjaxController
     Ajax::add('cand_filter_form', [$this, 'showCandidaturesFilterForm']);
     Ajax::add('cand_send_email', [$this, 'sendEmail']);
     Ajax::add('cand_type_email', [$this, 'getTypeEmail']);
+
     Ajax::add('cand_sendemail_popup', [$this, 'showSendEmailPopup']);
+    Ajax::add('cand_send_cv_email_popup', [$this, 'showSendCVEmailPopup']);
+
     Ajax::add('cand_change_status_popup', [$this, 'showChangeSatatusPopup']);
   }
   
@@ -52,8 +56,9 @@ class AjaxController
   public function showCandidaturesFilterForm($data)
   {
     ob_start();
+    $customFields = (isset($data['fields']) && is_array($data['fields'])) ? json_decode($data['fields'], true) : [];
     $fields = include_once module_base(__FILE__, 'resources/filter-fields.php');
-    $fields = array_merge($fields, json_decode($data['fields'], true));
+    $fields = array_merge($fields, $customFields);
     $data['fields'] = \etalent_array_sort($fields, 'sortOrder');
     $data['url_params'] = json_decode($data['params'], true);
 
@@ -70,7 +75,7 @@ class AjaxController
    */
   public function showSendEmailPopup($data)
   {
-    if( empty($data['candidatures']) ) return;
+    if( empty($data['candidatures']) ) return [];
     $cids = "'". implode("','", $data['candidatures']) ."'";
     $candidatures = getDB()->prepare("
       SELECT cand.id_candidature AS cid, c.email 
@@ -78,7 +83,7 @@ class AjaxController
       JOIN candidature AS cand ON cand.candidats_id=c.candidats_id 
       WHERE cand.id_candidature IN({$cids})
       ");
-    if( empty($candidatures) ) return;
+    if( empty($candidatures) ) return [];
 
     ob_start();
     get_view('admin/candidature/popup/send-mail', [
@@ -92,13 +97,51 @@ class AjaxController
 
 
   /**
+   * Show CV per email Popup
+   * 
+   * @author M'hamed Chanchaf
+   */
+  public function showSendCVEmailPopup($data)
+  {
+    if( empty($data['candidatures']) ) return [];
+    $cids = "'". implode("','", $data['candidatures']) ."'";
+    $candidature = getDB()->prepare("
+      SELECT  cand.*, cand.id_candidature AS cid, c.email 
+      FROM candidats c 
+      JOIN candidature AS cand ON cand.candidats_id=c.candidats_id 
+      WHERE cand.id_candidature=?
+      ", [$data['candidatures'][0]], true);
+    if( empty($candidature) ) return [
+      'status' => 'error',
+      'message' => 'Impossible de trouver cette candidature.'
+    ];
+
+    $cv = Cv::getByID($candidature->id_cv);
+    if( !isset($cv->lien_cv) ) return [
+      'status' => 'error',
+      'message' => 'Impossible de trouver le CV de ce candidat.'
+    ];
+
+    ob_start();
+    get_view('admin/candidature/popup/send-mail', [
+      'candidatures' => [$candidature],
+      'cv_name' => $cv->titre_cv,
+      'cv_path' => 'apps/upload/frontend/cv/'.$cv->lien_cv
+    ], __FILE__);
+    $content = ob_get_clean();
+
+    return ['content' => $content, 'title' => 'TRANSFÈRE LE CV PAR EMAIL'];
+  }
+
+
+  /**
    * Show change status
    * 
    * @author M'hamed Chanchaf
    */
   public function showChangeSatatusPopup($data)
   {
-    if( empty($data['candidatures']) ) return;
+    if( empty($data['candidatures']) ) return [];
 
     $candidature = getDB()->prepare("
       SELECT cand.id_candidature AS cid, concat(c.nom, ' ', c.prenom) AS displayName 
@@ -107,7 +150,7 @@ class AjaxController
       WHERE cand.id_candidature=?
     ", [$data['candidatures'][0]], true);
 
-    if( empty($candidature) ) return;
+    if( empty($candidature) ) return [];
 
     ob_start();
     get_view('admin/candidature/popup/change-status', [
@@ -129,7 +172,7 @@ class AjaxController
    */
   public function getTypeEmail($data)
   {
-    if(!isset($data['id_email']) || $data['id_email'] == '') return;
+    if(!isset($data['id_email']) || $data['id_email'] == '') return [];
     return getDB()->findOne('email_type', 'id_email', $data['id_email']);
   }
 
@@ -145,15 +188,15 @@ class AjaxController
       !isset($data['receiver']) || $data['receiver'] == '' ||
       !isset($data['subject'])  || $data['subject'] == '' ||
       !isset($data['message'])  || $data['message'] == ''
-    ) return;
+    ) return [];
 
       $message = $data['message'];
       $parts = explode('|', $data['receiver']);
       if( isset($parts[1]) ) {
         $message = $this->renderTemplate($parts[0], $parts[1], $data['message']);
       }
-      
-      /*$db->create('corespondances', [
+
+     /* getDB()->create('corespondances', [
         'sujet' => $data['subject'],
         'nom' => $_SESSION["abb_admin"],
         'date_envoi' => date('Y-m-d H:i:s'),
@@ -163,9 +206,12 @@ class AjaxController
         'ref_filiale' => ''
       ]);*/
 
+      $attachements = (isset($data['cv_path']) && $data['cv_path']!='') ? [site_base($data['cv_path'])] : [];    
+
       $receiver = (isset($parts[1])) ? $parts[1] : $parts[0];
       return \App\Mail\Mailer::send($receiver, $data['subject'], $data['message'], [
         'isHTML' => true,
+        'attachements' => $attachements
       ]);
     }
 

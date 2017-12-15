@@ -10,14 +10,18 @@ jQuery(document).ready(function($){
 			keyboard: false
 		})
 		ajax_handler(ajax_args, function(response){
-			if( typeof response.content != undefined ) {
-				$('#candidaturesModal .modal-body').html(response.content).show()
-				if( typeof response.title != undefined ) {
-					$('#candidaturesModal .modal-header h4').text(response.title)
-				} else {
-					$('#candidaturesModal .modal-header').hide()
-				}
+			var modal_title = 'ERREUR INATTENDU !'
+			var modal_content = '<strong>Une erreur est survenu lors de chargement de la requête, merci de réessayer.</strong>';
+			if( response.content != null && typeof response.content != undefined ) {
+				modal_content = response.content
+			} else if ( typeof response.status != undefined && response.status == 'error' ) {
+				modal_content = response.message
 			}
+			if( response.title != null && typeof response.title != undefined ) {
+				modal_title = response.title
+			}
+			$('#candidaturesModal .modal-body').html(modal_content).show()
+			$('#candidaturesModal .modal-header h4').html('<strong>'+modal_title+'</strong>')
 		});
 	}
 
@@ -42,6 +46,16 @@ jQuery(document).ready(function($){
 		showModal({
 			data: {
 				'action': 'cand_sendemail_popup',
+				'candidatures': candidatures
+			}
+		})
+	}
+
+	showSendCVEmailPopup = function(event, candidatures) {
+		event.preventDefault()
+		showModal({
+			data: {
+				'action': 'cand_send_cv_email_popup',
 				'candidatures': candidatures
 			}
 		})

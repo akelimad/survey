@@ -12,6 +12,6 @@
  *
  * @return instance $db
  */
-function getDb() {
+function getDB() {
 	return \App\Database::getInstance();
 }

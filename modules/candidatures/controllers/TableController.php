@@ -10,8 +10,9 @@
  */
 namespace Modules\Candidatures\Controllers;
 
-use \Modules\Candidatures\Models\Candidat;
-use \Modules\Candidatures\Models\Candidatures;
+use App\Event;
+use Modules\Candidatures\Models\Candidat;
+use Modules\Candidatures\Models\Candidatures;
 
 class TableController
 {
@@ -49,6 +50,17 @@ class TableController
 			'bulk_action' => false,
 			'attributes' => [
 				'class' => 'btn btn-success btn-xs',
+			]
+		],
+		'send_cv_mail' => [
+			'label' => 'Transférer le CV',
+			'bulk_label' => 'Transférer le CV',
+			'patern' => '#',
+			'icon' => 'fa fa-send-o',
+			'callback' => 'showSendCVEmailPopup',
+			'bulk_action' => false,
+			'attributes' => [
+				'class' => 'btn btn-default btn-xs',
 			]
 		],
 		'send_mail' => [
@@ -107,7 +119,20 @@ class TableController
 		$table->setTrigger('table_notes', [$this, 'getPertinenceNotice']);
 		$table->setOrderby('cand.date_candidature');
 		$table->setOrder('DESC');
+
   		// Add custom actions
+  		if( isset($_GET['id']) && $_GET['id'] == 45 ) {
+  			$this->actions['fiche_evaluation'] = [
+				'label' => 'Évaluer cet candidat',
+				'patern' => '#',
+				'icon' => 'fa fa-file-text-o',
+				'callback' => 'showFicheEvaluationPopup',
+				'attributes' => [
+					'class' => 'btn btn-primary btn-xs',
+				]
+  			];
+  		}
+
 		foreach ($this->actions as $key => $attributes) {
 			if( isset($this->params['actions'][$key]) && $this->params['actions'][$key] == false ) continue;
 			$table->setAction($key, $attributes);
@@ -222,7 +247,9 @@ class TableController
 			return '<b>'. date ("d.m.Y", strtotime($row->date_candidature)) .'</b>';
 		});
 
-		// Run table and get results
+		// TODO - Run table and get results
+		// Event::trigger('before_run_candidature_table', ['table' => $table]);
+
 		$table->_run();
 
 		return $table;

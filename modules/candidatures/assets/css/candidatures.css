@@ -155,6 +155,14 @@
   font-size: 12px !important;
 }
 
-ul#menu_site_carriere li a {
-    padding: 5px;
+
+ul#menu_site_carriere li{
+  height: auto;
+}
+
+ul#menu_site_carriere li a, 
+ul#menu_site_carriere li a:hover, 
+ul#menu_site_carriere li a:focus {
+  padding: 5px;
+  height: auto;
 }

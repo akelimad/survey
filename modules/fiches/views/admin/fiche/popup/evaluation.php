@@ -1,14 +1,15 @@
 <?php use \Modules\Fiches\Models\Fiche; ?>
-<table id="fiche-container" class="mb-15" style="width:100%;">
-    <?php if(!empty($ficheTypes) ) : foreach ($ficheTypes as $fiche_type => $name) : ?>
-        <tr class="ficheType_<?= $fiche_type; ?>" style="display:none;">
+
+<form action="" method="post" id="ficheEvaluationForm">
+    <table id="fiche-container" class="mb-15" style="width:100%;">
+        <tr class="ficheType_<?= $fiche_type; ?>">
             <td>
                 <div class="subscription" style="margin: 10px 0 5px;height: 23px;">
                     <h1><?= $name; ?></h1>
                 </div>
             </td>
         </tr>
-        <tr class="ficheType_<?= $fiche_type; ?>" style="display:none;">
+        <tr class="ficheType_<?= $fiche_type; ?>">
             <td>
                 <?php foreach (Fiche::getBlocksByFicheType($fiche_type) as $key => $block) : ?>
                     <table class="table table-striped mb-10">
@@ -48,7 +49,7 @@
                                         <select name="fiche_result[<?= $block->id_block; ?>][<?= $item->id_item; ?>][value]" style="width: 100%;height: 22px;">
                                         <option value=""></option>
                                         <?php foreach (Fiche::getNotes() as $nk => $note) : ?>
-                                            <option value="<?= $nk; ?>"><?= $note; ?></option>
+                                            <option value="<?= $nk; ?>"><?= $nk; ?>&nbsp;(<?= $note; ?>)</option>
                                         <?php endforeach; ?>
                                         </select>
                                     <?php endif; ?>
@@ -65,37 +66,19 @@
                 <?php endforeach; ?>       
             </td>
         </tr>
-    <?php endforeach; endif; ?>
-    <tr id="ficheCandidatureCommentsRow" style="display:none;">
-        <td>
-            <div class="subscription" style="height:23px;margin: 10px 0 5px;">
-                <h1><label for="fiche_comments">Commentaire(s)</label></h1>
-            </div>
-            <textarea name="fiche_candidature[comments]" style="width:100%;" rows="6"><?= (isset($fiche_candidature->comments)) ? $fiche_candidature->comments : ''; ?></textarea>
-        </td>
-    </tr>
-</table>
+        <tr id="ficheCandidatureCommentsRow">
+            <td>
+                <div class="subscription" style="height:23px;margin: 10px 0 5px;">
+                    <h1><label for="fiche_comments">Commentaire(s)</label></h1>
+                </div>
+                <textarea name="fiche[comments]" id="fiche_comments" style="width:100%;" rows="6"><?= (isset($fiche_candidature->comments)) ? $fiche_candidature->comments : ''; ?></textarea>
+            </td>
+        </tr>
+    </table>
 
-<script>
-jQuery(document).ready(function($){
-
-    $('#status_id').change(function(){
-        var $ref = $(this).find('option:selected').data('ref')
-
-        if( $ref == 'N_0' || $ref == 'N_1' ) {
-            $('.ficheType_0').show()
-            $('.ficheType_1').hide()
-            $('#ficheCandidatureCommentsRow').show()
-        } /*else if ( $ref == 'N_15' ) {
-            $('.ficheType_0').hide()
-            $('.ficheType_1').show()
-            $('#ficheCandidatureCommentsRow').show()
-        }*/ else {
-            $('.ficheType_0').hide()
-            $('.ficheType_1').hide()
-            $('#ficheCandidatureCommentsRow').hide()
-        }
-    })
-
-})
-</script>
+    <div class="ligneBleu" style="width: 100%;"></div>
+    <div class="form-group mt-10 mb-0">
+        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-hidden="true">Fermer</button>
+        <button type="submit" class="btn btn-primary btn-sm pull-right">Valider la fiche</button>
+    </div>
+</form>

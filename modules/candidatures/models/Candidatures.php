@@ -45,7 +45,7 @@ class Candidatures {
 
 	public static function getStatus()
 	{
-		return getDB()->prepare("SELECT * FROM prm_statut_candidature ORDER BY order_statut DESC") ?: [];
+		return getDB()->prepare("SELECT * FROM prm_statut_candidature ORDER BY order_statut ASC") ?: [];
 	}
 
 

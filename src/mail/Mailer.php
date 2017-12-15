@@ -58,7 +58,7 @@ class Mailer
 			$mail = new PHPMailer();
 
 			// SMTP connect
-			if( defined('SMTP_user_name') ) {
+			if( defined('SMTP_username') ) {
 				$mail->IsSMTP(true); // use SMTP
 				$mail->SMTPAuth   = true;
 				$mail->AuthType   = "LOGIN";

@@ -52,7 +52,7 @@ if ($_SESSION['menu1'] == 1)
 
 ?> 
 	<li class="<?php echo $cls0; ?>">
-	<a onclick="highlight_link(this);" href="<?php  echo $urladmin  ?>/">
+	<a onclick="highlight_link(this);" href="<?= site_url('backend/accueil/'); ?>">
 	
 
 	Accueil</a></li>

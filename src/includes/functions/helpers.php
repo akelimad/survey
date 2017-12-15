@@ -221,7 +221,7 @@ function dashesToCamelCase($string, $capitalizeFirstCharacter = true)
  * @return string $reference.
  */
 function generate_reference($table, $length=8) {
-	$lastID = getDb()->read($table, array('id'), true);
+	$lastID = getDB()->read($table, array('id'), true);
 	$lastID = ($lastID) ? $lastID->id : 0;
 	$reference = intval($lastID) + 1;
 	$char_length = $length - strlen( $reference );

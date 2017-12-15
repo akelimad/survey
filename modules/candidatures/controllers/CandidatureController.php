@@ -19,6 +19,13 @@ class CandidatureController extends AdminController
   private $data = [];
 
 
+  public function __construct()
+  {
+    if( !isLogged('admin') ) {
+      redirect('backend/login');
+    }
+  }
+
 
   public function actionIndex($id=null)
   {
@@ -34,6 +41,10 @@ class CandidatureController extends AdminController
 
   public function actionList($id)
   {
+    if( form_submited() ) {
+      $saveStatus = (new StatusController())->saveStatus($_POST);
+      redirect($_SERVER['HTTP_REFERER']);
+    }    
     return $this->actionIndex($id);
   }
 

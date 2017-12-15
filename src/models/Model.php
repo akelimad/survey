@@ -2,11 +2,13 @@
 /**
  * Model
  *
- * @author M'hamed Chanchaf
+ * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
  *
- * @package app.models
+ * @package app.assets
+ * @version 1.0
+ * @since 1.5.0
  */
-namespace App\Models;
+namespace App\Models; 
 
 
 class Model
