@@ -25,23 +25,16 @@
 <div style="width:33%; display:inline-table;">
 
   <label>Date de début </label><span style="color:red;">*</span> : <br/>
-
-<!--
-
-<input type="text" placeholder=" mm/aaaa "  title="Veuillez entrez la date de début de formation"  id="calendar_dbf" style="width:170px;" 
-
- name="date_debut_formation" value="<?php  echo $dd_formation; ?>" required/>
-
--->
-
-<?php/* echo $month_dd;
-
-echo $year_dd;
-
-echo $month_df;
-
-echo $year_df; */?>
-
+<?php 
+$date_debut = $formation1['date_debut'];
+$month_dd = '';
+$year_dd = '';
+if( isset($_POST['id']) && $date_debut != '' ) {
+  $parts = explode('/', $formation1['date_debut']);
+  $month_dd = $parts[0];
+  $year_dd = $parts[1];
+}
+?>
 <select class="form-control" id="mois_debut_formation" title="Mois debut formation" name="mois_formation" style="width: 40%;" required/>
 
 <option value=""></option>
@@ -100,12 +93,16 @@ echo $year_df; */?>
 
 <label>Date de fin </label><span style="color:red;">*</span> : <br/>
 
-<!--<input type="text"  placeholder=" mm/aaaa "  title="Veuillez entrez la date de fin de formation" id="calendar_ff" style="width:170px;" 
 
- name="date_fin_formation" value="<?php  echo $df_formation; ?>" class="conditionally-loaded"  />&nbsp;&nbsp;
-
--->
-
+<?php 
+$date_fin = $formation1['date_fin'];
+$month_df = '';
+$year_df = '';
+if( isset($_POST['id']) &&  $date_fin != '' ) {
+  $parts = explode('/', $date_fin);
+  $month_df = $parts[0];
+  $year_df = $parts[1];
+}?>
 
 
 <select class="conditionally-loaded" id="mois_fin_formation" title="Mois fin formation" name="mois_fin_formation" style="width: 26.3%%;" />
@@ -372,8 +369,23 @@ echo " </optgroup>";
 
 </div>
 
+<div style="width:33%; display:inline-table;">
+
+<label>Copie du diplôme</label>
+
+  <br />
+
+<input type="file" class="upload-file" title="Veuillez joindre la copie du diplôme" name="copie_diplome" id="copie_diplome" style="width: 250px;" accept=".gif,.jpeg,.jpg,.png,.pdf,.doc,.docx"/>
+
+<?php if(isset($_POST['id']) && is_numeric($_POST['id']) && isset($formation1['copie_diplome']) && $formation1['copie_diplome'] != '') : ?>
+<br>
+  <br><strong><a href="<?= site_url('apps/upload/frontend/candidat/copie_diplome/'.$formation1['copie_diplome']) ;?>"><i class="fa fa-download"> Voir la copie du diplôme</i></a></strong>
+<?php endif; ?>
+</div>
+
 <div style="width:100%; display:inline-table;">
 
+<br>
 <label>Description de la formation </label>
 
 <br />

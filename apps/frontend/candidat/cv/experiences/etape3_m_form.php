@@ -24,13 +24,16 @@
 
   <label>Date de début </label><br />
 
-<!--
-
-  <input  placeholder="  01/01/2010  "  id="calendar_dbex" name="date_debut" style="width:170px;" value="<?php echo $dd_exp; ?>" 
-
-  title="Veuillez entrez la date de début d'expérience"  required/>
-
--->
+<?php 
+$date_debut = $experience1['date_debut'];
+$month_dd = '';
+$year_dd = '';
+if( isset($_POST['id']) && $date_debut != '' ) {
+  $parts = explode('/', $experience1['date_debut']);
+  $month_dd = $parts[1];
+  $year_dd = $parts[2];
+}
+?>
 
 <select class="form-control" id="mois_debut_experience" title="Mois debut expérience" name="mois_debut_experience" 
 
@@ -92,15 +95,15 @@ style="width: 38%;" required/>
 
   <label>Date de fin </label><br />
 
-<!--  
-
-<input  placeholder="  01/01/2010  "  id="calendar_fex" name="date_fin"  style="width:170px;"  class="loadedexp"
-
-  value="<?php echo $df_exp; ?>"
-
-  title="Veuillez entrez la date de fin d'expérience"  />&nbsp;&nbsp;
-
--->
+<?php 
+$date_fin = $experience1['date_fin'];
+$month_df = '';
+$year_df = '';
+if( isset($_POST['id']) &&  $date_fin != '' ) {
+  $parts = explode('/', $date_fin);
+  $month_df = $parts[1];
+  $year_df = $parts[2];
+}?>
 
 <select class="loadedexp" id="mois_fin_experience" title="Mois fin expérience" 
 
@@ -369,15 +372,31 @@ while ($poste = mysql_fetch_array($req_poste)) {
 <label>Dernier salaire perçu </label><br />
 
 <input type="text" id="salair_pecu" name="salair_pecu" style="width:170px;"  value="<?php if(isset($salair_pecu) and $salair_pecu!=''){echo $salair_pecu;} else {echo '0';}  ?>" maxlength="100" pattern="[0-9,. ]+"  title="Veuillez entrez dérnier salire perçu"   maxlength="20" required/>
-
+<br><br>
 </div>
 
 
 
 </div>
+
+
+<div style="width:33%; display:inline-table;">
+
+<label>Copie de l’attestation de l’expérience</label>
+
+  <br />
+
+<input type="file" class="upload-file" title="Veuillez joindre la copie de l’attestation de l’expérience" name="copie_attestation" id="copie_attestation" style="width: 250px;" accept=".gif,.jpeg,.jpg,.png,.pdf,.doc,.docx"/>
+
+<?php if(isset($_POST['id']) && is_numeric($_POST['id']) && isset($experience1['copie_attestation']) && $experience1['copie_attestation'] != '') : ?>
+<br>
+  <br><strong><a href="<?= site_url('apps/upload/frontend/candidat/copie_attestation/'.$experience1['copie_attestation']) ;?>"><i class="fa fa-download"> Voir votre attestation de l’expérience</i></a></strong>
+<?php endif; ?>
+</div>
+
 
 <div style="width:100%; display:inline-table;">
-
+<br>
 <label>Description du poste </label><br />
 
 <textarea name="description_poste" rows="5" style="width:500px" id="editor2"  pattern="[a-zA-Z0-9ÀÁÂÄàáâäÒÓÔÖòóôöÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ' ]+" ><?php echo strip_tags(stripslashes($desc_exp)); ?></textarea>

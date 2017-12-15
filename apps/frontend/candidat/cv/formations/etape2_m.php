@@ -274,17 +274,50 @@ if (isset($_POST['envoi'])) {
 
 if( $msg == '') {		 
 
+
+	// Prepare attachements
+	$uploadFiles = [
+	  'copie_diplome' => [
+	      'errorMessage' => "Impossible d'envoyer le copie du diplôme",
+	      'name' => (isset($formation1['copie_diplome'])) ? $formation1['copie_diplome'] : '',
+	      'extensions' => ['doc', 'docx', 'pdf', 'gif', 'jpeg', 'jpg', 'png']
+	  ]
+	];
+
+	// upload attachements
+	foreach ($uploadFiles as $key => $file) {
+	  if( isset($_FILES[$key]) && intval($_FILES[$key]['size']) > 0 ) {
+	  		$uploadDir = 'apps/upload/frontend/candidat/'. $key .'/';
+		    $upload = \App\Media::upload($_FILES[$key], [
+		        'uploadDir' => $uploadDir,
+		        'extensions' => $file['extensions'],
+		        'maxSize' => (isset($file['maxSize'])) ? $file['maxSize'] : 0.300
+		    ]);
+	      if( isset($upload['files'][0]) ) {
+	      	unlinkFile(site_base($uploadDir.$uploadFiles[$key]['name']));
+	        $uploadFiles[$key]['name'] = $upload['files'][0];
+	      } else {
+	          $errorMessage = $uploadFiles[$key]['errorMessage'];
+	          if( isset($upload['errors'][0][0]) ) $errorMessage .= ': ('. $upload['errors'][0][0] .')';
+	          array_push($messages,"<li style='color:#FF0000'>". $errorMessage ."</li>");
+	      }
+	  }
+	}
+
+
+
              if ($id__e!='' ) {
 
 
 
-$s__r1="UPDATE formations SET  candidats_id='".safe($id_candidat)."',id_ecol='".safe($etablissement)."',
+/*$s__r1="UPDATE formations SET  candidats_id='".safe($id_candidat)."',id_ecol='".safe($etablissement)."',
 
 date_debut='".safe($dd_formation)."',date_fin='".safe($df_formation)."',diplome='".safe($diplome)."',
 
 description='".safe($desc_form)."',nivformation='".safe($nivformation)."',ecole='".safe($nom_etablissement)."'  
 
-WHERE  id_formation = '".safe($id__e)."'";
+WHERE  id_formation = '".safe($id__e)."'";*/
+
 
 echo "";
 
@@ -292,7 +325,19 @@ mysql_query("UPDATE candidats SET last_connexion = '".safe($last_connexion)."' W
 
 
 
-$insertion_formation = mysql_query( $s__r1);
+// $insertion_formation = mysql_query( $s__r1);
+
+$insertion_formation = getDB()->update('formations', 'id_formation', $id__e, [
+	'candidats_id' => $id_candidat,
+	'id_ecol' => $etablissement,
+	'date_debut' => $dd_formation,
+	'date_fin' => $df_formation,
+	'diplome' => $diplome,
+	'description' => $desc_form,
+	'nivformation' => $nivformation,
+	'ecole' => $nom_etablissement,
+	'copie_diplome' => $uploadFiles['copie_diplome']['name']
+]);
 
 
 
@@ -325,7 +370,8 @@ $month_dd='';$year_dd='';$month_df='';$year_df='';
 		'diplome' => $diplome,
 		'description' => $desc_form,
 		'nivformation' => $nivformation,
-		'ecole' => $nom_etablissement
+		'ecole' => $nom_etablissement,
+		'copie_diplome' => $uploadFiles['copie_diplome']['name']
     ]);
 
 mysql_query("UPDATE candidats SET last_connexion = '".safe($last_connexion)."' WHERE candidats_id = '".safe($id_candidat)."'");	

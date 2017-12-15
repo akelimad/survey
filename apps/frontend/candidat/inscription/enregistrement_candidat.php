@@ -1,4 +1,5 @@
 <?php
+$messagesuc=array();
 
 function no_special_character_v2($chaine){  
 
@@ -434,7 +435,7 @@ if($today == 'oui'){$df_formation='';}
 
 
 
-		$messages=array(); 
+		// $messages=array(); 
 
 
 
@@ -1594,40 +1595,15 @@ if($id_max_ini < $id_max )	{
 
 										
 
+										$ext_p = pathinfo($_FILES['photo']['name'] , PATHINFO_EXTENSION);
 										$nomformate = no_special_character_v2($nom);
-
 										$prenomformate = no_special_character_v2($prenom);
-
-										//copie du photo
-
-										   $ext_p = pathinfo($_FILES['photo']['name'] , PATHINFO_EXTENSION);
-
-										   $pname = $id_max.$prenomformate.$nomformate.'.'.$ext_p;
-
-										   //$_SESSION['pname'] = $pname;
-
-										$extensions_img = array('.gif',  '.jpg', '.jpeg', '.png','.GIF', '.JPG' , '.JPEG','.PNG'  );
-
-										$extension_photo = strrchr($_FILES['photo']['name'], '.'); 
-
-                       
-
-										if (in_array($extension_photo, $extensions_img)) {  
-
-												$folder_p = dirname(__FILE__).$file_photos2;
-
-											   $photo = $folder_p . $pname;
-
-											   if($ptmp != '' && $photo != '')	copy($ptmp, $photo);
-
-											   
-
-										
-
-												if($ext_p!="")
-
+										$pname = $id_max.$prenomformate.$nomformate.'.'.$ext_p;
+										$extensions_img = array('gif', 'jpeg', 'jpg', 'png');
+										if (in_array(strtolower($ext_p), $extensions_img)) {
+										   if( copy($ptmp, SITE_BASE .'/apps/upload/frontend/photo_candidats/' . $pname) ) {
 												$insertion2 = mysql_query("UPDATE candidats SET photo='".safe($pname)."' WHERE candidats_id = $id_max");
-
+										   }
 										}
 
 										//copie du cv
@@ -1711,6 +1687,39 @@ if($id_max_ini < $id_max )	{
 		"'.safe($df_formation).'","'.safe($diplome).'","'.safe($desc_form).'","'.safe($nivformation).'","'.safe($nom_etablissement).'" )');*/
 
 
+	// Prepare attachements
+	$uploadFiles = [
+	  'copie_diplome' => [
+	      'errorMessage' => "Impossible d'envoyer le copie du diplôme",
+	      'name' => '',
+	      'extensions' => ['doc', 'docx', 'pdf', 'gif', 'jpeg', 'jpg', 'png']
+	  ],
+	  'copie_attestation' => [
+	      'errorMessage' => "Impossible d'envoyer la copie de l’attestation de l’expérience",
+	      'name' => '',
+	      'extensions' => ['doc', 'docx', 'pdf', 'gif', 'jpeg', 'jpg', 'png']
+	  ]
+	];
+
+	// upload attachements
+	foreach ($uploadFiles as $key => $file) {
+	  if( isset($_FILES[$key]) && intval($_FILES[$key]['size']) > 0 ) {
+	      $upload = \App\Media::upload($_FILES[$key], [
+	          'uploadDir' => 'apps/upload/frontend/candidat/'. $key .'/',
+	          'extensions' => $file['extensions'],
+	          'maxSize' => (isset($file['maxSize'])) ? $file['maxSize'] : 0.300
+	      ]);
+	      if( isset($upload['files'][0]) ) {
+	          $uploadFiles[$key]['name'] = $upload['files'][0];
+	      } else {
+	          $errorMessage = $uploadFiles[$key]['errorMessage'];
+	          if( isset($upload['errors'][0][0]) ) $errorMessage .= ': ('. $upload['errors'][0][0] .')';
+	          array_push($messages,"<li style='color:#FF0000'>". $errorMessage ."</li>");
+	      }
+	  }
+	}
+
+
 	$insertion_formation1 = getDB()->create('formations', [
 		'candidats_id' => $id_max,
 		'id_ecol' => $etablissement,
@@ -1719,7 +1728,8 @@ if($id_max_ini < $id_max )	{
 		'diplome' => $diplome,
 		'description' => $desc_form,
 		'nivformation' => $nivformation,
-		'ecole' => $nom_etablissement
+		'ecole' => $nom_etablissement,
+		'copie_diplome' => $uploadFiles['copie_diplome']['name']
     ]);
 
 				 
@@ -1755,7 +1765,8 @@ if($id_max_ini < $id_max )	{
 			'entreprise' => $entreprise,
 			'ville' => $ville_exp,
 			'description' => $desc_exp,
-			'salair_pecu' => $salair_pecu
+			'salair_pecu' => $salair_pecu,
+			'copie_attestation' => $uploadFiles['copie_attestation']['name']
 		]);
 
 
@@ -2081,7 +2092,7 @@ if($id_max_ini < $id_max )	{
 
 
 
-$messagesuc=array(); 
+ 
 
 /* // old redirection
 

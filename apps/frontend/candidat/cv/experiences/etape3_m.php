@@ -206,19 +206,49 @@ if (isset($_POST['envoi'])) {
 
 			 
 
-	if( $msg == '') {		 
+	if( $msg == '') {	
+
+
+		// Prepare attachements
+		$uploadFiles = [
+		  'copie_attestation' => [
+		      'errorMessage' => "Impossible d'envoyer la copie de l’attestation de l’expérience",
+		      'name' => (isset($experience1['copie_attestation'])) ? $experience1['copie_attestation'] : '',
+		      'extensions' => ['doc', 'docx', 'pdf', 'gif', 'jpeg', 'jpg', 'png']
+		  ]
+		];
+
+		// upload attachements
+		foreach ($uploadFiles as $key => $file) {
+		  if( isset($_FILES[$key]) && intval($_FILES[$key]['size']) > 0 ) {
+		  		$uploadDir = 'apps/upload/frontend/candidat/'. $key .'/';
+			    $upload = \App\Media::upload($_FILES[$key], [
+			        'uploadDir' => $uploadDir,
+			        'extensions' => $file['extensions'],
+			        'maxSize' => (isset($file['maxSize'])) ? $file['maxSize'] : 0.300
+			    ]);
+		      if( isset($upload['files'][0]) ) {
+		      	unlinkFile(site_base($uploadDir.$uploadFiles[$key]['name']));
+		        $uploadFiles[$key]['name'] = $upload['files'][0];
+		      } else {
+		          $errorMessage = $uploadFiles[$key]['errorMessage'];
+		          if( isset($upload['errors'][0][0]) ) $errorMessage .= ': ('. $upload['errors'][0][0] .')';
+		          array_push($messages,"<li style='color:#FF0000'>". $errorMessage ."</li>");
+		      }
+		  }
+		}	 
 
              if ($id__e!='' ) {
 
 			 
 
-			  $s__r1="UPDATE experience_pro SET  candidats_id='".safe($id_candidat)."',id_sect='".safe($secteur)."',id_fonc='".safe($fonction_exp)."',
+			  /*$s__r1="UPDATE experience_pro SET  candidats_id='".safe($id_candidat)."',id_sect='".safe($secteur)."',id_fonc='".safe($fonction_exp)."',
 
               id_tpost='".safe($type_poste)."',id_pays='".safe($pays_exp)."',date_debut='".safe($dd_exp)."',date_fin='".safe($df_exp)."',
 
               poste='".safe($poste)."',entreprise='".safe($entreprise)."',
 
-              ville='".safe($ville_exp)."',description='".safe($desc_exp)."',salair_pecu='".safe($salair_pecu)."'  WHERE  id_exp = '".safe($id__e)."'";
+              ville='".safe($ville_exp)."',description='".safe($desc_exp)."',salair_pecu='".safe($salair_pecu)."'  WHERE  id_exp = '".safe($id__e)."'";*/
 
 
 
@@ -226,7 +256,24 @@ mysql_query("UPDATE candidats SET last_connexion = '".safe($last_connexion)."' W
 
 			 //echo $s__r1;
 
-$insertion_exp = mysql_query($s__r1);
+// $insertion_exp = mysql_query($s__r1);
+
+
+$insertion_exp = getDB()->update('experience_pro', 'id_exp', $id__e, [
+	'candidats_id' => $id_candidat,
+	'id_sect' => $secteur,
+	'id_fonc' => $fonction_exp,
+	'id_tpost' => $type_poste,
+	'id_pays' => $pays_exp,
+	'date_debut' => $dd_exp,
+	'date_fin' => $df_exp,
+	'poste' => $poste,
+	'entreprise' => $entreprise,
+	'ville' => $ville_exp,
+	'description' => $desc_exp,
+	'salair_pecu' => $salair_pecu,
+	'copie_attestation' => $uploadFiles['copie_attestation']['name']
+]);
 
 array_push($messages_succc,"<li style='color:#468847'>L'expérience professionnelle à été modifié avec succés</li>");
 
@@ -259,7 +306,8 @@ $insertion_exp = getDB()->create('experience_pro', [
 	'entreprise' => $entreprise,
 	'ville' => $ville_exp,
 	'description' => $desc_exp,
-	'salair_pecu' => $salair_pecu
+	'salair_pecu' => $salair_pecu,
+	'copie_attestation' => $uploadFiles['copie_attestation']['name']
 ]);
 
 
