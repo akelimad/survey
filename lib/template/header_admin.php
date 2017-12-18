@@ -32,7 +32,7 @@
 
                     <li class="acces"><a href="<?php echo $site_url ?>" target="_blank" 
 
-                    style="color:#ffffff;" title="Accès au site du Groupe - Nouvelle fenêtre">Accès au site de l'entreprise</a></li>
+                    style="color:#ffffff;" title="Accès au site de l'institution - Nouvelle fenêtre">Accès au site de l'institution</a></li>
 
                     <li class="contactus"><a href="<?php echo $urlinfos ?>/contact/" 
 

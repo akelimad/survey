@@ -12,7 +12,7 @@
 					<!-- RSS / Contact-->
 					<div class="rsscontact">
 						<ul>
-							<li class="acces"><a href="<?php echo $GLOBALS['etalent']['config']['site_url']; ?>" target="_blank" style="color:#ffffff;" title="Accès au site du Groupe - Nouvelle fenêtre">Accès au site de l'entreprise</a></li>
+							<li class="acces"><a href="<?php echo $GLOBALS['etalent']['config']['site_url']; ?>" target="_blank" style="color:#ffffff;" title="Accès au site de l'institution - Nouvelle fenêtre">Accès au site de l'institution</a></li>
 							<li class="contactus"><a href="<?= site_url('infos/contact/') ?>" style="color:#ffffff;" title="Contactez-nous">Contactez-nous</a></li>
 						</ul>
 					</div>
