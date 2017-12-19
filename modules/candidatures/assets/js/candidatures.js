@@ -88,6 +88,18 @@ jQuery(document).ready(function($){
 		})
 	}
 
+	// Update candidature note ecrit
+	showNoteEcritPopup = function(id_candidature) {
+		event.preventDefault()
+		showModal({
+			data: {
+				'action': 'cand_note_ecrit_popup',
+				'id_candidature': id_candidature
+			}
+		})
+	}
+	
+
 	$.fn.getWidthInPercent = function () {
 		var width = parseFloat($(this).css('width'))/parseFloat($(this).parent().css('width'));
 		return Math.round(100*width);

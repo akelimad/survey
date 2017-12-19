@@ -455,7 +455,7 @@ class Table extends Pagination {
                             }
                             
                             $sort_link = $this->getSortLink($key);
-                            $thead .= '<th '.$colAttrs.'><a title="Trier par: '. $header .'" href="'. $sort_link .'"><i class="fa fa-sort-amount-'. $sort .'"></i>&nbsp;'. $header .'</a></th>';
+                            $thead .= '<th '.$colAttrs.'><a title="Trier par: '. $header .'" href="'. $sort_link .'" class="sort"><i class="fa fa-sort-amount-'. $sort .'"></i>&nbsp;'. $header .'</a></th>';
                         } else {
                             $thead .= '<th '.$colAttrs.'>'. $header .'</th>';
                         }

@@ -185,3 +185,13 @@ ul#menu_site_carriere li a:focus {
 #etalent-table-wraper .pagination-wrap{
   width: 100% !important;
 }
+
+/* Table */
+a.sort{
+  color: #ffffff;
+}
+
+
+a.sort>.fa {
+  font-size: 12px !important;
+}

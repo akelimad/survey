@@ -37,7 +37,7 @@ class TableController
 
 	private $joints = [
 		'JOIN formations f ON f.candidats_id=cand.candidats_id' => ['motcle', 'ecole'], 
-    'JOIN compagne_offres co ON co.id_offre=cand.id_offre' => ['campagne']
+		'JOIN compagne_offres co ON co.id_offre=cand.id_offre' => ['campagne']
 	];
 
 	private $actions = [
@@ -120,33 +120,39 @@ class TableController
 	 */
   public function getTable()
   {
-  		$query = $this->buildQuery();
-		$table = new \App\Helpers\Table($query, 'id_candidature', $this->params['options']);
-		$table->setTableClass(['table', 'table-striped', 'table-hover']);
-		$table->setTableId('candidatureTable');
-		$table->removeActions(['edit', 'delete']);
-		$table->setTrigger('table_notes', [$this, 'getPertinenceNotice']);
-		$table->setOrderby('cand.date_candidature');
-		$table->setOrder('DESC');
-		// $table->setSortables(['date_cand', 'titre_offre']);
+  	$query = $this->buildQuery();
+  	$table = new \App\Helpers\Table($query, 'id_candidature', $this->params['options']);
+  	$table->setTableClass(['table', 'table-striped', 'table-hover']);
+  	$table->setTableId('candidatureTable');
+  	$table->removeActions(['edit', 'delete']);
+  	$table->setTrigger('table_notes', [$this, 'getPertinenceNotice']);
+
+    if( $_GET['id'] == 35 ) {
+  	  $table->setOrderby('cand.note_ecrit'); 
+    } else {
+      $table->setOrderby('cand.date_candidature'); 
+    }
+    
+  	$table->setOrder('DESC');
+    $table->setSortables(['note_ecrit', 'date_cand']);
 
   		// Add custom actions
-  		if( isset($_GET['id']) && $_GET['id'] == 45 ) {
-  			$this->actions['fiche_evaluation'] = [
-				'label' => 'Évaluer cet candidat',
-				'patern' => '#',
-				'icon' => 'fa fa-file-text-o',
-				'callback' => 'showFicheEvaluationPopup',
-				'attributes' => [
-					'class' => 'btn btn-primary btn-xs',
-				]
-  			];
-  		}
+  	if( isset($_GET['id']) && $_GET['id'] == 45 ) {
+  		$this->actions['fiche_evaluation'] = [
+  			'label' => 'Évaluer cet candidat',
+  			'patern' => '#',
+  			'icon' => 'fa fa-file-text-o',
+  			'callback' => 'showFicheEvaluationPopup',
+  			'attributes' => [
+  				'class' => 'btn btn-primary btn-xs',
+  			]
+  		];
+  	}
 
-		foreach ($this->actions as $key => $attributes) {
-			if( isset($this->params['actions'][$key]) && $this->params['actions'][$key] == false ) continue;
-			$table->setAction($key, $attributes);
-		}
+  	foreach ($this->actions as $key => $attributes) {
+  		if( isset($this->params['actions'][$key]) && $this->params['actions'][$key] == false ) continue;
+  		$table->setAction($key, $attributes);
+  	}
 
 		// $table->addColumn('ref_offre', 'Réf', function($row){
 		// 	$offre = Candidatures::getOfferById($row->id_offre);
@@ -155,114 +161,128 @@ class TableController
 		// });
 
 		// Add table columns
-		$table->addColumn('sinfos', 'Informations', function($row){
-			$html = '<a href="'. site_url('backend/cv/?candid='.$row->candidats_id) .'" target="_blank" class="cname" title="Voir le profile"><i class="fa fa-user"></i>&nbsp;'. $row->fullname .'</a>';
+  	$table->addColumn('sinfos', 'Informations', function($row){
+  		$html = '<a href="'. site_url('backend/cv/?candid='.$row->candidats_id) .'" target="_blank" class="cname" title="Voir le profile"><i class="fa fa-user"></i>&nbsp;'. $row->fullname .'</a>';
 
-			if( !is_null($row->date_n) ) {
-				$birthday = date('Y-m-d', french_to_english_date($row->date_n));
-				$age = (time() - strtotime($birthday)) / 3600 / 24 / 365;
-				$html .= '<br><b>'.number_format($age, 0).' ans</b>';
-			}
+  		if( !is_null($row->date_n) ) {
+  			$birthday = date('Y-m-d', french_to_english_date($row->date_n));
+  			$age = (time() - strtotime($birthday)) / 3600 / 24 / 365;
+  			$html .= '<br><b>'.number_format($age, 0).' ans</b>';
+  		}
 
-			$html .= '<br>'. $row->ville .'&nbsp;|&nbsp;'. Candidat::getPaysByID($row->id_pays);
+  		$html .= '<br>'. $row->ville .'&nbsp;|&nbsp;'. Candidat::getPaysByID($row->id_pays);
 
-			return $html;
-		});
+  		return $html;
+  	});
 
-		$table->addColumn('history', '', function($row){
-			$history = getDB()->prepare("SELECT date_modification, status, utilisateur FROM historique WHERE id_candidature=?", [$row->id_candidature]);
-			if ( empty($history) ) return;
-			$html = '<i class="fa fa-history pull-right" data-toggle="popover" data-trigger="hover" data-popover-content="#show_h_'. $row->candidats_id .'" title="Historique des actions effectuées"></i>';
-			$html .= '<div id="show_h_'. $row->candidats_id .'" class="hidden">';
-			$html .= '<table class="table table-history">';
-			foreach ($history as $key => $h) :
-				$html .= '<tr><td width="110">'. date('d.m.Y H:i', strtotime($h->date_modification)) .'</td><td>'. $h->status .'</td><td>'. $h->utilisateur .'</td></tr>';
-			endforeach;
-			$html .= '</table></div>';
-			return $html;
-		});
+  	$table->addColumn('history', '', function($row){
+  		$history = getDB()->prepare("SELECT date_modification, status, utilisateur FROM historique WHERE id_candidature=?", [$row->id_candidature]);
+  		if ( empty($history) ) return;
+  		$html = '<i class="fa fa-history pull-right" data-toggle="popover" data-trigger="hover" data-popover-content="#show_h_'. $row->candidats_id .'" title="Historique des actions effectuées"></i>';
+  		$html .= '<div id="show_h_'. $row->candidats_id .'" class="hidden">';
+  		$html .= '<table class="table table-history">';
+  		foreach ($history as $key => $h) :
+  			$html .= '<tr><td width="110">'. date('d.m.Y H:i', strtotime($h->date_modification)) .'</td><td>'. $h->status .'</td><td>'. $h->utilisateur .'</td></tr>';
+  		endforeach;
+  		$html .= '</table></div>';
+  		return $html;
+  	});
 
-		$table->addColumn('exp_salr', '', function($row){
-			$mobilite = (isset($row->mobilite) && $row->mobilite!='') ? ucfirst($row->mobilite) : 'Non';
-			$mobiliteClass = ($mobilite=='Oui') ? 'success' : 'default';
+  	$table->addColumn('exp_salr', '', function($row){
+  		$mobilite = (isset($row->mobilite) && $row->mobilite!='') ? ucfirst($row->mobilite) : 'Non';
+  		$mobiliteClass = ($mobilite=='Oui') ? 'success' : 'default';
 
-			$html  = '<table>';
-				$html .= '<tbody>';
-				$html .= '<tr>';
-					$html .= '<th width="88px">Expérience</th>';
-					$html .= '<td>'.Candidat::getExperienceNameByID($row->id_expe).'</td>';
-				$html .= '</tr>';
-				$html .= '<tr>';
-					$html .= '<th>Salaire souhaité</th>';
-					$html .= '<td>'.Candidat::getSalaireNameByID($row->id_salr).'</td>';
-				$html .= '</tr>';
-				$html .= '<tr>';
-					$html .= '<th>Fraicheur du cv</th>';
-					$html .= '<td>'.timeAgo($row->dateMAJ).'</td>';
-				$html .= '</tr>';
-				$html .= '<tr>';
-					$html .= '<th>Mobilité</th>';
-					$html .= '<td><span class="label label-'.$mobiliteClass.'">'. $mobilite .'</span></td>';
-				$html .= '</tr>';
-				$html .= '</tbody>';
-			$html .= '</table>';
-			
-			return $html;
-		}, ['width'=> '180px']);
+  		$html  = '<table>';
+  		$html .= '<tbody>';
+  		$html .= '<tr>';
+  		$html .= '<td width="88px">Expérience</td>';
+  		$html .= '<td>'.Candidat::getExperienceNameByID($row->id_expe).'</td>';
+  		$html .= '</tr>';
+  		$html .= '<tr>';
+  		$html .= '<td>Salaire souhaité</td>';
+  		$html .= '<td>'.Candidat::getSalaireNameByID($row->id_salr).'</td>';
+  		$html .= '</tr>';
+  		$html .= '<tr>';
+  		$html .= '<td>Fraicheur du cv</td>';
+  		$html .= '<td>'.timeAgo($row->dateMAJ).'</td>';
+  		$html .= '</tr>';
+  		$html .= '<tr>';
+  		$html .= '<td>Mobilité</td>';
+  		$html .= '<td><span class="label label-'.$mobiliteClass.'">'. $mobilite .'</span></td>';
+  		$html .= '</tr>';
+  		$html .= '</tbody>';
+  		$html .= '</table>';
 
-		$table->addColumn('details', 'Détails', function($row){
-			$details = '';
-			if( intval($row->id_cv) > 0 ) {
-				$cv_ext = \App\Models\Cv::getExtension($row->id_cv);
-				if( !is_null($cv_ext) ) {
-					$icon = $this->getIconByExtention($cv_ext);
-					$details .= '<a href="'. site_url('backend/module/candidatures/candidat/cv/'.$row->id_cv) .'" title="Télécharger le CV"><i class="'.$icon.'"></i></a>';
-				}
-			}
-			if( intval($row->id_lettre) > 0 ) {
-				$lettre_ext = \App\Models\Lettre::getExtension($row->id_lettre);
-				if( !is_null($lettre_ext) ) {
-					$icon = $this->getIconByExtention($lettre_ext);
-					$details .= '&nbsp;<a href="'. site_url('backend/module/candidatures/candidat/lettre/'.$row->id_lettre) .'" title="Télécharger la lettre de motivation"><i class="'.$icon.'"></i></a>';
-				}
-			}
-			return $details;
-		});
+  		return $html;
+  	}, ['width'=> '180px']);
 
-		$table->addColumn('pertinence', 'P', function($row){
-			$p = Candidat::getPertinance($row->candidats_id, $row->id_offre);
-			$total_p = (isset($p->total_p)) ? $p->total_p : 0;
-			$html = '<i class="fa fa-circle" style="font-size: 1.3em;color:'. $this->getPertinanceColor($total_p) .'" data-toggle="popover" data-trigger="hover" data-popover-content="#show_p_'. $row->candidats_id .'"></i>';
-			$html .= '<div id="show_p_'. $row->candidats_id .'" class="hidden">';
-			if( isset($p->total_p) ) {
-				$html .= '<table class="table table-pertinance">';
-				$pscores = $this->getPertinanceScores($p);
-				foreach ($pscores as $key => $score) :
-					$html .= '<tr><td>'. $key .'</td><td>=</td><td>'. $score .'&nbsp;%</td></tr>';
-				endforeach;
-					$html .= '<tr><td><strong>Pertinence total</strong></td><td>=</td><td><strong>'. $p->total_p .'&nbsp;%</strong></td></tr>';
-				$html .= '</table>';
-			} else {
-				$html .= 'Aucun résultat.</div>';
-			}
-			$html .= '</div>';
-			return $html;
-		});
+  	$table->addColumn('details', 'Détails', function($row){
+  		$details = '';
+  		if( intval($row->id_cv) > 0 ) {
+  			$cv_ext = \App\Models\Cv::getExtension($row->id_cv);
+  			if( !is_null($cv_ext) ) {
+  				$icon = $this->getIconByExtention($cv_ext);
+  				$details .= '<a href="'. site_url('backend/module/candidatures/candidat/cv/'.$row->id_cv) .'" title="Télécharger le CV"><i class="'.$icon.'"></i></a>';
+  			}
+  		}
+  		if( intval($row->id_lettre) > 0 ) {
+  			$lettre_ext = \App\Models\Lettre::getExtension($row->id_lettre);
+  			if( !is_null($lettre_ext) ) {
+  				$icon = $this->getIconByExtention($lettre_ext);
+  				$details .= '&nbsp;<a href="'. site_url('backend/module/candidatures/candidat/lettre/'.$row->id_lettre) .'" title="Télécharger la lettre de motivation"><i class="'.$icon.'"></i></a>';
+  			}
+  		}
+  		return $details;
+  	});
 
-		$table->addColumn('titre_offre', 'Titre du poste', function($row){
-			return $row->titre_offre;
-		}, ['width'=> '140px']);
+  	$table->addColumn('pertinence', 'P', function($row){
+  		$p = Candidat::getPertinance($row->candidats_id, $row->id_offre);
+  		$total_p = (isset($p->total_p)) ? $p->total_p : 0;
+  		$html = '<i class="fa fa-circle" style="font-size: 1.3em;color:'. $this->getPertinanceColor($total_p) .'" data-toggle="popover" data-trigger="hover" data-popover-content="#show_p_'. $row->candidats_id .'"></i>';
+  		$html .= '<div id="show_p_'. $row->candidats_id .'" class="hidden">';
+  		if( isset($p->total_p) ) {
+  			$html .= '<table class="table table-pertinance">';
+  			$pscores = $this->getPertinanceScores($p);
+  			foreach ($pscores as $key => $score) :
+  				$html .= '<tr><td>'. $key .'</td><td>=</td><td>'. $score .'&nbsp;%</td></tr>';
+  			endforeach;
+  			$html .= '<tr><td><strong>Pertinence total</strong></td><td>=</td><td><strong>'. $p->total_p .'&nbsp;%</strong></td></tr>';
+  			$html .= '</table>';
+  		} else {
+  			$html .= 'Aucun résultat.</div>';
+  		}
+  		$html .= '</div>';
+  		return $html;
+  	});
 
-		$table->addColumn('date_cand', 'Date', function($row){
-			return '<b>'. date ("d.m.Y", strtotime($row->date_candidature)) .'</b>';
-		});
+  	$table->addColumn('note_ecrit', 'NE', function($row){
+  		if( is_valid_int($row->note_ecrit) ) {
+  			$value = ($row->note_ecrit==0.00) ? 0 : $row->note_ecrit;
+  			$color = $this->percent2Color($row->note_ecrit, 200, 20);
+  			$style = 'background-color:#'.$color.';';
+  			$tooltip = '';
+  		} else {
+  			$value = '<i class="fa fa-times" style="font-size: 10px;"></i>';
+  			$style = '';
+  			$tooltip = 'data-toggle="tooltip" title="Non défini."';
+  		}
+  		return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteEcritPopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
+  	});
+
+  	$table->addColumn('titre_offre', 'Titre du poste', function($row){
+  		return $row->titre_offre;
+  	}, ['width'=> '140px']);
+
+  	$table->addColumn('date_cand', 'Date', function($row){
+  		return '<b>'. date ("d.m.Y", strtotime($row->date_cand)) .'</b>';
+  	});
 
 		// TODO - Run table and get results
 		// Event::trigger('before_run_candidature_table', ['table' => $table]);
 
-		$table->_run();
+  	$table->_run();
 
-		return $table;
+  	return $table;
   }
 
 
@@ -277,7 +297,7 @@ class TableController
   {
   	$andWhere = $this->getAndWhereStatement();
   	$joints   = $this->getJoints();
-  	$query = "SELECT c.candidats_id, CONCAT(c.nom, ' ',c.prenom) AS fullname, c.email, c.titre, c.ville, c.id_situ, c.id_tfor, c.id_nfor, c.id_expe, c.id_sect, c.id_fonc, c.mobilite, c.id_pays, c.id_salr, c.date_n, c.dateMAJ, c.CVdateMAJ, cand.* FROM candidature cand INNER JOIN candidats c ON c.candidats_id = cand.candidats_id {$joints} WHERE cand.status='". $_GET['id'] ."' {$andWhere} GROUP BY cand.id_candidature";
+  	$query = "SELECT c.candidats_id, CONCAT(c.nom, ' ',c.prenom) AS fullname, c.email, c.titre, c.ville, c.id_situ, c.id_tfor, c.id_nfor, c.id_expe, c.id_sect, c.id_fonc, c.mobilite, c.id_pays, c.id_salr, c.date_n, c.dateMAJ, c.CVdateMAJ, cand.*, cand.date_candidature as date_cand FROM candidature cand INNER JOIN candidats c ON c.candidats_id = cand.candidats_id {$joints} WHERE cand.status='". $_GET['id'] ."' {$andWhere} GROUP BY cand.id_candidature";
   	return $query;
   }
 
@@ -292,17 +312,17 @@ class TableController
    */
   public function addAction($name, $args=[])
   {
-    $this->actions[$name] = array_merge([
-    	'label' => 'Sans titre',
-      'patern' => '',
-      'icon' => '',
-      'permission' => true,
-      'bulk_action' => true,
-      'attributes' => array(
-        'class' => 'btn btn-default btn-xs'
-      ),
-      'callable' => null
-    ], $args);
+  	$this->actions[$name] = array_merge([
+  		'label' => 'Sans titre',
+  		'patern' => '',
+  		'icon' => '',
+  		'permission' => true,
+  		'bulk_action' => true,
+  		'attributes' => array(
+  			'class' => 'btn btn-default btn-xs'
+  		),
+  		'callable' => null
+  	], $args);
   }
 
 
@@ -315,44 +335,44 @@ class TableController
 	 *
 	 * @author Mhamed Chanchaf
 	 */
-	public function getAndWhereStatement($separator='AND') 
-	{
-		$andWhere_array = [];
-		foreach ($this->andWhere as $key => $column) {
-			if( !isset($_GET[$key]) || empty($_GET[$key]) ) continue;
-				switch ($key) {
-					case 'motcle':
-						$keywords = explode(" ", mysql_real_escape_string(htmlspecialchars($_GET[$key])));
-						$parts = array();
-						for ($i = 0; $i < count($keywords); $i++) {
-							$parts[] = "(c.nom LIKE '%". $keywords[$i] ."%' OR c.prenom LIKE '%". $keywords[$i] ."%' OR c.titre LIKE '%". $keywords[$i] ."%' OR c.email LIKE '%". $keywords[$i] ."%' OR f.description LIKE '%". $keywords[$i] ."%')";
-						}
-						$andWhere_array[] = '('. implode(' AND ', $parts) .')';
-						break;
-					case 'fraicheur':
-						$andWhere_array[] = "DATEDIFF(curdate(), c.". reset($column) .")<{$_GET[$key]}";
-						break;
-					case 'pertinence':
-						switch ($_GET[$key]) {
-							case '30':
-								$andWhere_array[] = key($column) .".". reset($column) ." BETWEEN 0 AND 30";
-								break;
-							case '60':
-								$andWhere_array[] = key($column) .".". reset($column) ." BETWEEN 31 AND 60";
-								break;
-							case '100':
-								$andWhere_array[] = key($column) .".". reset($column) ." BETWEEN 61 AND 100";
-								break;
-						}
-						break;
-					default:
-						$andWhere_array[] = key($column) .".". reset($column) ."='{$_GET[$key]}'";
-						break;
-				}
-				$andWhere_array[] = "c.status=1";
-		}
-		return (!empty($andWhere_array)) ? " {$separator} ". implode(' AND ', $andWhere_array) : '';
-	}
+  public function getAndWhereStatement($separator='AND') 
+  {
+  	$andWhere_array = [];
+  	foreach ($this->andWhere as $key => $column) {
+  		if( !isset($_GET[$key]) || empty($_GET[$key]) ) continue;
+  		switch ($key) {
+  			case 'motcle':
+  			$keywords = explode(" ", mysql_real_escape_string(htmlspecialchars($_GET[$key])));
+  			$parts = array();
+  			for ($i = 0; $i < count($keywords); $i++) {
+  				$parts[] = "(c.nom LIKE '%". $keywords[$i] ."%' OR c.prenom LIKE '%". $keywords[$i] ."%' OR c.titre LIKE '%". $keywords[$i] ."%' OR c.email LIKE '%". $keywords[$i] ."%' OR f.description LIKE '%". $keywords[$i] ."%')";
+  			}
+  			$andWhere_array[] = '('. implode(' AND ', $parts) .')';
+  			break;
+  			case 'fraicheur':
+  			$andWhere_array[] = "DATEDIFF(curdate(), c.". reset($column) .")<{$_GET[$key]}";
+  			break;
+  			case 'pertinence':
+  			switch ($_GET[$key]) {
+  				case '30':
+  				$andWhere_array[] = key($column) .".". reset($column) ." BETWEEN 0 AND 30";
+  				break;
+  				case '60':
+  				$andWhere_array[] = key($column) .".". reset($column) ." BETWEEN 31 AND 60";
+  				break;
+  				case '100':
+  				$andWhere_array[] = key($column) .".". reset($column) ." BETWEEN 61 AND 100";
+  				break;
+  			}
+  			break;
+  			default:
+  			$andWhere_array[] = key($column) .".". reset($column) ."='{$_GET[$key]}'";
+  			break;
+  		}
+  		$andWhere_array[] = "c.status=1";
+  	}
+  	return (!empty($andWhere_array)) ? " {$separator} ". implode(' AND ', $andWhere_array) : '';
+  }
 
 
 	/**
@@ -397,19 +417,19 @@ class TableController
    * 
    * @author Mhamed Chanchaf
    */
-  public function getIconByExtention($ext) {
-    switch ($ext) {
-    	case 'pdf':
-    		return 'fa fa-file-pdf-o';
-    		break;
-    	case 'doc' || 'docx':
-    		return 'fa fa-file-word-o';
-    		break;
-    	default:
-    		return 'fa fa-file';
-    		break;
-    }
-  }
+	public function getIconByExtention($ext) {
+		switch ($ext) {
+			case 'pdf':
+			return 'fa fa-file-pdf-o';
+			break;
+			case 'doc' || 'docx':
+			return 'fa fa-file-word-o';
+			break;
+			default:
+			return 'fa fa-file';
+			break;
+		}
+	}
 
 
 	/**
@@ -420,16 +440,16 @@ class TableController
    * 
    * @author Mhamed Chanchaf
    */
-  public function getPertinanceColor($total_p) {
-  	if($total_p == 100 ) {
-  		return '#00B300';
-  	} elseif ($total_p < 100 AND $total_p >= 40) {
-  		return '#CC5500';
-  	} elseif ($total_p <  40 ){
-  		return '#D50000';
-  	}
-  	return '#000000';
-  }
+	public function getPertinanceColor($total_p) {
+		if($total_p == 100 ) {
+			return '#00B300';
+		} elseif ($total_p < 100 AND $total_p >= 40) {
+			return '#CC5500';
+		} elseif ($total_p <  40 ){
+			return '#D50000';
+		}
+		return '#000000';
+	}
 
 
   /**
@@ -455,6 +475,28 @@ class TableController
   }
 
   
+  public function percent2Color($value, $brightness = 255, $max = 100, $min = 0, $thirdColorHex = '00')
+  {       
+	// Calculate first and second color (Inverse relationship)
+  	$first = (1-($value/$max))*$brightness;
+  	$second = ($value/$max)*$brightness;
+
+	// Find the influence of the middle color (yellow if 1st and 2nd are red and green)
+  	$diff = abs($first-$second);    
+  	$influence = ($brightness-$diff)/2;     
+  	$first = intval($first + $influence);
+  	$second = intval($second + $influence);
+
+	// Convert to HEX, format and return
+  	$firstHex = str_pad(dechex($first),2,0,STR_PAD_LEFT);     
+  	$secondHex = str_pad(dechex($second),2,0,STR_PAD_LEFT); 
+
+  	return $firstHex . $secondHex . $thirdColorHex ; 
+
+    // alternatives:
+    // return $thirdColorHex . $firstHex . $secondHex; 
+    // return $firstHex . $thirdColorHex . $secondHex;
+  }
 
 
   

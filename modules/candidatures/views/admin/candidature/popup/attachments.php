@@ -60,12 +60,21 @@ jQuery(document).ready(function($){
             cache: false,
             timeout: 600000,
             success: function (response) {
+            	$button.prop("disabled", false)
             	try {
 			        var data = jQuery.parseJSON(response)
-            		success_message(data.message, {position:'topCenter'})
-            		showAttachmentsPopup(event, [$('#attach_id_candidature').val()], $('#currentPage').val())
+			        if( typeof data.status != undefined ) {
+						if( data.status == 'success' ) {
+							success_message(data.message, {position:'topCenter'});
+							showAttachmentsPopup(event, [$('#attach_id_candidature').val()], $('#currentPage').val())
+						} else {
+							error_message(data.message);
+						}
+					} else {
+						ajax_error_message()
+					}
 			    }catch (e) {
-			        error_message('Une erreur est survenu, essay plus tards.');
+			        ajax_error_message()
 			    }
             }
         });
@@ -128,7 +137,6 @@ jQuery(document).ready(function($){
 						$(this).remove();
 					});
 					success_message(response.message, {position:'topCenter'});
-
 					showAttachmentsPopup(event, [$('#attach_id_candidature').val()], $('#currentPage').val())
 				} else {
 					error_message(response.message);

@@ -40,6 +40,8 @@ class AjaxController
     Ajax::add('cand_save_attachments', [$this, 'saveAttachement']);
     Ajax::add('cand_save_attachement_title', [$this, 'saveAttachementTitle']);
     Ajax::add('cand_delete_attachement', [$this, 'deleteAttachement']);
+
+    Ajax::add('cand_note_ecrit_popup', [$this, 'showNoteEcritPopup']);
   }
   
 
@@ -182,6 +184,27 @@ class AjaxController
   }
   
 
+  /**
+   * Show note orale popup
+   * 
+   * @author M'hamed Chanchaf
+   */
+  public function showNoteEcritPopup($data)
+  {
+    if( empty($data['id_candidature']) ) return [];
+
+    $candidature = getDB()->findOne('candidature', 'id_candidature', $data['id_candidature']);
+
+    if( !isset($candidature->id_candidature) ) return [];
+
+    return $this->renderAjaxView(
+      'Changer la note orale', 
+      'admin/candidature/popup/update-note-ecrit', [
+        'id_candidature' => $data['id_candidature'],
+        'note_ecrit' => $candidature->note_ecrit
+    ]);
+  }
+
 
 
   /**
@@ -194,6 +217,7 @@ class AjaxController
     if(!isset($data['id_email']) || $data['id_email'] == '') return [];
     return getDB()->findOne('email_type', 'id_email', $data['id_email']);
   }
+
 
   /**
    * Send email to candidat
@@ -242,7 +266,10 @@ class AjaxController
    */
   public function saveAttachement($data)
   {
-    if( empty($_FILES['attachments']) || !isset($data['id_candidature']) ) return;
+    if( $_FILES['attachments']['size'][0] <= 0 || !isset($data['id_candidature']) ) return [
+      'status' => 'error',
+      'message' => 'Aucun fichier choisi.',
+    ];
 
     $id_candidature = $data['id_candidature'];
 
