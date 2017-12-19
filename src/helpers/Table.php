@@ -65,6 +65,15 @@ class Table extends Pagination {
 
 
     /**
+     * current_page
+     *
+     * @access protected
+     * @var    int
+     */
+    protected $currentPage;
+
+
+    /**
      * perpage
      *
      * @access protected
@@ -211,6 +220,7 @@ class Table extends Pagination {
             'icon' => 'fa fa-pencil',
             'permission' => true,
             'bulk_action' => false,
+            'sort_order' => 10,
             'attributes' => array(
                 'class' => 'btn btn-primary btn-xs'
             ),
@@ -222,6 +232,7 @@ class Table extends Pagination {
             'icon' => 'fa fa-trash',
             'permission' => true,
             'bulk_action' => true,
+            'sort_order' => 20,
             'attributes' => array(
                 'class' => 'btn btn-danger btn-xs'
             ),
@@ -267,6 +278,10 @@ class Table extends Pagination {
             $this->_options['db_handle'] = getDB()->pdo;
         }
 
+        if( isset($options['currentPage']) ) {
+            $this->currentPage = $options['currentPage'];
+        }
+        
         if( isset($_GET['module']) ) {
             $path = (isBackend()) ? 'backend/module/' : '';
             $this->setAction('edit', ['patern' => site_url($path . $_GET['module'] .'/'. $_GET['controller'] .'/edit/{primary_key}')]);
@@ -357,7 +372,7 @@ class Table extends Pagination {
         $table_classes = (!empty($this->table_classes)) ? 'class="'. implode(' ', $this->table_classes) .' etaTable"' : 'etaTable';
 
         // if( $this->total_results > 0 ) {
-            $html .= '<form method="get" action="" class="form-inline" id="cim-table-filter">';
+            $html .= '<form method="get" action="" class="form-inline" id="etalent-table-filter">';
             $html .= '<div class="row" style="margin-bottom: 10px;">';
                 $html .= '<div class="col-md-12">';
 
@@ -404,7 +419,7 @@ class Table extends Pagination {
             $html .= '</form>';
         // }
 
-        $html .= '<form method="post" action="" class="form-inline">';
+        $html .= '<form method="post" action="" class="form-inline" id="etalent-table-wraper">';
             $html .= '<div class="row">';
             $html .= '<div class="col-md-12 table-responsive">';
             $html .= '<table '. $table_classes .' '. $table_id .'">';
@@ -530,7 +545,7 @@ class Table extends Pagination {
                     // add pagination
                     if( !empty($this->links_html) ) {
                         $links_pull = ( $this->_options['bulk_actions'] && $this->hasBulkActions() ) ? 'pull-right' : 'pull-left';
-                        $html .= '<div class="col-md-7"><div class="'. $this->table_id .'_pagination '.$links_pull.'">';
+                        $html .= '<div class="col-md-7 pagination-wrap"><div class="'. $this->table_id .'_pagination '.$links_pull.'">';
                         $html .= $this->links_html;
                         $html .= '</div></div>';
                     }
@@ -545,6 +560,11 @@ class Table extends Pagination {
         }
     }
 
+    public function getActions()
+    {
+        return $this->_actions;
+    }
+
 
     /**
      * Get actions links
@@ -556,6 +576,8 @@ class Table extends Pagination {
     public function getActionsLinks($columns, $row)
     {
         $html = '';
+
+        $this->sortActions();
 
         foreach ($this->_actions as $actionName => $action)
         {
@@ -583,16 +605,39 @@ class Table extends Pagination {
             $attrs = '';
             if( !empty($action['attributes']) ) : foreach ($action['attributes'] as $key => $attr) :
 
-                $attrs .= $key. '="'. $this->parseTemplate($attr, $columns) .'" ';
+                $attrs .= $key. '="'. $this->parseTemplate($attr, $columns);
+                if( $key == 'class' ) $attrs .= ' '. $actionName;
+                $attrs .= '" ';
 
             endforeach; endif;
 
-            //  data-toggle="tooltip"
-            $callable = (!is_null($action['callback']) && $action['callback']!='') ? 'onclick="return '. $action['callback'] .'(event, ['. $columns[$this->primary_key] .']);"' : '';
-            $confirm = ($actionName=='delete') ? 'onclick="return confirmMessage(event);"' : '';
-            $html .= '<a title="'. $action['label'] .'" href="'. $actionLink .'" '. $attrs .' '. $confirm .' '. $callable .'>'. $label .'&nbsp;</a>&nbsp;';
+            if( $actionName == 'delete'  ) {
+                if( !is_null($action['callback']) ) {
+                    $confirm = 'onclick="return confirmMessage(event, \''.$action['callback'].'\', ['. $columns[$this->primary_key] .']);"';
+                } else {
+                    $confirm = 'onclick="return confirmMessage(event);"';
+                }
+            } else {
+                $confirm = (!is_null($action['callback']) && $action['callback']!='') ? 'onclick="return '. $action['callback'] .'(event, ['. $columns[$this->primary_key] .']);"' : '';
+            }
+
+            $html .= '<a title="'. $action['label'] .'" href="'. $actionLink .'" '. $attrs .' '. $confirm .'>'. $label .'&nbsp;</a>&nbsp;';
         }
         return $html;
+    }
+
+
+    public function sortActions()
+    {
+        $actions = array();
+    
+        foreach($this->_actions as $key => $action)
+        {
+            $actions[$key] = $action;
+        }
+        krsort($actions);
+
+        $this->_actions = $actions;
     }
 
 
@@ -616,8 +661,10 @@ class Table extends Pagination {
      */
     public function getPage()
     {
-        $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) ? intval($_GET['page']) : 1;
-        return $page;
+        if( is_null($this->currentPage) ) {
+            return (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) ? intval($_GET['page']) : 1;
+        }
+        return $this->currentPage;
     }
 
 
@@ -815,6 +862,7 @@ class Table extends Pagination {
                 'icon' => '',
                 'permission' => true,
                 'bulk_action' => true,
+                'sort_order' => count($this->_actions) + 1,
                 'attributes' => array(
                     'class' => 'btn btn-default btn-xs'
                 ),

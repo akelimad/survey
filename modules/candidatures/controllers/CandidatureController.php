@@ -10,6 +10,7 @@
  */
 namespace Modules\Candidatures\Controllers;
 
+use App\Event;
 use App\Controllers\AdminController;
 use Modules\Candidatures\Models\Candidatures;
 
@@ -29,6 +30,11 @@ class CandidatureController extends AdminController
 
   public function actionIndex($id=null)
   {
+    if( form_submited() ) {
+      Event::trigger('candidature_form_submit', $_POST);
+      redirect($_SERVER['HTTP_REFERER']);
+    }
+
     $this->addAssets();
     $table = new TableController();
     $this->data['table'] = $table->getTable();
@@ -40,11 +46,7 @@ class CandidatureController extends AdminController
 
 
   public function actionList($id)
-  {
-    if( form_submited() ) {
-      $saveStatus = (new StatusController())->saveStatus($_POST);
-      redirect($_SERVER['HTTP_REFERER']);
-    }    
+  {   
     return $this->actionIndex($id);
   }
 

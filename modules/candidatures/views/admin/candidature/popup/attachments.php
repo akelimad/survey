@@ -1,0 +1,176 @@
+<div class="row">	
+	<div class="col-md-12">
+		<div class="subscription mb-0" style="height: 23px;">
+			<h1>Liste des pièces jointes</h1>
+		</div>
+		<?= $table->render(); ?>
+	</div>	
+</div>
+
+<div class="row">	
+	<div class="col-md-12">
+		<div class="subscription mt-15" style="height: 23px;">
+			<h1>Ajouter des pièces jointes</h1>
+		</div>
+		<form action="" method="post" enctype="multipart/form-data" id="candidatureAttachmentsForm">
+			<input type="hidden" name="id_candidature" id="attach_id_candidature" value="<?= $id_candidature ?>">
+			<input type="hidden" name="currentPage" id="currentPage" value="<?= $currentPage ?>">
+			<table class="table" id="attachmentTable">
+				<tbody>
+					<tr>
+						<td width="170" style="padding: 4px 2px;"><input type="file" name="attachments[]" accept="image/*|.doc,.docx,.xls,.xlsx,.pdf" style="width:100%"></td>
+						<td width="170" style="padding: 4px 2px;"><input type="text" name="titles[]" style="width:100%"></td>
+						<td width="5" style="padding: 4px 2px;"><button type="button" class="btn btn-success btn-block btn-xs addLine"><i class="fa fa-plus"></i></button></td>
+					</tr>
+				</tbody>
+			</table>
+
+			
+			<div class="ligneBleu mt-5" style="width: 100%;"></div>
+			<div class="form-group mt-5 mb-0">
+				<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-hidden="true">Fermer</button>
+			    <button type="submit" class="btn btn-primary btn-sm pull-right">Attacher les fichiers</button>
+			</div>
+		</form>
+	</div>	
+</div>
+
+<script>
+jQuery(document).ready(function($){
+
+	$('[data-toggle="tooltip"]').tooltip(); 
+
+	$('#candidatureAttachmentsForm').submit(function(event){
+		event.preventDefault()
+
+		var form = $(this)[0];
+		var data = new FormData(form);
+		data.append('action', 'cand_save_attachments');
+	    
+	    var $button = $(this).find('button[type="submit"]')
+	    $button.prop("disabled", true)
+
+	    $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: get_ajax_url(),
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (response) {
+            	try {
+			        var data = jQuery.parseJSON(response)
+            		success_message(data.message, {position:'topCenter'})
+            		showAttachmentsPopup(event, [$('#attach_id_candidature').val()], $('#currentPage').val())
+			    }catch (e) {
+			        error_message('Une erreur est survenu, essay plus tards.');
+			    }
+            }
+        });
+	})
+
+
+	editCandidatureAttachment = function(event, data) {
+		event.preventDefault()
+		var $parentRow = $(event.target).closest('tr')
+		$parentRow.find('.edit').hide()
+		$parentRow.find('.save_title').show()
+		$parentRow.find('strong.title').hide()
+		$parentRow.find('.title_input').attr('type', 'text')
+	}
+
+
+	saveAttachementTitle = function(event, data) {
+		event.preventDefault()
+		var $parentRow = $(event.target).closest('tr')
+		$parentRow.find('.save_title').hide()
+		$parentRow.find('.edit').show()
+		var $input = $parentRow.find('.title_input')
+		// Save Title
+		ajax_handler({
+			data: {
+				'action': 'cand_save_attachement_title',
+				'title': $input.val(),
+				'id_attachement': data[0]
+			}
+		}, function(response){
+			iziToast.destroy();
+			if( typeof response.status != undefined ) {
+				if( response.status == 'success' ) {
+					$parentRow.find('strong.title').text($input.val()).show()
+					$input.attr('type', 'hidden')
+					$parentRow.find('td.updated_at').text(response.updated_at)
+					success_message(response.message, {position:'topCenter'});
+				} else {
+					error_message(response.message);
+				}
+			} else {
+				ajax_error_message()
+			}
+		});
+	}
+
+
+	deleteCandidatureAttachment = function(data) {
+		ajax_handler({
+			data: {
+				'action': 'cand_delete_attachement',
+				'id_attachement': data[0]
+			}
+		}, function(response){
+			iziToast.destroy();
+			if( typeof response.status != undefined ) {
+				if( response.status == 'success' ) {
+					$(data.target).closest('tr').addClass('deletedRow')
+					$(data.target).closest('tr').fadeOut(5000, function() {
+						$(this).remove();
+					});
+					success_message(response.message, {position:'topCenter'});
+
+					showAttachmentsPopup(event, [$('#attach_id_candidature').val()], $('#currentPage').val())
+				} else {
+					error_message(response.message);
+				}
+			} else {
+				ajax_error_message()
+			}
+		});
+	}
+
+
+	// Ajax pagination
+	$('.live-link>a').click(function(event){
+		event.preventDefault()
+		var $link = $(this).attr('href')
+		showModal({
+			data: {
+				'action': 'cand_attachments_popup',
+				'candidatures': [$('#attach_id_candidature').val()],
+				'page': $link.slice($link.indexOf('=')+1)
+			}
+		})
+	})
+
+
+	// Add new Line
+    $("#attachmentTable").on('click', '.addLine', function(){
+        event.preventDefault()
+
+        var copy = $(this).closest("tr").clone()
+        	copy.find('input').val('')
+			copy.find('button').toggleClass('addLine deleteLine')
+			copy.find('button').toggleClass('btn-success btn-danger')
+			copy.find('button>i').toggleClass('fa-plus fa-minus')
+
+        $('#attachmentTable').append(copy)
+    })
+
+    $("#attachmentTable").on('click', '.deleteLine', function(){
+        $(this).closest('tr').remove();
+    });
+
+
+})
+</script>

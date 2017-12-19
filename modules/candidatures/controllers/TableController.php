@@ -41,9 +41,18 @@ class TableController
 	];
 
 	private $actions = [
+		'attachments' => [
+			'label' => 'Pièces jointes',
+			'patern' => '#',
+			'icon' => 'fa fa-files-o',
+			'callback' => 'showAttachmentsPopup',
+			'bulk_action' => false,
+			'attributes' => [
+				'class' => 'btn btn-info btn-xs',
+			]
+		],
 		'change_status' => [
 			'label' => 'Editer le statut de cette candidature',
-			'bulk_label' => 'Editer le statut',
 			'patern' => '#',
 			'icon' => 'fa fa-pencil',
 			'callback' => 'showChangeSatatusPopup',
@@ -119,6 +128,7 @@ class TableController
 		$table->setTrigger('table_notes', [$this, 'getPertinenceNotice']);
 		$table->setOrderby('cand.date_candidature');
 		$table->setOrder('DESC');
+		// $table->setSortables(['date_cand', 'titre_offre']);
 
   		// Add custom actions
   		if( isset($_GET['id']) && $_GET['id'] == 45 ) {
@@ -138,8 +148,14 @@ class TableController
 			$table->setAction($key, $attributes);
 		}
 
+		// $table->addColumn('ref_offre', 'Réf', function($row){
+		// 	$offre = Candidatures::getOfferById($row->id_offre);
+		// 	$row->titre_offre = $offre->Name;
+		// 	return $offre->reference;
+		// });
+
 		// Add table columns
-		$table->addColumn('sinfos', 'Informations Candidats', function($row){
+		$table->addColumn('sinfos', 'Informations', function($row){
 			$html = '<a href="'. site_url('backend/cv/?candid='.$row->candidats_id) .'" target="_blank" class="cname" title="Voir le profile"><i class="fa fa-user"></i>&nbsp;'. $row->fullname .'</a>';
 
 			if( !is_null($row->date_n) ) {
@@ -231,12 +247,6 @@ class TableController
 			}
 			$html .= '</div>';
 			return $html;
-		});
-
-		$table->addColumn('ref_offre', 'Réf', function($row){
-			$offre = Candidatures::getOfferById($row->id_offre);
-			$row->titre_offre = $offre->Name;
-			return $offre->reference;
 		});
 
 		$table->addColumn('titre_offre', 'Titre du poste', function($row){

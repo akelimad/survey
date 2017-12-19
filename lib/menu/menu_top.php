@@ -1,7 +1,5 @@
 <!--MENU PRINCIPAL -->
-<?php	
-use \Modules\Candidatures\Models\Candidatures;
-
+<?php
 
 $_SESSION['link']=isset($_GET['a'])	 ? $_GET['a']      : $_SESSION['link_bak_a'];
  
@@ -177,20 +175,8 @@ if ($_SESSION['menu4'] == 1)
  { 
 
 ?> 
-	<li class="<?php echo $cls4; ?>">
-
-		<a href="<?= site_url('backend/module/candidatures/candidature/status'); ?>">Candidatures</a>	
-		
-		<ul class="secondLevel">
-			<?php foreach (Candidatures::getStatus() as $key => $status) : ?>
-				<li>
-					<a href="<?= site_url('backend/module/candidatures/candidature/list/'. $status->id_prm_statut_c); ?>"><?= $status->statut; ?></a>
-				</li>
-			<?php endforeach; ?>
-		</ul>
-
-
-	</li>
+	
+	<?php get_view('partials/candidature_menu', ['cls4' => $cls4]); ?>
 
 	
 <?php	

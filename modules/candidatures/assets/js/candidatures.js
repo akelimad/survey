@@ -9,6 +9,8 @@ jQuery(document).ready(function($){
 			backdrop: 'static',
 			keyboard: false
 		})
+		ajax_args.showErrorMessage = false;
+		
 		ajax_handler(ajax_args, function(response){
 			var modal_title = 'ERREUR INATTENDU !'
 			var modal_content = '<strong>Une erreur est survenu lors de chargement de la requête, merci de réessayer.</strong>';
@@ -20,8 +22,8 @@ jQuery(document).ready(function($){
 			if( response.title != null && typeof response.title != undefined ) {
 				modal_title = response.title
 			}
+			$('#candidaturesModal .modal-header h4').html('<strong style="text-transform: uppercase;">'+modal_title+'</strong>')
 			$('#candidaturesModal .modal-body').html(modal_content).show()
-			$('#candidaturesModal .modal-header h4').html('<strong>'+modal_title+'</strong>')
 		});
 	}
 
@@ -40,6 +42,19 @@ jQuery(document).ready(function($){
 			}
 		});
 	}
+
+
+	showAttachmentsPopup = function(event, candidatures, currentPage=1) {
+		event.preventDefault()
+		showModal({
+			data: {
+				'action': 'cand_attachments_popup',
+				'candidatures': candidatures,
+				'page': currentPage
+			}
+		})
+	}
+
 
 	showSendEmailPopup = function(event, candidatures) {
 		event.preventDefault()

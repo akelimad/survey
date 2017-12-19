@@ -1,5 +1,6 @@
 .phpintel
 apps/upload
+uploads
 vendor
 composer.lock
 error_log

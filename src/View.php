@@ -45,7 +45,7 @@ class View {
             extract($variables);
             require($viewBase);
         } else {
-            get_alert('warning', 'Cannot find a view in: <'. $viewBase .'>', false);
+            get_alert('warning', $path .' <strong>Not found.</strong>', false);
         }
     }
 

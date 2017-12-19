@@ -166,3 +166,22 @@ ul#menu_site_carriere li a:focus {
   padding: 5px;
   height: auto;
 }
+
+
+/* Popup pièces jointes */
+#attachmentsTable>thead>tr>th,
+#attachmentsTable>tbody>tr>td{
+  padding: 2px 5px;
+}
+
+#attachmentsTable>thead>tr>th{
+    background-color: #636e79ba !important;
+}
+
+.deletedRow{
+  background-color: #f39696 !important;
+}
+
+#etalent-table-wraper .pagination-wrap{
+  width: 100% !important;
+}

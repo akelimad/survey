@@ -72,6 +72,10 @@ function error_message(message, params={}){
 }
 
 
+function ajax_error_message() {
+  error_message('Une erreur est survenu, essay plus tards.');
+}
+
 /**
  * SUCCESS MESSAGE
  *
@@ -138,6 +142,7 @@ function confirmMessage(event, callable=null, args={}, message=null) {
               }
             } else {
               window[callable](args);
+              $($target).removeClass('confirm')
               instance.hide({
                 transitionOut: 'fadeOutUp',
               }, toast, 'close', 'btn_oui');
@@ -343,9 +348,9 @@ function ajax_handler($params, callback){
   var $default = {
     url: site_url('src/includes/ajax/index.php'),
     type: 'post',
-    data: {}
+    data: {},
+    showErrorMessage: true
   }
-
   //merging two objects into new object
   var $args = jQuery.extend({}, $default, $params);
 
@@ -358,15 +363,21 @@ function ajax_handler($params, callback){
           callback( jQuery.parseJSON(response) ); //check if response is json
       }catch (e) {
         callback({error: true});
-        error_message('Une erreur est survenu, essay plus tards.');
+        if( $args.showErrorMessage ) error_message('Une erreur est survenu, essay plus tards.');
       }
   });
 
   // Callback handler that will be called on failure
   $request.fail(function (jqXHR, textStatus, errorThrown){
     callback({error: true});
-    error_message('Une erreur est survenu, essay plus tards.');
+    if( $args.showErrorMessage ) error_message('Une erreur est survenu, essay plus tards.');
   });
+}
+
+
+function get_ajax_url()
+{
+  return site_url('src/includes/ajax/index.php');
 }
 
 
