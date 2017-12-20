@@ -84,7 +84,11 @@ class View {
         // Render page
         self::get('partials/header', $variables, $file);
         $template = (isset($variables['template'])) ? $variables['template'] : 'full-width'; 
-        self::get('templates/'.$template, $variables, $file);
+        if( isBackend() ) {
+            self::get('templates/'.$template, $variables, $file);
+        } else {
+            self::get('templates/front/'.$template, $variables, $file);
+        }
         self::get('partials/footer', $variables, $file);
     }
 

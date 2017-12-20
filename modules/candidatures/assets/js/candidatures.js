@@ -98,6 +98,17 @@ jQuery(document).ready(function($){
 			}
 		})
 	}
+
+	// partager les candidatures
+	showShareCandidaturePopup = function(event, candidatures) {
+		event.preventDefault()
+		showModal({
+			data: {
+				'action': 'cand_share_candidature_popup',
+				'candidatures': candidatures
+			}
+		})
+	}
 	
 
 	$.fn.getWidthInPercent = function () {

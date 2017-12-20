@@ -16,7 +16,7 @@
             }
             $fiche = Fiche::findById($offreFicheId);
             ?>
-            <?php if( isset($fiche->name) && $fiche->name != '' ) : ?>
+            <?php if( isset($fiche->name) && $fiche->name != '' && !Fiche::canChangeOffreFiche($id_offre, $fiche_type) ) : ?>
                 <input type="text" name="reference" id="reference" value="<?= $fiche->reference .' | '. $fiche->name; ?>" style="width:100%" disabled>
             <?php else : ?>
                 <select name="offre_fiche_type[<?= $fiche_type; ?>]" style="width:100%">

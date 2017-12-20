@@ -133,9 +133,11 @@ jQuery(document).ready(function($){
 			if( typeof response.status != undefined ) {
 				if( response.status == 'success' ) {
 					$(data.target).closest('tr').addClass('deletedRow')
-					$(data.target).closest('tr').fadeOut(5000, function() {
-						$(this).remove();
+
+					$(data.target).closest('tr').fadeOut( "slow", function() {
+					    $(this).remove();
 					});
+
 					success_message(response.message, {position:'topCenter'});
 					showAttachmentsPopup(event, [$('#attach_id_candidature').val()], $('#currentPage').val())
 				} else {
@@ -166,13 +168,16 @@ jQuery(document).ready(function($){
     $("#attachmentTable").on('click', '.addLine', function(){
         event.preventDefault()
 
-        var copy = $(this).closest("tr").clone()
-        	copy.find('input').val('')
+        var $row = $(this).closest("tr")
+
+        var copy = $row.clone()
 			copy.find('button').toggleClass('addLine deleteLine')
 			copy.find('button').toggleClass('btn-success btn-danger')
 			copy.find('button>i').toggleClass('fa-plus fa-minus')
 
-        $('#attachmentTable').append(copy)
+		$row.find('input').val('')
+
+        $(copy).insertBefore($row)
     })
 
     $("#attachmentTable").on('click', '.deleteLine', function(){

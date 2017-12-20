@@ -29,13 +29,14 @@ CREATE TABLE `fiche_items` (
 
 
 CREATE TABLE `fiche_offre` (
+    `id_fiche_offre` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `id_fiche` int(11) unsigned NOT NULL,
     `id_offre` int(11) unsigned NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=0 CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-
 CREATE TABLE `fiche_candidature` (
     `id_fiche_candidature` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `id_fiche` int(11) unsigned NOT NULL,
     `id_candidature` int(11) unsigned NOT NULL,
     `id_evaluator` int(11) unsigned NOT NULL,
     `comments` varchar(255) DEFAULT NULL,

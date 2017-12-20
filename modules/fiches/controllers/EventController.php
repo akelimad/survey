@@ -12,6 +12,7 @@ namespace Modules\Fiches\Controllers;
 
 use App\Event;
 use App\View;
+use App\Session;
 use Modules\Fiches\Models\Fiche;
 
 class EventController
@@ -31,10 +32,7 @@ class EventController
 		
 		// Candidature change status events
 		Event::add('change_status_form_fields', [$this, 'changeStatusFormFields']);
-		Event::add('change_status_form_submit', [$this, 'changeStatusFormSubmit']);
-
-		// Add custom params to candidature table
-		Event::add('before_run_candidature_table', [$this, 'beforeRunCandidatureTable']);
+		Event::add('candidature_form_submit', [$this, 'candidatureFormSubmit']);
 	}
 	
 
@@ -59,16 +57,17 @@ class EventController
 
 	public function afterFormSubmit($data)
 	{
-		if( isset($data['id_offre']) && !empty($data['data']['offre_fiche_type']) ) {
-			$db = getDB();
-			foreach ($data['data']['offre_fiche_type'] as $key => $id_fiche) {
-				if( $id_fiche == '' || !is_numeric($id_fiche) ) continue;
-				if( !$db->exists('fiche_offre', 'id_fiche', $id_fiche) ) {
-					$db->create('fiche_offre', [
-						'id_fiche' => $id_fiche,
-						'id_offre' => $data['id_offre'] ?: null
-					]);
-				}
+		if( !isset($data['id_offre']) || empty($data['data']['offre_fiche_type']) ) return;
+
+		$db = getDB();
+		foreach ($data['data']['offre_fiche_type'] as $key => $id_fiche) {
+			if( $id_fiche == '' || !is_numeric($id_fiche) ) continue;
+			$count = $db->prepare("SELECT COUNT(*) AS nbr FROM fiche_offre WHERE id_fiche=? AND id_offre=?", [$id_fiche, $data['id_offre']], true);
+			if( $count->nbr == 0 ) {
+				$db->create('fiche_offre', [
+					'id_fiche' => $id_fiche,
+					'id_offre' => $data['id_offre']
+				]);
 			}
 		}
 	}
@@ -76,42 +75,96 @@ class EventController
 
 	public function changeStatusFormFields($data)
 	{
-		$id_candidature = $data['candidature']->id_candidature;
+		$db = getDB();
+		$fiche_offre = $db->prepare("SELECT f.name, f.id_fiche FROM fiche_offre fo JOIN fiches f ON f.id_fiche=fo.id_fiche WHERE f.fiche_type=? AND fo.id_offre=?", [0, $data['candidature']->id_offre], true);
+		$id_candidature = $data['candidature']->cid;
+		$fiche_candidature = $db->findOne('fiche_candidature', 'id_candidature', $id_candidature) ?: new \stdClass;
+
 		return View::get('admin/candidature/fields', [
 			'ficheTypes' => $this->ficheTypes,
-			'fiche_candidature' => getDB()->findOne('fiche_candidature', 'id_candidature', $id_candidature) ?: new \stdClass,
-			'id_candidature' => $id_candidature
+			'fiche_candidature' => $fiche_candidature,
+			'id_candidature' => $id_candidature,
+			'fiche_offre' => $fiche_offre,
+			'id_fiche' => (isset($fiche_offre->id_fiche)) ? $fiche_offre->id_fiche : 0
 		], __FILE__);
 	}
 
 
-	public function changeStatusFormSubmit($data)
+
+	public function candidatureFormSubmit($data)
 	{
-		/*if( isset($args['id_offre']) && !empty($args['data']['offre_fiche_type']) ) {
-			$db = getDB();
-			foreach ($args['data']['offre_fiche_type'] as $key => $id_fiche) {
-				if( $id_fiche == '' || !is_numeric($id_fiche) ) continue;
-				if( !$db->exists('fiche_offre', 'id_fiche', $id_fiche) ) {
-					$db->create('fiche_offre', [
-						'id_fiche' => $id_fiche,
-						'id_offre' => $args['id_offre'] ?: null
-					]);
-				}
-			}
-		}*/
+		if( !isset($data['fiche']['blocks']) || empty($data['fiche']['blocks']) || !isset($_SESSION['id_role']) ) return;
+		
+		$db = getDB();
+		$currentDate = date("Y-m-d H:i:s");
+		$id_candidature = $data['fiche']['id_candidature'];
+
+		// Telle if current Admin has already submit a fiche
+		$fcand = $db->prepare("SELECT id_fiche_candidature FROM fiche_candidature WHERE id_fiche=? AND id_candidature=? AND id_evaluator=?", [$data['fiche']['id'], $id_candidature, $_SESSION['id_role']], true);
+
+		if( !isset($fcand->id_fiche_candidature) ) {
+			$id_fiche_candidature = $db->create('fiche_candidature', [
+				'id_fiche' => $data['fiche']['id'],
+				'id_candidature' => $id_candidature,
+				'id_evaluator' => $_SESSION['id_role'],
+				'comments' => $data['fiche']['comments'],
+				'created_at' => $currentDate,
+				'updated_at' => $currentDate
+			]);
+		} else {
+			$db->update('fiche_candidature', 'id_fiche_candidature', $fcand->id_fiche_candidature, [
+				'comments' => $data['fiche']['comments'],
+				'updated_at' => $currentDate
+			]);
+			$id_fiche_candidature = $fcand->id_fiche_candidature;
+		}
+
+		if( intval($id_fiche_candidature) > 0 ) : 
+			foreach ($data['fiche']['blocks'] as $id_block => $blockItems) :
+				if( !empty($blockItems) ) : foreach ($blockItems as $id_item => $item) :
+					$result = $db->prepare("SELECT id_result FROM fiche_candidature_results WHERE id_fiche_candidature=? AND id_block=? AND id_item=?", [$id_fiche_candidature, $id_block, $id_item], true);
+					if( !isset($result->id_result) ) {
+						$db->create('fiche_candidature_results', [
+							'id_fiche_candidature' => $id_fiche_candidature,
+							'id_item' => $id_item,
+							'id_block' => $id_block,
+							'value' => (isset($item['value'])) ? $item['value'] : '',
+							'observations' => (isset($item['observations'])) ? $item['observations'] : ''
+						]);
+					} else {
+						$db->update('fiche_candidature_results', 'id_result', $result->id_result, [
+							'value' => (isset($item['value'])) ? $item['value'] : '',
+							'observations' => (isset($item['observations'])) ? $item['observations'] : ''
+						]);
+					}
+				endforeach; endif;
+			endforeach;
+
+			// update note orale
+			if(isset($data['fiche']['type']) && $data['fiche']['type'] == 1) $this->updateNoteOrale($id_candidature);
+
+			Session::setFlash('success', 'La fiche a été bien sauvegarder.');
+		else :
+			Session::setFlash('danger', 'Impossible de sauvegarder la fiche.');
+		endif;
 	}
 
 
-	public function beforeRunCandidatureTable($data)
+	public function updateNoteOrale($id_candidature)
 	{
-		$abc = $data['table'];
-		// dump($abc);
-		// return $data['table'];
+		$db = getDB();
+	    $note = $db->prepare("
+	      SELECT COUNT(fcr.id_result) AS nbr, SUM(fcr.value) AS total
+	      FROM fiches f
+	      JOIN fiche_candidature fc ON fc.id_fiche=f.id_fiche
+	      JOIN fiche_candidature_results fcr ON fcr.id_fiche_candidature=fc.id_fiche_candidature
+	      WHERE fc.id_candidature=? AND f.fiche_type=?
+	    ", [$id_candidature, 1], true);
+
+	    $db->update('candidature', 'id_candidature', $id_candidature, [
+	    	'note_orale' => ($note->total/$note->nbr)
+	    ]);
 	}
-
-
-
-
 
 
   

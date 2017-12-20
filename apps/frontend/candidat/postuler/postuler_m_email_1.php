@@ -110,4 +110,16 @@ $sql_mail= ' insert into corespondances Values ("","'.safe($obj_emp).'","'.safe(
 
 mysql_query($sql_mail);
 
+
+$offre = getDB()->findOne('offre', 'id_offre', $_GET['id_offre']);
+$notifMessage  = '<p>Une nouvelle candidature a été reçu sur l\'offre: '.$offre->Name;
+$notifMessage .= '</p><p>Pour consulter les nouvelles candidatures <strong><a href="'.site_url('backend/module/candidatures/candidature/list/0').'">cliquez ici</a></strong></p>';
+\App\Mail\Mailer::send([
+	'recrutement@ammc.ma',
+	'mohamed.yahya@ammc.ma',
+	'driss.lemjaouri@ammc.ma',
+	'meriam.trabelsi@ammc.ma',
+	'ali.amrani@ammc.ma'
+], 'Nouvelle candidature reçu', $notifMessage, ['isHTML' => true]);
+
 ?>

@@ -27,6 +27,8 @@ class Session
      */
 	public static function get($key, $default=null)
     {
+        self::startSession();
+
         return $_SESSION[$key] ?: $default;	
 	}
 
@@ -43,6 +45,8 @@ class Session
     {
         if( $key == '' || $value == '' )
             return false;
+
+        self::startSession();
         
         return $_SESSION[$key] = $value;
     }
@@ -140,6 +144,13 @@ class Session
         return false;
     }
 
+
+    public static function startSession()
+    {
+        if (session_status() == PHP_SESSION_NONE) {
+          session_start();
+        }
+    }
 
 
 } // END Class

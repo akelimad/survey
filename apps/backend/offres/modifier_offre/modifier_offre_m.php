@@ -1,4 +1,4 @@
-
+<?php $messages=array(); ?>
 <div class='texte' >	
 													
                   <br/><h1>MODIFIER UNE OFFRE</h1>
@@ -93,14 +93,14 @@ if(copy($photo_offre_tmp, $photo_offre_f)){//echo "hahah";
 		$messages=array();
 				if( !empty($msgs)) {
 			  $msgs ="<div class='alert alert-error'><ul>".$msgs . "<li style='color:#FF0000'>Veuillez remplir le type de contrat </li>";
-				array_push($messages,$msgs);
+				array_push($messages, $msgs);
 				}
 				 
 
 if(isset($messages) and !empty($messages))  {
-        foreach($messages as $messages) 
+        foreach($messages as $message) 
         ?><?php    
-          {     echo $messages;    } 
+          {     echo $message;    } 
            ?><?php
       } 
          } 
@@ -195,7 +195,7 @@ if(isset($messages) and !empty($messages))  {
                 } else {
                     $errorMessage = $uploadFiles[$key]['errorMessage'];
                     if( isset($upload['errors'][0][0]) ) $errorMessage .= ': ('. $upload['errors'][0][0] .')';
-                    array_push($messages,"<li style='color:#FF0000'>". $errorMessage ."</li>");
+                    array_push($messages, "<li style='color:#FF0000'>". $errorMessage ."</li>");
                 }
             }
         }                

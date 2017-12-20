@@ -43,6 +43,8 @@ class Table extends Pagination {
         'show_thead' => true,
         'show_footer' => false,
         'show_increment' => false,
+        'show_before_table_form' => true,
+        'head_actions_width' => null
     );
 
 
@@ -163,12 +165,12 @@ class Table extends Pagination {
     protected $templates;
 
     /**
-     * $columnAttributes
+     * $columnOptions
      *
      * @access protected
      * @var    array
      */
-    protected $columnAttributes;
+    protected $columnOptions;
 
 
     /**
@@ -371,10 +373,10 @@ class Table extends Pagination {
         // Table Classess
         $table_classes = (!empty($this->table_classes)) ? 'class="'. implode(' ', $this->table_classes) .' etaTable"' : 'etaTable';
 
-        // if( $this->total_results > 0 ) {
+        if( $this->_options['show_before_table_form'] ) {
             $html .= '<form method="get" action="" class="form-inline" id="etalent-table-filter">';
             $html .= '<div class="row" style="margin-bottom: 10px;">';
-                $html .= '<div class="col-md-12">';
+            $html .= '<div class="col-md-12">';
 
                 /*if( $this->total_results > 0 ) {
                     $show_start = (($this->perpage * $this->getPage()) - $this->perpage)+1;
@@ -415,155 +417,166 @@ class Table extends Pagination {
 
                 $html .= '</div>';
                 $html .= '</div>';*/
-            $html .= '</div>';
-            $html .= '</form>';
-        // }
+                $html .= '</div>';
+                $html .= '</form>';
+            }
 
-        $html .= '<form method="post" action="" class="form-inline" id="etalent-table-wraper">';
+            $html .= '<form method="post" action="" class="form-inline" id="etalent-table-wraper">';
             $html .= '<div class="row">';
             $html .= '<div class="col-md-12 table-responsive">';
-            $html .= '<table '. $table_classes .' '. $table_id .'">';
+            $html .= '<table '.$table_classes.' '.$table_id.'>';
             $rowspan = count($this->headers);
 
             $thead = '';
             if( $this->_options['show_thead'] && $this->total_results > 0 ) {
                 $html .= '<thead><tr>';
 
-                    if( $this->_options['bulk_actions'] && $this->hasBulkActions() ) :
-                        $thead .= '<th><input type="checkbox" value="" class="'.$this->table_id.'_checkAll etaTable_checkAll"></th>';
-                        $rowspan += 1;
-                    elseif( $this->_options['show_increment'] ) :
-                        $thead .= '<th>#</th>';
-                        $rowspan += 1;
-                    endif;
+                if( $this->_options['bulk_actions'] && $this->hasBulkActions() ) :
+                    $thead .= '<th><input type="checkbox" value="" class="'.$this->table_id.'_checkAll etaTable_checkAll"></th>';
+                    $rowspan += 1;
+                elseif( $this->_options['show_increment'] ) :
+                    $thead .= '<th>#</th>';
+                    $rowspan += 1;
+                endif;
 
-                    foreach ($this->headers as $key => $header) {
+                foreach ($this->headers as $key => $header) {
 
-                        $colAttrs = '';
-                        $this->columnAttributes[$key]['class'] .= ' '.$key;
-                        if( !empty($this->columnAttributes[$key]) ) : 
-                            foreach ($this->columnAttributes[$key] as $k => $v) :
-                                $colAttrs .= $k.'="'.$v.'"';
-                            endforeach; 
-                        endif;
+                    $colAttrs = '';
+                    $this->columnOptions[$key]['attributes']['class'] .= ' '.$key;
 
-                        if( !empty($this->sortables) && in_array($key, $this->sortables) ) {
-                            if( $this->orderby == $key ) {
-                                $sort = (strtolower($this->order)=='asc') ? 'desc' : 'asc';
-                            } else {
-                                $sort = 'asc';
-                            }
-                            
-                            $sort_link = $this->getSortLink($key);
-                            $thead .= '<th '.$colAttrs.'><a title="Trier par: '. $header .'" href="'. $sort_link .'" class="sort"><i class="fa fa-sort-amount-'. $sort .'"></i>&nbsp;'. $header .'</a></th>';
+                    if( !empty($this->sortables) && in_array($key, $this->sortables) ) {
+                        if (isset($this->columnOptions[$key]['attributes']['title'])) {
+                            $title = $this->columnOptions[$key]['attributes']['title'];
+                            $this->columnOptions[$key]['attributes']['title'] = 'Trier par:&nbsp;'.$title;
                         } else {
-                            $thead .= '<th '.$colAttrs.'>'. $header .'</th>';
+                            $this->columnOptions[$key]['attributes']['title'] = 'Trier par:&nbsp;'.$header;
                         }
                     }
-                    if( $this->_options['actions'] ) :
-                        $width = count($this->_actions) * 35;
-                        $thead .= '<th width="'. $width .'px" class="actions">Actions</th>';
-                        $rowspan += 1;
+
+                    if( !empty($this->columnOptions[$key]['attributes']) ) : 
+                        foreach ($this->columnOptions[$key]['attributes'] as $k => $v) :
+                            $colAttrs .= $k.'="'.$v.'"';
+                        endforeach; 
                     endif;
+
+                    if( !empty($this->sortables) && in_array($key, $this->sortables) ) {
+                        if( $this->orderby == $key ) {
+                            $sort = (strtolower($this->order)=='asc') ? 'desc' : 'asc';
+                        } else {
+                            $sort = 'asc';
+                        }
+
+                        $sort_link = $this->getSortLink($key);
+                        $thead .= '<th '.$colAttrs.'>';
+                        $thead .= '<a href="'. $sort_link .'" class="sort"><i class="fa fa-sort-amount-'. $sort .'"></i>&nbsp;'. $header .'</a></th>';
+                    } else {
+                        $thead .= '<th '.$colAttrs.'>'. $header .'</th>';
+                    }
+                }
+                if( $this->_options['actions'] ) :
+                    $width = (!is_null($this->_options['head_actions_width'])) ? $this->_options['head_actions_width'] : count($this->_actions) * 35;
+                    $thead .= '<th width="'. $width .'px" class="actions">Actions</th>';
+                    $rowspan += 1;
+                endif;
                 $html .= $thead . '</tr></thead>';
             }
 
             $html .= '<tbody>';
-                $headers = array_keys($this->headers);
-                if( !empty($this->rows) ) : foreach ($this->rows as $key => $row) :
-                    $html .= '<tr>';
-                    $columns = array_merge(array_flip($headers), (array) $row);
+            $headers = array_keys($this->headers);
+            if( !empty($this->rows) ) : foreach ($this->rows as $key => $row) :
+                $html .= '<tr>';
+                $columns = array_merge(array_flip($headers), (array) $row);
 
-                    if( $this->_options['bulk_actions'] && $this->hasBulkActions() ) :
-                        $html .= '<td class="bulk-cb"><input type="checkbox" name="'. $this->table_id .'_items[]" value="'. $columns[$this->primary_key] .'" class="'. $this->table_id .'_cb etaTable_cb"></td>';
-                    elseif( $this->_options['show_increment'] ) :
-                        $html .= '<td>'. $this->getIncrement() .'</td>';
-                        $rowspan += 1;
-                    endif;
+                if( $this->_options['bulk_actions'] && $this->hasBulkActions() ) :
+                    $html .= '<td class="bulk-cb"><input type="checkbox" name="'. $this->table_id .'_items[]" value="'. $columns[$this->primary_key] .'" class="'. $this->table_id .'_cb etaTable_cb"></td>';
+                elseif( $this->_options['show_increment'] ) :
+                    $html .= '<td>'. $this->getIncrement() .'</td>';
+                    $rowspan += 1;
+                endif;
 
-                    foreach ($columns as $key => $column) {
-                        if( !isset($this->headers[$key]) ) continue;
-                        if( isset($this->templates[$key]) ) {
-                            if(is_callable($this->templates[$key])) {
-                                $row->object = $this;
-                                $column = call_user_func($this->templates[$key], $row);
-                            } else {
-                                $column = $this->parseTemplate($this->templates[$key], $columns);
-                            }
+                foreach ($columns as $key => $column) {
+                    if( !isset($this->headers[$key]) ) continue;
+                    if( isset($this->templates[$key]) ) {
+                        if(is_callable($this->templates[$key])) {
+                            $row->object = $this;
+                            $column = call_user_func($this->templates[$key], $row);
+                        } else {
+                            $column = $this->parseTemplate($this->templates[$key], $columns);
                         }
-                        $html .= '<td class="'.$key.'">'. $column .'</td>';
                     }
+                    $html .= '<td class="'.$key.'">'. $column .'</td>';
+                }
 
                     // Get actions links
-                    if( $this->_options['actions'] ) :
-                        $html .= '<td class="actions">'. $this->getActionsLinks($columns, $row) .'</td>';
-                    endif;
+                if( $this->_options['actions'] ) :
+                    $html .= '<td class="actions">'. $this->getActionsLinks($columns, $row) .'</td>';
+                endif;
 
-                    $html .= '</tr>';
-                endforeach; else :
+                $html .= '</tr>';
+            endforeach; else :
 
-                    $html .= '<tr><td colspan="'. $rowspan .'" style="text-align: center; border-top: 3px solid #e32b2b !important; border-bottom: 3px solid #e32b2b !important;">Aucune donnée à afficher.</td></tr>';
+            $html .= '<tr><td colspan="'. $rowspan .'" style="text-align: center; border-top: 3px solid #e32b2b !important; border-bottom: 3px solid #e32b2b !important;">Aucune donnée à afficher.</td></tr>';
 
                 endif; // END Table
-            $html .= '</tbody>';
+                $html .= '</tbody>';
 
-            if( $this->_options['show_footer'] && $this->total_results > 0 ) {
-                $html .= '<tfoot><tr>'. $thead .'<tr></tfoot>';
-            }           
+                if( $this->_options['show_footer'] && $this->total_results > 0 ) {
+                    $html .= '<tfoot><tr>'. $thead .'<tr></tfoot>';
+                }           
 
-            $html .= '</table>';
+                $html .= '</table>';
             $html .= '</div></div>';// End table row
 
             if( $this->total_results > 0 ) {
                 $html .= '<div class="row">';
 
 
-                    if( $this->_options['bulk_actions'] && $this->hasBulkActions() ) :
+                if( $this->_options['bulk_actions'] && $this->hasBulkActions() ) :
                     $html .= '<div class="col-md-5" id="bulk-wrap">';
-                        $html .= '<select name="'. $this->table_id .'_action" required>';
-                        $html .= '<option value="">Actions groupées</option>';
-                            foreach ($this->_actions as $key => $action)
-                            {
-                                if( $key == 'edit' || !$action['bulk_action'] ) continue;
-                                $callable = (!is_null($action['callback']) && $action['callback']!='') ? 'data-callback="'.$action['callback'].'"' : '';
-                                $bulk_label = (isset($action['bulk_label'])) ? $action['bulk_label'] : $action['label'];
-                                $html .= '<option value="'. $key .'" '.$callable.'>'. $bulk_label .'</option>';
-                            }
-                        $html .= '</select>&nbsp;';
-                        $html .= '<input type="submit" class="espace_candidat" value="Appliquer" style="padding: 0px 8px;border: 0px;margin-right: 5px;">';
-                        $html .= '<div class="form-group">';
-                            $html .= '<select id="'.$this->table_id.'_perpage" class="etaTable_perpage">';
-                            foreach ($this->perpages as $key => $value) {
-                                $selected = ($this->perpage==$value) ? 'selected' : '';
-                                $html .= '<option value="'.$value.'" '.$selected.'>'.$value.'</option>';
-                            }
-                            $html .= '</select>';
-                        $html .= '</div>';
+                    $html .= '<select name="'. $this->table_id .'_action" required>';
+                    $html .= '<option value="">Actions groupées</option>';
+                    foreach ($this->_actions as $key => $action)
+                    {
+                        if( $key == 'edit' || !$action['bulk_action'] ) continue;
+                        $callable = (!is_null($action['callback']) && $action['callback']!='') ? 'data-callback="'.$action['callback'].'"' : '';
+                        $bulk_label = (isset($action['bulk_label'])) ? $action['bulk_label'] : $action['label'];
+                        $html .= '<option value="'. $key .'" '.$callable.'>'. $bulk_label .'</option>';
+                    }
+                    $html .= '</select>&nbsp;';
+                    $html .= '<input type="submit" class="espace_candidat" value="Appliquer" style="padding: 0px 8px;border: 0px;margin-right: 5px;">';
+                    $html .= '<div class="form-group">';
+                    $html .= '<select id="'.$this->table_id.'_perpage" class="etaTable_perpage">';
+                    foreach ($this->perpages as $key => $value) {
+                        $selected = ($this->perpage==$value) ? 'selected' : '';
+                        $html .= '<option value="'.$value.'" '.$selected.'>'.$value.'</option>';
+                    }
+                    $html .= '</select>';
                     $html .= '</div>';
-                    endif;
+                    $html .= '</div>';
+                endif;
 
                     // add pagination
-                    if( !empty($this->links_html) ) {
-                        $links_pull = ( $this->_options['bulk_actions'] && $this->hasBulkActions() ) ? 'pull-right' : 'pull-left';
-                        $html .= '<div class="col-md-7 pagination-wrap"><div class="'. $this->table_id .'_pagination '.$links_pull.'">';
-                        $html .= $this->links_html;
-                        $html .= '</div></div>';
-                    }
+                if( !empty($this->links_html) ) {
+                    $links_pull = ( $this->_options['bulk_actions'] && $this->hasBulkActions() ) ? 'pull-right' : 'pull-left';
+                    $html .= '<div class="col-md-7 pagination-wrap"><div class="'. $this->table_id .'_pagination '.$links_pull.'">';
+                    $html .= $this->links_html;
+                    $html .= '</div></div>';
+                }
                 $html .= '</div>';
             }
-        $html .= '</form>';
+            $html .= '</form>';
 
-        if( $echo ) {
-            echo $html;
-        } else {
-            return $html;
+            if( $echo ) {
+                echo $html;
+            } else {
+                return $html;
+            }
         }
-    }
 
-    public function getActions()
-    {
-        return $this->_actions;
-    }
+        public function getActions()
+        {
+            return $this->_actions;
+        }
 
 
     /**
@@ -577,8 +590,8 @@ class Table extends Pagination {
     {
         $html = '';
 
-        $this->sortActions();
-
+        // $this->sortActions();
+        
         foreach ($this->_actions as $actionName => $action)
         {
             $permission = $action['permission'];
@@ -601,6 +614,8 @@ class Table extends Pagination {
             if (strpos($action['patern'], 'http') === false && $action['patern'] != '#') {
                 $actionLink = $sep . $actionLink;
             }
+            
+            if( $action['patern'] == '#' ) $actionLink = 'javascript:void(0)';
 
             $attrs = '';
             if( !empty($action['attributes']) ) : foreach ($action['attributes'] as $key => $attr) :
@@ -629,15 +644,33 @@ class Table extends Pagination {
 
     public function sortActions()
     {
-        $actions = array();
-    
-        foreach($this->_actions as $key => $action)
-        {
-            $actions[$key] = $action;
-        }
-        krsort($actions);
+        $sort_ascending = true;
+        $subkey = 'sort_order';
 
-        $this->_actions = $actions;
+        $temp_array[key($this->_actions)] = $this->_actions;
+
+        foreach($this->_actions as $key => $val){
+            $offset = 0;
+            $found = false;
+            foreach($temp_array as $tmp_key => $tmp_val)
+            {
+                if(!$found and strtolower($val[$subkey]) > strtolower($tmp_val[$subkey])) {
+                    $temp_array = array_merge(    (array)array_slice($temp_array,0,$offset),
+                        array($key => $val),
+                        array_slice($temp_array,$offset)
+                    );
+                    $found = true;
+                }
+                $offset++;
+            }
+            if(!$found) $temp_array = array_merge($temp_array, array($key => $val));
+        }
+
+        if ($sort_ascending) {
+            $this->_actions = array_reverse($temp_array);
+        } else {
+            $this->_actions = $temp_array;
+        } 
     }
 
 
@@ -858,19 +891,18 @@ class Table extends Pagination {
         } else {
             $default = array(
                 'label' => 'Sans titre',
-                'patern' => '',
+                'patern' => '#',
                 'icon' => '',
                 'permission' => true,
                 'bulk_action' => true,
-                'sort_order' => count($this->_actions) + 1,
+                'sort_order' => (count($this->_actions) + 1),
                 'attributes' => array(
                     'class' => 'btn btn-default btn-xs'
                 ),
-                'callable' => null
+                'callback' => null
             );
         }
         $args = array_merge($default, $args);
-
         $this->_actions[$name] = $args;
     }
 
@@ -952,10 +984,10 @@ class Table extends Pagination {
                         return date($format, strtotime($values[$tpl[0]]));
                         break;
                         case stristr($tpl[1], 'letters_limit') : 
-                            $parts = explode(',', $tpl[1]);
-                            if( isset($parts[1]) ) {
-                                return letters_limit($values[$tpl[0]], $parts[1]);
-                            }
+                        $parts = explode(',', $tpl[1]);
+                        if( isset($parts[1]) ) {
+                            return letters_limit($values[$tpl[0]], $parts[1]);
+                        }
                         break;
                     }
                 }
@@ -976,15 +1008,16 @@ class Table extends Pagination {
      * @param string $id
      * @param string $name
      * @param callable $callback
+     * @param array $options
      *
      * @return void
      * @since 2017-10-30
      */
-    public function addColumn($id, $name, $callback, $attributes=[])
+    public function addColumn($id, $name, $callback, $options=[])
     {
         if( !isset($this->headers[$id]) ) $this->headers[$id] = $name;
         $this->templates[$id] = $callback;
-        $this->columnAttributes[$id] = $attributes;
+        $this->columnOptions[$id] = $options;
     }
     
 

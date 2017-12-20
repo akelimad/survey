@@ -42,6 +42,9 @@ class AjaxController
     Ajax::add('cand_delete_attachement', [$this, 'deleteAttachement']);
 
     Ajax::add('cand_note_ecrit_popup', [$this, 'showNoteEcritPopup']);
+
+    Ajax::add('cand_share_candidature_popup', [$this, 'showShareCandidaturePopup']);
+    
   }
   
 
@@ -167,7 +170,7 @@ class AjaxController
     if( empty($data['candidatures']) ) return [];
 
     $candidature = getDB()->prepare("
-      SELECT cand.id_candidature AS cid, concat(c.nom, ' ', c.prenom) AS displayName 
+      SELECT cand.id_candidature AS cid, cand.id_offre, concat(c.nom, ' ', c.prenom) AS displayName, c.email AS candidat_email
       FROM candidats c 
       JOIN candidature AS cand ON cand.candidats_id=c.candidats_id 
       WHERE cand.id_candidature=?
@@ -185,7 +188,7 @@ class AjaxController
   
 
   /**
-   * Show note orale popup
+   * Show note ecrit popup
    * 
    * @author M'hamed Chanchaf
    */
@@ -204,8 +207,24 @@ class AjaxController
         'note_ecrit' => $candidature->note_ecrit
     ]);
   }
+  
 
+  /**
+   * Show Share Candidature Popup
+   * 
+   * @author M'hamed Chanchaf
+   */
+  public function showShareCandidaturePopup($data)
+  {
+    if( empty($data['candidatures']) ) return [];
 
+    return $this->renderAjaxView(
+      'Partager les candidatures', 
+      'admin/candidature/popup/share-candidatures', [
+        'candidatures' => $data['candidatures']
+    ]);
+  }
+  
 
   /**
    * Get email type
@@ -224,7 +243,7 @@ class AjaxController
    * 
    * @author M'hamed Chanchaf
    */
-  public function sendEmail($data)
+  public function sendEmail($data, $args=[])
   {
     if( 
       !isset($data['sender'])   || $data['sender'] == '' ||
@@ -239,23 +258,28 @@ class AjaxController
         $message = $this->renderTemplate($parts[0], $parts[1], $data['message']);
       }
 
-     /* getDB()->create('corespondances', [
+     getDB()->create('corespondances', [
       'sujet' => $data['subject'],
-      'nom' => $_SESSION["abb_admin"],
+      'nom' => read_session('abb_admin'),
       'date_envoi' => date('Y-m-d H:i:s'),
-      'type_email' => 'Envoi manuel',
-      'titre' => 'Contacte avec le candidat',
+      'type_email' => (isset($data['type_email'])) ? $data['type_email'] : 'Envoi manuel',
+      'titre' => (isset($data['titre'])) ? $data['titre'] : 'Contact avec le candidat',
       'message' => $data['message'],
-      'ref_filiale' => ''
-    ]);*/
+      'ref_filiale' => (isset($data['ref_filiale'])) ? $data['ref_filiale'] : ''
+    ]);
 
-    $attachements = (isset($data['cv_path']) && $data['cv_path']!='') ? [site_base($data['cv_path'])] : [];    
+    $attachements = (isset($data['cv_path']) && $data['cv_path']!='') ? [site_base($data['cv_path'])] : [];  
+    if(isset($data['attachements']) && is_array($data['attachements'])) {
+      $attachements = array_merge($attachements, $data['attachements']);
+    }
 
-    $receiver = (isset($parts[1])) ? $parts[1] : $parts[0];
-    return \App\Mail\Mailer::send($receiver, $data['subject'], $data['message'], [
+    $args = array_replace_recursive([
       'isHTML' => true,
       'attachements' => $attachements
-    ]);
+    ], $args);
+    
+    $receiver = (isset($parts[1])) ? $parts[1] : $parts[0];
+    return \App\Mail\Mailer::send($receiver, $data['subject'], $data['message'], $args);
   }
 
 

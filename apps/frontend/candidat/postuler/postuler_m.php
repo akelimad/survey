@@ -218,7 +218,19 @@ $motivation1 =str_replace("'", "\'", $motivation);
 
             $date = date('Y-m-d'); 
 
-            $insertion = mysql_query("INSERT INTO candidature VALUES ('','".safe($id_candidat)."', '".safe($id_cv)."', '".safe($id_lettre)."','".safe($id_offre)."','".safe($motivation1)."','".safe($date)."','0', '".safe($r_note_finale)."','' )");
+            /*$insertion = mysql_query("INSERT INTO candidature VALUES ('','".safe($id_candidat)."', '".safe($id_cv)."', '".safe($id_lettre)."','".safe($id_offre)."','".safe($motivation1)."','".safe($date)."','0', '".safe($r_note_finale)."','' )");*/
+
+            $insertion = getDB()->create('candidature', [
+                'candidats_id' => $id_candidat,
+                'id_cv' => $id_cv,
+                'id_lettre' => $id_lettre,
+                'id_offre' => $id_offre,
+                'lettre_motivation' => $motivation1,
+                'date_candidature' => $date,
+                'status' => 0,
+                'pertinence' => $r_note_finale,
+                'notation' => ''
+            ]);
 
 
 

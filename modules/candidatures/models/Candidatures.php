@@ -51,7 +51,12 @@ class Candidatures {
 
 	public function countByStatus($status_id)
 	{
-		return getDB()->prepare("SELECT COUNT(*) AS count FROM candidature WHERE status=?", [$status_id], true)->count;
+		$query  = "SELECT COUNT(*) AS count FROM candidature c";
+		if( read_session('abb_admin') != 'root' ) {
+			$query .= " JOIN role_candidature AS rc ON rc.id_candidature = c.id_candidature";
+		} 
+		$query .= " WHERE c.status=?";
+		return getDB()->prepare($query, [$status_id], true)->count;
 	}
 
 

@@ -115,7 +115,20 @@ class Mailer
 		} catch (Exception $e) {
 			return array("response" => "error", "message" => "Le message n'a pas pu être envoyé. Erreur: {$mail->ErrorInfo}");
 		}
- 	}
+	}
+
+
+
+	public static function renderMessage($message, $variables)
+	{
+		return preg_replace_callback('#{{([^}]+)}}#', function($m) use ($message, $variables){
+			if(isset($variables[$m[1]])){
+				return $variables[$m[1]];
+			}else{
+				return $m[0];
+			}
+		}, $message);
+	}
 
 
 

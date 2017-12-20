@@ -68,6 +68,10 @@ RewriteRule ^backend/module/([a-z-_]+)/([a-z-_]+)/([a-z-_(\.php)]+)$ ./modules/i
 RewriteRule ^backend/module/([a-z-_]+)/([a-z-_]+)/([a-z-_]+)/([0-9]+)$ ./modules/index.php?module=$1&controller=$2&action=$3&id=$4 [L,QSA]
 RewriteRule ^backend/module/([a-z-_]+)/([a-z-_]+)$ ./modules/index.php?module=$1&controller=$2&action=index [L,QSA]
 
+RewriteRule ^module/([a-z-_]+)/([a-z-_]+)/([a-z-_(\.php)]+)$ ./modules/index.php?module=$1&controller=$2&action=$3 [L,QSA]
+RewriteRule ^module/([a-z-_]+)/([a-z-_]+)/([a-z-_]+)/([0-9]+)$ ./modules/index.php?module=$1&controller=$2&action=$3&id=$4 [L,QSA]
+RewriteRule ^module/([a-z-_]+)/([a-z-_]+)$ ./modules/index.php?module=$1&controller=$2&action=index [L,QSA]
+
 
 RewriteRule ^backend(.*)$ ./apps/backend/home/$1 [L,QSA] 
 RewriteRule ^accueil.php$ ./apps/backend/home/accueil.php [L,QSA] 

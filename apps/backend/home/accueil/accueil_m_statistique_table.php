@@ -161,7 +161,7 @@ $accept =   $count_cours;
 
 if ($accept)
 
-echo '<a href="'.$urlad_candatur.'/candidature_en_cours/" title="Consulter">
+echo '<a href="'. site_url('backend/module/candidatures/candidature') .'" title="Consulter">
 
 <span class="badge badge-success">'. $accept.'</span></a>';
 

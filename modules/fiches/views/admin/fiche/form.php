@@ -76,19 +76,17 @@ input, select {
 
                 <table class="blockTable" id="blockTable<?= $block->id_block; ?>" style="width:100%;">
                 <?php
-                    $block_items = [];
+                    $block_items[0] = (object) [
+                        'id_item' => 'new_0',
+                        'name' => ''
+                    ];
                     if(isset($data->block_items[$block->id_block]) && !empty($data->block_items[$block->id_block])) {
                         $block_items = $data->block_items[$block->id_block];
                     } else if (isset($data->id_fiche)) {
                         $block_items = getDB()->prepare("SELECT * FROM fiche_items WHERE id_fiche=? AND id_block=?", [
                             $data->id_fiche,
                             $block->id_block
-                        ]) ?: [];
-                    } else {
-                        $block_items[] = (object) [
-                            'id_item' => 'new_0',
-                            'name' => ''
-                        ];
+                        ]) ?: $block_items;
                     }
                     // Show block items
                     if( !empty($block_items) ) : foreach ($block_items as $key => $item) :                    

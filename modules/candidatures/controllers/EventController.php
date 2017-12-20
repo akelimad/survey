@@ -13,6 +13,7 @@ namespace Modules\Candidatures\Controllers;
 use App\Event;
 use App\View;
 use App\Session;
+use App\Mail\Mailer;
 
 class EventController
 {
@@ -41,7 +42,24 @@ class EventController
 		// Save status popup data
 		if( isset($data['status']['id']) ) {
 			$saveStatus = (new StatusController())->saveStatus($data);
+			// Send convocation email
+			if( isset($data['status']['mail']) ) {
+				$message = $data['status']['mail']['message'];
+				$data['status']['mail']['message'] = Mailer::renderMessage($message, [
+					// 'lien_confirmation' => '<a href="'. site_url('confirmation/?i='.$saveStatus['id_agend']) .'"> <b>Confirmer</b></a>'
+					'lien_confirmation' => '<a href="'. site_url('module/candidatures/confirm/calendar/'.$saveStatus['id_agend']) .'"> <b>Confirmer</b></a>'
+				]);
+				$sendEmail = (new AjaxController())->sendEmail($data['status']['mail']);
+				if( $sendEmail['response'] == 'success' ) {
+					Session::setFlash('success', 'Une convocation a été envoyé au candidat.');
+				} else {
+					Session::setFlash('error', $sendEmail['message']);
+				}
+			}
 		}
+
+		// share candidature
+		if( isset($data['share']['candidatures']) ) (new ShareController())->share($data['share']);
 	}
 
 

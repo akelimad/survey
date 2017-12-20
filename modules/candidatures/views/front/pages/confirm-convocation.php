@@ -1,0 +1,1 @@
+<?= get_alert($type, $message); ?>

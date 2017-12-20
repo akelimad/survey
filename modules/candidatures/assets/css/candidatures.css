@@ -1,5 +1,6 @@
 .actions .btn-xs {
   padding: 1px 1px 0px 4px !important;
+  margin-bottom: 4px;
 }
 
 #candidatureTable>tbody>tr>td{

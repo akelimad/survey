@@ -52,7 +52,11 @@ class Fiche extends Model
 
     public static function getOffreFicheByType($id_offre, $fiche_type)
     {
-        $fiche = getDB()->prepare("SELECT f.id_fiche FROM fiches f JOIN fiche_offre fo ON fo.id_fiche=f.id_fiche WHERE f.fiche_type=? AND fo.id_offre=?", [$fiche_type, $id_offre], true);
+        $fiche = getDB()->prepare("
+            SELECT f.id_fiche FROM fiches f 
+            JOIN fiche_offre fo ON fo.id_fiche=f.id_fiche 
+            WHERE fo.id_offre=? AND f.fiche_type=?
+        ", [$id_offre, $fiche_type], true);
 
         return (isset($fiche->id_fiche)) ? $fiche->id_fiche : null;
     }
@@ -64,22 +68,39 @@ class Fiche extends Model
     }
     
 
-    public static function getBlockItemsByCandidatureId($id_block, $id_candidature)
+    public static function getBlockItem($id_fiche_candidature, $id_block, $id_item)
     {
-        return getDB()->prepare("SELECT fi.* FROM fiche_items AS fi WHERE fi.id_block=?", [
-            $id_block
-        ]) ?: [];
-
-        /* return getDB()->prepare("SELECT fi.* FROM fiche_items AS fi JOIN candidature AS c ON c.id_ca WHERE fi.id_block=? AND c.id_candidature=?", [
+        return getDB()->prepare("SELECT fcr.value, fcr.observations FROM fiche_candidature_results fcr JOIN fiche_candidature fc ON fc.id_fiche_candidature=fcr.id_fiche_candidature WHERE fcr.id_fiche_candidature=? AND fcr.id_block=? AND fcr.id_item=? AND fc.id_evaluator=?", [
+            $id_fiche_candidature,
             $id_block,
-            $id_candidature
-        ]) ?: []; */
+            $id_item,
+            read_session('id_role')
+        ], true);  
     }
+    
 
+    public static function getBlockItems($id_block, $id_fiche)
+    {
+        return getDB()->prepare("SELECT * FROM fiche_items WHERE id_block=? AND id_fiche=?", [$id_block, $id_fiche]) ?: [];
+    }
+    
 
     public static function getFichesByType($fiche_type)
     {
         return getDB()->findByColumn('fiches', 'fiche_type', $fiche_type) ?: [];
+    }
+    
+
+    public static function canChangeOffreFiche($id_offre, $fiche_type)
+    {
+        $count = getDB()->prepare("
+            SELECT COUNT(*) AS nbr FROM candidature c
+            JOIN fiche_candidature fc ON fc.id_candidature=c.id_candidature
+            JOIN fiche_offre fo ON fo.id_offre=c.id_offre
+            JOIN fiches f ON f.id_fiche=fo.id_fiche
+            WHERE fo.id_offre=? AND f.fiche_type=?
+        ", [$id_offre, $fiche_type], true);
+        return ($count->nbr==0);
     }
 
     

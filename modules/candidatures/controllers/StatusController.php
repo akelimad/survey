@@ -52,13 +52,14 @@ class StatusController
       'lieu' => '',
       'start' => $date,
       'end' => $date,
-      'confirmation_statu' => '0',
+      'confirmation_statu' => (isset($data['status']['agenda']['confirmation_statu'])) ? $data['status']['agenda']['confirmation_statu'] : 0,
     );
   	$agenda = $db->findOne('agenda', 'id_candidature', $candidature->id_candidature);
   	if( isset($agenda->id_agend) ) {
   		$db->update('agenda', 'id_agend', $agenda->id_agend, $agendaData);
+      $id_agend = $agenda->id_agend;
   	} else {
-  		$db->create('agenda', $agendaData);
+  		$id_agend = $db->create('agenda', $agendaData);
   	}
 
     // Fire event after saving new sattus
@@ -68,16 +69,20 @@ class StatusController
     ]);
 
     // Send email notification
-    $this->sendNotif();
+    $this->sendNotif();  
 
-    // set flash bag
-    Session::setFlash('success', 'Un email sera envoyé automatiquement au candidat.');    
+    return [
+      'id_agend' => $id_agend,
+      'candidature' => $candidature, 
+      'id_historique' => $id_historique
+    ];
   }
 
 
   private function sendNotif()
   {
   	// TODO - send email to candidat
+    // Session::setFlash('success', 'Un email sera envoyé automatiquement au candidat.');  
   	// apps\backend\home\popup\state_email.php
   }
 

@@ -11,10 +11,11 @@
 namespace Modules\Candidatures\Controllers;
 
 use App\Event;
+use App\Controllers\Controller;
 use Modules\Candidatures\Models\Candidat;
 use Modules\Candidatures\Models\Candidatures;
 
-class TableController
+class TableController extends Controller
 {
 
 
@@ -41,47 +42,62 @@ class TableController
 	];
 
 	private $actions = [
-		'attachments' => [
-			'label' => 'Pièces jointes',
-			'patern' => '#',
-			'icon' => 'fa fa-files-o',
-			'callback' => 'showAttachmentsPopup',
-			'bulk_action' => false,
-			'attributes' => [
-				'class' => 'btn btn-info btn-xs',
-			]
-		],
-		'change_status' => [
-			'label' => 'Editer le statut de cette candidature',
-			'patern' => '#',
-			'icon' => 'fa fa-pencil',
-			'callback' => 'showChangeSatatusPopup',
-			'bulk_action' => false,
-			'attributes' => [
-				'class' => 'btn btn-success btn-xs',
-			]
-		],
-		'send_cv_mail' => [
-			'label' => 'Transférer le CV',
-			'bulk_label' => 'Transférer le CV',
-			'patern' => '#',
-			'icon' => 'fa fa-send-o',
-			'callback' => 'showSendCVEmailPopup',
-			'bulk_action' => false,
-			'attributes' => [
-				'class' => 'btn btn-default btn-xs',
-			]
-		],
-		'send_mail' => [
-			'label' => 'Envoyer un email au candidat',
-			'bulk_label' => 'Envoyer un email',
-			'patern' => '#',
-			'icon' => 'fa fa-envelope-o',
-			'callback' => 'showSendEmailPopup',
-			'attributes' => [
-				'class' => 'btn btn-default btn-xs',
-			]
-		]
+    'change_status' => [
+      'label' => 'Editer le statut de cette candidature',
+      'patern' => '#',
+      'icon' => 'fa fa-pencil',
+      'callback' => 'showChangeSatatusPopup',
+      'bulk_action' => false,
+      'sort_order' => 1,
+      'attributes' => [
+        'class' => 'btn btn-success btn-xs',
+      ]
+    ],
+    'send_cv_mail' => [
+      'label' => 'Transférer le CV',
+      'bulk_label' => 'Transférer le CV',
+      'patern' => '#',
+      'icon' => 'fa fa-send-o',
+      'callback' => 'showSendCVEmailPopup',
+      'bulk_action' => false,
+      'sort_order' => 2,
+      'attributes' => [
+        'class' => 'btn btn-default btn-xs',
+      ]
+    ],
+    'send_mail' => [
+      'label' => 'Envoyer un email au candidat',
+      'bulk_label' => 'Envoyer un email',
+      'patern' => '#',
+      'icon' => 'fa fa-envelope-o',
+      'callback' => 'showSendEmailPopup',
+      'sort_order' => 3,
+      'attributes' => [
+        'class' => 'btn btn-default btn-xs',
+      ]
+    ],
+    'attachments' => [
+      'label' => 'Pièces jointes',
+      'patern' => '#',
+      'icon' => 'fa fa-files-o',
+      'callback' => 'showAttachmentsPopup',
+      'bulk_action' => false,
+      'sort_order' => 4,
+      'attributes' => [
+        'class' => 'btn btn-info btn-xs',
+      ]
+    ],
+    'share_candidature' => [
+      'label' => 'Partager la candidature',
+      'bulk_label' => 'Partager les candidatures',
+      'patern' => '#',
+      'icon' => 'fa fa-share-alt',
+      'callback' => 'showShareCandidaturePopup',
+      'sort_order' => 5,
+      'attributes' => [
+        'class' => 'btn btn-primary btn-xs',
+      ]
+    ]		
 	];
 
 	private $pertinence;
@@ -94,7 +110,8 @@ class TableController
 			'show_thead' => true,
 			'show_footer' => true,
 			'show_increment' => false,
-			'show_links_first_last' => false
+			'show_links_first_last' => false,
+      'head_actions_width' => '105px'
 		],
 		'actions' => [
 			'send_mail' => true
@@ -134,20 +151,20 @@ class TableController
     }
     
   	$table->setOrder('DESC');
-    $table->setSortables(['note_ecrit', 'date_cand']);
+    $table->setSortables(['note_ecrit', 'note_orale', 'date_cand']);
 
-  		// Add custom actions
-  	if( isset($_GET['id']) && $_GET['id'] == 45 ) {
-  		$this->actions['fiche_evaluation'] = [
-  			'label' => 'Évaluer cet candidat',
-  			'patern' => '#',
-  			'icon' => 'fa fa-file-text-o',
-  			'callback' => 'showFicheEvaluationPopup',
-  			'attributes' => [
-  				'class' => 'btn btn-primary btn-xs',
-  			]
-  		];
-  	}
+    $this->actions['fiche_evaluation'] = [
+      'label' => 'Évaluer cet candidat',
+      'patern' => '#',
+      'icon' => 'fa fa-file-text-o',
+      'callback' => 'showFicheEvaluationPopup',
+      'sort_order' => 6,
+      'bulk_action' => false,
+      'attributes' => [
+        'class' => 'btn btn-primary btn-xs',
+      ],
+      'permission' => (isset($_GET['id']) && $_GET['id'] == 45)
+    ];
 
   	foreach ($this->actions as $key => $attributes) {
   		if( isset($this->params['actions'][$key]) && $this->params['actions'][$key] == false ) continue;
@@ -214,7 +231,7 @@ class TableController
   		$html .= '</table>';
 
   		return $html;
-  	}, ['width'=> '180px']);
+  	}, ['attributes' => ['width'=> '180px']]);
 
   	$table->addColumn('details', 'Détails', function($row){
   		$details = '';
@@ -238,7 +255,7 @@ class TableController
   	$table->addColumn('pertinence', 'P', function($row){
   		$p = Candidat::getPertinance($row->candidats_id, $row->id_offre);
   		$total_p = (isset($p->total_p)) ? $p->total_p : 0;
-  		$html = '<i class="fa fa-circle" style="font-size: 1.3em;color:'. $this->getPertinanceColor($total_p) .'" data-toggle="popover" data-trigger="hover" data-popover-content="#show_p_'. $row->candidats_id .'"></i>';
+  		$html = '<i class="fa fa-circle" style="font-size: 1.3em;color:'. $this->getPertinanceColor($total_p) .'" data-toggle="popover"  title="Pertinence" data-trigger="hover" data-popover-content="#show_p_'. $row->candidats_id .'"></i>';
   		$html .= '<div id="show_p_'. $row->candidats_id .'" class="hidden">';
   		if( isset($p->total_p) ) {
   			$html .= '<table class="table table-pertinance">';
@@ -253,7 +270,7 @@ class TableController
   		}
   		$html .= '</div>';
   		return $html;
-  	});
+  	}, ['attributes' => ['title' => 'Pertinence']]);
 
   	$table->addColumn('note_ecrit', 'NE', function($row){
   		if( is_valid_int($row->note_ecrit) ) {
@@ -267,11 +284,29 @@ class TableController
   			$tooltip = 'data-toggle="tooltip" title="Non défini."';
   		}
   		return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteEcritPopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
-  	});
+  	}, ['attributes' => ['title' => 'Note Écrit']]);
+
+
+    // FICHES D'EVALUATION 
+    $table->addColumn('note_orale', 'NO', function($row){
+      if( is_valid_int($row->note_orale) ) {
+        $value = ($row->note_orale==0.00) ? 0 : $row->note_orale;
+        $color = $this->percent2Color($row->note_orale, 200, 4);
+        $style = 'background-color:#'.$color.';';
+        $tooltip = '';
+      } else {
+        $value = '<i class="fa fa-times" style="font-size: 10px;"></i>';
+        $style = '';
+        $tooltip = 'data-toggle="tooltip" title="Non défini."';
+      }
+      return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteOralePopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
+    }, ['attributes' => ['title' => 'Note Orale']]);
+
 
   	$table->addColumn('titre_offre', 'Titre du poste', function($row){
-  		return $row->titre_offre;
-  	}, ['width'=> '140px']);
+      $offre = Candidatures::getOfferById($row->id_offre);
+  		return $offre->Name;
+  	}, ['attributes' => ['width'=> '120px']]);
 
   	$table->addColumn('date_cand', 'Date', function($row){
   		return '<b>'. date ("d.m.Y", strtotime($row->date_cand)) .'</b>';
@@ -295,9 +330,21 @@ class TableController
 	 */
   public function buildQuery()
   {
-  	$andWhere = $this->getAndWhereStatement();
+    $condition = "";
+    if( is_valid_int($_GET['id']) ) {
+      $condition .= "WHERE cand.status='". $_GET['id'] ."' ";
+      $condition .= $this->getAndWhereStatement();
+    } else {
+    	$condition .= $this->getAndWhereStatement('WHERE');
+    }
+
   	$joints   = $this->getJoints();
-  	$query = "SELECT c.candidats_id, CONCAT(c.nom, ' ',c.prenom) AS fullname, c.email, c.titre, c.ville, c.id_situ, c.id_tfor, c.id_nfor, c.id_expe, c.id_sect, c.id_fonc, c.mobilite, c.id_pays, c.id_salr, c.date_n, c.dateMAJ, c.CVdateMAJ, cand.*, cand.date_candidature as date_cand FROM candidature cand INNER JOIN candidats c ON c.candidats_id = cand.candidats_id {$joints} WHERE cand.status='". $_GET['id'] ."' {$andWhere} GROUP BY cand.id_candidature";
+    if( read_session('abb_admin') != 'root' ) $joints .= ' JOIN role_candidature rc ON rc.id_candidature = cand.id_candidature';
+  	$query = "
+      SELECT c.candidats_id, CONCAT(c.nom, ' ',c.prenom) AS fullname, c.email, c.titre, c.ville, c.id_situ, c.id_tfor, c.id_nfor, c.id_expe, c.id_sect, c.id_fonc, c.mobilite, c.id_pays, c.id_salr, c.date_n, c.dateMAJ, c.CVdateMAJ, cand.*, cand.date_candidature as date_cand 
+      FROM candidature cand 
+      INNER JOIN candidats c ON c.candidats_id = cand.candidats_id 
+      {$joints} {$condition} GROUP BY cand.id_candidature";
   	return $query;
   }
 
@@ -472,30 +519,6 @@ class TableController
   	if( $this->pertinence->prm_n_mobil == 1 ) $scores['Pertinence Niveau Mobilité'] = $cp->prm_n_mobil;
   	if( $this->pertinence->prm_t_mobil == 1 ) $scores['Pertinence Taux Mobilité']   = $cp->prm_t_mobil;
   	return $scores;
-  }
-
-  
-  public function percent2Color($value, $brightness = 255, $max = 100, $min = 0, $thirdColorHex = '00')
-  {       
-	// Calculate first and second color (Inverse relationship)
-  	$first = (1-($value/$max))*$brightness;
-  	$second = ($value/$max)*$brightness;
-
-	// Find the influence of the middle color (yellow if 1st and 2nd are red and green)
-  	$diff = abs($first-$second);    
-  	$influence = ($brightness-$diff)/2;     
-  	$first = intval($first + $influence);
-  	$second = intval($second + $influence);
-
-	// Convert to HEX, format and return
-  	$firstHex = str_pad(dechex($first),2,0,STR_PAD_LEFT);     
-  	$secondHex = str_pad(dechex($second),2,0,STR_PAD_LEFT); 
-
-  	return $firstHex . $secondHex . $thirdColorHex ; 
-
-    // alternatives:
-    // return $thirdColorHex . $firstHex . $secondHex; 
-    // return $firstHex . $thirdColorHex . $secondHex;
   }
 
 
