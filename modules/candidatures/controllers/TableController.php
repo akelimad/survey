@@ -154,7 +154,7 @@ class TableController extends Controller
     $table->setSortables(['note_ecrit', 'note_orale', 'date_cand']);
 
     $this->actions['fiche_evaluation'] = [
-      'label' => 'Évaluer cet candidat',
+      'label' => 'Évaluer ce candidat',
       'patern' => '#',
       'icon' => 'fa fa-file-text-o',
       'callback' => 'showFicheEvaluationPopup',

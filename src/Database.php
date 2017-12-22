@@ -118,15 +118,17 @@ class Database {
      *
      * @return boolean
      */
-	public function create($table, $columns=['*']){
+	public function create($table, $columns=['*'], $autoConvertDates=true){
 		$sql_parts = [];
 		$attributes = [];
 		foreach ($columns as $k => $v) {
 			$sql_parts[] = "$k = ?";
-			if ( preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/[0-9]{4} [0-9]{2}:[0-9]{2}$/", $v) ) {
-				$v = french_to_english_datetime($v);
-			} else if ( preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/[0-9]{4}$/", $v) ) {
-				$v = french_to_english_date($v);
+			if( $autoConvertDates ) {
+				if ( preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/[0-9]{4} [0-9]{2}:[0-9]{2}$/", $v) ) {
+					$v = french_to_english_datetime($v);
+				} else if ( preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/[0-9]{4}$/", $v) ) {
+					$v = french_to_english_date($v);
+				}
 			}
 			$attributes[] = $v;
 		}
@@ -173,15 +175,17 @@ class Database {
      *
      * @return boolean
      */
-	public function update($table, $column, $value, $columns=['*']){
+	public function update($table, $column, $value, $columns=['*'], $autoConvertDates=true){
 		$sql_parts = $attributes = [];
 
 		foreach ($columns as $k => $v) {
 			$sql_parts[] = "$k = ? ";
-			if ( preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/[0-9]{4} [0-9]{2}:[0-9]{2}$/", $v) ) {
-				$v = french_to_english_datetime($v);
-			} else if ( preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/[0-9]{4}$/", $v) ) {
-				$v = french_to_english_date($v);
+			if( $autoConvertDates ) {
+				if ( preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/[0-9]{4} [0-9]{2}:[0-9]{2}$/", $v) ) {
+					$v = french_to_english_datetime($v);
+				} else if ( preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/[0-9]{4}$/", $v) ) {
+					$v = french_to_english_date($v);
+				}
 			}
 			$attributes[] = $v;
 		}

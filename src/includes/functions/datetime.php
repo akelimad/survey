@@ -14,9 +14,9 @@
  *
  * @return string $french_date
  */
-function french_to_english_date($date) {
+function french_to_english_date($date, $format='Y-m-d') {
 	if(\DateTime::createFromFormat('d/m/Y', $date)) {
-		return \DateTime::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+		return \DateTime::createFromFormat('d/m/Y', $date)->format($format);
 	}
 	return null;
 }
@@ -28,9 +28,9 @@ function french_to_english_date($date) {
  *
  * @return string $french_datetime
  */
-function french_to_english_datetime($datetime) {
-	if(\DateTime::createFromFormat('d/m/Y', $datetime)) {
-		return \DateTime::createFromFormat('d/m/Y H:i', $datetime)->format('Y-m-d H:i:s');
+function french_to_english_datetime($datetime, $format='Y-m-d H:i:s') {
+	if(\DateTime::createFromFormat('d/m/Y H:i:s', $datetime)) {
+		return \DateTime::createFromFormat('d/m/Y H:i:s', $datetime)->format($format);
 	}
 	return null;
 }
@@ -42,9 +42,9 @@ function french_to_english_datetime($datetime) {
  *
  * @return string $english_date
  */
-function english_to_french_date($date) {
-	if(\DateTime::createFromFormat('d/m/Y', $date)) {
-		return \DateTime::createFromFormat('Y-m-d', $date)->format('d/m/Y');
+function english_to_french_date($date, $format='d/m/Y') {
+	if(\DateTime::createFromFormat('Y-m-d', $date)) {
+		return \DateTime::createFromFormat('Y-m-d', $date)->format($format);
 	}
 	return null;
 }
@@ -56,9 +56,9 @@ function english_to_french_date($date) {
  *
  * @return string $english_datetime
  */
-function english_to_french_datetime($datetime) {
-	if(\DateTime::createFromFormat('d/m/Y', $datetime)) {
-		return \DateTime::createFromFormat('Y-m-d H:i:s', $datetime)->format('d/m/Y H:i');
+function english_to_french_datetime($datetime, $format='d/m/Y H:i') {
+	if(\DateTime::createFromFormat('Y-m-d H:i:s', $datetime)) {
+		return \DateTime::createFromFormat('Y-m-d H:i:s', $datetime)->format($format);
 	}
 	return null;
 }

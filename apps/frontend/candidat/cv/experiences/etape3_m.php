@@ -273,7 +273,7 @@ $insertion_exp = getDB()->update('experience_pro', 'id_exp', $id__e, [
 	'description' => $desc_exp,
 	'salair_pecu' => $salair_pecu,
 	'copie_attestation' => $uploadFiles['copie_attestation']['name']
-]);
+], false);
 
 array_push($messages_succc,"<li style='color:#468847'>L'expérience professionnelle à été modifié avec succés</li>");
 
@@ -308,7 +308,7 @@ $insertion_exp = getDB()->create('experience_pro', [
 	'description' => $desc_exp,
 	'salair_pecu' => $salair_pecu,
 	'copie_attestation' => $uploadFiles['copie_attestation']['name']
-]);
+], false);
 
 
 mysql_query("UPDATE candidats SET last_connexion = '".safe($last_connexion)."' WHERE candidats_id = '".safe($id_candidat)."'");

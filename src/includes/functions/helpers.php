@@ -15,10 +15,22 @@
 function redirect($url, $timer=null) {
 	if (strpos($url, 'http') === false) $url = site_url($url);
 
-	if( is_null($timer) ) {
-		header("Location: ".$url);exit;
+	if(!headers_sent()) {
+      //If headers not sent yet... then do php redirect
+		if( is_null($timer) ) {
+			header("Location: ".$url);exit;
+		} else {
+			header('Refresh: '. $timer .'; URL='.$url);
+		}
 	} else {
-		header('Refresh: '. $timer .'; URL='.$url);
+      //If headers are sent... do javascript redirect... if javascript disabled, do html redirect.
+		echo '<script type="text/javascript">';
+		echo 'window.location.href="'.$url.'";';
+		echo '</script>';
+		echo '<noscript>';
+		echo '<meta http-equiv="refresh" content="'. intval($timer) .';url='.$url.'" />';
+		echo '</noscript>';
+		exit;
 	}
 }
 
