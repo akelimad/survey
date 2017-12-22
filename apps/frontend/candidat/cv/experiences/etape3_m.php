@@ -589,7 +589,7 @@ if (isset($_SESSION['erreur']) and !empty($_SESSION['erreur'])) {
 
 											// header("location:./");
 
-											redirect(site_url());
+											redirect(site_url('candidat/cv/experiences/'));
 
                                         } else {
 
