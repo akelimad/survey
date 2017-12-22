@@ -48,7 +48,6 @@ class TableController extends Controller
       'icon' => 'fa fa-pencil',
       'callback' => 'showChangeSatatusPopup',
       'bulk_action' => false,
-      'sort_order' => 1,
       'attributes' => [
         'class' => 'btn btn-success btn-xs',
       ]
@@ -60,7 +59,6 @@ class TableController extends Controller
       'icon' => 'fa fa-send-o',
       'callback' => 'showSendCVEmailPopup',
       'bulk_action' => false,
-      'sort_order' => 2,
       'attributes' => [
         'class' => 'btn btn-default btn-xs',
       ]
@@ -71,9 +69,18 @@ class TableController extends Controller
       'patern' => '#',
       'icon' => 'fa fa-envelope-o',
       'callback' => 'showSendEmailPopup',
-      'sort_order' => 3,
       'attributes' => [
-        'class' => 'btn btn-default btn-xs',
+        'class' => 'btn btn-info btn-xs',
+      ]
+    ],
+    'note_ecrit' => [
+      'label' => 'Afficher la note écrit',
+      'patern' => '#',
+      'icon' => 'fa fa-trophy',
+      'bulk_action' => false,
+      'attributes' => [
+        'class' => 'btn btn-primary btn-xs',
+        'onclick' => 'return showNoteEcritPopup({id_candidature})'
       ]
     ],
     'attachments' => [
@@ -82,9 +89,8 @@ class TableController extends Controller
       'icon' => 'fa fa-files-o',
       'callback' => 'showAttachmentsPopup',
       'bulk_action' => false,
-      'sort_order' => 4,
       'attributes' => [
-        'class' => 'btn btn-info btn-xs',
+        'class' => 'btn btn-default btn-xs',
       ]
     ],
     'share_candidature' => [
@@ -93,9 +99,8 @@ class TableController extends Controller
       'patern' => '#',
       'icon' => 'fa fa-share-alt',
       'callback' => 'showShareCandidaturePopup',
-      'sort_order' => 5,
       'attributes' => [
-        'class' => 'btn btn-primary btn-xs',
+        'class' => 'btn btn-success btn-xs',
       ]
     ]		
 	];
@@ -161,7 +166,7 @@ class TableController extends Controller
       'sort_order' => 6,
       'bulk_action' => false,
       'attributes' => [
-        'class' => 'btn btn-primary btn-xs',
+        'class' => 'btn btn-default btn-xs',
       ],
       'permission' => (isset($_GET['id']) && $_GET['id'] == 45)
     ];

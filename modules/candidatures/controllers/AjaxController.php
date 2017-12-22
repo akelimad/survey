@@ -201,7 +201,7 @@ class AjaxController
     if( !isset($candidature->id_candidature) ) return [];
 
     return $this->renderAjaxView(
-      'Changer la note orale', 
+      'Changer la note écrit', 
       'admin/candidature/popup/update-note-ecrit', [
         'id_candidature' => $data['id_candidature'],
         'note_ecrit' => $candidature->note_ecrit
