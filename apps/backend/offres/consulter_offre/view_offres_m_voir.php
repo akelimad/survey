@@ -450,7 +450,7 @@ echo ': '.$niv['formation'];
 
 <?php  if($_SESSION['r_prm_note']==0){ ?>
 
-<?php include ("./view_offre_m_note.php"); ?>
+<?php //include ("./view_offre_m_note.php"); ?>
 
 <?php  } ?>
 
@@ -462,8 +462,26 @@ echo ': '.$niv['formation'];
 
     <td colspan="2">
 
- <div class="ligneBleu"></div>
+<?php if(isset($offre['avis_concours']) && $offre['avis_concours'] != '') : ?>
+  <div class="subscription" style="margin: 10px 0pt;"><h1>Avis de concours</h1></div>
+  <a href="<?= site_url('apps/upload/frontend/offre/avis_concours/'.$offre['avis_concours']) ;?>"><i class="fa fa-download"> Télécharger</i></a>
+<?php endif; ?>
 
+<?php if(isset($offre['decisions_recrutement']) && $offre['decisions_recrutement'] != '') : ?>
+  <div class="subscription" style="margin: 10px 0pt;"><h1>Décisions de recrutement</h1></div>
+  <a href="<?= site_url('apps/upload/frontend/offre/decisions_recrutement/'.$offre['decisions_recrutement']) ;?>"><i class="fa fa-download"> Télécharger</i></a>
+<?php endif; ?>
+
+<?php if(isset($offre['candidats_convoques']) && $offre['candidats_convoques'] != '') : ?>
+  <div class="subscription" style="margin: 10px 0pt;"><h1>Liste des candidats convoqués</h1></div>
+  <a href="<?= site_url('apps/upload/frontend/offre/candidats_convoques/'.$offre['candidats_convoques']) ;?>"><i class="fa fa-download"> Télécharger</i></a>
+<?php endif; ?>
+
+<?php if(isset($offre['resultats_concours']) && $offre['resultats_concours'] != '') : ?>
+  <div class="subscription" style="margin: 10px 0pt;"><h1>Résultats des concours</h1></div>
+  <a href="<?= site_url('apps/upload/frontend/offre/resultats_concours/'.$offre['resultats_concours']) ;?>"><i class="fa fa-download"> Télécharger</i></a>
+<?php endif; ?>
+<br><br>
     </td>
 
 

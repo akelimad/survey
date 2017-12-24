@@ -27,8 +27,8 @@ if(!isset($_SESSION["abb_login_candidat"]) || $_SESSION["abb_login_candidat"] ==
       {	
 
 
-
-  		header("Location: ../") ;
+        retirect(site_url());
+  		// header("Location: ../") ;
 
 
 
@@ -80,7 +80,8 @@ $id_autre = array("290" );
 
         $supprimer = mysql_fetch_array($select_photo);
 
-        unlink(dirname(__FILE__) . $file_photos3 . $supprimer['photo']);
+        $fichier = SITE_BASE .'/apps/upload/frontend/photo_candidats/'.$supprimer['photo'];
+        unlinkFile($fichier);
 
          mysql_query("UPDATE candidats SET photo='' WHERE candidats_id = ".safe($_SESSION['abb_id_candidat'])." ");
 

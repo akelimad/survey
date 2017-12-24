@@ -21,8 +21,7 @@ function get_filesize($path){
  * @return string $path
  */
 function unlinkFile($path) {
-	if( is_file($path) && file_exists($path) ) {
-		chown($path, 666);
+	if( is_file($path) && file_exists($path) && is_readable($path) ) {
 		if (unlink($path)) {
 			return true;
 		}

@@ -105,7 +105,8 @@
 			data: {
 				'action': 'cand_type_email',
 				'id_email': $(this).val(),
-			}
+			},
+			showErrorMessage:false
 		}, function(response){
 			if( typeof response.email != undefined ) {
 				$('#cp_sender').val(response.email)

@@ -43,7 +43,7 @@ class EventController
 		if( isset($data['status']['id']) ) {
 			$saveStatus = (new StatusController())->saveStatus($data);
 			// Send convocation email
-			if( isset($data['status']['mail']) ) {
+			if( isset($data['status']['mail']) && $data['status']['mail'] != '' ) {
 				$message = $data['status']['mail']['message'];
 				$data['status']['mail']['message'] = Mailer::renderMessage($message, [
 					// 'lien_confirmation' => '<a href="'. site_url('confirmation/?i='.$saveStatus['id_agend']) .'"> <b>Confirmer</b></a>'

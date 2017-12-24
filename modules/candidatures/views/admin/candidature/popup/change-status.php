@@ -51,7 +51,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<label for="status_email_type" class="col-md-4">Type Email&nbsp;<font style="color:red;">*</font></label>
+			<label for="status_email_type" class="col-md-4">Type Email</label>
 			<div class="col-md-6">
 				<select id="status_email_type" name="status[mail][type]" style="width: 100%;">
 					<option value=""></option>
@@ -65,14 +65,14 @@
 		<div class="row mb-5">
 			<label for="status_mail_sender" class="col-md-4">Expéditeur&nbsp;<font style="color:red;">*</font></label>
 			<div class="col-md-5">
-				<input type="email" name="status[mail][sender]" id="status_mail_sender" style="width: 100%;" required>
+				<input type="email" name="status[mail][sender]" id="status_mail_sender" style="width: 100%;">
 				<input type="hidden" name="status[mail][receiver]" value="<?= $candidature->candidat_email; ?>">
 			</div>
 		</div>
 		<div class="row mb-5">
 			<label for="status_mail_subject" class="col-md-4">Sujet&nbsp;<font style="color:red;">*</font></label>
 			<div class="col-md-8">
-				<input type="text" name="status[mail][subject]" id="status_mail_subject" style="width: 100%;" required>
+				<input type="text" name="status[mail][subject]" id="status_mail_subject" style="width: 100%;">
 			</div>
 		</div>
 		<div class="row mb-5">
@@ -81,7 +81,7 @@
 				<span style="vertical-align: top; font-size: 11px; display: inline-block;">Utiliser la variable <code style="display: inline-block;">{{lien_confirmation}}</code> pour afficher le lien de confirmation <font style="color:red;">(obligatoire)</font>.</span>
 			</div>
 			<div class="col-md-12">
-				<textarea name="status[mail][message]" id="status_mail_message" class="ckeditor" cols="30" rows="5" required></textarea>
+				<textarea name="status[mail][message]" id="status_mail_message" class="ckeditor" cols="30" rows="5"></textarea>
 			</div>
 		</div>
 	</div>
@@ -99,8 +99,6 @@
 <script>
 jQuery(document).ready(function($){
 
-	CKEDITOR.replace('status_mail_message');
-
 	$('#status_email_type').change(function(){
 		if( $(this).val() == '' ) {
 			$('#status_mail_sender').val('')
@@ -112,7 +110,8 @@ jQuery(document).ready(function($){
 			data: {
 				'action': 'cand_type_email',
 				'id_email': $(this).val(),
-			}
+			},
+			showErrorMessage:false
 		}, function(response){
 			if( typeof response.email != undefined ) {
 				$('#status_mail_sender').val(response.email)
@@ -124,7 +123,8 @@ jQuery(document).ready(function($){
 
 	$('form').submit(function(event){
 		var message = CKEDITOR.instances['status_mail_message'].getData()
-		if( (message.indexOf("{{lien_confirmation}}") <= 0) ) {
+		var $ref = $(this).find('option:selected').data('ref')
+		if( (message.indexOf("{{lien_confirmation}}") <= 0) && ($ref == 'N_2' || $ref == 'N_9') ) {
 			event.preventDefault()
 			error_message('Le message doit contenir la variable <code style="display: inline-block;">{{lien_confirmation}}</code>')
 		}
@@ -132,10 +132,14 @@ jQuery(document).ready(function($){
 
     $('#status_id').change(function(){
         var $ref = $(this).find('option:selected').data('ref')
-
+        var $requiredEmailFields = $('#status_mail_sender, #status_mail_subject, #status_mail_message')
         if( $ref == 'N_2' || $ref == 'N_9' ) {
+        	$requiredEmailFields.prop('required', true)
+        	CKEDITOR.replace('status_mail_message');
             $('#email_convocation').show()
         } else {
+        	CKEDITOR.instances['status_mail_message'].destroy()
+        	$requiredEmailFields.prop('required', false)
             $('#email_convocation').hide()
         }
     })

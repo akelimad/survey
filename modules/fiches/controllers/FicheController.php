@@ -17,7 +17,7 @@ use Modules\Fiches\Controllers\TableController;
 class FicheController extends \App\Controllers\Controller
 {
 
-  private $data;
+  private $data = new \stdClass;
 
   private $savedItemsIds;
 
@@ -30,6 +30,8 @@ class FicheController extends \App\Controllers\Controller
   public function actionIndex()
   {
     $table = (new TableController() )->getTable();
+
+
     $this->data->types = Fiche::getTypes();
 
     return get_page('admin/fiche/index', [

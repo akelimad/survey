@@ -40,10 +40,10 @@ $hasItems = false;
                         </thead>
                         <tbody>
                         <?php foreach ($block_items as $key => $item) : 
-                            $blockItem = null;
+                            /*$blockItem = null;
                             if (isset($fiche_candidature->id_fiche_candidature)) {
                                 $blockItem = Fiche::getBlockItem($fiche_candidature->id_fiche_candidature, $block->id_block, $item->id_item);                   
-                            }
+                            }*/
                         ?>
                             <tr>
                                 <td style="padding: 5px; vertical-align: middle;">
@@ -51,9 +51,9 @@ $hasItems = false;
                                 </td>
                                 <td width="120" align="right" style="padding: 5px;">
                                     <?php if( $block->fields_type == 'checkbox' ) : ?>
-                                        <input type="checkbox" name="fiche[blocks][<?= $block->id_block; ?>][<?= $item->id_item; ?>][value]" value="1" <?= (isset($blockItem->value) && $blockItem->value=='1') ? 'checked' : '';?> style="transform: scale(1.3);margin: 0px;">
+                                        <input type="checkbox" name="fiche[blocks][<?= $block->id_block; ?>][<?= $item->id_item; ?>][value]" value="1" style="transform: scale(1.3);margin: 0px;">
                                     <?php elseif( $block->fields_type == 'number' ) : ?>
-                                        <input type="number" min="1" step="1" name="fiche[blocks][<?= $block->id_block; ?>][<?= $item->id_item; ?>][value]" value="<?= (isset($blockItem->value)) ? $blockItem->value : '';?>" style="width: 70px;">
+                                        <input type="number" min="1" step="1" name="fiche[blocks][<?= $block->id_block; ?>][<?= $item->id_item; ?>][value]" value="" style="width: 70px;">
                                     <?php elseif( $block->fields_type == 'select' ) : ?>
                                         <select name="fiche[blocks][<?= $block->id_block; ?>][<?= $item->id_item; ?>][value]" style="width: 100%;height: 22px;">
                                         <option value=""></option>
@@ -65,7 +65,7 @@ $hasItems = false;
                                 </td>
                                 <?php if( $block->show_observations == '1' ) : ?>
                                 <td width="120" style="padding: 5px;">
-                                    <input type="text" name="fiche[blocks][<?= $block->id_block; ?>][<?= $item->id_item; ?>][observations]" value="<?= (isset($blockItem->observations)) ? $blockItem->observations : '';?>">
+                                    <input type="text" name="fiche[blocks][<?= $block->id_block; ?>][<?= $item->id_item; ?>][observations]" value="">
                                 </td>
                                 <?php endif; ?>
                             </tr>
@@ -83,7 +83,7 @@ $hasItems = false;
             <div class="subscription" style="height:23px;margin: 10px 0 5px;">
                 <h1><label for="fiche_comments">Commentaire(s)</label></h1>
             </div>
-            <textarea name="fiche[comments]" style="width:100%;" rows="6"><?= (isset($fiche_candidature->comments)) ? $fiche_candidature->comments : ''; ?></textarea>
+            <textarea name="fiche[comments]" style="width:100%;" rows="6"></textarea>
             <?php else : ?>
                 <?php get_alert('info', 'Cette fiche n\'a aucune élément.', false) ?>
             <?php endif; ?>

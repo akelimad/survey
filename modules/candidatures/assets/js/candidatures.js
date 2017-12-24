@@ -33,7 +33,8 @@ jQuery(document).ready(function($){
 				'action': 'cand_filter_form',
 				'params': url_params,
 				'fields': fields,
-			}
+			},
+			showErrorMessage:false
 		}, function(res){
 			if(res.content) {
 				$('#candidatures-filter-wrap').empty().html(res.content)

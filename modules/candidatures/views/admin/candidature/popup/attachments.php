@@ -103,7 +103,8 @@ jQuery(document).ready(function($){
 				'action': 'cand_save_attachement_title',
 				'title': $input.val(),
 				'id_attachement': data[0]
-			}
+			},
+			showErrorMessage:false
 		}, function(response){
 			iziToast.destroy();
 			if( typeof response.status != undefined ) {
@@ -127,7 +128,8 @@ jQuery(document).ready(function($){
 			data: {
 				'action': 'cand_delete_attachement',
 				'id_attachement': data[0]
-			}
+			},
+			showErrorMessage:false
 		}, function(response){
 			iziToast.destroy();
 			if( typeof response.status != undefined ) {

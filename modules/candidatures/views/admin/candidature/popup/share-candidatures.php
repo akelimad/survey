@@ -70,7 +70,8 @@ jQuery(document).ready(function($){
 			data: {
 				'action': 'cand_type_email',
 				'id_email': $(this).val(),
-			}
+			},
+			showErrorMessage:false
 		}, function(response){
 			if( typeof response.email != undefined ) {
 				$('#share_sender').val(response.email)
