@@ -31,7 +31,16 @@ $('[data-toggle="popover"]').popover({
 	}
 }).click(function(event) {
 	event.preventDefault();
+	$('[data-toggle="popover"]').not(this).popover('hide');
+	$('.popover-title').append('<i class="fa fa-times"></i>')
+	
 });
+
+$('body').on('click', '.popover-title>i', function(){
+	$('[data-toggle="popover"]').popover('hide');
+})
+
+
 
 
 // Candidat table

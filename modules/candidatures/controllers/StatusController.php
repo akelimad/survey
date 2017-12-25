@@ -63,10 +63,10 @@ class StatusController
   	}
 
     // Fire event after saving new sattus
-    Event::trigger('change_status_form_submit', [
-    	'candidature' => $candidature, 
-    	'id_historique' => $id_historique
-    ]);
+    $data['candidature'] = $candidature;
+    $data['agenda'] = $agenda;
+    $data['id_historique'] = $id_historique;
+    Event::trigger('change_status_form_submit', $data);
 
     // Send email notification
     $this->sendNotif();  

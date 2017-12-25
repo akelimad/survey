@@ -1594,84 +1594,35 @@ if($id_max_ini < $id_max )	{
  $succes3='ok';
 
 										
-
+ 										// upload photo
 										$ext_p = pathinfo($_FILES['photo']['name'] , PATHINFO_EXTENSION);
-										$nomformate = no_special_character_v2($nom);
-										$prenomformate = no_special_character_v2($prenom);
-										$pname = $id_max.$prenomformate.$nomformate.'.'.$ext_p;
+										$pname = $id_max.uniqid().'.'.$ext_p;
 										$extensions_img = array('gif', 'jpeg', 'jpg', 'png');
-										if (in_array(strtolower($ext_p), $extensions_img)) {
+										if( isset($_FILES['photo']) && intval($_FILES['photo']['size']) > 0 && in_array(strtolower($ext_p), $extensions_img) ) {
 										   if( copy($ptmp, SITE_BASE .'/apps/upload/frontend/photo_candidats/' . $pname) ) {
 												$insertion2 = mysql_query("UPDATE candidats SET photo='".safe($pname)."' WHERE candidats_id = $id_max");
 										   }
 										}
 
-										//copie du cv
-
-										
-
-										   $ext_cv = pathinfo($_FILES['cv']['name'] , PATHINFO_EXTENSION);
-
-										   $cvname = rand()."CV".$prenomformate.$nomformate.'.'.$ext_cv;
-
-										   //$_SESSION['pname'] = $pname;
-
-										$extensions_file = array('.pdf', '.doc', '.docx', '.rtf','.PDF', '.DOC', '.DOCX', '.RTF'  );
-
-										$extension_cv = strrchr($_FILES['cv']['name'], '.'); 
-
-                       
-
-										if (in_array($extension_cv, $extensions_file)) {  
-
-											$folder_cv = dirname(__FILE__).$file_cv2;
-
-										   $cv = $folder_cv . $cvname;
-
-										   copy($cvtmp, $cv);
-
-										   
-
-								   
-
-										if($ext_cv!="")
-
-										$insertion3 = mysql_query("INSERT into cv values('','".safe($id_max)."','".safe($cvname)."','".safe($cvname)."','1','1')");
-
+										// upload cv
+										$ext_cv = pathinfo($_FILES['cv']['name'] , PATHINFO_EXTENSION);
+										$cvname = $id_max.uniqid().'.'.$ext_cv;
+										$extensions_cv = array('doc', 'docx', 'rtf', 'pdf');
+										if( isset($_FILES['cv']) && intval($_FILES['cv']['size']) > 0 && in_array(strtolower($ext_cv), $extensions_cv) ) {
+										   if( copy($cvtmp, SITE_BASE .'/apps/upload/frontend/cv/' . $cvname) ) {
+										   		$insertion3 = mysql_query("INSERT into cv values('','".safe($id_max)."','".safe($cvname)."','".safe($cvname)."','1','1')");
+										   }
 										}
 
-										//copie du lm
 
-										
-
-										   $ext_lm = pathinfo($_FILES['lm']['name'] , PATHINFO_EXTENSION);
-
-										   $lmname = rand()."LM".$prenomformate.$nomformate.'.'.$ext_lm;
-
-										   //$_SESSION['pname'] = $pname;
-
-										$extensions_file = array('.pdf', '.doc', '.docx', '.rtf','.PDF', '.DOC', '.DOCX', '.RTF'  );
-
-										$extension_lm = strrchr($_FILES['lm']['name'], '.'); 
-
-                       
-
-										if (in_array($extension_lm, $extensions_file)) {  
-
-											$folder_lm = dirname(__FILE__).$file_lm2;
-
-										   $lm = $folder_lm . $lmname;
-
-										   if($lmtmp != '' && $lm != '')	copy($lmtmp, $lm);
-
-										   
-
-								   
-
-										if($ext_lm!="")
-
-				$insertion4 = mysql_query("INSERT into lettres_motivation  values('','".safe($id_max)."','".safe($lmname)."', '".safe($lmname)."','1','0')");
-
+										// upload lm
+										$ext_lm = pathinfo($_FILES['lm']['name'] , PATHINFO_EXTENSION);
+										$lmname = $id_max.uniqid().'.'.$ext_lm;
+										$extensions_lm = array('doc', 'docx', 'rtf', 'pdf');
+										if( isset($_FILES['lm']) && intval($_FILES['lm']['size']) > 0 && in_array(strtolower($ext_lm), $extensions_lm) ) {
+										   if( copy($cvtmp, SITE_BASE .'/apps/upload/frontend/lmotivation/' . $lmname) ) {
+										   		$insertion4 = mysql_query("INSERT into lettres_motivation  values('','".safe($id_max)."','".safe($lmname)."', '".safe($lmname)."','1','0')");
+										   }
 										}
 
 							
@@ -1730,7 +1681,7 @@ if($id_max_ini < $id_max )	{
 		'nivformation' => $nivformation,
 		'ecole' => $nom_etablissement,
 		'copie_diplome' => $uploadFiles['copie_diplome']['name']
-    ]);
+    ], false);
 
 				 
 
@@ -1746,11 +1697,11 @@ if($id_max_ini < $id_max )	{
 
 				if($entreprise!="" AND $ville_exp!="")
 
-	$insertion_exp1 = mysql_query('INSERT INTO experience_pro VALUES ("","'.safe($id_max).'","'.safe($secteur).'",
+	/*$insertion_exp1 = mysql_query('INSERT INTO experience_pro VALUES ("","'.safe($id_max).'","'.safe($secteur).'",
 
 		"'.safe($fonction_exp).'","'.safe($type_poste).'","'.safe($pays_exp).'",
 
-		"'.safe($dd_exp).'","'.safe($df_exp).'","'.safe($poste).'","'.safe($entreprise).'","'.safe($ville_exp).'","'.safe($desc_exp).'","'.safe($salair_pecu).'")');
+		"'.safe($dd_exp).'","'.safe($df_exp).'","'.safe($poste).'","'.safe($entreprise).'","'.safe($ville_exp).'","'.safe($desc_exp).'","'.safe($salair_pecu).'")');*/
 
 	
 		$insertion_exp1 = getDB()->create('experience_pro', [
@@ -1767,7 +1718,7 @@ if($id_max_ini < $id_max )	{
 			'description' => $desc_exp,
 			'salair_pecu' => $salair_pecu,
 			'copie_attestation' => $uploadFiles['copie_attestation']['name']
-		]);
+		], false);
 
 
 				$requet = mysql_query("SELECT * from candidats WHERE email = '".safe($email1_req)."' AND status=1"); 

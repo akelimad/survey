@@ -352,7 +352,7 @@ $result_array_4 =  $array_test_4 =  array();
 
 <td width="60%"  valign=top>
 
-<?php include('index__m_statistique_table.php '); ?>     
+<?php include('index__m_statistique_table.php'); ?>     
 
  </td>   
 

@@ -32,7 +32,8 @@ class EventController
 		
 		// Candidature change status events
 		Event::add('change_status_form_fields', [$this, 'changeStatusFormFields']);
-		Event::add('candidature_form_submit', [$this, 'candidatureFormSubmit']);
+		Event::add('change_status_form_submit', [$this, 'candidatureFormSubmit']);
+
 	}
 	
 
@@ -93,20 +94,22 @@ class EventController
 
 	public function candidatureFormSubmit($data)
 	{
-		if( !isset($data['fiche']['blocks']) || empty($data['fiche']['blocks']) || !isset($_SESSION['id_role']) ) return;
+		$id_role = read_session('id_role');
+		if( !isset($data['fiche']['blocks']) || empty($data['fiche']['blocks']) || !isset($id_role) ) return;
 		
 		$db = getDB();
 		$currentDate = date("Y-m-d H:i:s");
 		$id_candidature = $data['fiche']['id_candidature'];
 
 		// Telle if current Admin has already submit a fiche
-		$fcand = $db->prepare("SELECT id_fiche_candidature FROM fiche_candidature WHERE id_fiche=? AND id_candidature=? AND id_evaluator=?", [$data['fiche']['id'], $id_candidature, $_SESSION['id_role']], true);
+		$fcand = $db->prepare("SELECT id_fiche_candidature FROM fiche_candidature WHERE id_fiche=? AND id_candidature=? AND id_evaluator=?", [$data['fiche']['id'], $id_candidature, $id_role], true);
 
-		if( !isset($fcand->id_fiche_candidature) ) {
+		if( !isset($fcand->id_fiche_candidature) || $data['fiche']['type'] == 0 ) {
 			$id_fiche_candidature = $db->create('fiche_candidature', [
 				'id_fiche' => $data['fiche']['id'],
 				'id_candidature' => $id_candidature,
-				'id_evaluator' => $_SESSION['id_role'],
+				'id_historique' => (isset($data['id_historique'])) ? $data['id_historique'] : 0,
+				'id_evaluator' => $id_role,
 				'comments' => $data['fiche']['comments'],
 				'created_at' => $currentDate,
 				'updated_at' => $currentDate

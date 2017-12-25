@@ -85,7 +85,7 @@ class TableController extends Controller
 	public function getNoteOraleTable()
 	{
 		$query = "
-	      SELECT r.nom, fc.comments, fc.created_at, fc.updated_at, COUNT(fcr.id_result) AS nbr, SUM(fcr.value) AS total
+	      SELECT fc.id_fiche_candidature, r.nom, fc.comments, fc.created_at, fc.updated_at, COUNT(fcr.id_result) AS nbr, SUM(fcr.value) AS total
 	      FROM fiches f
 	      JOIN fiche_candidature fc ON fc.id_fiche=f.id_fiche
 	      JOIN fiche_candidature_results fcr ON fcr.id_fiche_candidature=fc.id_fiche_candidature
@@ -94,14 +94,25 @@ class TableController extends Controller
 	    ";
 		$table = new \App\Helpers\Table($query, 'id_fiche', [
 			'currentPage' => $_POST['page'],
-			'actions' => false,
 			'show_before_table_form' => false
 		]);
 		$table->setTableClass(['table', 'table-striped', 'table-hover']);
 		$table->setTableId('noteOraleTable');
 		$table->setOrderby('updated_at');
 		$table->setOrder('DESC');
+		$table->removeActions(['edit', 'delete']);
 
+    	$table->setAction('show_fiche_details', [
+			'label' => 'Détails',
+			'patern' => '#',
+			'icon' => 'fa fa-eye',
+			'sort_order' => 6,
+			'bulk_action' => false,
+			'attributes' => [
+				'class' => 'btn btn-info btn-xs',
+				'onclick' => 'return showFicheDetails({id_fiche_candidature}, \'id_fiche_candidature\');'
+			]
+		]);
 
 		$table->addColumn('nom', 'Évaluateur', function($row) {
 			return $row->nom;

@@ -128,13 +128,13 @@ if(isset($_POST["p_envoi"]) and $_POST["p_envoi"]!='')  $_SESSION["p_envoi"]=$_P
 
                                            <tr>
 
-<td colspan="2" >Par mot clé<label><br />
+<td colspan="2" ><label>Par mot clé</label><br />
 
 
 
 <input  type="text" name="motcle" style="width:185px" value="<?php if (!empty($_SESSION['motcle'])) echo $_SESSION['motcle']; ?>" maxlength="100" />
 
-</label></td>
+</td>
 
 </tr>
 

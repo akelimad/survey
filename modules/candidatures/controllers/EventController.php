@@ -46,7 +46,6 @@ class EventController
 			if( isset($data['status']['mail']) && $data['status']['mail'] != '' ) {
 				$message = $data['status']['mail']['message'];
 				$data['status']['mail']['message'] = Mailer::renderMessage($message, [
-					// 'lien_confirmation' => '<a href="'. site_url('confirmation/?i='.$saveStatus['id_agend']) .'"> <b>Confirmer</b></a>'
 					'lien_confirmation' => '<a href="'. site_url('module/candidatures/confirm/calendar/'.$saveStatus['id_agend']) .'"> <b>Confirmer</b></a>'
 				]);
 				$sendEmail = (new AjaxController())->sendEmail($data['status']['mail']);
@@ -56,6 +55,12 @@ class EventController
 					Session::setFlash('error', $sendEmail['message']);
 				}
 			}
+		} else {
+			// Fire event after saving new sattus
+		    $data['candidature'] = new \stdClass;
+		    $data['agenda'] = new \stdClass;
+		    $data['id_historique'] = 0;
+		    Event::trigger('change_status_form_submit', $data);
 		}
 
 		// share candidature

@@ -11,6 +11,7 @@
 namespace Modules\Fiches\Controllers;
 
 use App\Ajax;
+use Modules\Fiches\Models\Fiche;
 
 class AjaxController
 {
@@ -23,6 +24,8 @@ class AjaxController
     Ajax::add('fiche_evaluation_popup', [$this, 'showFicheEvaluationPopup']);
 
     Ajax::add('cand_note_orale_popup', [$this, 'showNoteOralePopup']);
+
+    Ajax::add('cand_show_history_fiche', [$this, 'showHistoryFiche']);
   }
   
 
@@ -102,6 +105,59 @@ class AjaxController
     $content .= $table->render(false);
 
     return ['content' => $content, 'title' => 'Historique de fiches d\'evaluation'];
+  }
+  
+
+  /**
+   * Show History Fiche
+   * 
+   * @author M'hamed Chanchaf
+   */
+  public function showHistoryFiche($data)
+  {
+    if( !isset($data['key']) || !isset($data['value']) ) return [];
+
+    $db = getDB();
+
+
+    $fiche_candidature = $db->prepare("SELECT * FROM fiche_candidature WHERE {$data['key']}=?", [$data['value']], true);
+
+
+    if( !isset($fiche_candidature->id_fiche_candidature) ) return [];
+
+
+    $candidature = $db->prepare("
+      SELECT cand.id_candidature AS cid, cand.id_offre, concat(c.nom, ' ', c.prenom) AS displayName 
+      FROM candidats c 
+      JOIN candidature AS cand ON cand.candidats_id=c.candidats_id 
+      WHERE cand.id_candidature=?
+    ", [$fiche_candidature->id_candidature], true);
+
+    if( empty($candidature) ) return [];
+
+    $fiche_type = Fiche::getTypeById($fiche_candidature->id_fiche);
+
+    // Check if offre has a fiche
+    $fiche_offre = $db->prepare("SELECT f.name, f.id_fiche FROM fiche_offre fo JOIN fiches f ON f.id_fiche=fo.id_fiche WHERE f.fiche_type=? AND fo.id_offre=?", [$fiche_type, $candidature->id_offre], true);
+
+    return $this->renderAjaxView(
+      'Détails de la fiche', 
+      'admin/candidature/popup/history-fiche', [
+        'candidature' => $candidature,
+        'fiche_candidature' => $fiche_candidature,
+        'id_fiche' => $fiche_offre->id_fiche,
+        'fiche_type' => $fiche_type,
+        'name' => Fiche::getTypeName($fiche_type) .'&nbsp;('.$fiche_offre->name.')'
+    ]);
+  }
+
+
+  private function renderAjaxView($title, $viewPath, $variables=[])
+  {
+    ob_start();
+    get_view($viewPath, $variables, __FILE__);
+    $content = ob_get_clean();
+    return ['content' => $content, 'title' => $title];
   }
 
 

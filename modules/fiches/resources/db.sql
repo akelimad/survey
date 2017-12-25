@@ -38,6 +38,7 @@ CREATE TABLE `fiche_candidature` (
     `id_fiche_candidature` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `id_fiche` int(11) unsigned NOT NULL,
     `id_candidature` int(11) unsigned NOT NULL,
+    `id_historique` int(11) unsigned NOT NULL,
     `id_evaluator` int(11) unsigned NOT NULL,
     `comments` varchar(255) DEFAULT NULL,
     `created_at` datetime DEFAULT NULL,

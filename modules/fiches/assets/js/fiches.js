@@ -23,6 +23,17 @@ jQuery(document).ready(function($){
 		})
 	}
 
+	// Show Fiche details
+	showFicheDetails = function(value, key='id_historique') {
+		showModal({
+			data: {
+				'action': 'cand_show_history_fiche',
+				'key': key,
+				'value': value
+			}
+		})
+	}
+
 
 	// Ajax pagination
 	$(document).on('click', '.pagination-wrap .live-link>a', function(event){

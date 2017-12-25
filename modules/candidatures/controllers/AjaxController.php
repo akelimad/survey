@@ -44,7 +44,6 @@ class AjaxController
     Ajax::add('cand_note_ecrit_popup', [$this, 'showNoteEcritPopup']);
 
     Ajax::add('cand_share_candidature_popup', [$this, 'showShareCandidaturePopup']);
-    
   }
   
 

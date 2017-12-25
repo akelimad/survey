@@ -44,6 +44,19 @@ class Fiche extends Model
     }
 
 
+    public static function getTypeName($key)
+    {
+        return (isset(self::$types[$key])) ? self::$types[$key] : null;
+    }
+
+
+    public static function getTypeById($id_fiche)
+    {
+        $fiche = getDB()->findOne('fiches', 'id_fiche', $id_fiche);
+        return (isset($fiche->fiche_type)) ? $fiche->fiche_type : 0;
+    }
+
+
     public static function getNotes()
     {
         return self::$notes;
@@ -125,6 +138,11 @@ class Fiche extends Model
     }
         
     
+    public static function historyFicheExists($id_candidature, $id_historique)
+    {
+        $count = getDB()->prepare("SELECT COUNT(*) AS nbr FROM fiche_candidature WHERE id_candidature=? AND id_historique=?", [$id_candidature, $id_historique], true);
+        return ($count->nbr>0);
+    }
 
   
 } // END Class

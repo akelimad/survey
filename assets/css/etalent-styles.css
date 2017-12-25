@@ -119,3 +119,14 @@ td.bulk-cb{
 .pagination>li>a, .pagination>li>span {
     padding: 2px 8px !important;
 }
+
+[data-toggle="popover"], .popover-title:after{
+  cursor: pointer !important;
+}
+
+.popover-title>i{
+  /*content: "\f00d";
+  font-family: FontAwesome;*/
+  float: right;
+  cursor: pointer !important;
+}

@@ -14,6 +14,7 @@ use App\Event;
 use App\Controllers\Controller;
 use Modules\Candidatures\Models\Candidat;
 use Modules\Candidatures\Models\Candidatures;
+use Modules\Fiches\Models\Fiche;
 
 class TableController extends Controller
 {
@@ -198,13 +199,19 @@ class TableController extends Controller
   	});
 
   	$table->addColumn('history', '', function($row){
-  		$history = getDB()->prepare("SELECT date_modification, status, utilisateur FROM historique WHERE id_candidature=?", [$row->id_candidature]);
+  		$history = getDB()->prepare("SELECT id, date_modification, status, utilisateur FROM historique WHERE id_candidature=?", [$row->id_candidature]);
   		if ( empty($history) ) return;
-  		$html = '<i class="fa fa-history pull-right" data-toggle="popover" data-trigger="hover" data-popover-content="#show_h_'. $row->candidats_id .'" title="Historique des actions effectuées"></i>';
+  		$html = '<i class="fa fa-history pull-right" data-toggle="popover" data-trigger="click" data-popover-content="#show_h_'. $row->candidats_id .'" title="Historique des actions effectuées"></i>';
   		$html .= '<div id="show_h_'. $row->candidats_id .'" class="hidden">';
   		$html .= '<table class="table table-history">';
   		foreach ($history as $key => $h) :
-  			$html .= '<tr><td width="110">'. date('d.m.Y H:i', strtotime($h->date_modification)) .'</td><td>'. $h->status .'</td><td>'. $h->utilisateur .'</td></tr>';
+  			$html .= '<tr><td width="110">'. date('d.m.Y H:i', strtotime($h->date_modification)) .'</td><td width="110">'. $h->status .'</td><td width="40">'. $h->utilisateur .'</td><td>';
+        if( in_array($h->status, ['Préselectionnés', 'Présélectionné', 'Non présélectionné', 'Non préselectionnés']) ) {
+          if( Fiche::historyFicheExists($row->id_candidature, $h->id) ) {
+            $html .= '<a href="jaavscript:void(0);" onclick="return showFicheDetails('.$h->id.');"><i class="fa fa-file-text-o"></i></a>';
+          }
+        }
+        $html .='</td></tr>';
   		endforeach;
   		$html .= '</table></div>';
   		return $html;
@@ -260,7 +267,7 @@ class TableController extends Controller
   	$table->addColumn('pertinence', 'P', function($row){
   		$p = Candidat::getPertinance($row->candidats_id, $row->id_offre);
   		$total_p = (isset($p->total_p)) ? $p->total_p : 0;
-  		$html = '<i class="fa fa-circle" style="font-size: 1.3em;color:'. $this->getPertinanceColor($total_p) .'" data-toggle="popover"  title="Pertinence" data-trigger="hover" data-popover-content="#show_p_'. $row->candidats_id .'"></i>';
+  		$html = '<i class="fa fa-circle" style="font-size: 1.3em;color:'. $this->getPertinanceColor($total_p) .'" data-toggle="popover"  title="Pertinence" data-trigger="click" data-popover-content="#show_p_'. $row->candidats_id .'"></i>';
   		$html .= '<div id="show_p_'. $row->candidats_id .'" class="hidden">';
   		if( isset($p->total_p) ) {
   			$html .= '<table class="table table-pertinance">';
