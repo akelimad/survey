@@ -421,7 +421,7 @@ class Table extends Pagination {
                 $html .= '</form>';
             }
 
-            $html .= '<form method="post" action="" class="form-inline" id="etalent-table-wraper">';
+            $html .= '<form method="post" action="" class="form-inline '.$this->table_id.'Form" id="etalent-table-wraper">';
             $html .= '<div class="row">';
             $html .= '<div class="col-md-12 table-responsive">';
             $html .= '<table '.$table_classes.' '.$table_id.'>';

@@ -36,7 +36,7 @@ jQuery(document).ready(function($){
 
 
 	// Ajax pagination
-	$(document).on('click', '.pagination-wrap .live-link>a', function(event){
+	$(document).on('click', '.noteOraleTableForm .live-link>a', function(event){
 		event.preventDefault()
 		var $link = $(this).attr('href')
 		showModal({

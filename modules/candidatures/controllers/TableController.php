@@ -188,9 +188,10 @@ class TableController extends Controller
   		$html = '<a href="'. site_url('backend/cv/?candid='.$row->candidats_id) .'" target="_blank" class="cname" title="Voir le profile"><i class="fa fa-user"></i>&nbsp;'. $row->fullname .'</a>';
 
   		if( !is_null($row->date_n) ) {
-  			$birthday = date('Y-m-d', french_to_english_date($row->date_n));
-  			$age = (time() - strtotime($birthday)) / 3600 / 24 / 365;
-  			$html .= '<br><b>'.number_format($age, 0).' ans</b>';
+  			if( $birthday = french_to_english_date($row->date_n) ) {
+    			$age = (time() - strtotime($birthday)) / 3600 / 24 / 365;
+    			$html .= '<br><b>'.number_format($age, 0).' ans</b>';
+        }
   		}
 
   		$html .= '<br>'. $row->ville .'&nbsp;|&nbsp;'. Candidat::getPaysByID($row->id_pays);
