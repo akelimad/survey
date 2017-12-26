@@ -60,11 +60,13 @@
 
 <?php // gibraltar 
 
-if($offre['Photo_offre'] !=""){?>
+$photoPath = 'apps/upload/backend/offres/'.$offre['Photo_offre'];
 
-<img src="<?php echo $url_photo_offres.$offre['Photo_offre']; ?>" width="100%">
+if($offre['Photo_offre'] !="" && file_exists(site_base($photoPath))){?>
 
-<?php }  else{ ?>
+<img src="<?= site_url($photoPath); ?>" width="100%">
+
+<?php }  //else { ?>
 
 			
 
@@ -492,7 +494,7 @@ echo ': '.$niv['formation'];
 
 </table>
 
-<?php }  /*fin else*/?>
+<?php //}  /*fin else*/?>
 
       </div>
 
