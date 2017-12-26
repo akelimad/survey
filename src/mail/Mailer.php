@@ -67,6 +67,16 @@ class Mailer
 				$mail->Port       = SMTP_port;
 				$mail->Username   = SMTP_username;
 				$mail->Password   = SMTP_password;
+
+				if( defined('SMTP_ssl') && SMTP_ssl == true ) {
+					$mail->SMTPOptions = array(
+					    'ssl' => array(
+					        'verify_peer' => false,
+					        'verify_peer_name' => false,
+					        'allow_self_signed' => true
+					    )
+					);
+				}
 			}
 
 			// Recipients
