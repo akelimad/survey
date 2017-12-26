@@ -31,8 +31,14 @@ $folder_photo_offre = dirname(__FILE__).$file_offres2;
 
 $photo_offre_f = $folder_photo_offre . $photo_offre_name;
 
-if($photo_offre_tmp != '' && $photo_offre_f != '')
+if($photo_offre_tmp != '' && $photo_offre_f != '') {
+  copy($photo_offre_tmp, SITE_BASE .'/apps/upload/backend/offres/' . $photo_offre_name):
+}
+
+
+
 if(copy($photo_offre_tmp, $photo_offre_f)){//echo "hahah";
+
 }else{ 
 //echo "erreur";
 }

@@ -183,7 +183,7 @@ ul#menu_site_carriere li a:focus {
   background-color: #f39696 !important;
 }
 
-#etalent-table-wraper .pagination-wrap{
+#attachmentsTableForm .pagination-wrap, #noteOraleTableForm .pagination-wrap{
   width: 100% !important;
 }
 

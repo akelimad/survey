@@ -27,7 +27,7 @@ jQuery(document).ready(function($){
 	showFicheDetails = function(value, key='id_historique') {
 		showModal({
 			data: {
-				'action': 'cand_show_history_fiche',
+				'action': 'cand_show_fiche_details',
 				'key': key,
 				'value': value
 			}

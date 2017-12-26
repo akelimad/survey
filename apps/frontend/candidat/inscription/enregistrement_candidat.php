@@ -1,4 +1,5 @@
 <?php
+$messages=array(); 
 $messagesuc=array();
 
 function no_special_character_v2($chaine){  

@@ -25,7 +25,7 @@ class AjaxController
 
     Ajax::add('cand_note_orale_popup', [$this, 'showNoteOralePopup']);
 
-    Ajax::add('cand_show_history_fiche', [$this, 'showHistoryFiche']);
+    Ajax::add('cand_show_fiche_details', [$this, 'showFicheDetails']);
   }
   
 
@@ -109,11 +109,11 @@ class AjaxController
   
 
   /**
-   * Show History Fiche
+   * Show Fiche Details
    * 
    * @author M'hamed Chanchaf
    */
-  public function showHistoryFiche($data)
+  public function showFicheDetails($data)
   {
     if( !isset($data['key']) || !isset($data['value']) ) return [];
 
@@ -142,7 +142,7 @@ class AjaxController
 
     return $this->renderAjaxView(
       'Détails de la fiche', 
-      'admin/candidature/popup/history-fiche', [
+      'admin/candidature/popup/fiche-details', [
         'candidature' => $candidature,
         'fiche_candidature' => $fiche_candidature,
         'id_fiche' => $fiche_offre->id_fiche,

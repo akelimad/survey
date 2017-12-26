@@ -5,7 +5,10 @@ $hasItems = false;
 
 <div class="row mb-15">   
     <div class="col-md-4"><strong>Nom et prénom du candidat</strong></div>
-    <div class="col-md-8">: <?= $candidature->displayName; ?></div>
+    <div class="col-md-5">: <?= $candidature->displayName; ?></div>
+    <div class="col-md-3 pull-right">
+        <a target="_blank" href="<?= site_url('/backend/module/fiches/pdf/fiche_candidature/'.$fiche_candidature->id_fiche_candidature); ?>" class="btn btn-primary btn-xs"><i class="fa fa-file-pdf-o"></i>&nbsp;Télécharger</a>
+    </div>
 </div>
 
 <table id="fiche-container" class="mb-15" style="width:100%;">

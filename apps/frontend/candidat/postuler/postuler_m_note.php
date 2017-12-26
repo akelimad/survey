@@ -94,23 +94,29 @@ $sum_day_exp=0;
 
 		  $date_d = $experience_pro['date_debut']; 
 
-		  $date_d = explode("/", $date_d); 
+		  // $date_d = explode("/", $date_d); 
 
 		  
 
 		  $date_f =  (empty($experience_pro['date_fin'])) ? date("d/m/Y") : $experience_pro['date_fin'] ;  
 
-		  $date_f = explode("/", $date_f); 
+		  // $date_f = explode("/", $date_f); 
+	  
 
-		  
+   // new DateTime($date_d[2].'-'.$date_d[1].'-'.$date_d[0]);
 
-   $dStart = new DateTime($date_d[2].'-'.$date_d[1].'-'.$date_d[0]);
+   // new DateTime($date_f[2].'-'.$date_f[1].'-'.$date_f[0]);
 
-   $dEnd  = new DateTime($date_f[2].'-'.$date_f[1].'-'.$date_f[0]);
+   
 
-   $dDiff = $dStart->diff($dEnd); 
+   if( $dStart = french_to_english_date($date_d) && $dEnd = french_to_english_date($date_f) ) {
+   	$dStart = strtotime($dStart);
+	$dEnd = strtotime($dEnd);
+	$datediff = $dStart - $dEnd;
+   	$sum_day_exp += floor($datediff / (60 * 60 * 24));
+   }
 
-   $sum_day_exp += $dDiff->days;
+  
 
 //*/
 

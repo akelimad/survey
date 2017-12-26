@@ -97,7 +97,7 @@ class AjaxController
     return $this->renderAjaxView(
       'Envoyer e-mail au candidat', 
       'admin/candidature/popup/send-mail', [
-        'candidature' => $candidature
+        'candidatures' => $candidatures
     ]);
   }
 
