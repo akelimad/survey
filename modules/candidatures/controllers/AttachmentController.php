@@ -39,18 +39,30 @@ class AttachmentController
             'sort_order' => 1,
             'attributes' => array(
                 'class' => 'btn btn-success btn-xs',
-                'style' => 'display:none;'
+                'style' => 'display:none;margin-left: -7px;'
+            )
+		]);
+
+		$table->setAction('download', [
+            'label' => 'Télécharger',
+            'patern' => site_url('uploads/candidatures/{id_candidature}/attachments/{file_name}'),
+            'icon' => 'fa fa-download',
+            'sort_order' => 1,
+            'attributes' => array(
+                'class' => 'btn btn-default btn-xs'
             )
 		]);
 
 		$table->setAction('edit', [
             'patern' => '#',
-            'callback' => 'editCandidatureAttachment'
+            'callback' => 'editCandidatureAttachment',
+            'sort_order' => 2
 		]);
 
 		$table->setAction('delete', [
             'patern' => '#',
-            'callback' => 'deleteCandidatureAttachment'
+            'callback' => 'deleteCandidatureAttachment',
+            'sort_order' => 3
 		]);
 
 		$table->addColumn('title', 'Titre', function($row) {

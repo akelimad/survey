@@ -378,13 +378,13 @@ if(isset($messages) and !empty($messages)){ ?>
 
 
 
-<div style="float:left; width: 49%; height: 800px; background-color: #b0c4de;">
+<div style="float:left; width: 47%; height: 800px; background-color: #b0c4de;">
 
 
-
-
-
-<iframe src="<?php echo $google_doc.$_FILES["file"]["name"];?>&embedded=true" width="100%" height="100%" style="border: none;"></iframe>
+<?php
+$google_doc = "https://docs.google.com/viewer?url=". urlencode(site_url('apps/upload/backend/cv_import_uploads/')) . $_FILES["file"]["name"] ."&embedded=true";
+?>
+<iframe src="<?= $google_doc; ?>" width="100%" height="100%" style="border: none;"></iframe>
 
 
 

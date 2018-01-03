@@ -297,7 +297,7 @@ class AjaxController
     $id_candidature = $data['id_candidature'];
 
     $upload = Media::upload($_FILES['attachments'], [
-      'extensions' => ['jpg', 'gif', 'png', 'doc', 'docx', 'xlsx'],
+      'extensions' => ['jpg', 'gif', 'png', 'doc', 'docx', 'xlsx', 'pdf'],
       'uploadDir' => 'uploads/candidatures/'.$id_candidature.'/attachments/',
     ]);
 

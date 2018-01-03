@@ -84,8 +84,8 @@ jQuery(document).ready(function($){
 	editCandidatureAttachment = function(event, data) {
 		event.preventDefault()
 		var $parentRow = $(event.target).closest('tr')
-		$parentRow.find('.edit').hide()
 		$parentRow.find('.save_title').show()
+		$parentRow.find('a:not(.save_title)').hide()
 		$parentRow.find('strong.title').hide()
 		$parentRow.find('.title_input').attr('type', 'text')
 	}
@@ -95,7 +95,7 @@ jQuery(document).ready(function($){
 		event.preventDefault()
 		var $parentRow = $(event.target).closest('tr')
 		$parentRow.find('.save_title').hide()
-		$parentRow.find('.edit').show()
+		$parentRow.find('a:not(.save_title)').show()
 		var $input = $parentRow.find('.title_input')
 		// Save Title
 		ajax_handler({
