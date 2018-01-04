@@ -44,7 +44,7 @@ require_once dirname(__FILE__) . "/../../../../../config/config.php";
 
 
 
-$allowedExts = array("doc","docx","pdf");	
+$allowedExts = array("doc","docx","pdf");   
 
 
 
@@ -204,8 +204,7 @@ echo '<meta http-equiv=\'refresh\' content="0;'.$urlad_cand.'/import_manuel_des_
 if($_SESSION['f_type'] == "application/msword"){
 
 
-
-$userDoc = (isset($_SESSION['f_name'])) ? $_SESSION['f_name'] : '';
+$userDoc = site_base('apps/upload/backend/cv_import_uploads/'.basename($_SESSION['f_name']));
 
 
 
@@ -227,7 +226,7 @@ if($_SESSION['f_type'] == "application/vnd.openxmlformats-officedocument.wordpro
 
 
 
-$userDoc = (isset($_SESSION['f_name'])) ? $_SESSION['f_name'] : '';
+$userDoc = site_base('apps/upload/backend/cv_import_uploads/'.basename($_SESSION['f_name']));
 
 
 
@@ -251,9 +250,7 @@ $pass= Matching($text);
 
 
 
-$userDoc = (isset($_SESSION['f_name'])) ? $_SESSION['f_name'] : '';
-
-
+$userDoc = site_base('apps/upload/backend/cv_import_uploads/'.basename($_SESSION['f_name']));
 
 $text = pdf2text($userDoc);
 
@@ -295,7 +292,7 @@ function readZippedXML($archiveFile, $dataFile) {
 
             // Skip errors and warnings
 
-			$xml = new DOMDocument(); 
+            $xml = new DOMDocument(); 
 
             $xml->loadXML($data, LIBXML_NOENT | LIBXML_XINCLUDE | LIBXML_NOERROR | LIBXML_NOWARNING);
 
@@ -333,7 +330,7 @@ function Matching($outtext)
 
 
 
-    $mail = '/[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})/';
+    $mail = '/[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,3})/';
 
 
 
@@ -401,7 +398,7 @@ function Matching($outtext)
 
 
 
-    $var[1]= $matches[0]; 
+    $var[1]= str_replace('mailto', '', $matches[0]); 
 
 
 
@@ -474,7 +471,6 @@ function Matching($outtext)
 
 
     $var[9]= $matches[0];
-
 
 
     return $var;
@@ -1751,7 +1747,7 @@ if(isset($_POST['envoi'])){
 
     $sql = mysql_query("select * from offre ");
 
-	  
+      
 
  
 
