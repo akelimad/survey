@@ -30,3 +30,4 @@ include_once( dirname(__FILE__) .'/messages.php');
 include_once( dirname(__FILE__) .'/mobile.php');
 include_once( dirname(__FILE__) .'/views.php');
 include_once( dirname(__FILE__) .'/site.php');
+include_once( dirname(__FILE__) .'/menu.php');

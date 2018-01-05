@@ -97,57 +97,79 @@ jQuery(document).ready(function($){
 		$parentRow.find('.save_title').hide()
 		$parentRow.find('a:not(.save_title)').show()
 		var $input = $parentRow.find('.title_input')
-		// Save Title
-		ajax_handler({
+
+		// Fire off the request
+		$.ajax({
+			type: 'POST',
+			url: site_url('src/includes/ajax/index.php'),
 			data: {
 				'action': 'cand_save_attachement_title',
 				'title': $input.val(),
 				'id_attachement': data[0]
-			},
-			showErrorMessage:false
-		}, function(response){
-			iziToast.destroy();
-			if( typeof response.status != undefined ) {
-				if( response.status == 'success' ) {
-					$parentRow.find('strong.title').text($input.val()).show()
-					$input.attr('type', 'hidden')
-					$parentRow.find('td.updated_at').text(response.updated_at)
-					success_message(response.message, {position:'topCenter'});
-				} else {
-					error_message(response.message);
+			}
+		}).done(function (response, textStatus, jqXHR) {
+			try {
+				var data = $.parseJSON(response);
+				if( $.type(data) == 'object' ) {
+					iziToast.destroy();
+					if( typeof data.status != undefined ) {
+						if( data.status == 'success' ) {
+							$parentRow.find('strong.title').text($input.val()).show()
+							$input.attr('type', 'hidden')
+							$parentRow.find('td.updated_at').text(data.updated_at)
+							success_message(data.message, {position:'topCenter'});
+						} else {
+							error_message(data.message);
+						}
+					} else {
+						ajax_error_message()
+					}
 				}
-			} else {
+			} catch (e) {
 				ajax_error_message()
 			}
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			ajax_error_message();
 		});
 	}
 
 
-	deleteCandidatureAttachment = function(data) {
-		ajax_handler({
+	deleteCandidatureAttachment = function(params) {
+		// Fire off the request
+		$.ajax({
+			type: 'POST',
+			url: site_url('src/includes/ajax/index.php'),
 			data: {
 				'action': 'cand_delete_attachement',
-				'id_attachement': data[0]
-			},
-			showErrorMessage:false
-		}, function(response){
-			iziToast.destroy();
-			if( typeof response.status != undefined ) {
-				if( response.status == 'success' ) {
-					$(data.target).closest('tr').addClass('deletedRow')
-
-					$(data.target).closest('tr').fadeOut( "slow", function() {
-					    $(this).remove();
-					});
-
-					success_message(response.message, {position:'topCenter'});
-					showAttachmentsPopup(event, [$('#attach_id_candidature').val()], $('#currentPage').val())
-				} else {
-					error_message(response.message);
-				}
-			} else {
-				ajax_error_message()
+				'id_attachement': params[0]
 			}
+		}).done(function (response, textStatus, jqXHR) {
+			try {
+				var data = $.parseJSON(response);
+				if( $.type(data) == 'object' ) {
+					iziToast.destroy();
+					if( typeof data.status != undefined ) {
+						if( data.status == 'success' ) {
+							$(params.target).closest('tr').addClass('deletedRow')
+
+							$(params.target).closest('tr').fadeOut( "slow", function() {
+							    $(this).remove();
+							});
+
+							success_message(data.message, {position:'topCenter'});
+							showAttachmentsPopup(event, [$('#attach_id_candidature').val()], $('#currentPage').val())
+						} else {
+							error_message(data.message);
+						}
+					} else {
+						ajax_error_message()
+					}
+				}
+			} catch (e) {
+				ajax_error_message();
+			}
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			ajax_error_message();
 		});
 	}
 
@@ -185,6 +207,8 @@ jQuery(document).ready(function($){
     $("#attachmentTable").on('click', '.deleteLine', function(){
         $(this).closest('tr').remove();
     });
+
+    $('#candidaturesModal .modal-content').css('max-width', window.outerWidth-30)
 
 
 })

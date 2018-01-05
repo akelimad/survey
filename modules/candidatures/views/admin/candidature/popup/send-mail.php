@@ -98,21 +98,36 @@
 		if( $(this).val() == '' ) {
 			$('#cp_sender').val('')
 			$('#cp_subject').val('')
+			$('#cp_message').val('')
 			CKEDITOR.instances['cp_message'].setData('')
 			return;
 		}
-		ajax_handler({
+
+		// Fire off the request
+		$.ajax({
+			type: 'POST',
+			url: site_url('src/includes/ajax/index.php'),
 			data: {
 				'action': 'cand_type_email',
-				'id_email': $(this).val(),
-			},
-			showErrorMessage:false
-		}, function(response){
-			if( typeof response.email != undefined ) {
-				$('#cp_sender').val(response.email)
-				$('#cp_subject').val(response.objet)
-				CKEDITOR.instances['cp_message'].setData(response.message)
+				'id_email': $(this).val()
 			}
+		}).done(function (response, textStatus, jqXHR) {
+			try {
+				var data = $.parseJSON(response);
+				if( $.type(data) == 'object' ) {
+					$('#cp_sender').val(data.email)
+					$('#cp_subject').val(data.objet)
+					try {
+						CKEDITOR.instances['cp_message'].setData(data.message)
+					} catch (e) {
+						$('#cp_message').val(data.message)
+					}
+				}
+			} catch (e) {
+				ajax_error_message();
+			}
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			ajax_error_message();
 		});
 	})
 
@@ -121,7 +136,7 @@
 	$('#candidaturesContactForm').submit(function(event){
 		event.preventDefault()
 
-		var receivers = $('#cp_receivers').val() //.split(',');
+		var receivers = $('#cp_receivers').val()
 		var message = CKEDITOR.instances['cp_message'].getData()
 		if( $('#cp_receivers').val() == null || message == '' ) {
 			error_message("Merci de remplir tous les champs.");
@@ -131,7 +146,6 @@
 		$('#progress-wrap').show()
 		$('#candidaturesContactForm').hide()
 		$('#total-count').text(receivers.length)
-
 
 		sendEmailLoop({
 			step: 100 / receivers.length,
@@ -171,12 +185,12 @@
 			url: site_url('src/includes/ajax/index.php'),
 			method: 'POST',
 			data: {
-				'action'	 : 'cand_send_email',
-				'sender' 	 : ajax_data.sender,
-				'receiver' : ajax_data.receiver,
-				'subject'	 : ajax_data.subject,
-				'message'	 : ajax_data.message,
-				'cv_path'	 : ajax_data.cv_path
+				'action': 'cand_send_email',
+				'sender': ajax_data.sender,
+				'receiver': ajax_data.receiver,
+				'subject': ajax_data.subject,
+				'message': ajax_data.message,
+				'cv_path': ajax_data.cv_path
 			}
 		});
 	}

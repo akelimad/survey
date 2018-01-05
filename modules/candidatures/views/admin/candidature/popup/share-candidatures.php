@@ -37,7 +37,7 @@
 			<label for="share_message">Message&nbsp;<font style="color:red;">*</font></label>
 		</div>
 		<div class="col-md-12 mb-10">
-			<textarea name="share[message]" id="share_message" class="ckeditor" cols="30" rows="5" required></textarea>
+			<textarea name="share[message]" id="share_message" class="ckeditor" cols="30" rows="5" style="width: 100%;" required></textarea>
 		</div>
 	</div>
 	<div class="row mb-5">
@@ -54,30 +54,45 @@
 	</div>
 </form>
 
+
 <script>
 jQuery(document).ready(function($){
 
 	CKEDITOR.replace('share_message');
-
+	
 	$('#share_type').change(function(){
 		if( $(this).val() == '' ) {
 			$('#share_sender').val('')
 			$('#share_subject').val('')
+			$('#share_message').val('')
 			CKEDITOR.instances['share_message'].setData('')
 			return;
 		}
-		ajax_handler({
+		// Fire off the request
+		$.ajax({
+			type: 'POST',
+			url: site_url('src/includes/ajax/index.php'),
 			data: {
 				'action': 'cand_type_email',
-				'id_email': $(this).val(),
-			},
-			showErrorMessage:false
-		}, function(response){
-			if( typeof response.email != undefined ) {
-				$('#share_sender').val(response.email)
-				$('#share_subject').val(response.objet)
-				CKEDITOR.instances['share_message'].setData(response.message)
+				'id_email': $(this).val()
 			}
+		}).done(function (response, textStatus, jqXHR) {
+			try {
+				var data = $.parseJSON(response);
+				if( $.type(data) == 'object' ) {
+					$('#share_sender').val(data.email)
+					$('#share_subject').val(data.objet)
+					try {
+						CKEDITOR.instances['share_message'].setData(data.message)
+					} catch (e) {
+						$('#share_message').val(data.message)
+					}
+				}
+			} catch (e) {
+				ajax_error_message();
+			}
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			ajax_error_message();
 		});
 	})
 

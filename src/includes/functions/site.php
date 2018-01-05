@@ -17,6 +17,7 @@ function get_site($key=null){
 	$site = $GLOBALS['etalent']->site;
 	if( !isset($site->$key) ) {
 		$site = getDB()->read('root_configuration', ['limit'=>1]);
+		$GLOBALS['etalent'] = new \stdClass;
 		$GLOBALS['etalent']->site = $site;
 	}
 	if( is_null($key) ) {

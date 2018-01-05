@@ -29,5 +29,8 @@
 <script type="text/javascript" src="<?php echo $jsurl; ?>/jquery.validate.min.js"></script> 
 
 <script type="text/javascript" src="<?php echo $jsurl; ?>/scripts_valide.js"></script>
+
+<base href="<?= site_url(); ?>">
+<link rel="website" href="<?= site_url(); ?>">
 <?php \App\Event::trigger('head'); ?>
 <!--	-->

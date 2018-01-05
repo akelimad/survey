@@ -81,7 +81,7 @@
 				<span style="vertical-align: top; font-size: 11px; display: inline-block;">Utiliser la variable <code style="display: inline-block;">{{lien_confirmation}}</code> pour afficher le lien de confirmation <font style="color:red;">(obligatoire)</font>.</span>
 			</div>
 			<div class="col-md-12">
-				<textarea name="status[mail][message]" id="status_mail_message" class="ckeditor" cols="30" rows="5"></textarea>
+				<textarea name="status[mail][message]" id="status_mail_message" style="width: 100%;" class="ckeditor" cols="30" rows="5"></textarea>
 			</div>
 		</div>
 	</div>
@@ -103,21 +103,36 @@ jQuery(document).ready(function($){
 		if( $(this).val() == '' ) {
 			$('#status_mail_sender').val('')
 			$('#status_mail_subject').val('')
+			$('#status_mail_message').val('')
 			CKEDITOR.instances['status_mail_message'].setData('')
 			return;
 		}
-		ajax_handler({
+
+		// Fire off the request
+		$.ajax({
+			type: 'POST',
+			url: site_url('src/includes/ajax/index.php'),
 			data: {
 				'action': 'cand_type_email',
-				'id_email': $(this).val(),
-			},
-			showErrorMessage:false
-		}, function(response){
-			if( typeof response.email != undefined ) {
-				$('#status_mail_sender').val(response.email)
-				$('#status_mail_subject').val(response.objet)
-				CKEDITOR.instances['status_mail_message'].setData(response.message)
+				'id_email': $(this).val()
 			}
+		}).done(function (response, textStatus, jqXHR) {
+			try {
+				var data = $.parseJSON(response);
+				if( $.type(data) == 'object' ) {
+					$('#status_mail_sender').val(data.email)
+					$('#status_mail_subject').val(data.objet)
+					try {
+						CKEDITOR.instances['status_mail_message'].setData(data.message)
+					} catch (e) {
+						$('#status_mail_message').val(data.message)
+					}
+				}
+			} catch (e) {
+				ajax_error_message();
+			}
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			ajax_error_message();
 		});
 	})
 
@@ -131,17 +146,19 @@ jQuery(document).ready(function($){
 	})
 
     $('#status_id').change(function(){
-        var $ref = $(this).find('option:selected').data('ref')
-        var $requiredEmailFields = $('#status_mail_sender, #status_mail_subject, #status_mail_message')
-        if( $ref == 'N_2' || $ref == 'N_9' ) {
-        	$requiredEmailFields.prop('required', true)
-        	CKEDITOR.replace('status_mail_message');
-            $('#email_convocation').show()
-        } else {
-        	CKEDITOR.instances['status_mail_message'].destroy()
-        	$requiredEmailFields.prop('required', false)
-            $('#email_convocation').hide()
-        }
+    	try {
+	        var $ref = $(this).find('option:selected').data('ref')
+	        var $requiredEmailFields = $('#status_mail_sender, #status_mail_subject, #status_mail_message')
+	        if( $ref == 'N_2' || $ref == 'N_9' ) {
+	        	$requiredEmailFields.prop('required', true)
+	        	CKEDITOR.replace('status_mail_message');
+	            $('#email_convocation').show()
+	        } else {
+	        	CKEDITOR.instances['status_mail_message'].destroy()
+	        	$requiredEmailFields.prop('required', false)
+	            $('#email_convocation').hide()
+	        }
+		} catch (e) {}
     })
 
 })

@@ -6,44 +6,58 @@ jQuery(document).ready(function($){
 
 	showModal = function(ajax_args) {
 		$('[data-toggle="popover"]').popover('hide');
-		
-		$('#candidaturesModal').modal({
-			backdrop: 'static',
-			keyboard: false
-		})
-		ajax_args.showErrorMessage = false;
-		
-		ajax_handler(ajax_args, function(response){
-			var modal_title = 'ERREUR INATTENDU !'
-			var modal_content = '<strong>Une erreur est survenu lors de chargement de la requête, merci de réessayer.</strong>';
-			if( response.content != null && typeof response.content != undefined ) {
-				modal_content = response.content
-			} else if ( typeof response.status != undefined && response.status == 'error' ) {
-				modal_content = response.message
+		$('#candidaturesModal').modal({backdrop: 'static', keyboard: false})
+
+		// Fire off the request
+    	ajax_args.type = 'POST';
+		ajax_args.url = site_url('src/includes/ajax/index.php');
+		$.ajax(ajax_args).done(function (response, textStatus, jqXHR) {
+			try {
+				var data = $.parseJSON(response);
+				var modal_title = 'ERREUR INATTENDU !'
+				var modal_content = '<strong>Une erreur est survenu lors de chargement de la requête, merci de réessayer.</strong>';
+				if( data.content != null && typeof data.content != undefined ) {
+					modal_content = data.content
+				} else if ( typeof data.status != undefined && data.status == 'error' ) {
+					modal_content = data.message
+				}
+				if( data.title != null && typeof data.title != undefined ) {
+					modal_title = data.title
+				}
+				$('#candidaturesModal .modal-header h4').html('<strong style="text-transform: uppercase;">'+modal_title+'</strong>')
+				$('#candidaturesModal .modal-body').html(modal_content).show()
+			} catch (e) {
+				ajax_error_message();
 			}
-			if( response.title != null && typeof response.title != undefined ) {
-				modal_title = response.title
-			}
-			$('#candidaturesModal .modal-header h4').html('<strong style="text-transform: uppercase;">'+modal_title+'</strong>')
-			$('#candidaturesModal .modal-body').html(modal_content).show()
-		});
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+        	ajax_error_message();
+        });
 	}
 
 	showCandidaturesFilterForm = function(url_params, fields) {
-		ajax_handler({
+		// Fire off the request
+		$.ajax({
+			type: 'POST',
+			url: site_url('src/includes/ajax/index.php'),
 			data: {
 				'action': 'cand_filter_form',
 				'params': url_params,
 				'fields': fields,
-			},
-			showErrorMessage:false
-		}, function(res){
-			if(res.content) {
-				$('#candidatures-filter-wrap').empty().html(res.content)
-			} else {
-				$('#candidatures-filter-wrap').empty().html('<div class="eta-alerts alert alert-warning alert-white rounded"><div class="icon"><i class="fa fa-warning"></i></div><ul><li>Une erreur est survenue lors de chargement de filter. <a href="#" id="refresh-candidatures-filter" style="float: right;margin-right: 5px;margin-top: -2px;"><i class="fa fa-refresh"></i></a></li></ul></div>')
 			}
-		});
+		}).done(function (response, textStatus, jqXHR) {
+			try {
+				var data = $.parseJSON(response);
+				if( $.type(data) == 'object' ) {
+					$('#candidatures-filter-wrap').empty().html(data.content)
+				} else {
+					$('#candidatures-filter-wrap').empty().html('<div class="eta-alerts alert alert-warning alert-white rounded"><div class="icon"><i class="fa fa-warning"></i></div><ul><li>Une erreur est survenue lors de chargement de filter. <a href="#" id="refresh-candidatures-filter" style="float: right;margin-right: 5px;margin-top: -2px;"><i class="fa fa-refresh"></i></a></li></ul></div>')
+				}
+			} catch (e) {
+				ajax_error_message();
+			}
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+        	ajax_error_message();
+        });
 	}
 
 
