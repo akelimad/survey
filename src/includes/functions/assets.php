@@ -121,40 +121,41 @@ add_js('ckeditor', [
 add_js('eta-functions', [
 	'src' => SITE_URL .'assets/js/etalent-functions.js', 
 	'admin' => true,
-	'version' => time()
+	'version' => ETA_ASSETS_VERSION
 ]);
 
 add_js('eta-scripts', [
 	'src' => SITE_URL .'assets/js/etalent-scripts.js', 
 	'admin' => true,
-	'version' => time()
+	'version' => ETA_ASSETS_VERSION
 ]);
 
 add_css('style_admin', [
 	'src'=> SITE_URL .'assets/css/style_admin.php', 
 	'admin' => true,
-	'version' => time()
+	'version' => ETA_ASSETS_VERSION
 ]);
 
 add_css('menuprincipal', [
 	'src'=> SITE_URL .'assets/css/styles/menuprincipal.php', 
-	'admin' => true
+	'admin' => true,
+	'version' => ETA_ASSETS_VERSION
 ]);
 
 add_css('eta-alerts', [
 	'src'=> SITE_URL .'assets/css/etalent-alerts.css', 
 	'admin' => true,
-	'version' => time()
+	'version' => ETA_ASSETS_VERSION
 ]);
 
 add_css('eta-popup', [
 	'src'=> SITE_URL .'assets/css/etalent-popup.css', 
 	'admin' => true,
-	'version' => time()
+	'version' => ETA_ASSETS_VERSION
 ]);
 
 add_css('eta-styles', [
 	'src'=> SITE_URL .'assets/css/etalent-styles.css', 
 	'admin' => true,
-	'version' => time()
+	'version' => ETA_ASSETS_VERSION
 ]);

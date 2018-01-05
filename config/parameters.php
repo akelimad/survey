@@ -5,3 +5,6 @@ define('SMTP_port', 2525);
 define('SMTP_username', '04e3c7b80424be');
 define('SMTP_password', '3122cb7d31d3ae');
 define('SMTP_ssl', false);
+
+// Assets version
+define('ETA_ASSETS_VERSION', time());

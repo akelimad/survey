@@ -82,13 +82,13 @@ class CandidatureController extends AdminController
       'src' => module_url(__FILE__, 'assets/css/candidatures.css'), 
       'admin' => true,
       'front' => false,
-      'version' => time()
+      'version' => ETA_ASSETS_VERSION
     ]);
     
     \App\Assets::addJS('cand-table', [
       'src' => module_url(__FILE__, 'assets/js/candidatures.js'), 
       'admin' => true,
-      'version' => time()
+      'version' => ETA_ASSETS_VERSION
     ]);
   }
   
