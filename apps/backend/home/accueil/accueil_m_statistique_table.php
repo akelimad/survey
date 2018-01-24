@@ -1,3 +1,6 @@
+<?php use Modules\Candidatures\Models\Candidatures; ?>
+
+<?php if(isAdmin()) : ?>
 <table width="100%" border="0">
 
 <tr>
@@ -121,6 +124,7 @@ echo '<span class="badge badge-error">'.$accept.'</span> ';?>
  <!--////////////////// Offres arrivant à &///////////////////////-->
 
 </table>
+<?php endif; ?>
 
  <!--////////////////// ///////////////////////-->
 
@@ -132,183 +136,23 @@ echo '<span class="badge badge-error">'.$accept.'</span> ';?>
 
 </div></tr>
 
-<!--//////////////////  &///////////////////////-->
 
-<tr>  
-
-<td width="80%"><b>Nouvelles candidatures :</b></td>
-
-<td   style="float: right;">
-<a href="<?= site_url('backend/module/candidatures/candidature/list/0'); ?>" title="Consulter">
-
-<span class="badge badge-success"><?= \Modules\Candidatures\Models\Candidatures::countByStatus(0); ?></span>
-
-</td>
-
-</tr>
-
-<!--//////////////////  &///////////////////////-->
-
-<!--//////////////////  &///////////////////////-->
-
-<tr>
-
-<td><b>Candidatures en cours :</b></td>
-
-<td style="float: right;"><?php 
-
-$accept =   $count_cours;
-
-if ($accept)
-
-echo '<a href="'. site_url('backend/module/candidatures/candidature') .'" title="Consulter">
-
-<span class="badge badge-success">'. $accept.'</span></a>';
-
-else
-
-echo ' <span class="badge badge-error">'.$accept.' </span>';?>
-
-</td>
-
-</tr>  
-
-<!--//////////////////  &///////////////////////-->
-
-<!--//////////////////  &///////////////////////-->
-
-<tr>
-
-<td><b>Candidatures retenues :</b></td>
-
-<td style="float: right;"><?php
-
-$accept =  $count_retenu ;
-
-if ($accept)
-
-echo '<a href="'.$urlad_candatur.'/candidature_retenu/" title="Consulter">
-
-<span class="badge badge-success">'.$accept.'</span></a>';
-
-else
-
-echo '<span class="badge badge-error">'.$accept.'</span>';?>
-
-</td>
-
-</tr>  
-
-<!--//////////////////  &///////////////////////-->
-
-<!--//////////////////  &///////////////////////-->
-
-<tr>
-
-<td><b>Candidatures recruté :</b></td>
-
-<td style="float: right;"><?php 
-
-$accept =   $count_recruter ;
-
-if ($accept)
-
-echo '<a href="'.$urlad_candatur.'/candidature_recruter/" title="Consulter">
-
-<span class="badge badge-success">'.$accept.'</span></a>';
-
-else
-
-echo '<span class="badge badge-error">'.$accept.'</span>';?>
-
-</td>
-
-</tr> 
-
-<!--//////////////////  &///////////////////////-->
-
-<!--//////////////////  &///////////////////////-->
-
-<tr>
-
-<td><b>Candidatures non retenues :</b></td>
-
-<td style="float: right;"><?php
-
-$accept =  $count_non_retenu ;
-
-if ($accept)
-
-echo '<a href="'.$urlad_candatur.'/candidature_non_retenu/" title="Consulter">
-
-<span class="badge badge-success">'. $accept .'</span></a>';
-
-else
-
-echo '<span class="badge badge-error">'.$accept.'</span>';?>
-
-</td>
-
-</tr>  
-
-<!--//////////////////  &///////////////////////-->
-
-<!--//////////////////  &///////////////////////-->
-
-<tr>
-
-<td><b>Candidatures spontanées :</b></td>
-
-<td style="float: right;"><?php 
-
-$accept = $cand_spontanee;
-
-if ($accept)
-
-echo '<a href="'.$urlad_candatur.'/candidature_spontannee/" title="Consulter">
-
-<span class="badge badge-success">'.$accept.'</span></a>';
-
-else
-
-echo '<span class="badge badge-error"> '.$accept.'</span> ';?>
-
-</td>
-
-</tr>
-
-<!--//////////////////  &///////////////////////-->
-
-<!--////////////////// Candidatures pour stage &///////////////////////-->
-
-<tr>
-
-<td><b>Candidatures pour stage :</b></td>
-
-<td style="float: right;"><?php 
-
-$accept =  $cand_stage;
-
-if ($accept)
-
-echo '<a href="'.$urlad_candatur.'/candidature_stage/" title="Consulter">
-
-<span class="badge badge-success">'.$accept.'</span></a>';
-
-else
-
-echo '<span class="badge badge-error">'.$accept.'</span>';?>
-
-</td>
-
-</tr>
-
-<!--////////////////// Candidatures pour stage &///////////////////////-->
+<?php
+	foreach (Candidatures::getStatus() as $key => $status) : 
+	$count = Candidatures::countByStatus($status->id_prm_statut_c);
+	if(($count == 0 && !isAdmin()) || ($status->id_prm_statut_c == 53 && !isAdmin())) continue;
+	?>
+	<tr>  
+		<td>
+			<a href="<?= site_url('backend/module/candidatures/candidature/list/'. $status->id_prm_statut_c); ?>"><?= $status->statut; ?><span class="badge pull-right"><?= $count; ?></span></a>
+		</td>
+	</tr>
+<?php endforeach; ?>
 
 </table>  
 
 
-
+<?php if(isAdmin()) : ?>
 <table width="100%" border="0">
 
 <tr colspan="2"><div class="subscription" style="width:100%; margin: 10px 0pt;">
@@ -372,3 +216,4 @@ echo ' <span class="badge badge-error">'.$archive.' </span>';?>
  <!--////////////////// Nombre de dossiers créés &///////////////////////-->
 
 </table>
+<?php endif; ?>

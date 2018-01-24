@@ -1,4 +1,7 @@
 <?php
+$params = json_decode($_POST['params']);
+$offreStatus = (isset($params->id) && $params->id == 53) ? 'Archivée' : 'En cours';
+
 return array(
 	[
 		'name' => 'motcle',
@@ -58,7 +61,7 @@ return array(
 		'value' => '',
 		'label' => 'Par ref de l\'offre',
 		'sortOrder' => 60,
-		'options' => getDB()->prepare("SELECT id_offre AS value, CONCAT(id_offre, ' | ', Name) AS text FROM offre ORDER BY id_offre DESC")
+		'options' => getDB()->prepare("SELECT id_offre AS value, CONCAT(id_offre, ' | ', Name) AS text FROM offre WHERE status='". $offreStatus ."' ORDER BY id_offre DESC")
 	],	
 	[
 		'name' => 'exp',

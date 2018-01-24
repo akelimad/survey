@@ -1,9 +1,10 @@
+<script src="<?= module_url('candidatures', 'assets/js/candidatures.js'); ?>"></script>
 
     <table width="100%" border="0" cellspacing="0" id="liste_offres" class="tablesorter" style="background: none;">
     <thead>
           <tr>
             <th width="16%"  align="center"><b>Actions</b></th>
-            <th width="15%"><center><b>Date de publication </b></center></th>
+            <th width="15%"><center><b>Date d'expiration</b></center></th>
         
             <th width="30%"><b>Titre</b></th>
             <th width="7%"><b>Réf</b></th>
@@ -239,7 +240,7 @@ $count00 = mysql_num_rows($rst_pagination);
                 <input name="id" type="hidden" value="<?php echo $result['id_offre'];?>" />
                 <input name="action_offre" type="hidden" value="view" />
                 <input name="action" type="hidden" value="<?php echo $action;?>" />
-                <a href="../consulter_offre/?offre=<?php echo $result['id_offre'] ?>" onclick="formulaire<?php echo $jj; ?>.submit()" title="Voir l’offre "> 
+                <a href="<?= site_url('backend/offres/consulter_offre/?offre='.$result['id_offre']) ?>" onclick="formulaire<?php echo $jj; ?>.submit()" title="Voir l’offre "> 
                <i class="fa fa-search fa-fw fa-lg"></i></a>&nbsp;  
              </form>
             </td>
@@ -251,18 +252,18 @@ $count00 = mysql_num_rows($rst_pagination);
                 <input name="id" type="hidden" value="<?php echo $result['id_offre'];?>" />
                 <input name="action_offre" type="hidden" value="edit" />
                 <input name="action" type="hidden" value="<?php echo $action;?>" />
-                <a href="#" onclick="formulaire<?php echo $jj; ?>.submit()" title="Modifier">
+                <a href="javascript:void(0)" onclick="formulaire<?php echo $jj; ?>.submit()" title="Modifier">
                  <i class="fa fa-pencil-square-o fa-fw fa-lg"></i>
                 </a>&nbsp;
               </form>
             </td>
             
                 <td valign="top" width="20px" style="border:0px solid #FFFFFF;">
-                <form action="./" method="post" name="formulaire<?php echo ++$jj; ?>">
+                <form action="" method="post" name="formulaire<?php echo ++$jj; ?>">
                 <input name="id" type="hidden" value="<?php echo $result['id_offre'];?>" />
                 <input name="action_offre" type="hidden" value="supprimer" />
                 <input name="action" type="hidden" value="<?php echo $action;?>" />
-                <a href="#" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer cette offre?')) formulaire<?php echo $jj; ?>.submit()" title="Supprimer">
+                <a href="javascript:void(0)" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer cette offre?')) formulaire<?php echo $jj; ?>.submit()" title="Supprimer">
                 <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i></a>&nbsp;
               </form>
 
@@ -270,7 +271,7 @@ $count00 = mysql_num_rows($rst_pagination);
 
             
             <td valign="top"   width="20px" style="border:0px solid #FFFFFF;">
-            <form action="./" method="post" name="formulaire<?php echo ++$jj; ?>">
+            <form action="" method="post" name="formulaire<?php echo ++$jj; ?>">
                 <input name="id" type="hidden" value="<?php echo $result['id_offre'];?>" />
                 <input name="action" type="hidden" value="<?php echo $action;?>" />
                 <?php 
@@ -278,7 +279,7 @@ $count00 = mysql_num_rows($rst_pagination);
       {
       ?>
                 <input name="action_offre" type="hidden" value="archive" />
-                <a href="#" onclick="if(confirm('Êtes-vous sûre de vouloir Archivée  cette offre?')) formulaire<?php echo $jj; ?>.submit()" title="Archiver"> 
+                <a href="javascript:void(0)" onclick="if(confirm('Êtes-vous sûre de vouloir Archivée  cette offre?')) formulaire<?php echo $jj; ?>.submit()" title="Archiver"> 
                 <i class="fa fa-unlock fa-fw fa-lg" style="color:#419900;"></i></a>
                 <?php 
       }
@@ -286,7 +287,7 @@ $count00 = mysql_num_rows($rst_pagination);
       {
       ?>
                 <input name="action_offre" type="hidden" value="desarchive" />
-                <a href="#" onclick="if(confirm('Êtes-vous sûre de vouloir publier cette offre?')) formulaire<?php echo $jj; ?>.submit()" title="Publier"> 
+                <a href="javascript:void(0)" onclick="if(confirm('Êtes-vous sûre de vouloir publier cette offre?')) formulaire<?php echo $jj; ?>.submit()" title="Publier"> 
                 <i class="fa fa-lock fa-fw fa-lg" style="color:#DB1212;"></i></a>
                 <?php 
       }
@@ -301,10 +302,7 @@ $count00 = mysql_num_rows($rst_pagination);
                 <input name="id_off" type="hidden" value="<?php echo $result['id_offre'];?>" />
                 <input name="action_offre" type="hidden" value="edit" />
                 <input name="action" type="hidden" value="<?php echo $action;?>" />
-                <a href="#" onclick="formulaire<?php echo $jj; ?>.submit()" title="Partager des candidatures"> 
-                
-                <i class="fa fa-user-plus fa-fw fa-lg" ></i>
-                </a>&nbsp;
+                <a title="Partager la candidature" href="javascript:void(0)" onclick="return showShareCandidaturePopup(event, {'id_offre':<?= $result['id_offre']; ?>});" style="font-size: 15px;"><i class="fa fa-share-alt"></i>&nbsp;</a}
               </form>
             </td>
             
@@ -325,7 +323,7 @@ $count00 = mysql_num_rows($rst_pagination);
                  
               
             <td valign="top" style="border:1px solid #FFFFFF;"><center>
-            <?php echo date("d.m.Y",strtotime($result['date_insertion']));?></center> </td>
+            <?php echo date("d.m.Y",strtotime($result['date_expiration']));?></center> </td>
          
             <td valign="top" style="border:1px solid #FFFFFF;">
              
@@ -407,12 +405,16 @@ $requete_test= mysql_query($sql_test);
 $result_test = mysql_fetch_array($requete_test);
 $nom_filiale = $result_test['nom_filiale'];
             echo $nom_filiale; ?></td>
-            <td valign="top" style="border:1px solid #FFFFFF;"><?php 
-          if($result['status'] == 'En cours') 
-            echo '<font style="color:#009900 ;" >'.$result['status'].'</font>';
-          else
-            echo '<font style="color:#FF0000 ;">'.$result['status'].'</font>';
-          ?>
+            <td style="border:1px solid #FFFFFF;text-align: center;vertical-align: sub;">
+                <?php
+                    $expired = ($result['status'] == 'En cours' && strtotime($result['date_expiration']) < strtotime(date('Y-m-d', time())));
+                    $status = ($expired) ? 'Expiré' : $result['status'];
+                    $bgColor = 'FF0000';
+                    if($result['status'] == 'En cours') {
+                        $bgColor = ($expired) ? 'FFA500' : '009900';
+                    }
+                ?> 
+                <span class="label label-default" style="background-color: #<?= $bgColor; ?>;color: #fff;font-size: 10px;vertical-align: sub;"><?= $status ?></span>
             </td>
             <td align="center" valign="top" style="border:1px solid #FFFFFF;"><?php if(empty($result['vue'])) echo 0; else echo $result['vue'];?></td>
             <td align="center" valign="top" style="border:1px solid #FFFFFF;"><?php 
@@ -426,7 +428,7 @@ $nom_filiale = $result_test['nom_filiale'];
           {
           echo '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" name="form'.$j.'">';
  
-           echo '<a title="la liste des candidatures" href="./candidature/?btn_a=m&offre='.$result['id_offre'].' "><b>'.$count.'</b></a>';
+           echo '<a title="la liste des candidatures" href="'. site_url('backend/offres/liste_offre/candidature/?btn_a=m&offre='.$result['id_offre']) .'"><b>'.$count.'</b></a>';
  
           echo '</form>';
           }
@@ -473,10 +475,10 @@ $nom_filiale = $result_test['nom_filiale'];
 			<div id="">
 					<?php        
 					
-                            $lapage = '?';
+                            $lapage = site_url('backend/offres/liste_offre/?');
                     
                     require_once (dirname ( __FILE__ ) . $incurl2.'/class.pagination2.php');
-                    Pagination::affiche ( $lapage, 'idPage', $nbPages, $pageCourante, 2 ); 
+                    Pagination::affiche ( $lapage, 'idPage', $nbPages, $pageCourante, 2); 
                     /*
                     $lapage = 'pages/'  ;
                     require_once (dirname ( __FILE__ ) . $incurl2.'/class.pagination.php');
@@ -487,3 +489,15 @@ $nom_filiale = $result_test['nom_filiale'];
 					?>
 			</div>
     </div>
+
+<div id="candidaturesModal" class="modal fade" role="dialog" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="border-bottom: none;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><img src="<?= module_url('candidatures', 'assets/img/loading.gif'); ?>" style="width: 30px;">&nbsp;Chargement en cours...</h4>
+            </div>
+            <div class="modal-body" style="display: none;border-top: 1px solid #e5e5e5;"></div>
+        </div>
+    </div>
+</div>

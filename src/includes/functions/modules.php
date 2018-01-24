@@ -14,6 +14,7 @@
  * @return $slug
  */
 function get_module_dirname($file){
+	if(!is_file($file)) return $file;
 	$file = str_replace('\\', '/', $file);
 	if (preg_match("!/modules/([a-z-]*)/!", $file, $match) === 1) {
 		return $match[1];

@@ -126,7 +126,7 @@ var rel02=c;
 
                 type: 'POST',
 
-                url: 'trai_pop_suit.php',
+                url: site_url('apps/backend/offres/liste_offre/trai_pop_suit.php'),
 
                 data:  variable,
 

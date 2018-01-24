@@ -126,6 +126,18 @@ jQuery(document).ready(function($){
 			}
 		})
 	}
+
+	// Change candidature offre
+	showChangeOffrePopup = function(id_candidature, id_offre) {
+		event.preventDefault()
+		showModal({
+			data: {
+				'action': 'cand_change_offre_popup',
+				'id_candidature': id_candidature,
+				'id_offre': id_offre
+			}
+		})
+	}
 	
 
 	$.fn.getWidthInPercent = function () {
@@ -157,7 +169,11 @@ jQuery(document).ready(function($){
 	});
 
 	var eta_filter = readCookie('eta_filter')
-	if( (eta_filter == null || eta_filter == '1') && $('#candidatures-filter').length == 0 ) {
+	if( 
+		(eta_filter == null || eta_filter == '1') && 
+		$('#candidatures-filter-wrap').length == 1 && 
+		$('#candidatures-filter').length == 0
+	) {
 		showCandidaturesFilterForm(url_params, fields)
 	}
 

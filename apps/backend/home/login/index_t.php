@@ -57,8 +57,8 @@ $msg_alert ='';
 		$id_offre_f='';
 
             $_SESSION['abb_admin'] = $login;	 
-
-			 $_SESSION['id_role'] = $role['id_role']; 
+			$_SESSION['id_role'] = $role['id_role']; 
+			$_SESSION['id_type_role'] = $role['id_type_role']; 
 
 			 
 

@@ -1,4 +1,4 @@
-<form action="" method="post" id="changeSatatusForm">
+<form action="<?= site_url('backend/module/candidatures/candidature') ?>" method="post" id="shareCandidaturesForm">
 
 	<input type="hidden" name="share[candidatures]" value="<?= htmlentities(json_encode($candidatures)) ?>">
 

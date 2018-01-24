@@ -382,10 +382,10 @@ recherchés </h1> </div></td> </tr> <tr>
 <?php endif; ?>
 <br><br>
 
+<?php if(strtotime($offre['date_expiration']) > strtotime(date('Y-m-d', time()))) : ?>
 <table>
 
 <div class="ligneBleu"></div>
-
 <input name="id_offre" type="hidden"    value="<?php echo $id_offre; ?>" />
 
 <input class="espace_candidat" name="envoi" value="Répondre à cette offre" type="button"
@@ -407,6 +407,7 @@ recherchés </h1> </div></td> </tr> <tr>
 </div>
 
 </table>
+<?php endif; ?>
 
 <script>
 

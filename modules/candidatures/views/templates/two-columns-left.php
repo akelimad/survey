@@ -12,9 +12,13 @@
 				<li <?= (!isset($_GET['id']) && $_GET['action'] == 'index') ? 'class="menufo-active"' : ''; ?>>
 					<a href="<?= site_url('backend/module/candidatures/candidature'); ?>"><i class="fa fa-list-ol"></i>&nbsp;Candidatures en cours</a>
 				</li>
-				<?php foreach (Candidatures::getStatus() as $key => $status) : ?>
+				<?php
+					foreach (Candidatures::getStatus() as $key => $status) : 
+					$count = Candidatures::countByStatus($status->id_prm_statut_c);
+					if(($count == 0 && !isAdmin()) || ($status->id_prm_statut_c == 53 && !isAdmin())) continue;
+					?>
 					<li <?= (isset($_GET['id']) && $_GET['id']==$status->id_prm_statut_c) ? 'class="menufo-active"' : ''; ?>>
-						<a href="<?= site_url('backend/module/candidatures/candidature/list/'. $status->id_prm_statut_c); ?>"><i class="fa fa-tasks"></i>&nbsp;<?= $status->statut; ?><span class="badge pull-right"><?= Candidatures::countByStatus($status->id_prm_statut_c); ?></span></a>
+						<a href="<?= site_url('backend/module/candidatures/candidature/list/'. $status->id_prm_statut_c); ?>"><i class="fa fa-tasks"></i>&nbsp;<?= $status->statut; ?><span class="badge pull-right"><?= $count; ?></span></a>
 					</li>
 				<?php endforeach; ?>
 				<!--li>

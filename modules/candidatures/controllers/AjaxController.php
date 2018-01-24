@@ -44,6 +44,8 @@ class AjaxController
     Ajax::add('cand_note_ecrit_popup', [$this, 'showNoteEcritPopup']);
 
     Ajax::add('cand_share_candidature_popup', [$this, 'showShareCandidaturePopup']);
+
+    Ajax::add('cand_change_offre_popup', [$this, 'showChangeOffrePopup']);
   }
   
 
@@ -217,10 +219,36 @@ class AjaxController
   {
     if( empty($data['candidatures']) ) return [];
 
+    if(isset($data['candidatures']['id_offre']) && !empty($data['candidatures']['id_offre'])) {
+      $candidatures = getDB()->findByColumn('candidature', 'id_offre', $data['candidatures']['id_offre']);
+      unset($data['candidatures']['id_offre']);
+      if(!empty($candidatures)) : foreach ($candidatures as $key => $c) :
+        $data['candidatures'][] = $c->id_candidature;
+      endforeach; endif;
+    }
     return $this->renderAjaxView(
       'Partager les candidatures', 
       'admin/candidature/popup/share-candidatures', [
         'candidatures' => $data['candidatures']
+    ]);
+  }
+
+
+  /**
+   * Show change offre popup
+   * 
+   * @author M'hamed Chanchaf
+   */
+  public function showChangeOffrePopup($data)
+  {
+    if( !isset($data['id_candidature']) || !isset($data['id_offre'])) return [];
+
+    return $this->renderAjaxView(
+      'Changer l\'offre de candidature', 
+      'admin/candidature/popup/change-offre', [
+        'id_candidature' => $data['id_candidature'],
+        'id_offre' => $data['id_offre'],
+        'offres' => getDB()->read('offre')
     ]);
   }
   

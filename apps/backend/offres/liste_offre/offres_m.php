@@ -1,6 +1,6 @@
 <div class='texte' >
 
-
+<?php get_flash_message() ?>
 
         <br/><h1>LISTE DES OFFRES</h1>
 
@@ -80,7 +80,7 @@ if (isset($_GET['r'])) {
 
 ?>  
 
-<form enctype="multipart/form-data" action="./" method="post">        
+<form enctype="multipart/form-data" action="" method="post">        
 
 <table>
 

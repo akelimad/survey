@@ -7,6 +7,7 @@ return array(
 	[
 		"name" => "Offres",
 		"uri" => "backend/offres/",
+		"show" => isAdmin(),
 		"sub_menu" => [
 			[
 				"name" => "Etat des offres",
@@ -41,6 +42,7 @@ return array(
 	[
 		"name" => "Candidats",
 		"uri" => "backend/candidats/",
+		"show" => isAdmin(),
 		"sub_menu" => [
 			[
 				"name" => "Etat des candidats",
@@ -67,6 +69,7 @@ return array(
 	[
 		"name" => "Candidatures",
 		"uri" => "backend/module/candidatures/candidature/status",
+		"show" => (isModuleEnabled('candidatures') && isAdmin()),
 		"sub_menu" => [
 			[
 				"name" => "État des candidatures",
@@ -173,6 +176,7 @@ return array(
 	[
 		"name" => "Reporting",
 		"uri" => "backend/reporting/",
+		"show" => isAdmin(),
 		"sub_menu" => [
 			[
 				"name" => "Statistiques",
@@ -195,6 +199,7 @@ return array(
 	[
 		"name" => "Courriers",
 		"uri" => "backend/courriers/",
+		"show" => isAdmin(),
 		"sub_menu" => [
 			[
 				"name" => "Historique des correspondances",
@@ -213,10 +218,12 @@ return array(
 	[
 		"name" => "Root",
 		"uri" => "backend/administration/profils/",
+		"show" => isAdmin(),
 		"sub_menu" => [
 			[
 				"name" => "Gestion des workflows",
-				"uri" => "backend/module/workflows/workflow"
+				"uri" => "backend/module/workflows/workflow",
+				"show" => isModuleEnabled('workflows')
 			],
 			[
 				"name" => "Gestion des profils",
@@ -252,7 +259,8 @@ return array(
 			],
 			[
 				"name" => "Fiches de présélection / evaluation",
-				"uri" => "backend/module/fiches/fiche"
+				"uri" => "backend/module/fiches/fiche",
+				"show" => isModuleEnabled('fiches')
 			],
 			[
 				"name" => "Historique de connexion",

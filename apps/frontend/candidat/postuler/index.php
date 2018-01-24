@@ -64,10 +64,12 @@
 
  
 
-    <?php 
-
-		include ( "./postuler_m.php"); 		
-
+    <?php
+    if(strtotime($offres['date_expiration']) < time()) {
+      echo '<div class="alert alert-danger">Cette offre est expiré.</div>';
+    } else {
+		  include ( "./postuler_m.php"); 		
+    }
 	?>
 
  

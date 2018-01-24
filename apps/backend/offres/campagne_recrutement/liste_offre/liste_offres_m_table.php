@@ -20,7 +20,7 @@
 
             <th width="10%"  align="center"><b>Actions</b></th>
 
-            <th width="14%"><center><b>Date de publication</b> </center></th>
+            <th width="14%"><center><b>Date d'expiration</b> </center></th>
 
         
 
@@ -130,7 +130,7 @@
 
                 <td valign="top" width="20px" style="border:0px solid #FFFFFF;">
 
-                <form action="./" method="post" name="formulaire<?php echo ++$jj; ?>">
+                <form action="" method="post" name="formulaire<?php echo ++$jj; ?>">
 
                 <input name="id" type="hidden" value="<?php echo $result['id_offre'];?>" />
 
@@ -150,7 +150,7 @@
 
             
 
-            <td valign="top"   width="20px" style="border:0px solid #FFFFFF;"><form action="./" method="post" name="formulaire<?php echo ++$jj; ?>">
+            <td valign="top"   width="20px" style="border:0px solid #FFFFFF;"><form action="" method="post" name="formulaire<?php echo ++$jj; ?>">
 
                 <input name="id" type="hidden" value="<?php echo $result['id_offre'];?>" />
 
@@ -234,7 +234,7 @@
 
             <td valign="top" style="border:1px solid #FFFFFF;"><center>
 
-            <?php echo date("d.m.Y",strtotime($result['date_insertion']));?></center> </td>
+            <?php echo date("d.m.Y",strtotime($result['date_expiration']));?></center> </td>
 
         
 
@@ -426,18 +426,16 @@ $nom_filiale = $result_test['nom_filiale'];
 
             <td valign="top" style="border:1px solid #FFFFFF;"><?php echo $result['reference']; ?></td>
 
-            <td valign="top" style="border:1px solid #FFFFFF;"><?php 
-
-          if($result['status'] == 'En cours') 
-
-            echo '<font style="color:#009900 ;" >'.$result['status'].'</font>';
-
-          else
-
-            echo '<font style="color:#FF0000 ;">'.$result['status'].'</font>';
-
-          ?>
-
+            <td style="border:1px solid #FFFFFF;text-align: center;vertical-align: sub;">
+                <?php
+                    $expired = ($result['status'] == 'En cours' && strtotime($result['date_expiration']) < strtotime(date('Y-m-d', time())));
+                    $status = ($expired) ? 'Expiré' : $result['status'];
+                    $bgColor = 'FF0000';
+                    if($result['status'] == 'En cours') {
+                        $bgColor = ($expired) ? 'FFA500' : '009900';
+                    }
+                ?> 
+                <span class="label label-default" style="background-color: #<?= $bgColor; ?>;color: #fff;font-size: 10px;vertical-align: sub;"><?= $status ?></span>
             </td>
 
             <td align="center" valign="top" style="border:1px solid #FFFFFF;"><?php if(empty($result['vue'])) echo 0; else echo $result['vue'];?></td>

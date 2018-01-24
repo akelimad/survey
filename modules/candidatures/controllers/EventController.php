@@ -43,7 +43,7 @@ class EventController
 		if( isset($data['status']['id']) ) {
 			$saveStatus = (new StatusController())->saveStatus($data);
 			// Send convocation email
-			if( isset($data['status']['mail']) && $data['status']['mail'] != '' ) {
+			if(isset($data['status']['mail']) && $data['status']['mail']['sender'] != '') {
 				$message = $data['status']['mail']['message'];
 				$data['status']['mail']['message'] = Mailer::renderMessage($message, [
 					'lien_confirmation' => '<a href="'. site_url('module/candidatures/confirm/calendar/'.$saveStatus['id_agend']) .'"> <b>Confirmer</b></a>'
@@ -65,6 +65,14 @@ class EventController
 
 		// share candidature
 		if( isset($data['share']['candidatures']) ) (new ShareController())->share($data['share']);
+
+		// change candidature offre
+		if( isset($data['change_offre']['id']) ) {
+			getDB()->update('candidature', 'id_candidature', $data['change_offre']['id_candidature'], [
+				'id_offre' => $data['change_offre']['id']
+			]);
+			Session::setFlash('success', 'L\'offre de candidature a été enregistré.');
+		}
 	}
 
 

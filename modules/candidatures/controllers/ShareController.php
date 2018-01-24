@@ -21,8 +21,10 @@ class ShareController
 
   public function share($data)
   {
-    if( $data['candidatures'] == '' || empty(json_decode($data['candidatures'], true)) )
+    if( $data['candidatures'] == '' || empty(json_decode($data['candidatures'], true)) ) {
+      Session::setFlash('warning', 'Cette offre ne contient aucun candidat.');
       return;
+    }
 
     global $email_e;
     $candidatures = json_decode($data['candidatures'], true);
@@ -52,7 +54,7 @@ class ShareController
         $id_role = $admin->id_role;
       } else {
         $id_role = $db->create('root_roles', [
-          'id_type_role' => '2', 
+          'id_type_role' => 2, 
           'login' => $data['receiver'], 
           'mdp' => md5($randPassword), 
           'date_creation' => $date, 

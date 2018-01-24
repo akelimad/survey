@@ -62,9 +62,17 @@ else{
 
                             }
 
-                            
-
-                                ?>          
+        
+                            $count = getDB()->prepare("
+                              SELECT COUNT(*) AS nbr,
+                                SUM(case when (o.status='En cours' AND DATE(o.date_expiration) >= CURDATE()) then 1 else 0 end) encours,
+                                SUM(case when (o.status='En cours' AND DATE(o.date_expiration) < CURDATE()) then 1 else 0 end) expire,
+                                SUM(case when (o.status='Archivée') then 1 else 0 end) archive
+                              FROM campagne_offres as c
+                              JOIN offre as o ON o.id_offre=c.id_offre
+                              WHERE c.id_compagne=?
+                            ", [$reponse['id_compagne']], true);
+                            ?>          
 
 
 
@@ -75,14 +83,16 @@ else{
                                         
 
                                         <td style="border:1px solid #FFFFFF;" align="center">
+<a title="Voir les offres" href="<?= site_url('backend/offres/campagne_recrutement/liste_offre/?in_d='.$reponse['id_compagne']) ?>"><i class="fa fa-eye fa-fw fa-lg"></i></a>
 
-<a href="./?action=modifier&id=<?php echo $reponse['id_compagne'] ?>&titre_compagne=<?php echo $reponse['titre_compagne'] ?>" >
+
+<a href="<?= site_url('backend/offres/campagne_recrutement/?action=modifier&id='. $reponse['id_compagne'] .'&titre_compagne='.$reponse['titre_compagne']) ?>" >
 
                                             <i class="fa fa-pencil-square-o fa-fw fa-lg"></i>
 
                                             </a>
 
-                                            <a href="#" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ce dossier?'))location.href='?action=delete&id=<?php echo $reponse['id_compagne'] ?>'">
+                                            <a href="<?= site_url('backend/offres/campagne_recrutement/?action=delete&id='.$reponse['id_compagne']) ?>" onclick="confirm('Êtes-vous sûre de vouloir supprimer ce dossier?')">
 
                                              <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i>
 
@@ -92,7 +102,7 @@ else{
 
                                         <td align="center" style="border:1px solid #FFFFFF;">
 
-                                            <?php echo $reponse['titre_compagne']; ?>
+                                            <a href="<?= site_url('backend/offres/campagne_recrutement/liste_offre/?in_d='.$reponse['id_compagne']) ?>"><strong><?= $reponse['titre_compagne']; ?></strong></a>
 
                                         </td>
 
@@ -114,11 +124,14 @@ $nom_filiale = $result_test['nom_filiale'];
 
 
 
-                                        <td align="center" style="border:1px solid #FFFFFF;">
-
+                                        <td style="border:1px solid #FFFFFF;">
+                                            <span class="label label-primary">Total: (<?= intval($count->nbr); ?>)</span>  
+                                            <span class="label label-success">En cours: (<?= intval($count->encours); ?>)</span>  
+                                            <span class="label label-warning">Expiré: (<?= intval($count->expire); ?>)</span>  
+                                            <span class="label label-danger">Archivé: (<?= intval($count->archive); ?>)</span>  
                                          <?php                                                                  //id_compagnee
 
-                                            $s_requ = "SELECT * from campagne_offres inner join
+                                            /*$s_requ = "SELECT * from campagne_offres inner join
 
                                             offre on offre.id_offre = campagne_offres.id_offre where  id_compagne = '".$reponse['id_compagne']."' 
 
@@ -136,7 +149,7 @@ $nom_filiale = $result_test['nom_filiale'];
 
                                             else
 
-                                                echo '<i class="fa fa-file fa-fw " ></i> '.$encours ;   
+                                                echo '<i class="fa fa-file fa-fw " ></i> '.$encours ; */  
 
                                                 ?>
 

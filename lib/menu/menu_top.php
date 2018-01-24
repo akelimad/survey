@@ -344,9 +344,6 @@ if ($_SESSION['menu7'] == 1)
 		<a href="<?php  echo $urlad_admi  ?>/profils/">Root</a>	
 
 		<ul class="secondLevel">
-		<li>
-				<a href="<?= site_url('backend/module/workflows/workflow'); ?>">Gestion des workflows</a>		
-			</li>
 			<li>
 
 				<a href="<?php  echo $urlad_admi  ?>/profils/">Gestion des profils</a>					

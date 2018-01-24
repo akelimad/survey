@@ -51,12 +51,15 @@ class Candidatures {
 
 	public function countByStatus($status_id)
 	{
-		$query  = "SELECT COUNT(*) AS count FROM candidature c";
-		if( read_session('abb_admin') != 'root' ) {
-			$query .= " JOIN role_candidature AS rc ON rc.id_candidature = c.id_candidature";
-		} 
-		$query .= " WHERE c.status=?";
-		return getDB()->prepare($query, [$status_id], true)->count;
+		$query  = "SELECT COUNT(*) AS count FROM candidature c JOIN offre o ON o.id_offre = c.id_offre";
+		if( !isAdmin() ) $query .= ' JOIN role_candidature rc ON rc.id_candidature = c.id_candidature';
+
+		$status = ($status_id == 53) ? 'Archivée' : 'En cours';
+    	$query .= " WHERE o.status='". $status ."' ";
+		if($status_id != 53) $query .= " AND c.status=".$status_id;
+		if( !isAdmin() ) $query .= " AND rc.id_role=".$_SESSION['id_role'];
+		
+		return getDB()->prepare($query, [], true)->count;
 	}
 
 

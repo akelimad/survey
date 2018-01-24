@@ -113,8 +113,7 @@ else
  /////////////////////////////////////////////////////////////////////
 
  
-
-         if(isset($_POST['send']))
+         if(isset($_POST['send']) && strtotime($offres['date_expiration']) > time() )
 
      {
 

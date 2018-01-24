@@ -798,15 +798,16 @@
 
                   inner join prm_fonctions on prm_fonctions.id_fonc = offre.id_fonc
 
-                  where  offre.status = 'En cours' AND offre.date_expiration >= '$today' AND ( " . $requete . " )    ORDER BY " . $order . "   
+                  where  offre.status = 'En cours' AND ( " . $requete . " )    ORDER BY " . $order . "   
 
                   LIMIT " . $limitstart . ", " . $itemsParPage ) : mysql_query ( "select * from offre  
 
                   inner join prm_fonctions on prm_fonctions.id_fonc = offre.id_fonc
 
-                  where  offre.status = 'En cours' AND offre.date_expiration >= '$today'   
+                  where  offre.status = 'En cours'    
 
                   ORDER BY " . $order . "  LIMIT " . $limitstart . ", " . $itemsParPage );
+                  // AND offre.date_expiration >= '$today'
 
         
 

@@ -103,6 +103,16 @@ class TableController extends Controller
       'attributes' => [
         'class' => 'btn btn-success btn-xs',
       ]
+    ],
+    'change_offre' => [
+      'label' => 'Changer l\'offre',
+      'patern' => '#',
+      'icon' => 'fa fa-retweet',
+      'bulk_action' => false,
+      'attributes' => [
+        'class' => 'btn btn-warning btn-xs',
+        'onclick' => 'return showChangeOffrePopup({id_candidature}, {id_offre})'
+      ]
     ]		
 	];
 
@@ -143,6 +153,8 @@ class TableController extends Controller
 	 */
   public function getTable()
   {
+    $this->params['options']['actions'] = (!isset($_GET['id']) || $_GET['id'] != 53);
+
   	$query = $this->buildQuery();
   	$table = new \App\Helpers\Table($query, 'id_candidature', $this->params['options']);
   	$table->setTableClass(['table', 'table-striped', 'table-hover']);
@@ -296,7 +308,11 @@ class TableController extends Controller
   			$style = '';
   			$tooltip = 'data-toggle="tooltip" title="Non défini."';
   		}
-  		return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteEcritPopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
+      if(isset($_GET['id']) && $_GET['id'] != 53) {
+        return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteEcritPopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
+      } else {
+  		  return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" '.$tooltip.'>'.$value.'</i>';
+      }
   	}, ['attributes' => ['title' => 'Note Écrit']]);
 
 
@@ -312,13 +328,18 @@ class TableController extends Controller
         $style = '';
         $tooltip = 'data-toggle="tooltip" title="Non défini."';
       }
-      return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteOralePopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
+      if(isset($_GET['id']) && $_GET['id'] != 53) {
+        return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteOralePopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
+      } else {
+        return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" '.$tooltip.'>'.$value.'</i>';
+      }
+
     }, ['attributes' => ['title' => 'Note Orale']]);
 
 
   	$table->addColumn('titre_offre', 'Titre du poste', function($row){
-      $offre = Candidatures::getOfferById($row->id_offre);
-  		return $offre->Name;
+      // $offre = Candidatures::getOfferById($row->id_offre);
+  		return $row->offre_name;
   	}, ['attributes' => ['width'=> '120px']]);
 
   	$table->addColumn('date_cand', 'Date', function($row){
@@ -343,20 +364,24 @@ class TableController extends Controller
 	 */
   public function buildQuery()
   {
-    $condition = "";
-    if( is_valid_int($_GET['id']) ) {
-      $condition .= "WHERE cand.status='". $_GET['id'] ."' ";
-      $condition .= $this->getAndWhereStatement();
-    } else {
-    	$condition .= $this->getAndWhereStatement('WHERE');
+    $status = (isset($_GET['id']) && $_GET['id'] == 53) ? 'Archivée' : 'En cours';
+    $condition = " WHERE o.status='". $status ."'";
+
+    if(isset($_GET['id']) && $_GET['id'] != 53) $condition .= " AND cand.status=".$_GET['id'];
+
+    $condition .= $this->getAndWhereStatement('AND');
+
+  	$joints = $this->getJoints();
+    if( !isAdmin() ) {
+      $condition .= " AND rc.id_role=".$_SESSION['id_role'];
+      $joints .= ' JOIN role_candidature rc ON rc.id_candidature = cand.id_candidature';
     }
 
-  	$joints   = $this->getJoints();
-    if( read_session('abb_admin') != 'root' ) $joints .= ' JOIN role_candidature rc ON rc.id_candidature = cand.id_candidature';
   	$query = "
-      SELECT c.candidats_id, CONCAT(c.nom, ' ',c.prenom) AS fullname, c.email, c.titre, c.ville, c.id_situ, c.id_tfor, c.id_nfor, c.id_expe, c.id_sect, c.id_fonc, c.mobilite, c.id_pays, c.id_salr, c.date_n, c.dateMAJ, c.CVdateMAJ, cand.*, cand.date_candidature as date_cand 
+      SELECT c.candidats_id, CONCAT(c.nom, ' ',c.prenom) AS fullname, c.email, c.titre, c.ville, c.id_situ, c.id_tfor, c.id_nfor, c.id_expe, c.id_sect, c.id_fonc, c.mobilite, c.id_pays, c.id_salr, c.date_n, c.dateMAJ, c.CVdateMAJ, cand.*, cand.date_candidature as date_cand, o.status AS offre_status, o.Name AS offre_name
       FROM candidature cand 
-      INNER JOIN candidats c ON c.candidats_id = cand.candidats_id 
+      JOIN offre o ON o.id_offre = cand.id_offre
+      JOIN candidats c ON c.candidats_id = cand.candidats_id
       {$joints} {$condition} GROUP BY cand.id_candidature";
   	return $query;
   }

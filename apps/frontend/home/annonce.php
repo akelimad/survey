@@ -70,11 +70,7 @@ while ($data = mysql_fetch_array($request)) {
 
         <?php
 
-      $request = mysql_query("select * from offre 
-
-inner join prm_fonctions on prm_fonctions.id_fonc = offre.id_fonc
-
-        where status = 'En cours' ORDER BY date_insertion DESC LIMIT 0 ,5");
+      $request = mysql_query("SELECT * from offre inner join prm_fonctions on prm_fonctions.id_fonc = offre.id_fonc where status = 'En cours' and DATE(date_expiration) >= CURDATE() ORDER BY date_insertion DESC LIMIT 0 ,5");
 
       
 
@@ -108,7 +104,7 @@ inner join prm_fonctions on prm_fonctions.id_fonc = offre.id_fonc
 
 <?php echo $retour['Name'].''; ?></a></b>
 
-<b><?php echo ' || '.date("d.m.Y",strtotime($retour['date_insertion'])); ?></b>
+<b><?php echo ' || '.date("d.m.Y",strtotime($retour['date_expiration'])); ?></b>
 
 </h2>
 

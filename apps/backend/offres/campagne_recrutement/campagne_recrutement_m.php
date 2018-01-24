@@ -106,13 +106,16 @@ $titre_compagne  =  $_POST['titre_compagne'];
 
 $sql= " UPDATE campagne_recrutement SET  titre_compagne='".safe($titre_compagne)."'  WHERE id_compagne='".safe($id)."' ";
 
-if(mysql_query($sql))
-
+if(mysql_query($sql)) {
 array_push($messagesDossier,"<span class='success'> entrée ajouté avec succes</span>");
 
-else
-
+redirect('backend/offres/campagne_recrutement/');
+  
+} else {
 array_push($messagesDossier,"<span class='erreur'> erreur lors de l'enregistrement</span>");
+  
+}
+
 
 
 
@@ -144,7 +147,7 @@ array_push($messagesDossier,"<span class='erreur'> erreur lors de l'enregistreme
 
                         
 
-                        <form   method="post" action="./">
+                        <form   method="post" action="">
 
                         <input type="hidden" name="id" value="<?php echo $id; ?>" >
 
@@ -302,8 +305,8 @@ if (isset($_SESSION['erreur']) and !empty($_SESSION['erreur'])) {
 
                                         
 
-                             echo '<script type="text/javascript">window.location="./";</script>';
-
+                             // echo '<script type="text/javascript">window.location="./";</script>';
+                                        redirect('backend/offres/campagne_recrutement/');
                              
 
                                 }
