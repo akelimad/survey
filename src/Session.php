@@ -28,8 +28,8 @@ class Session
 	public static function get($key, $default=null)
     {
         self::startSession();
-
-        return $_SESSION[$key] ?: $default;	
+        
+        return (isset($_SESSION[$key])) ? $_SESSION[$key] : $default;	
 	}
 
 

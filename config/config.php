@@ -8,6 +8,19 @@ define('SITE_BASE', dirname(__DIR__));
 // Include bootstrap
 include_once SITE_BASE .'/config/bootstrap.php';
 
+// Check if logged user has permission
+$uri = addslashes(str_replace(PHYSICAL_URI, '', $_SERVER['REQUEST_URI']));
+$statusUrls = \Modules\Candidatures\Models\Candidatures::getUserStatusUrls();
+$allowed = array_merge([
+	'backend/login/',
+	'backend/accueil/'
+], $statusUrls);
+
+if ( (isBackend() && !isAdmin() && !in_array($uri, $allowed)) ) {
+	redirect('backend/accueil/');
+}
+
+
 // Get root configuration
 $sql                 = "SELECT * from root_configuration";
 $select              = mysql_query($sql);

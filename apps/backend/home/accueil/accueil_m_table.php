@@ -1,7 +1,7 @@
 
 
 				  
-
+<?php if(isAdmin()) : ?>
 <article style="width:100%;">
 
 <div style=" float:left;width:100%;">
@@ -927,6 +927,6 @@ echo '</td></tr>';
 </div>
 
 </article>
-
+<?php endif; ?>
 
 

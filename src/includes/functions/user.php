@@ -1,5 +1,6 @@
 <?php
 
 function isAdmin() {
-	return (isset($_SESSION['id_type_role']) && in_array($_SESSION['id_type_role'], ['0', '1']));
+	$id_type_role = \App\Session::get('id_type_role');
+	return (!is_null($id_type_role) && in_array(intval($id_type_role), [0, 1]));
 }

@@ -63,6 +63,25 @@ class Candidatures {
 	}
 
 
+	public static function getUserStatusUrls()
+	{
+		if(!isLogged('admin')) return [];
 
+		$statusUrls = [];
+		$query = "SELECT s.id_prm_statut_c as id FROM prm_statut_candidature s";
+		if( !isAdmin() ) {
+			$query .= ' JOIN candidature c ON c.status = s.id_prm_statut_c';
+			$query .= ' JOIN offre o ON o.id_offre = c.id_offre';
+			$query .= ' JOIN role_candidature rc ON rc.id_candidature = c.id_candidature';
+			$query .= " WHERE o.status='En cours' AND rc.id_role=".$_SESSION['id_role'] ." GROUP BY s.id_prm_statut_c";
+		}
+		$status = getDB()->prepare($query);
+		if(!empty($status)) : foreach ($status as $key => $s) :
+			$statusUrls[] = 'backend/module/candidatures/candidature/list/'. $s->id;
+		endforeach; endif;
+
+		return $statusUrls;
+	}
+	
 
 }
