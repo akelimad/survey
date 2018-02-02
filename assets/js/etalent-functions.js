@@ -302,7 +302,12 @@ function getDate( element ) {
 
 
 function site_url(path='') {
-  return $('link[rel="website"]').attr('href') + path;
+  var url = $('link[rel="website"]').attr('href')
+  if(url == undefined) url = ''
+  if (url.substr(-1) !== '/') {
+    url = url + '/'
+  }
+  return url + path
 }
 
 
