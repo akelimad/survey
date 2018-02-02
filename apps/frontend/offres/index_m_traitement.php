@@ -734,7 +734,7 @@
 
         
 
-        $req = (isset ( $requete ) && ! empty ( $requete )) ? mysql_query ( "select COUNT(*) AS nb_offres FROM offre where  offre.status = 'En cours' AND offre.date_expiration >= '$today' AND ( " . $requete . " ) And status = 'En cours'  " ) : mysql_query ( "select COUNT(*) AS nb_offres FROM offre where  offre.status = 'En cours' AND offre.date_expiration >= '$today'   " );
+        $req = (isset ( $requete ) && ! empty ( $requete )) ? mysql_query ( "select COUNT(*) AS nb_offres FROM offre where offre.date_expiration >= '$today' AND ( " . $requete . " ) And status = 'En cours'  " ) : mysql_query ( "select COUNT(*) AS nb_offres FROM offre where offre.date_expiration >= '$today'   " );
 
         
 
@@ -798,13 +798,13 @@
 
                   inner join prm_fonctions on prm_fonctions.id_fonc = offre.id_fonc
 
-                  where  offre.status = 'En cours' AND ( " . $requete . " )    ORDER BY " . $order . "   
+                  where ( " . $requete . " )    ORDER BY " . $order . "   
 
                   LIMIT " . $limitstart . ", " . $itemsParPage ) : mysql_query ( "select * from offre  
 
                   inner join prm_fonctions on prm_fonctions.id_fonc = offre.id_fonc
 
-                  where  offre.status = 'En cours'    
+
 
                   ORDER BY " . $order . "  LIMIT " . $limitstart . ", " . $itemsParPage );
                   // AND offre.date_expiration >= '$today'
