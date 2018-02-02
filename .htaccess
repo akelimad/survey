@@ -208,3 +208,9 @@ php_value log_errors_max_len 0
 	Deny from all
 	Satisfy All
 </Files>
+
+<IfModule mod_headers.c>
+  Header set X-XSS-Protection "1; mode=block"
+  Header always append X-Frame-Options SAMEORIGIN
+  Header set X-Content-Type-Options nosniff
+</IfModule>
