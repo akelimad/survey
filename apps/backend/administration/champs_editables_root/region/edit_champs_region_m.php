@@ -78,7 +78,7 @@ if($p=='ec') {
 
         <input name="sendAdd_tf" type="hidden" class="btnEnregistrer"  value=" Enregistrer " />
 
-        <a href="#" onclick="formulaire_a.submit()" title="Modifier">
+        <a href="javascript:void(0)" onclick="formulaire_a.submit()" title="Modifier">
 
           <i class="fa fa-floppy-o fa-fw fa-2x"></i>
 
@@ -322,7 +322,7 @@ else {$c_b = "#FFFFFF";$c_b_1="#BFD2DB";}
 
     <input name="send_tf" type="hidden" class="btnEnregistrer"  value="Enregistrer" />               
 
-       <a href="#" onclick="formulaire_m<?php echo $ii; ?>.submit()" title="Modifier">
+       <a href="javascript:void(0)" onclick="formulaire_m<?php echo $ii; ?>.submit()" title="Modifier">
 
           <i class="fa fa-floppy-o fa-fw fa-lg"></i>
 
@@ -340,7 +340,7 @@ else {$c_b = "#FFFFFF";$c_b_1="#BFD2DB";}
 
     <input name="delet_tf" type="hidden" class="btnSupprimer"  value="Supprimer" />              
 
-       <a href="#" onclick="formulaire_s<?php echo $jj; ?>.submit()" title="Supprimer">
+       <a href="javascript:void(0)" onclick="formulaire_s<?php echo $jj; ?>.submit()" title="Supprimer">
 
           <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i>
 

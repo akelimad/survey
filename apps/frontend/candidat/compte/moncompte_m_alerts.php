@@ -198,7 +198,7 @@ $date_rep = str_replace($var, $replace, $alerte['date']);
 
 <div style="    float: left;    margin-right: 10px;">
 
-               <a href="#" onclick="editAlert(<?php echo $alerte['id_alert']; ?>,'<?php  $titre= str_replace("'","\'",$alerte['titre']); echo $titre;    ?>')"     title="Editer cette alerte" ><i class="fa fa-pencil fa-fw fa-lg"></i></a>
+               <a href="javascript:void(0)" onclick="editAlert(<?php echo $alerte['id_alert']; ?>,'<?php  $titre= str_replace("'","\'",$alerte['titre']); echo $titre;    ?>')"     title="Editer cette alerte" ><i class="fa fa-pencil fa-fw fa-lg"></i></a>
 
 </div>
 
@@ -212,7 +212,7 @@ $date_rep = str_replace($var, $replace, $alerte['date']);
 
                 <input name="id_alert" type="hidden" value="<?php echo $alerte['id_alert']; ?>" /> 
 
-                <a href="#" onclick="if(confirm('êtes vous sur de vouloir supprimer cette alerte?')) formu<?php echo $cc; ?>.submit();" title="Supprimer l'alerte" > <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i></a> 
+                <a href="javascript:void(0)" onclick="if(confirm('êtes vous sur de vouloir supprimer cette alerte?')) formu<?php echo $cc; ?>.submit();" title="Supprimer l'alerte" > <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i></a> 
 
               </form>
 
@@ -306,7 +306,7 @@ $date_rep = str_replace($var, $replace, $alerte['date']);
 
             <!--
 
-            <a href="#" onclick="createAlert(<?php     if(isset($_POST['requete'])) echo $_POST['requete']; else echo "'norequete'";        ?>);" >Créer une alerte e-mail</a>
+            <a href="javascript:void(0)" onclick="createAlert(<?php     if(isset($_POST['requete'])) echo $_POST['requete']; else echo "'norequete'";        ?>);" >Créer une alerte e-mail</a>
 
             -->
 

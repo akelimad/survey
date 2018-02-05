@@ -447,7 +447,7 @@ else{
 
 												<input type="hidden"  id="edit" name="edit"  value=""   title="Edit ce message" class="cu" />                             
 
-												<a href="#" onclick="formulaire<?php echo $jj; ?>.submit()" title="Modifier">
+												<a href="javascript:void(0)" onclick="formulaire<?php echo $jj; ?>.submit()" title="Modifier">
 
 												 <i class="fa fa-pencil-square-o fa-fw "></i>
 
@@ -463,7 +463,7 @@ else{
 
 										<?php if($reponse['login'] != $_SESSION['abb_admin']) {?>
 
-										<a href="#" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ce profil?'))location.href='?action=delete&id=<?php echo $reponse['id_role'] ?>'">
+										<a href="javascript:void(0)" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ce profil?'))location.href='?action=delete&id=<?php echo $reponse['id_role'] ?>'">
 
                                         <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i></a>
 

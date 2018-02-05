@@ -897,7 +897,7 @@ $m_dd=$m_df='';
 
 
 
-                                            <a href="#" onclick="formulaire_m<?php echo $ii; ?>.submit()">
+                                            <a href="javascript:void(0)" onclick="formulaire_m<?php echo $ii; ?>.submit()">
 
                                             <i class="fa fa-pencil-square-o fa-fw fa-lg"></i>
 
@@ -913,7 +913,7 @@ $m_dd=$m_df='';
 
 										<div style=" float: left; padding-left: 5px; "><?php if ($count >1){?>
 
-											<a href="#" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ce profil?'))location.href='./?action=delete&id=<?php echo $reponse['id_formation'] ?>'">
+											<a href="javascript:void(0)" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ce profil?'))location.href='./?action=delete&id=<?php echo $reponse['id_formation'] ?>'">
 
 											
 

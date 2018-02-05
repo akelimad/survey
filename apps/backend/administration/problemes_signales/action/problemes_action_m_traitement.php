@@ -74,7 +74,7 @@ $return0 = mysql_fetch_array($req0);
 
         <p><b><?php echo couperChaine(strip_tags($return0['message']), 10, 10); ?></b>
 
-            <a class="info1" href="#" onclick="return false">
+            <a class="info1" href="javascript:void(0)" onclick="return false">
 
                 <i class="fa fa-external-link"></i>
 

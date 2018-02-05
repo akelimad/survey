@@ -192,7 +192,7 @@ else{
 
                        <input type="hidden" name="id_view" value="<?php echo $reponse['id'] ?>" />                  
 
-                       <a href="#" onclick="formulaire<?php echo $jj; ?>.submit()" title="Ajouter" >
+                       <a href="javascript:void(0)" onclick="formulaire<?php echo $jj; ?>.submit()" title="Ajouter" >
 
                        <input type="hidden"  id="view" name="ok"  value=""   title="Voir ce message" class="cu" />
 
@@ -206,7 +206,7 @@ else{
 
             
 
-                <a href="#" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer cette message?'))location.href='?action=delete&id=<?php echo $reponse['id'] ?>'">
+                <a href="javascript:void(0)" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer cette message?'))location.href='?action=delete&id=<?php echo $reponse['id'] ?>'">
 
                  <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i> 
 

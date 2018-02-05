@@ -320,7 +320,7 @@ echo '<li> Par pays de résidence : <b>'.$saa9.'</b></li> ';
 
 <td>
 
-  <a href="#" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ?'))location.href='./?action=delete&id=<?php echo $reponse['id_hit_cvtheq'] ?>'">
+  <a href="javascript:void(0)" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ?'))location.href='./?action=delete&id=<?php echo $reponse['id_hit_cvtheq'] ?>'">
 
  <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i>
 

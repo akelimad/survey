@@ -450,7 +450,7 @@ echo $rcc['FR'].' <b> | </b>'.$row01[1]; ?> <br /><br />
 
                                 ?>
 
-                                <a class="info1" href="#" onclick="return false">
+                                <a class="info1" href="javascript:void(0)" onclick="return false">
 
                                    <i class="fa fa-external-link"></i>
 
@@ -480,7 +480,7 @@ echo $rcc['FR'].' <b> | </b>'.$row01[1]; ?> <br /><br />
 
                                 ?>
 
-                                <a class="info1" href="#" onclick="return false">
+                                <a class="info1" href="javascript:void(0)" onclick="return false">
 
                                      <i class="fa fa-external-link"></i>
 

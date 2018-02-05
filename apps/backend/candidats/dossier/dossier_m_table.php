@@ -168,7 +168,7 @@ else
 
 </a>
 
-<a href="#" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ce dossier?'))location.href='?action=delete&id=<?php echo $reponse['id_dossier'] ?>'">
+<a href="javascript:void(0)" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ce dossier?'))location.href='?action=delete&id=<?php echo $reponse['id_dossier'] ?>'">
 
 <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i>
 

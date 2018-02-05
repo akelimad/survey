@@ -234,7 +234,7 @@ Complété à <b><?php echo $prog; ?>%</b>
 
 
 
-<?php /*<a class="info1" href="#" onclick="return false"><i class="fa fa-external-link"></i>
+<?php /*<a class="info1" href="javascript:void(0)" onclick="return false"><i class="fa fa-external-link"></i>
 
 <span style="width:450px;padding: 5px 5px 0 5px;word-wrap: break-word;left: 0px;  "><p>
 

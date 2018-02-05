@@ -76,7 +76,7 @@
 
 
 
-                <?php echo '<a href="#" onclick="if(confirm(\'Etes-vous sûr de vouloir supprimer cette candidature?\')) formidspontanee.submit();">
+                <?php echo '<a href="javascript:void(0)" onclick="if(confirm(\'Etes-vous sûr de vouloir supprimer cette candidature?\')) formidspontanee.submit();">
 
                 <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i></a>'; ?>
 

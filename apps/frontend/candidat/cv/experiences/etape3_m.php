@@ -825,7 +825,7 @@ $m_dd=$m_df='';
 
 											<input type="hidden"  id="edit" name="ok"  value=""   title="Edit ce message" class="cu" /> 
 
-                                            <a href="#" onclick="formulaire_m<?php echo $ii; ?>.submit()">
+                                            <a href="javascript:void(0)" onclick="formulaire_m<?php echo $ii; ?>.submit()">
 
                                             <i class="fa fa-pencil-square-o fa-fw fa-lg"></i>
 
@@ -841,7 +841,7 @@ $m_dd=$m_df='';
 
 										<div style=" float: left; padding-left: 5px; ">
 
-											<a href="#" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ce profil?'))location.href='./?action=delete&id=<?php echo $reponse['id_exp'] ?>'">
+											<a href="javascript:void(0)" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ce profil?'))location.href='./?action=delete&id=<?php echo $reponse['id_exp'] ?>'">
 
 											 <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i>
 

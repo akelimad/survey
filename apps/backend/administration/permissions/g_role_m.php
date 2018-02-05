@@ -174,7 +174,7 @@ select{width:206px;}
 
       <div align="center"><input type="hidden" name="Sauvegarder" id="Sauvegarder" title="Enregistrer" value="" class="imgClass" />
 
-       <a href="#" onclick="formulaire<?php echo $jj; ?>.submit()" title="Enregistrer" >
+       <a href="javascript:void(0)" onclick="formulaire<?php echo $jj; ?>.submit()" title="Enregistrer" >
 
        <i class="fa fa-floppy-o fa-fw fa-2x"></i> </a>
 
@@ -470,7 +470,7 @@ echo "ERROR";
 
       <div align="center"><input type="hidden" name="Sauvegarder_candidature" id="Sauvegarder_candidature" title="Enregistrer" value="" class="imgClass" />
 
-       <a href="#" onclick="formulaire<?php echo $jj; ?>.submit()" title="Enregistrer" >
+       <a href="javascript:void(0)" onclick="formulaire<?php echo $jj; ?>.submit()" title="Enregistrer" >
 
        <i class="fa fa-floppy-o fa-fw fa-2x"></i> </a>
 
@@ -746,7 +746,7 @@ $result=mysql_query($sql);
 
           <input name="sendAdd_trole" type="hidden" class="btnEnregistrer"  style="width: 90px;" value=" Ajouter " />
 
-        <a href="#" onclick="formulaire<?php echo $jj; ?>.submit()" title="Ajouter" >
+        <a href="javascript:void(0)" onclick="formulaire<?php echo $jj; ?>.submit()" title="Ajouter" >
 
        <i class="fa fa-floppy-o fa-fw fa-2x"></i> </a>
 
@@ -946,7 +946,7 @@ if((isset($_POST['send_trole']) && $_POST['send_trole']!='') or ( isset($_POST['
 
 
 
- <a href="#" onclick="formulaire<?php echo $jj; ?>.submit()" title="Enregistrer" >
+ <a href="javascript:void(0)" onclick="formulaire<?php echo $jj; ?>.submit()" title="Enregistrer" >
 
        <i class="fa fa-floppy-o fa-fw fa-lg"></i> </a>
 
@@ -964,7 +964,7 @@ if((isset($_POST['send_trole']) && $_POST['send_trole']!='') or ( isset($_POST['
 
    <input name="delet_trole" type="Hidden" class="btnSupprimer"  title="Supprimer"  value="Supprimer" /> 
 
-<a href="#" onclick="formulaire<?php echo $jj; ?>.submit()" title="Supprimer" >
+<a href="javascript:void(0)" onclick="formulaire<?php echo $jj; ?>.submit()" title="Supprimer" >
 
        <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i> </a>
 

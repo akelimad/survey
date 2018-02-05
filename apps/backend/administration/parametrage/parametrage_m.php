@@ -176,7 +176,7 @@ $update = mysql_query("update root_parametrage  set ref_r_prm='".safe($ref_r_prm
 
 							<input name="send_r_prm" type="hidden" class="btnEnregistrer"  value="Enregistrer" />               
 
-								 <a href="#" onclick="formulaire_m<?php echo $ii; ?>.submit()" title="Modifier">
+								 <a href="javascript:void(0)" onclick="formulaire_m<?php echo $ii; ?>.submit()" title="Modifier">
 
 									  <i class="fa fa-floppy-o fa-fw fa-lg"></i>
 

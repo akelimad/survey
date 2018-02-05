@@ -34,7 +34,7 @@
 
             <th width="10%" >Nom</th>
 
-            <th  width="60%" ><center><b> Détails </b></h2></center></th>
+            <th  width="60%" ><center><b> Dï¿½tails </b></h2></center></th>
 
             <th width="20%"  ><center><b> Date </b></center></th>
 
@@ -112,7 +112,7 @@ $sa1 = mysql_fetch_array($select_1);
 
 $saa1 = $sa1['FR'];
 
-echo ' Par secteur d’activité : <b>'.$saa1.'</b>';
+echo ' Par secteur dï¿½activitï¿½ : <b>'.$saa1.'</b>';
 
 }
 
@@ -142,7 +142,7 @@ $sa1 = mysql_fetch_array($select_1);
 
 $saa1 = $sa1['FR'];
 
-echo '<li> Par secteur d’activité : <b>'.$saa1.'</b></li>';
+echo '<li> Par secteur dï¿½activitï¿½ : <b>'.$saa1.'</b></li>';
 
 }
 
@@ -154,7 +154,7 @@ $sa2 = mysql_fetch_array($select_2);
 
 $saa2 = $sa2['intitule'];
 
-echo '<li> Par années d expérience : <b>'.$saa2.'</b></li>';
+echo '<li> Par annï¿½es d expï¿½rience : <b>'.$saa2.'</b></li>';
 
 }
 
@@ -166,7 +166,7 @@ $sa3 = mysql_fetch_array($select_3);
 
 $saa3 = $sa3['salaire'];
 
-echo '<li> Par salaire souhaité en DH : <b>'.$saa3.'</b></li>';
+echo '<li> Par salaire souhaitï¿½ en DH : <b>'.$saa3.'</b></li>';
 
 }
 
@@ -178,7 +178,7 @@ $sa4 = mysql_fetch_array($select_4);
 
 $saa4 = $sa4['formation'];
 
-echo '<li> Par niveau d étude : <b>'.$saa4.'</b></li>';
+echo '<li> Par niveau d ï¿½tude : <b>'.$saa4.'</b></li>';
 
 }
 
@@ -218,7 +218,7 @@ $sa5 = mysql_fetch_array($select_5);
 
 $saa5 = $sa5['nom_ecole'];
 
-echo '<li> Par école ou établissement : <b>'.$saa5.'</b></li>';
+echo '<li> Par ï¿½cole ou ï¿½tablissement : <b>'.$saa5.'</b></li>';
 
 }
 
@@ -230,7 +230,7 @@ $sa6 = mysql_fetch_array($select_6);
 
 $saa6 = $sa6['intitule'];
 
-echo '<li> Par disponibilité : <b>'.$saa6.'</b></li> ';
+echo '<li> Par disponibilitï¿½ : <b>'.$saa6.'</b></li> ';
 
 }
 
@@ -266,7 +266,7 @@ $sa9 = mysql_fetch_array($select_9);
 
 $saa9 = $sa9['pays'];
 
-echo '<li> Par pays de résidence : <b>'.$saa9.'</b></li> ';
+echo '<li> Par pays de rï¿½sidence : <b>'.$saa9.'</b></li> ';
 
 }
 
@@ -288,7 +288,7 @@ echo '<li> Par pays de résidence : <b>'.$saa9.'</b></li> ';
 
 <td>
 
-  <a href="#" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ce profil?'))location.href='rechercher_can.php?action=delete&id=<?php echo $reponse['id_hit_cvtheq'] ?>'">
+  <a href="javascript:void(0)" onclick="if(confirm('ï¿½tes-vous sï¿½re de vouloir supprimer ce profil?'))location.href='rechercher_can.php?action=delete&id=<?php echo $reponse['id_hit_cvtheq'] ?>'">
 
 <img src="<?php echo $imgurl ?>/icons/delete.png" title="Supprimer ce message"/>
 
@@ -324,11 +324,11 @@ echo '<li> Par pays de résidence : <b>'.$saa9.'</b></li> ';
 
 <div>
 
-<img  style="float: right" class="selectallarrow" src="<?php echo $imgurl ?>/arrow_ltr_b.png" width="38" height="22" alt="Pour la sélection :"></div>
+<img  style="float: right" class="selectallarrow" src="<?php echo $imgurl ?>/arrow_ltr_b.png" width="38" height="22" alt="Pour la sï¿½lection :"></div>
 
-<div style="float: right" > Pour la sélection : 
+<div style="float: right" > Pour la sï¿½lection : 
 
-     <input   name="email_tt" class="espace_candidat" type="submit" value="Supprimer"    alt="à supprimer" />
+     <input   name="email_tt" class="espace_candidat" type="submit" value="Supprimer"    alt="ï¿½ supprimer" />
 
      <input name="id" type="hidden" value="<?php echo $reponse['id']; ?>" /> 
 
@@ -378,7 +378,7 @@ echo '<li> Par pays de résidence : <b>'.$saa9.'</b></li> ';
 
 $(document).ready(function() { 
 
-        $("#dossier").tablesorter({headers: { 0: {sorter:'text'} ,1: { sorter: false}, 2: {sorter:false}}, widthFixed: true, widgets: ['zebra']});
+        $("#dossier").tablesorter({headers: { 0: {sorter:'text'} ,1: { sorter: false},ï¿½2: {sorter:false}}, widthFixed: true, widgets: ['zebra']});
 
   
 

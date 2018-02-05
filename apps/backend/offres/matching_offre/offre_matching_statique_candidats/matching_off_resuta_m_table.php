@@ -552,7 +552,7 @@ echo time_ago($datemaj);
 
 <input type="hidden"  id="edit" name="ok"  value=""   title="Edit ce message" class="cu" /> 
 
-<a href="#" onclick="formulaire<?php echo $jj; ?>.submit()" title="Affecter à l'offre" name="edit">
+<a href="javascript:void(0)" onclick="formulaire<?php echo $jj; ?>.submit()" title="Affecter à l'offre" name="edit">
 
 <i class="fa fa-pencil-square-o fa-fw fa-lg"></i></a>&nbsp;
 

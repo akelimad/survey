@@ -38,7 +38,7 @@
 
 <!-- CHANGE TEXT LINK -->
 
-<a href="#" onclick="
+<a href="javascript:void(0)" onclick="
 
     document.getElementById('captcha').src='<?php echo $jsurl; ?>/captcha/captcha.php?'+Math.random();
 

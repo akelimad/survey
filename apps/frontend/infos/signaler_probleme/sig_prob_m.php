@@ -101,7 +101,7 @@
     
     <img src="<?php echo $jsurl; ?>/captcha/captcha.php" id="captcha"><br/>
 		<!-- CHANGE TEXT LINK -->
-		<a href="#" onclick="
+		<a href="javascript:void(0)" onclick="
 			document.getElementById('captcha').src='<?php echo $jsurl; ?>/captcha/captcha.php?'+Math.random();
 			document.getElementById('captcha-form').focus();"
 			id="change-image">Illisible? Changer le texte.</a><br/><br/>

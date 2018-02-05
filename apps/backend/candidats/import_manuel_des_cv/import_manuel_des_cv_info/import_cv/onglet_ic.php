@@ -98,7 +98,7 @@
 
 										<! -- CHANGE TEXT LINK -- >
 
-										<a href="#" onclick="
+										<a href="javascript:void(0)" onclick="
 
 											document.getElementById('captcha').src='<?php echo $urlcandidat; ?>/captcha/captcha.php?'+Math.random();
 

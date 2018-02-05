@@ -304,7 +304,7 @@ $delet = mysql_query("DELETE from prm_pertinence where id_prm_p='$id'");
 
         <input name="send_trole" type="hidden" class="btnEnregistrer"  value="Enregistrer" />               
 
-             <a href="#" onclick="formulaire_m<?php echo $ii; ?>.submit()" title="Modifier">
+             <a href="javascript:void(0)" onclick="formulaire_m<?php echo $ii; ?>.submit()" title="Modifier">
 
                   <i class="fa fa-floppy-o fa-fw fa-lg"></i>
 
@@ -322,7 +322,7 @@ $delet = mysql_query("DELETE from prm_pertinence where id_prm_p='$id'");
 
         <input name="delet_trole" type="hidden" class="btnSupprimer"  value="Supprimer" />              
 
-             <a href="#" onclick="formulaire_s<?php echo $jj; ?>.submit()" title="Modifier">
+             <a href="javascript:void(0)" onclick="formulaire_s<?php echo $jj; ?>.submit()" title="Modifier">
 
                   <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i>
 
@@ -346,7 +346,7 @@ $delet = mysql_query("DELETE from prm_pertinence where id_prm_p='$id'");
 
         <input type="hidden" name="p_trole"  value="pertinences" />              
 
-             <a href="#" onclick="formulaire_s<?php echo $jj; ?>.submit()" title="Modifier pertinences des candidats">
+             <a href="javascript:void(0)" onclick="formulaire_s<?php echo $jj; ?>.submit()" title="Modifier pertinences des candidats">
 
                   <i class="fa fa-tasks fa-fw fa-lg"  ></i>
 

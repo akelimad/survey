@@ -660,7 +660,7 @@ echo $row01[1]; ?> <br /><br />
 
            }else{
 
-           echo '<a class="info1" href="#" onclick="return false">' .$stat.'
+           echo '<a class="info1" href="javascript:void(0)" onclick="return false">' .$stat.'
 
            <i class="fa fa-external-link"></i>
 
@@ -696,7 +696,7 @@ echo $row01[1]; ?> <br /><br />
 
                                 ?>
 
-                                <a class="info1" href="#" onclick="return false">
+                                <a class="info1" href="javascript:void(0)" onclick="return false">
 
                                      <i class="fa fa-external-link"></i>
 

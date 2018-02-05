@@ -460,7 +460,7 @@ $objet_desc = $secteur['objet'];
 
         <input name="send_trole" type="hidden" class="btnEnregistrer"  value="Enregistrer" />               
 
-             <a href="#" onclick="formulaire_m<?php echo $ii; ?>.submit()" title="Modifier">
+             <a href="javascript:void(0)" onclick="formulaire_m<?php echo $ii; ?>.submit()" title="Modifier">
 
                   <i class="fa fa-floppy-o fa-fw fa-lg"></i>
 
@@ -478,7 +478,7 @@ $objet_desc = $secteur['objet'];
 
         <input name="delet_trole" type="hidden" class="btnSupprimer"  value="Supprimer" />              
 
-             <a href="#" onclick="formulaire_s<?php echo $jj; ?>.submit()" title="Modifier">
+             <a href="javascript:void(0)" onclick="formulaire_s<?php echo $jj; ?>.submit()" title="Modifier">
 
                   <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i>
 

@@ -36,7 +36,7 @@ if($p=='ec') {
 	</td>
     <td scope="col" width="8%" style="border:1px solid #FFFFFF;">
         <input name="sendAdd_ex" type="hidden" class="btnEnregistrer" value="Enregistrer" />
-        <a href="#" onclick="formulaire_a.submit()" title="Modifier">
+        <a href="javascript:void(0)" onclick="formulaire_a.submit()" title="Modifier">
           <i class="fa fa-floppy-o fa-fw fa-2x"></i>
        </a> 
     </td>
@@ -117,7 +117,7 @@ $delet = mysql_query("delete from prm_experience where id_expe='$id'");
     <td style="border:1px solid #FFFFFF;">
     <input type="hidden" name="id" value="<?php echo $reponse['id_expe']; ?>" >
     <input name="send_ex" type="hidden" class="btnEnregistrer"  value="Enregistrer" />               
-       <a href="#" onclick="formulaire_m<?php echo $ii; ?>.submit()" title="Modifier">
+       <a href="javascript:void(0)" onclick="formulaire_m<?php echo $ii; ?>.submit()" title="Modifier">
           <i class="fa fa-floppy-o fa-fw fa-lg"></i>
        </a> 
   </td>
@@ -126,7 +126,7 @@ $delet = mysql_query("delete from prm_experience where id_expe='$id'");
     <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post" name="formulaire_s<?php echo ++$jj; ?>">
     <input type="hidden" name="id" value="<?php echo $reponse['id_expe']; ?>" > 
     <input name="delet_ex" type="hidden" class="btnSupprimer"  value="Supprimer" />              
-       <a href="#" onclick="formulaire_s<?php echo $jj; ?>.submit()" title="Modifier">
+       <a href="javascript:void(0)" onclick="formulaire_s<?php echo $jj; ?>.submit()" title="Modifier">
           <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i>
        </a> 
     </form> 

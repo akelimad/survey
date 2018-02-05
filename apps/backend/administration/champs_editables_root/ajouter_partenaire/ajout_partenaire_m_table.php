@@ -360,7 +360,7 @@ $select = mysql_query($sql);
 
 										</a>
 
-										<a href="#" onclick="if(confirm('?es-vous s?re de vouloir supprimer ce profil?'))location.href='?action=delete&id=<?php echo $reponse['id_parte'] ?>'">
+										<a href="javascript:void(0)" onclick="if(confirm('?es-vous s?re de vouloir supprimer ce profil?'))location.href='?action=delete&id=<?php echo $reponse['id_parte'] ?>'">
 
 										<i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i>
 

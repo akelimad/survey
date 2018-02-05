@@ -212,7 +212,7 @@ if(strlen($motiv)<strlen($resultat['message']))
 
 ?>
 
-<a class="info1" href="#" onclick="return false">
+<a class="info1" href="javascript:void(0)" onclick="return false">
 
         <img src="<?php echo $imgurl ?>/info.png" 
 

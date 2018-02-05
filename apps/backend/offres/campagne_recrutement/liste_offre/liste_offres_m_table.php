@@ -118,7 +118,7 @@
 
                 <input name="action" type="hidden" value="<?php echo $action;?>" />
 
-                <a href="#" onclick="formulaire<?php echo $jj; ?>.submit()" title="Modifier"> 
+                <a href="javascript:void(0)" onclick="formulaire<?php echo $jj; ?>.submit()" title="Modifier"> 
 
                  <i class="fa fa-pencil-square-o fa-fw fa-lg"></i></a>&nbsp;
 
@@ -138,7 +138,7 @@
 
                 <input name="action" type="hidden" value="<?php echo $action;?>" />
 
-                <a href="#" onclick="if(confirm('Êtes-vous sûre de vouloir Supprimer cette offre?')) formulaire<?php echo $jj; ?>.submit()" title="Supprimer"> 
+                <a href="javascript:void(0)" onclick="if(confirm('Êtes-vous sûre de vouloir Supprimer cette offre?')) formulaire<?php echo $jj; ?>.submit()" title="Supprimer"> 
 
                 <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i></a>&nbsp;
 
@@ -166,7 +166,7 @@
 
                 <input name="action_offre" type="hidden" value="archive" />
 
-                <a href="#" onclick="if(confirm('Êtes-vous sûre de vouloir Archivée  cette offre?')) formulaire<?php echo $jj; ?>.submit()" title="ARCHIVER"> 
+                <a href="javascript:void(0)" onclick="if(confirm('Êtes-vous sûre de vouloir Archivée  cette offre?')) formulaire<?php echo $jj; ?>.submit()" title="ARCHIVER"> 
 
                 <i class="fa fa-unlock fa-fw fa-lg" style="color:#419900;"></i></a>
 
@@ -182,7 +182,7 @@
 
                 <input name="action_offre" type="hidden" value="desarchive" />
 
-                <a href="#" onclick="if(confirm('Êtes-vous sûre de vouloir publier cette offre?')) formulaire<?php echo $jj; ?>.submit()" title="PUBLIER">
+                <a href="javascript:void(0)" onclick="if(confirm('Êtes-vous sûre de vouloir publier cette offre?')) formulaire<?php echo $jj; ?>.submit()" title="PUBLIER">
 
                  <i class="fa fa-lock fa-fw fa-lg" style="color:#DB1212;"></i></a>
 

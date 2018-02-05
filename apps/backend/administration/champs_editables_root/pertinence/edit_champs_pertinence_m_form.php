@@ -250,7 +250,7 @@
 
         <input name="sendAdd_trole" type="hidden" class="btnEnregistrer"  />             
 
-             <a href="#" onclick="formulaire_a.submit()" title="Ajouter">
+             <a href="javascript:void(0)" onclick="formulaire_a.submit()" title="Ajouter">
 
                   <i class="fa fa-floppy-o fa-fw fa-2x"></i> Ajouter
 

@@ -278,7 +278,7 @@ else{
 
                                         <input type="hidden"  id="edit" name="ok"  value=""   title="Edit ce message" class="cu" /> 
 
-                                        <a href="#" onclick="formulaire<?php echo $jj; ?>.submit()" title="Modifier" name="edit">
+                                        <a href="javascript:void(0)" onclick="formulaire<?php echo $jj; ?>.submit()" title="Modifier" name="edit">
 
                                             <i class="fa fa-pencil-square-o fa-fw fa-lg"></i></a>&nbsp;
 
@@ -290,7 +290,7 @@ else{
 
                                         
 
-                                        <div style=" float: left; padding-left: 5px; "><a href="#" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ce message?'))location.href='?action=delete&id=<?php echo $reponse['id_email'] ?>'">
+                                        <div style=" float: left; padding-left: 5px; "><a href="javascript:void(0)" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ce message?'))location.href='?action=delete&id=<?php echo $reponse['id_email'] ?>'">
 
                                         <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i>
 
