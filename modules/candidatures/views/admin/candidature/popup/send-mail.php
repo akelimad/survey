@@ -173,7 +173,7 @@
 			if( data.index < data.count ) {
 				return sendEmailLoop(data)
 			} else {
-				$('#progress-wrap').empty().html('<div class="eta-alerts alert alert-info alert-white rounded"><div class="icon"><i class="fa fa-check"></i></div><ul><li>L\'envoi d\'emails est terminé.</li></ul></div>')
+				$('#progress-wrap').empty().html('<div class="chm-alerts alert alert-info alert-white rounded"><div class="icon"><i class="fa fa-check"></i></div><ul><li>L\'envoi d\'emails est terminé.</li></ul></div>')
 			}
 		});
 	}

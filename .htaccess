@@ -1,9 +1,8 @@
 # Tu indique que Apache doit suivre les liens symbolique #
 Options +FollowSymlinks
+Options All -Indexes
 
 RewriteEngine on
-
-Options All -Indexes
 
 RewriteRule ^(/*)$ ./apps/frontend/home/$1 [L,QSA]
 RewriteRule ^()$ ./apps/frontend/home/$1 [L,QSA]
@@ -77,36 +76,11 @@ RewriteRule ^backend(.*)$ ./apps/backend/home/$1 [L,QSA]
 RewriteRule ^accueil.php$ ./apps/backend/home/accueil.php [L,QSA] 
 
 
-## contrôle les erreurs des pages dans le navigateur -debut-
-
-ErrorDocument 400 ./apps/frontend/home/erreur/
-ErrorDocument 401 ./apps/frontend/home/erreur/
-ErrorDocument 402 ./apps/frontend/home/erreur/
-ErrorDocument 403 ./apps/frontend/home/erreur/
-ErrorDocument 404 ./apps/frontend/home/erreur/
-ErrorDocument 405 ./apps/frontend/home/erreur/
-ErrorDocument 406 ./apps/frontend/home/erreur/
-ErrorDocument 407 ./apps/frontend/home/erreur/
-ErrorDocument 408 ./apps/frontend/home/erreur/
-ErrorDocument 409 ./apps/frontend/home/erreur/
-ErrorDocument 410 ./apps/frontend/home/erreur/
-ErrorDocument 411 ./apps/frontend/home/erreur/
-ErrorDocument 412 ./apps/frontend/home/erreur/
-ErrorDocument 413 ./apps/frontend/home/erreur/
-ErrorDocument 414 ./apps/frontend/home/erreur/
-ErrorDocument 500 ./apps/frontend/home/erreur/
-ErrorDocument 501 ./apps/frontend/home/erreur/
-ErrorDocument 502 ./apps/frontend/home/erreur/
-ErrorDocument 503 ./apps/frontend/home/erreur/
-ErrorDocument 504 ./apps/frontend/home/erreur/
-ErrorDocument 505 ./apps/frontend/home/erreur/
-
-
-RewriteRule ^erreur/(.*)$ ./apps/frontend/home/erreur/$1 [L,QSA] 
-
-## contrôle les erreurs des pages dans le navigateur -fin-
- 
-
+## controle les erreurs des pages dans le navigateur -debut-
+ErrorDocument 403 /apps/frontend/home/erreur/403.php
+ErrorDocument 404 /apps/frontend/home/erreur/404.php
+ErrorDocument 500 /apps/frontend/home/erreur/500.php
+ErrorDocument 503 /apps/frontend/home/erreur/503.php
 
  
 <IfModule mod_deflate.c>
@@ -114,7 +88,7 @@ RewriteRule ^erreur/(.*)$ ./apps/frontend/home/erreur/$1 [L,QSA]
     SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip
 </IfModule>
   
-## contrôle du cache navigateur - Expire headers
+## contrï¿½le du cache navigateur - Expire headers
 <IfModule mod_expires.c>
 	ExpiresActive On
 	ExpiresDefault "access plus 7200 seconds"

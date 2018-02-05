@@ -8,17 +8,20 @@ define('SITE_BASE', dirname(__DIR__));
 // Include bootstrap
 include_once SITE_BASE .'/config/bootstrap.php';
 
-// Check if logged user has permission
-$uri = addslashes(str_replace(PHYSICAL_URI, '', $_SERVER['REQUEST_URI']));
+// Get current route
+$route = str_replace(PHYSICAL_URI, '', $_SERVER['REQUEST_URI']);
+$route = (PHYSICAL_URI != '/') ? $route : $_SERVER['REQUEST_URI'];
+$route = trim($route, '/');
+
+// Get allowed routes
 $statusUrls = \Modules\Candidatures\Models\Candidatures::getUserStatusUrls();
 $allowed = array_merge([
-	'backend/login/',
-	'backend/accueil/'
+	'backend/login',
+	'backend/accueil'
 ], $statusUrls);
 
-if ( (isBackend() && !isAdmin() && !in_array($uri, $allowed)) ) {
-	redirect('backend/accueil/');
-}
+// Redirect to backend homepage
+if ( (isBackend() && !isAdmin() && !in_array($route, $allowed)) ) redirect('backend/accueil/');
 
 
 // Get root configuration

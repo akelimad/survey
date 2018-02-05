@@ -111,7 +111,6 @@ jQuery(document).ready(function($){
 			try {
 				var data = $.parseJSON(response);
 				if( $.type(data) == 'object' ) {
-					iziToast.destroy();
 					if( typeof data.status != undefined ) {
 						if( data.status == 'success' ) {
 							$parentRow.find('strong.title').text($input.val()).show()
@@ -147,7 +146,6 @@ jQuery(document).ready(function($){
 			try {
 				var data = $.parseJSON(response);
 				if( $.type(data) == 'object' ) {
-					iziToast.destroy();
 					if( typeof data.status != undefined ) {
 						if( data.status == 'success' ) {
 							$(params.target).closest('tr').addClass('deletedRow')

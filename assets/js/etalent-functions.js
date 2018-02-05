@@ -1,74 +1,10 @@
 /**
- * Check if array contain a value
- *
- * @Mhamed chanchaf
- */
-function RegExpArr($arr, $value) {
-  return new RegExp('/(' + $arr.join('|') + ')/').test($value);
-}
-
-
-
-/**
- * Add active class to current menu link
- *
- * @Mhamed chanchaf
- */
-function set_active_menu() {
-  var current_url = location.href;
-  var current_link = $('#navigation ul li ul a[href="'+current_url+'"]')
-
-  // Accueil link
-  if( current_url == site_url() ) {
-      $('#navigation ul li:first').addClass('active')
-  } else if( RegExpArr(['compte', 'candidat', 'forums', 'raisons', 'conseils'], current_url) ) {
-    // Candidat menu
-    var parent_link = $('#navigation>ul>li.candidat')
-        parent_link.addClass('active')
-  } else if( RegExpArr(['offres', 'entreprise'], current_url) ) {
-    // Offres menu
-    var parent_link = $('#navigation>ul>li.offres')
-        parent_link.addClass('active')
-  } else if( RegExpArr(['services', 'pourquoi-annoncer', 'pourquoi-participer', 'inscription'], current_url) ) {
-    // Offres menu
-    var parent_link = $('#navigation>ul>li.employeur')
-        parent_link.addClass('active')
-  }
-
-  // Set current sub menu link
-  if( current_link.length > 0 ) {
-      current_link.closest('li').closest('ul').closest('li').addClass('active')
-      current_link.closest('li').addClass('active')
-  }
-}
-
-
-
-
-/**
  * ERROR MESSAGE
  *
  * @param string message
  */
 function error_message(message, params={}){
-  if( message == '' ) return;
-  if( !detectIE() ) {
-    // default params
-    var default_params = {
-      icon: 'fa fa-exclamation-triangle',
-      title: '',
-      message: message,
-      position: 'topCenter',
-      progressBar: false,
-    }
-
-    //merging two objects into new object
-    var args = $.extend({}, default_params, params);
-
-    iziToast.error(args);
-  } else {
-    alert(message)
-  }
+  window.chmAlert.danger(message)
 }
 
 
@@ -82,25 +18,7 @@ function ajax_error_message() {
  * @param string message
  */
 function success_message(message, params={}){
-  if( message == '' ) return;
-  if( !detectIE() ) {
-    // default params
-    var default_params = {
-      icon: 'fa fa-exclamation-triangle',
-      title: '',
-      message: message,
-      position: 'topRight',
-      progressBar: false,
-    }
-
-    //merging two objects into new object
-    var args = $.extend({}, default_params, params);
-
-    iziToast.success(args);
-
-  } else {
-    alert(message)
-  }
+  window.chmAlert.success(message)
 }
 
 /**
@@ -108,61 +26,9 @@ function success_message(message, params={}){
  *
  * @author Mhamed Chanchaf
  */
-function confirmMessage(event, callable=null, args={}, message=null) {
-  var $target = event.target;
-  if( $($target).is('i') ) $target = $($target).closest('a')
-
-  if( !$($target).hasClass('confirm') ) {
-    event.preventDefault();
-
-    args.target = $target;
-
-      // Add class confirm
-    $($target).addClass('confirm')
-
-    if( message == null ) message = 'Êtes-vous sûr ?';
-
-    iziToast.error({
-      icon: 'fa fa-exclamation-triangle',
-      class: 'confirm',
-      message: message,
-      position: 'center',
-      close: false,
-      progressBar: false,
-      timeout: false,
-      buttons: [
-          ['<button>OUI</button>', function (instance, toast) {
-
-            if( callable == null ) {
-
-              if( $($target).is('a') ) {
-                location.href = $($target).attr('href')
-              } else if( $($target).is('input[type="submit"]') ) {
-                $($target).closest('form').submit()
-              }
-            } else {
-              window[callable](args);
-              $($target).removeClass('confirm')
-              instance.hide({
-                transitionOut: 'fadeOutUp',
-              }, toast, 'close', 'btn_oui');
-            }
-
-          }],
-          ['<button>NON</button>', function (instance, toast) {
-            $($target).removeClass('confirm')
-
-              instance.hide({
-                  transitionOut: 'fadeOutUp',
-              }, toast, 'close', 'btn_non');
-          }]
-      ]
-    });
-  }
-
-  
+function confirmMessage(event, callable = null, args = {}, message ='Êtes-vous sûr de vouloir effectuer cette action?') {
+  window.chmModal.confirm(event.target, title = '', message, callable, args, {width: 325, closeAfterConfirm: true})
 }
-
 
 /**
  * Tell if number is lower than giving length  
@@ -302,42 +168,19 @@ function getDate( element ) {
 
 
 function site_url(path='') {
-  var url = $('link[rel="website"]').attr('href')
-  if(url == undefined) url = ''
-  if (url.substr(-1) !== '/') {
-    url = url + '/'
-  }
-  return url + path
+  return window.chmSite.url(path)
 }
 
-
 function createCookie(name,value,days=365,path='') {
-  if( path == '' ){
-    var url  = site_url();
-    var path = url.replace(location.origin, '');
-  }
-  if (days) {
-    var date = new Date();
-    date.setTime(date.getTime()+(days*24*60*60*1000));
-    var expires = "; expires="+date.toGMTString();
-  }
-  else var expires = "";
-  document.cookie = name+"="+value+expires+"; path="+path;
+  window.chmCookie.create(name, value, days, path)
 }
 
 function readCookie(name) {
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(';');
-  for(var i=0;i < ca.length;i++) {
-    var c = ca[i];
-    while (c.charAt(0)==' ') c = c.substring(1,c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-  }
-  return null;
+  return window.chmCookie.read(name);
 }
 
 function eraseCookie(name) {
-  createCookie(name,"",-1);
+  return window.chmCookie.erase(name);
 }
 
 
@@ -385,105 +228,6 @@ function get_ajax_url()
   return site_url('src/includes/ajax/index.php');
 }
 
-
-function isGreaterDate(date_start, date_end) {
-  var ds_parts = date_start.split('/');
-  var date_start = ds_parts[1] + "/" + ds_parts[0] + "/" + ds_parts[2];
-
-  var de_parts = date_end.split('/');
-  var date_end = de_parts[1] + "/" + de_parts[0] + "/" + de_parts[2];
-
-  var startDate = new Date(date_start);
-  var endDate = new Date(date_end);
-
-  return startDate >= endDate;
-};
-
-
-
-// AJAX Functions
-function submitCIMContactForm(event, target) {
-  event.preventDefault()
-
-  var fields = $(target).closest('form').find('input, textarea')
-  var data = {action:'submit_cim_contact_form'};
-  var error = false;
-
-  $(fields).each(function(){
-    var field_id = $(this).attr('name');
-    var value = $(this).val();
-    if( value == '' ) error = true;
-    data[field_id] = value
-  })
-
-  if( error ) {
-    error_message('Merci de remplir tous les champs.')
-    return;
-  }
-
-  $(target)
-    .text('Envoi en cours...')
-    .prop('disabled', true)
-
-
-  ajax_handler({data: data}, function(res){
-    if(res.response == 'success') {
-      $(fields).val('')
-      success_message(res.message)
-
-      if(res.reload) {
-        setTimeout(function(){
-          location.reload()
-        }, 3000);
-      }
-
-    } else {
-      error_message(res.message)
-    }
-    $(target)
-      .text('Envoyer')
-      .prop('disabled', false)
-  })
-}
-
-
-/**
- * detect IE
- * returns version of IE or false, if browser is not Internet Explorer
- */
-function detectIE() {
-
-  var ua = window.navigator.userAgent;
-
-  var is_android = ((ua.indexOf('Mozilla/5.0') > -1 && ua.indexOf('Android ') > -1 && ua.indexOf('AppleWebKit') > -1) && !(ua.indexOf('Chrome') > -1));
-  if( is_android ) {
-    return true;
-  }
-
-  var msie = ua.indexOf('MSIE ');
-  if (msie > 0) {
-      // IE 10 or older => return version number
-      return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
-  }
-
-  var trident = ua.indexOf('Trident/');
-  if (trident > 0) {
-      // IE 11 => return version number
-      var rv = ua.indexOf('rv:');
-      return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
-  }
-
-  var edge = ua.indexOf('Edge/');
-  if (edge > 0) {
-     // Edge (IE 12+) => return version number
-     return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
-  }
-
-  // other browser
-  return false;
-}
-
-
 /**
  * Get url parameter
  *
@@ -491,12 +235,7 @@ function detectIE() {
  * @return $params string
  **/
 function get_url_param(name){
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (results==null){
-        return null;
-    }else{
-        return results[1] || 0;
-    }
+  return window.chmUrl.getParam(name)
 }
 
 /**
@@ -507,83 +246,16 @@ function get_url_param(name){
  * @return void
  */
 function change_url_param(param, value) {
-  var url = window.location.href;
-  var reExp = new RegExp("[\?|\&]"+param+"=[0-9a-zA-Z\_\+\-\|\.\,\;]*");
-  if(reExp.test(url)) { // update
-    var reExp = new RegExp("[\?&]" + param + "=([^&#]*)");
-    var delimiter = reExp.exec(url)[0].charAt(0);
-    url = url.replace(reExp, delimiter + param + "=" + value);
-  } else { // add
-    var newParam = param + "=" + value;
-    if(!url.indexOf('?')){
-      url += '?';
-    }
-    if(url.indexOf('#') > -1){
-      var urlparts = url.split('#');
-      url = urlparts[0] +  "&" + newParam +  (urlparts[1] ?  "#" +urlparts[1] : '');
-    } else if(url.indexOf('?') == -1) {
-      url += "?" + newParam;
-    } else {
-      url += "&" + newParam;
-    }
-  }
-  window.history.pushState(null, document.title, url);
+  return window.chmUrl.setParam(param, value)
 }
-
-
-function remove_url_param(param) {
-  var url = window.location.href;
-  //prefer to use l.search if you have a location/link object
-  var urlparts= url.split('?');   
-  if (urlparts.length>=2) {
-
-    var prefix= encodeURIComponent(param)+'=';
-    var pars= urlparts[1].split(/[&;]/g);
-
-    //reverse iteration as may be destructive
-    for (var i= pars.length; i-- > 0;) {    
-        //idiom for string.startsWith
-        if (pars[i].lastIndexOf(prefix, 0) !== -1) {  
-            pars.splice(i, 1);
-        }
-    }
-
-    url= urlparts[0]+'?'+pars.join('&');
-    // return url;
-  } else {
-    // return url;
-  }
-  window.history.pushState(null, document.title, url);
-}
-
 
 
 /**
- * Add labels to form element contain .styled class
+ * Delete parameter from url
  *
- **/
-function init_styled_form() {
-  $('form.styled input[type="text"], form.styled input[type="file"], form.styled select, form.styled textarea').each(function(){
-    var $element = $(this)
-    if( $element.is('input') || $element.is('file') ) {
-      if( $element.data('label') != undefined ) {
-        var $placeholder = $element.data('label')
-      } if( $element.attr('placeholder') != undefined ) {
-        var $placeholder = $element.attr('placeholder')
-      }
-    } else if( $element.is('select') ) {
-      if( $element.data('label') != undefined ) {
-        var $placeholder = $element.data('label')
-            $element.attr('placeholder', '')
-      } else {
-        var $placeholder = $element.find('option:first').text()
-      }
-    } else if( $element.is('textarea') ) {
-      var $placeholder = $element.data('label')
-    }
-    var $id = 'ca_'+ $element.attr('name')
-
-    $element.attr('id', $id)
-    $element.closest('.form-group').append('<label for="'+$id+'" class="cim-label">'+$placeholder+'</label>')
-  })
+ * @param param string
+ * @return void
+ */
+function remove_url_param(param) {
+  return window.chmUrl.eraseParam(name)
 }

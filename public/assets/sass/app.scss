@@ -1,0 +1,24 @@
+// font awesome
+$fa-font-path: "~font-awesome-sass/assets/fonts/font-awesome/" !default;
+@import '~font-awesome-sass/assets/stylesheets/font-awesome';
+
+// bootstrap
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+@import '~bootstrap-sass/assets/stylesheets/bootstrap';
+
+// bootstrap override
+@import 'bootstrap/navbar';
+@import 'bootstrap/panels';
+@import 'bootstrap/modals';
+@import 'bootstrap/icons';
+@import 'bootstrap/alerts';
+@import 'bootstrap/tables';
+@import 'bootstrap/forms';
+@import 'bootstrap/bottuns';
+@import 'bootstrap/pagination';
+@import 'bootstrap/responsive';
+
+// components
+@import 'components/layout';
+@import 'components/margin-padding';
+@import 'components/error-page';

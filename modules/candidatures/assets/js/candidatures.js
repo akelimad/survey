@@ -50,7 +50,7 @@ jQuery(document).ready(function($){
 				if( $.type(data) == 'object' ) {
 					$('#candidatures-filter-wrap').empty().html(data.content)
 				} else {
-					$('#candidatures-filter-wrap').empty().html('<div class="eta-alerts alert alert-warning alert-white rounded"><div class="icon"><i class="fa fa-warning"></i></div><ul><li>Une erreur est survenue lors de chargement de filter. <a href="#" id="refresh-candidatures-filter" style="float: right;margin-right: 5px;margin-top: -2px;"><i class="fa fa-refresh"></i></a></li></ul></div>')
+					$('#candidatures-filter-wrap').empty().html('<div class="chm-alerts alert alert-warning alert-white rounded"><div class="icon"><i class="fa fa-warning"></i></div><ul><li>Une erreur est survenue lors de chargement de filter. <a href="#" id="refresh-candidatures-filter" style="float: right;margin-right: 5px;margin-top: -2px;"><i class="fa fa-refresh"></i></a></li></ul></div>')
 				}
 			} catch (e) {
 				ajax_error_message();

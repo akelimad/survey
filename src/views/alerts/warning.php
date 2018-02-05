@@ -1,5 +1,5 @@
 <?php $classes = (!empty($classes)) ? implode(' ', $classes) : ''; ?>
-<div class="eta-alerts alert alert-warning alert-white rounded <?php echo $classes; ?>">
+<div class="chm-alerts alert alert-warning alert-white rounded <?php echo $classes; ?>">
 	<?php if( !isset($dismissible) || $dismissible === true ) : ?>
 	    <button type="button" data-dismiss="alert" aria-hidden="true" class="close">x</button>
 	<?php endif; ?>

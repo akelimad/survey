@@ -1,7 +1,10 @@
 .phpintel
 apps/upload
 uploads
+public/build
+public/uploads
 vendor
+/node_modules
 composer.lock
 error_log
 error.log
