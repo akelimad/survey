@@ -8,7 +8,7 @@
 
  <div class="texte">
 
-<form action="./" method="post">
+<form action="" method="post">
 
 
 

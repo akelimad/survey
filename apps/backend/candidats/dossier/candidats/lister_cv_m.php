@@ -176,7 +176,7 @@ if(isset($_POST["situation"]) and $_POST["situation"]!='')  $_SESSION["lcv_situa
 
 
 
-                            <form action="./" method="post">
+                            <form action="" method="post">
 
 
 

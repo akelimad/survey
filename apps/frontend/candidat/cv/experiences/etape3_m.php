@@ -819,7 +819,7 @@ $m_dd=$m_df='';
 
 										<div style=" float: left; padding-left: 5px; ">
 
-											<form method="post" action="./" id="form2" name="formulaire_m<?php echo ++$ii; ?>">
+											<form method="post" action="" id="form2" name="formulaire_m<?php echo ++$ii; ?>">
 
 											<input type="hidden" name="id" value="<?php echo $reponse['id_exp'] ?>" /> 
 

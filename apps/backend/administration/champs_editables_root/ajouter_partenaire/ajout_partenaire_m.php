@@ -284,7 +284,7 @@ echo $message.'<br/>';
 
 						  
 
-						<form   method="post" action="./"> 
+						<form   method="post" action=""> 
 
 						<table  width="100%" id="addrole" >
 

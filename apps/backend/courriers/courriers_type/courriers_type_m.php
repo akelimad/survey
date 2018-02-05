@@ -170,7 +170,7 @@ echo ''.$message.'  <br/>';
 ?>
 
                           
-<form   method="post" action="./" enctype="multipart/form-data">
+<form   method="post" action="" enctype="multipart/form-data">
  <?php include ("./courriers_type_m_form.php"); ?>                       
                         
 </form>

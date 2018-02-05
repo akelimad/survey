@@ -15,7 +15,7 @@ if( isset($_POST['cua_cid']) && !empty($_POST['cua_cid']) ) {
 
  <div class="texte">
 
-<form action="./" method="post">
+<form action="" method="post">
 
 
 

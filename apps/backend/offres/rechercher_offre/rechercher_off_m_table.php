@@ -528,7 +528,7 @@ LIMIT " . $limitstart . ", " . $itemsParPage ."";
 
                 <td valign="top" width="20px" style="border:0px solid #FFFFFF;">
 
-                <form action="./" method="post" name="formulaire<?php echo ++$jj; ?>">
+                <form action="" method="post" name="formulaire<?php echo ++$jj; ?>">
 
                 <input name="id" type="hidden" value="<?php echo $result['id_offre'];?>" />
 
@@ -552,7 +552,7 @@ LIMIT " . $limitstart . ", " . $itemsParPage ."";
 
             <td valign="top"   width="20px" style="border:0px solid #FFFFFF;">
 
-            <form action="./" method="post" name="formulaire<?php echo ++$jj; ?>">
+            <form action="" method="post" name="formulaire<?php echo ++$jj; ?>">
 
                 <input name="id" type="hidden" value="<?php echo $result['id_offre'];?>" />
 

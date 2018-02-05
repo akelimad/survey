@@ -534,7 +534,7 @@ echo '<meta http-equiv="refresh" content="0; url=./">';
 
 
 
-	  <form action="./" method="post"  enctype="multipart/form-data" name="form1"> 
+	  <form action="" method="post"  enctype="multipart/form-data" name="form1"> 
 
 
 

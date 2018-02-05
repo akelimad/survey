@@ -60,7 +60,7 @@ if (isset($_GET['r'])) {
 
 
 
-<form enctype="multipart/form-data" action="./" method="post"> 
+<form enctype="multipart/form-data" action="" method="post"> 
 
 <table>
 

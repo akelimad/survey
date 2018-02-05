@@ -258,7 +258,7 @@ if(isset($messages) and !empty($messages))  {
 
     <td style="height:90px;"  valign="top"  >
 
-<form name="form1" method="post" action="./">
+<form name="form1" method="post" action="">
 
   <table style="width:300px;" border="0"   >
 

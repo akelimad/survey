@@ -372,7 +372,7 @@ else{
 
 										
 
-										<form method="post" action="./" id="form2" name="formulaire<?php echo ++$jj; ?>">
+										<form method="post" action="" id="form2" name="formulaire<?php echo ++$jj; ?>">
 
 										<input type="hidden" name="id" value="<?php echo $reponse['id_email'] ?>" />
 

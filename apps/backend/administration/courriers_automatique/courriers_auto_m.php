@@ -184,7 +184,7 @@ echo $message.'<br/>';
 ?>
 
 						  
-						<form   method="post" action="./" enctype="multipart/form-data" id="form_standard">
+						<form   method="post" action="" enctype="multipart/form-data" id="form_standard">
 						
 						<table  width="100%" id="addrole" >
                         <input type="hidden" name="id"  value="<?php if(isset($_POST['id'])){echo $_POST['id'];}?> "  />
