@@ -37,7 +37,7 @@ if($p=='ec') {
 // -----------------------------------
 
    $af0="none";
-href="javascript:void(0)" onclick="
+
    $af="block";
 
    // -----------------------------------
@@ -132,7 +132,7 @@ $addSect = mysql_query("INSERT INTO prm_sectors (id_sect,EN,FR) VALUES ('','','"
 
 }
 
-?>href="javascript:void(0)" onclick="
+?>
 
 
 
@@ -141,12 +141,12 @@ $addSect = mysql_query("INSERT INTO prm_sectors (id_sect,EN,FR) VALUES ('','','"
 <table width="100%" border="0" cellspacing="0" id="secteur" class="tablesorter" style="background: none;">
 
 <thead>
-href="javascript:void(0)" onclick="
+
     <tr>
 
 
 
-        <th scope="col" width="23%" style="background-color:#C1B3B0;color:white;"><strong>Intitule</strong></th>
+        <th scope="col" width="23%" style="background-color:#C1B3B0;color:white;"><strong>Intitulé</strong></th>
 
         <th width="8%"colspan="2" style="background-color:#C1B3B0;color:white;"><strong>Actions</strong></th>
 

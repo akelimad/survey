@@ -52,7 +52,7 @@ export default class chmFilter {
   static errorMessage (target, fileName, route, message = null) {
     if (message === null) message = 'Une erreur est survenue lors de chargement de filter.'
     $(target).find('i').removeClass('fa-spin')
-    $(target).empty().html('<div class="chm-alerts alert alert-warning alert-white rounded"><div class="icon"><i class="fa fa-warning"></i></div><ul><li>' + message + '</li></ul><a href="#" onclick="return chmFilter.render(this, &apos;' + fileName + '&apos;, &apos;' + route + '&apos;);" class="refresh"><i class="fa fa-refresh"></i></a></div>')
+    $(target).empty().html('<div class="chm-alerts alert alert-warning alert-white rounded"><div class="icon"><i class="fa fa-warning"></i></div><ul><li>' + message + '</li></ul><a href="javascript:void(0)" onclick="return chmFilter.render(this, &apos;' + fileName + '&apos;, &apos;' + route + '&apos;);" class="refresh"><i class="fa fa-refresh"></i></a></div>')
   }
 
 }

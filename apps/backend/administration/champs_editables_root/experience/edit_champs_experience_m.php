@@ -134,7 +134,7 @@ $addSect = mysql_query("INSERT INTO prm_experience (id_expe,intitule) VALUES (''
 
 	<tr>
 
-		<th scope="col" width="23%" style="background-color:#C1B3B0;color:white;"><strong>Intitul?/strong></th>
+		<th scope="col" width="23%" style="background-color:#C1B3B0;color:white;"><strong>Intitulé</strong></th>
 
         <th align="center" width="8%"colspan="2" style="background-color:#C1B3B0;color:white;"><strong>Actions</strong></th>
 

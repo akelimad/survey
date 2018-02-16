@@ -1,4 +1,6 @@
-<?php 
+<?php
+use App\Permission;
+
 // Désactiver DEPRECATED ERROR 
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
@@ -8,57 +10,44 @@ define('SITE_BASE', dirname(__DIR__));
 // Include bootstrap
 include_once SITE_BASE .'/config/bootstrap.php';
 
-// Get current route
-$route = str_replace(PHYSICAL_URI, '', $_SERVER['REQUEST_URI']);
-$route = (PHYSICAL_URI != '/') ? $route : $_SERVER['REQUEST_URI'];
-$route = trim($route, '/');
-
-// Get allowed routes
-$statusUrls = \Modules\Candidatures\Models\Candidatures::getUserStatusUrls();
-$allowed = array_merge([
-	'backend/login',
-	'backend/accueil'
-], $statusUrls);
-
 // Redirect to backend homepage
-if ( (isBackend() && !isAdmin() && !in_array($route, $allowed)) ) redirect('backend/accueil/');
+if(isBackend() && !Permission::canViewPage() && !Permission::allowed())	redirect('backend/accueil/');
 
+$GLOBALS['etalent'] = new \stdClass;
 
 // Get root configuration
-$sql                 = "SELECT * from root_configuration";
-$select              = mysql_query($sql);
-$reponse             = mysql_fetch_assoc($select);  
-$nom_site            = $reponse['nom_site'];
-$seo_description     = $reponse['seo_description'];
-$seo_keywords        = $reponse['seo_keywords'];
-$banniere            = "/".$reponse['banniere'];
-$logo                = "/".$reponse['logo'];
-$titre_site          = $reponse['titre_site'];
-$fb_url              = $reponse['fb_url'];
-$tw_url              = $reponse['tw_url'];
-$li_url              = $reponse['li_url'];
-$via_url             = $reponse['via_url'];
-$site_url            = $reponse['site_url'];
-$date_expiration_off = $reponse['duree_offres'];
-$color_bg_body       = $reponse['color_bg_body'];
-$color_bg            = $reponse['color_bg'];
-$color_bg_menu       = $reponse['color_bg_menu'];
-$info_contact        = $reponse['email_site'];
+$reponse = getDB()->prepare('SELECT * from root_configuration', [], true);
+$nom_site            = $reponse->nom_site;
+$seo_description     = $reponse->seo_description;
+$seo_keywords        = $reponse->seo_keywords;
+$banniere            = "/".$reponse->banniere;
+$logo                = "/".$reponse->logo;
+$titre_site          = $reponse->titre_site;
+$fb_url              = $reponse->fb_url;
+$tw_url              = $reponse->tw_url;
+$li_url              = $reponse->li_url;
+$via_url             = $reponse->via_url;
+$site_url            = $reponse->site_url;
+$date_expiration_off = $reponse->duree_offres;
+$color_bg_body       = $reponse->color_bg_body;
+$color_bg            = $reponse->color_bg;
+$color_bg_menu       = $reponse->color_bg_menu;
+$info_contact        = $reponse->email_site;
 
 // Get website configuartion
-$sql_prm_config      = "SELECT * from prm_config";
-$r_prm_config        = mysql_query($sql_prm_config);
-$d_prm_config        = mysql_fetch_assoc($r_prm_config);  
-$nom_serveur         = $d_prm_config['nom_serveur'];
-$nom_user            = $d_prm_config['nom_user'];
-$password            = $d_prm_config['password'];
-$nom_bdd             = $d_prm_config['nom_bdd'];
-$lien_google_d       = $d_prm_config['lien_google_d'];
-$app_id_fb           = $d_prm_config['app_id_fb'];
-$app_secret_fb       = $d_prm_config['app_secret_fb'];
-$site_e              = $d_prm_config['site_e'];
-$email_e             = $d_prm_config['email_e'];
-$variable_r          = $d_prm_config['variable_r'];
+$prm_config = getDB()->prepare('SELECT * from prm_config', [], true);
+$nom_serveur         = $prm_config->nom_serveur;
+$nom_user            = $prm_config->nom_user;
+$password            = $prm_config->password;
+$nom_bdd             = $prm_config->nom_bdd;
+$lien_google_d       = $prm_config->lien_google_d;
+$app_id_fb           = $prm_config->app_id_fb;
+$app_secret_fb       = $prm_config->app_secret_fb;
+$site_e              = $prm_config->site_e;
+$email_e             = $prm_config->email_e;
+$variable_r          = $prm_config->variable_r;
+
+$GLOBALS['etalent']->config = array_merge((array)$prm_config, (array)$reponse);
 
 define('SITE_NAME', $nom_site);
 define('SITE_EMAIL', $info_contact);

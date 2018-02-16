@@ -12,14 +12,21 @@ export default class chmModal {
     var loadingMessage = ('message' in options) ? options.message : ''
     var modalTemplate = this.loading(loadingMessage)
 
-    var modalWidth = 600
+    var modalWidth = (window.outerWidth >= 600) ? 600 : (window.outerWidth - 20)
     if (options.width !== '' && window.outerWidth > options.width) modalWidth = options.width
     modalTemplate.find('.modal-dialog').css('width', modalWidth)
 
     modalTemplate.attr('chm-modal-id', null)
     $.ajax(params).done(function (response, textStatus, jqXHR) {
-      modalObject.response = response
       try {
+        try {
+          response = $.parseJSON(response)
+        } catch (error) {
+          response = undefined
+        }
+
+        modalObject.response = response
+
         if (response === undefined) {
           classInstance.destroy(modalTemplate)
         } else {
@@ -31,7 +38,7 @@ export default class chmModal {
           }
           // add content
           if (response['content'] !== undefined) {
-            modalTemplate.find('.modal-body').html('<div class="chm-modal-message">' + response.content + '</div>').show()
+            modalTemplate.find('.modal-body').html('<div class="chm-modal-content">' + response.content + '</div>').show()
           } else {
             modalTemplate.find('.modal-body').hide()
           }
@@ -58,7 +65,8 @@ export default class chmModal {
               if ('class' in options.form) formClass = options.form.class
               if ('callback' in options.form) formCallback = 'onsubmit="return ' + options.form.callback + '(event)"'
             }
-            $('.modal-content').wrap('<form method="' + formMethod + '" action="' + formAction + '" role="form" class="' + formClass + '" ' + formCallback + '></div>')
+            var enctype = ('enctype' in options.form && options.form.enctype === true) ? 'enctype="multipart/form-data"' : ''
+            $('.modal-content').wrap('<form method="' + formMethod + '" action="' + formAction + '" role="form" class="' + formClass + '" ' + formCallback + ' ' + enctype + '></div>')
           }
           if (!$(modalTemplate).find('.modal-title').is(':visible') && !$(modalTemplate).find('.modal-body').is(':visible')) {
             classInstance.destroy(modalTemplate)
@@ -70,6 +78,12 @@ export default class chmModal {
             modalTemplate.find('.panel-footer').remove()
             modalTemplate.find('.modal-content').html(response.content).show()
           }
+        }
+
+        // Trigger callback
+        if ('onSuccess' in options) {
+          // TODO - trigger onSuccess action
+          console.log(options.onSuccess)
         }
       } catch (e) {
         classInstance.setError(modalTemplate, e.message)
@@ -98,7 +112,7 @@ export default class chmModal {
     var modal = ($('.chm-modal').length > 0) ? $('.chm-modal') : $(this.template())
     modal.find('button.close').hide()
     modal.find('.modal-title').html(title)
-    modal.find('.modal-body').html('<div class="chm-modal-message">' + message + '</div>')
+    modal.find('.modal-body').html('<div class="chm-modal-content">' + message + '</div>')
 
     // add footer actions
     var dismiss = ''
@@ -126,7 +140,7 @@ export default class chmModal {
     if (title === '') title = 'Alert !'
     modal.find('.modal-title').html(title)
     if (message !== '') {
-      modal.find('.modal-body').html('<div class="chm-modal-message">' + message + '</div>')
+      modal.find('.modal-body').html('<div class="chm-modal-content">' + message + '</div>')
     } else {
       modal.find('.modal-body').hide()
     }
@@ -164,7 +178,7 @@ export default class chmModal {
     return tpl
   }
 
-  static destroy (instance) {
+  static destroy (instance = null) {
     if (instance instanceof window.MouseEvent) {
       instance = $(instance.target).closest('.chm-modal')
     } else if (instance === null) {
@@ -174,7 +188,7 @@ export default class chmModal {
   }
 
   static template () {
-    return '<div class="modal chm-modal fade" role="dialog" data-keyboard="false"><div class="modal-dialog"><div class="modal-content"><div class="modal-header" style="border-bottom: none;"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title"></h4></div><div class="modal-body" style="border-top: 1px solid #e5e5e5;"><div class="modal-notif-block"></div></div></div></div></div>'
+    return '<div class="modal chm-modal fade" role="dialog" data-keyboard="false"><div class="modal-dialog"><div class="modal-content"><div class="modal-header" style="border-bottom: none;"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title"></h4></div><div class="modal-body" style="border-top: 1px solid #e5e5e5;"><div class="chm-response-messages"></div></div></div></div></div>'
   }
 
   static showAlertMessage (type, message, dismissible = true) {
@@ -205,13 +219,13 @@ export default class chmModal {
       })
       alert += '</ul>'
     } else {
-      alert += '<strong>' + message + '</strong>'
+      alert += '<ul><li><strong>' + message + '</strong></li></ul>'
     }
     alert += '</div>'
-    if ($('.chm-modal').find('.modal-notif-block').length === 0) {
-      $('.chm-modal').find('.modal-body').prepend('<div class="modal-notif-block"></div>')
+    if ($('.chm-modal').find('.chm-response-messages').length === 0) {
+      $('.chm-modal').find('.modal-body').prepend('<div class="chm-response-messages"></div>')
     }
-    $('.chm-modal').find('.modal-notif-block').empty().html(alert)
+    $('.chm-modal').find('.chm-response-messages').empty().html(alert)
   }
 
   static setError (modal, message) {

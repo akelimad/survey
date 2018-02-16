@@ -1773,8 +1773,8 @@ class GUMP
             return;
         }
 
-        $cdate1 = new DateTime(date('Y-m-d', strtotime($input[$field])));
-        $today = new DateTime(date('d-m-Y'));
+        $cdate1 = new \DateTime(date('Y-m-d', strtotime($input[$field])));
+        $today = new \DateTime(date('d-m-Y'));
 
         $interval = $cdate1->diff($today);
         $age = $interval->y;

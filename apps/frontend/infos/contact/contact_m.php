@@ -64,9 +64,9 @@
 
        <tbody>
 
+          <?php $showDestinations = (get_setting('show_contact_destination') == 1); ?>
 
-
-           <tr>
+           <tr style="display:<?= ($showDestinations) ? 'block' : 'none' ?>">
 
 
 
@@ -97,12 +97,11 @@
                   $ci_id = $ci['id_destination'];                 $ci_desc = $ci['titre'];                  
 
                       if(isset($destination) and $destination==$ci_desc){                   
-
                       echo '<option value="'.$ci_desc.'" selected="selected">'.$ci_desc.'</option>';
 
                       }     else    {                   
-
-                      echo '<option value="'.$ci_desc.'">'.$ci_desc.'</option>';                    
+                        $selected = (!$showDestinations && $ci_desc=='DIRECTION DES RESSOURCES HUMAINES') ? 'selected' : '';
+                      echo '<option value="'.$ci_desc.'" '.$selected.'>'.$ci_desc.'</option>';                    
 
                       }
 
@@ -121,7 +120,6 @@
 
 
            </tr>
-
 
 
            <tr>

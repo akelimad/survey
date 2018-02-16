@@ -14,15 +14,19 @@ import chmCookie from './modules/cookie'
 import chmModal from './modules/modal'
 import chmFilter from './modules/filter'
 import chmAlert from './modules/alert'
+import chmForm from './modules/form'
+import chmOffer from './modules/offer'
 
 // Global storage
 window.$ = window.jQuery = $
 window.chmSite = chmSite
 window.chmUrl = chmUrl
 window.chmCookie = chmCookie
+window.chmForm = chmForm
 window.chmModal = chmModal
 window.chmAlert = chmAlert
 window.chmFilter = chmFilter
+window.chmOffer = chmOffer
 
 // Standart jQuery script
-// import './custom'
+import './custom'

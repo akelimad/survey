@@ -1,0 +1,4 @@
+.btn-primary {
+  @include button-variant(#fff, $color_bg, $color_bg);
+  border-radius: 0px;
+}

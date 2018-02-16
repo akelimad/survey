@@ -1274,7 +1274,7 @@ $select_candidature1 = $select_candidature;
 
             <tr>
 
-              <td width="25%">Intitul� de l'offre <font style="color:#FF0000 ;">*</font></td>
+              <td width="25%">Intitulé de l'offre <font style="color:#FF0000 ;">*</font></td>
 
               <td width="75%"><?php echo '<input type="text" name="intitule" style="width:534px" value="'.$reponse['Name'].'" readonly="readonly"/>'; ?>
 

@@ -246,6 +246,21 @@ class Database {
 
 
 	/**
+   * Count table rows by condition
+   *
+   * @param string $table
+   * @param string $column
+   * @param string $value
+   *
+   * @return $datas array
+   */
+	public function count($table, $column, $value){ 
+		$count = self::$_instance->prepare("SELECT COUNT(*) AS nbr FROM {$table} WHERE {$column} = ?", [$value], true);
+		return intval($count->nbr);
+	}
+
+
+	/**
    * Tell if table contain at least one row by condition
    *
    * @param string $table

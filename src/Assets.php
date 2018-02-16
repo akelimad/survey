@@ -47,15 +47,18 @@ class Assets {
                 'version' => false,
                 'media'   => 'all',
                 'admin'   => false,
-                'front'   => true
+                'front'   => true,
+                'in_footer' => false
             ], $params);
+
+            $location = ($params['in_footer']) ? 'footer' : 'head';
 
             if( \isBackend() ){
                 if( $params['admin'] !== false ){
-                    self::$styles[$unique_id] = $params;
+                    self::$styles[$location][$unique_id] = $params;
                 }
             } elseif ( $params['front'] !== false ){
-                self::$styles[$unique_id] = $params;
+                self::$styles[$location][$unique_id] = $params;
             } 
         }
     }
@@ -81,12 +84,14 @@ class Assets {
                 'in_footer' => true
             ], $params);
 
+            $location = ($params['in_footer']) ? 'footer' : 'head';
+
             if( \isBackend() ){
                 if( $params['admin'] !== false ){
-                    self::$scripts[$unique_id] = $params;
+                    self::$scripts[$location][$unique_id] = $params;
                 }
             } elseif ( $params['front'] !== false ){
-                self::$scripts[$unique_id] = $params;
+                self::$scripts[$location][$unique_id] = $params;
             }
         }
     }

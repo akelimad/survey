@@ -13,7 +13,7 @@ return array(
     'validate_numeric'              => 'Le champ {field} doit seulement contenir des caract&#232;res num&#233;riques',
     'validate_integer'              => 'Le champ {field} doit &#234;tre une valeur num&#233;rique',
     'validate_boolean'              => 'Le champ {field} doit &#234;tre vrai ou faux',
-    'validate_float'                => 'Le champ {field} doit &#234;tre une valeur d&#233;cimale',
+    'validate_float'                => 'Le champ {field} doit &#234;tre une valeur d&#233;etaale',
     'validate_valid_url'            => 'Le champ {field} doit &#234;tre une URL valide',
     'validate_url_exists'           => 'L&#44;URL {field} n&#44;existe pas',
     'validate_valid_ip'             => 'Le champ {field} doit contenir une adresse IP valide',
@@ -41,8 +41,8 @@ return array(
     'validate_valid_json_string'    => 'Le champ {field} doit avoir un format JSON',
 
     // custom messages
-    'validate_cim_string' => 'Le champ {field} ne doit pas contenir des caractères spéciaux',
-    'validate_cim_alpha_non_numeric' => 'Le champ {field} ne doit pas contenir des chiffres ou caractères spéciaux',
-    'validate_cim_alpha_numeric' => 'Le champ {field} ne doit pas contenir des caractères spéciaux',
-    'validate_cim_phone' => 'Le champ {field} n\'est pas un numero de téléphone valid.',
+    'validate_eta_string' => 'Le champ {field} ne doit pas contenir des caractères spéciaux',
+    'validate_eta_alpha_non_numeric' => 'Le champ {field} ne doit pas contenir des chiffres ou caractères spéciaux',
+    'validate_eta_alpha_numeric' => 'Le champ {field} ne doit pas contenir des caractères spéciaux',
+    'validate_eta_phone' => 'Le champ {field} n\'est pas un numero de téléphone valid.',
 );

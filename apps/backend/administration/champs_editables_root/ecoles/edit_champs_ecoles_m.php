@@ -58,8 +58,6 @@ if($p=='ec') {
 
 
 
-href="javascript:void(0)" onclick="
-
 <?php ///////////////////////////////////////////////////////////////////////////////////  -d  ?>   
 
 
@@ -70,7 +68,7 @@ href="javascript:void(0)" onclick="
 
     <tr> 
 
-    <td scope="col" width="11%" style="border:1px solid #FFFFFF;" >Ajouter une �cole  : </td>
+    <td scope="col" width="11%" style="border:1px solid #FFFFFF;" >Ajouter une école  : </td>
 
     <td scope="col" width="23%" style="border:1px solid #FFFFFF;" >
 
@@ -78,7 +76,7 @@ href="javascript:void(0)" onclick="
 
     </td>
 
-    <td scope="col" width="13%" style="border:1px solid #FFFFFF;" >Pays de l'�cole  : </td>
+    <td scope="col" width="13%" style="border:1px solid #FFFFFF;" >Pays de l'école  : </td>
 
     <td scope="col" width="23%" style="border:1px solid #FFFFFF;" >
 
@@ -180,7 +178,7 @@ $addSect = mysql_query("INSERT INTO prm_ecoles  VALUES ('','".safe($ecole)."','"
 
    echo "showonlyone('newboxes12');";
 
-   echohref="javascript:void(0)" onclick="   
+   echo "</script>";
 
 // -----------------------------------
 
@@ -188,8 +186,6 @@ $addSect = mysql_query("INSERT INTO prm_ecoles  VALUES ('','".safe($ecole)."','"
 
 ?>
 
-
-href="javascript:void(0)" onclick="
 <br><div class="ligneBleu"></div><br>
 
 
@@ -202,7 +198,7 @@ href="javascript:void(0)" onclick="
 
 	
 
-        <th scope="col" width="23%" style="background-color:#C1B3B0;color:white;"><strong>Intitul�</strong></th>
+        <th scope="col" width="23%" style="background-color:#C1B3B0;color:white;"><strong>Intitulé</strong></th>
 
         <th scope="col" width="23%" style="background-color:#C1B3B0;color:white;"><strong>Pays</strong></th>
 

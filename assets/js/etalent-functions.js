@@ -146,7 +146,7 @@ function cimDatepicker(identifier, params={}) {
     yearRange: "-100:+0",
     changeMonth: true,
     changeYear: true,
-    numberOfMonths: 1,
+    numberOfMonths: 1
   }
 
   //merging two objects into new object

@@ -11,21 +11,13 @@
 namespace Modules\Candidatures\Controllers;
 
 use App\Event;
-use App\Controllers\AdminController;
+use App\Controllers\Controller;
 use Modules\Candidatures\Models\Candidatures;
 
-class CandidatureController extends AdminController
+class CandidatureController extends Controller
 {
 
   private $data = [];
-
-
-  public function __construct()
-  {
-    if( !isLogged('admin') ) {
-      redirect('backend/login');
-    }
-  }
 
 
   public function actionIndex($id=null)

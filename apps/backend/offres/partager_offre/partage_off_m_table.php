@@ -770,9 +770,11 @@ $count00 = mysql_num_rows($rst_pagination);
 
                 <input name="action" type="hidden" value="<?php echo $action;?>" />
 
-                <a href="javascript:void(0)" onclick="formulaire<?php echo $jj; ?>.submit()" title="Partager">
+                <a href="javascript:void(0)" onclick="return showSharePopup(<?=$result['id_offre']; ?>)" title="Partager"><i class="fa fa-exchange fa-fw fa-lg"></i></a>
 
-                 <i class="fa fa-exchange fa-fw fa-lg"></i></a>&nbsp;
+                <!-- <a href="javascript:void(0)" onclick="formulaire<?php //echo $jj; ?>.submit()" title="Partager">
+
+                 <i class="fa fa-exchange fa-fw fa-lg"></i></a>&nbsp; -->
 
               </form>
 

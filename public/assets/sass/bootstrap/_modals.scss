@@ -1,8 +1,17 @@
-.chm-modal .modal-header {
-  padding: 10px 15px 8px;
-  h4 {
-    text-transform: uppercase;
-    font-weight: 700;
-    font-size: 1em;
+.chm-modal {
+  .modal-header {
+    padding: 10px 15px 8px;
+    h4 {
+      text-transform: uppercase;
+      font-weight: 700;
+      font-size: 1em;
+    }
+  }
+  label {
+    margin-bottom: 0px;
+    margin-top: 3px;
+  }
+  input {
+    width: 100%;
   }
 }

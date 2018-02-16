@@ -34,6 +34,7 @@ class Mailer
 		'isHTML' => false,
 		'CC' => [],
 		'BCC' => [],
+		'data' => []
 	);
 
 
@@ -117,6 +118,18 @@ class Mailer
 			
 			// Send email
 			if( $mail->Send() ) {
+				$nom = (isset($args['coresp_nom'])) ? $args['coresp_nom'] : 'NA';
+				$nom = (isLogged('admin')) ? read_session('abb_admin') : $nom;
+				
+				getDB()->create('corespondances', [
+					'sujet' => $subject,
+					'nom' => $nom,
+					'date_envoi' => date('Y-m-d H:i:s'),
+					'type_email' => (isset($args['type_email'])) ? $args['type_email'] : 'Envoi manuel',
+					'titre' => (isset($args['titre'])) ? $args['titre'] : 'Contact avec le candidat',
+					'message' => $message,
+					'ref_filiale' => (isset($args['ref_filiale'])) ? $args['ref_filiale'] : ''
+				]);
 				return array("response" => "success", "message" => "L'email a été bien envoyé.");
 			} else {
 				return array("response" => "error", "message" => "Une erreur est survenu lors d'envoi de l'email.");

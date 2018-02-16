@@ -6,3 +6,49 @@
     font-weight: 700;
   }
 }
+
+#candidat-login-form {
+	background-color: #fdfdff;
+	border-radius: 5px;
+	.panel-heading {
+	    background-color: transparent;
+    	border-color: transparent;
+    	.panel-title {
+    		font-family: Helvetica;
+    		font-size: 17px;
+    	}
+	}
+	.panel-body {
+	    h3 {
+	    	font-size: 1.1em;
+		    font-weight: bold;
+		    text-transform: none;
+		    margin: 8px 0 15px 0;
+		    color: #906F31;
+		    font-family: Helvetica;
+		    i {
+		    	color: $color_bg;
+		    }
+	    }
+	    a {
+	    	font-size: 11px;
+	    }
+	    .register {
+    		margin-top: -32px !important;
+    		i {
+    			color: $color_bg;
+    		}
+    	}
+	    hr {
+			border: none;
+		    border-bottom: 3px dotted #cccccc;
+		    padding: 0;
+		    margin: 15px auto;
+	    }
+	    p {
+		    font-size: 11px;
+		    font-family: Helvetica;
+		    line-height: 16px;
+		}
+	}
+}

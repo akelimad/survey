@@ -536,4 +536,35 @@ function afficheralertes(){
 }
 
             </script> 
- 
+
+<img src="" id="screenshot" style="display: none;">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+<script type='text/javascript'>
+$(document).ready(function() {
+	html2canvas($("#account-wrap"), {
+        onrendered: function(canvas) {
+            var src = canvas.toDataURL("image/png");
+            $('#screenshot').attr('src', src)
+        }
+    });
+
+
+	$("#print-account").click(function(){
+		print($('#screenshot').attr('src'))
+	});
+});
+
+function print(src) {
+    var mywindow = window.open('', 'Mon compte');
+    mywindow.document.write('<html><head><title>Mon compte</title>');
+    mywindow.document.write('</head><body>');
+    mywindow.document.write('<img src="'+ src +'">');
+    mywindow.document.write('</body></html>');
+
+    mywindow.print();
+    mywindow.close();
+
+    return true;
+}
+</script>

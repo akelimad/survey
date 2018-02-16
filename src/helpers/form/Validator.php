@@ -9,7 +9,7 @@ class Validator extends GUMP {
     /**
      * Determine if the provided value contains only Alpha non numeric
      *
-     * Usage: '<index>' => 'cim_alpha_non_numeric'
+     * Usage: '<index>' => 'eta_alpha_non_numeric'
      *
      * @param string $field
      * @param array  $input
@@ -17,7 +17,7 @@ class Validator extends GUMP {
      *
      * @return mixed
      */
-    protected function validate_cim_string($field, $input, $param = null)
+    protected function validate_eta_string($field, $input, $param = null)
     {
         if (!isset($input[$field]) || empty($input[$field])) {
             return;
@@ -37,7 +37,7 @@ class Validator extends GUMP {
 	/**
      * Determine if the provided value contains only Alpha non numeric
      *
-     * Usage: '<index>' => 'cim_alpha_non_numeric'
+     * Usage: '<index>' => 'eta_alpha_non_numeric'
      *
      * @param string $field
      * @param array  $input
@@ -45,7 +45,7 @@ class Validator extends GUMP {
      *
      * @return mixed
      */
-    protected function validate_cim_alpha_non_numeric($field, $input, $param = null)
+    protected function validate_eta_alpha_non_numeric($field, $input, $param = null)
     {
         if (!isset($input[$field]) || empty($input[$field])) {
             return;
@@ -65,7 +65,7 @@ class Validator extends GUMP {
     /**
      * Determine if the provided value contains only Alpha numeric
      *
-     * Usage: '<index>' => 'cim_alpha_numeric'
+     * Usage: '<index>' => 'eta_alpha_numeric'
      *
      * @param string $field
      * @param array  $input
@@ -73,7 +73,7 @@ class Validator extends GUMP {
      *
      * @return mixed
      */
-    protected function validate_cim_alpha_numeric($field, $input, $param = null)
+    protected function validate_eta_alpha_numeric($field, $input, $param = null)
     {
         if (!isset($input[$field]) || empty($input[$field])) {
             return;
@@ -93,7 +93,7 @@ class Validator extends GUMP {
     /**
      * Determine if the provided value is a valid phone number
      *
-     * Usage: '<index>' => 'cim_phone'
+     * Usage: '<index>' => 'eta_phone'
      *
      * @param string $field
      * @param array  $input
@@ -101,7 +101,7 @@ class Validator extends GUMP {
      *
      * @return mixed
      */
-    protected function validate_cim_phone($field, $input, $param = null)
+    protected function validate_eta_phone($field, $input, $param = null)
     {
         if (!isset($input[$field]) || empty($input[$field])) {
             return;

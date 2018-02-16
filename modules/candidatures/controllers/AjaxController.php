@@ -279,21 +279,11 @@ class AjaxController
       !isset($data['message'])  || $data['message'] == ''
     ) return [];
 
-      $message = $data['message'];
-      $parts = explode('|', $data['receiver']);
-      if( isset($parts[1]) ) {
-        $message = $this->renderTemplate($parts[0], $parts[1], $data['message']);
-      }
-
-     getDB()->create('corespondances', [
-      'sujet' => $data['subject'],
-      'nom' => read_session('abb_admin'),
-      'date_envoi' => date('Y-m-d H:i:s'),
-      'type_email' => (isset($data['type_email'])) ? $data['type_email'] : 'Envoi manuel',
-      'titre' => (isset($data['titre'])) ? $data['titre'] : 'Contact avec le candidat',
-      'message' => $data['message'],
-      'ref_filiale' => (isset($data['ref_filiale'])) ? $data['ref_filiale'] : ''
-    ]);
+    $message = $data['message'];
+    $parts = explode('|', $data['receiver']);
+    if( isset($parts[1]) ) {
+      $message = $this->renderTemplate($parts[0], $parts[1], $data['message']);
+    }
 
     $attachements = (isset($data['cv_path']) && $data['cv_path']!='') ? [site_base($data['cv_path'])] : [];  
     if(isset($data['attachements']) && is_array($data['attachements'])) {

@@ -39,7 +39,6 @@ if($p=='ec') {
    $af0="none";
 
    $af="block";
-href="javascript:void(0)" onclick="
    // -----------------------------------
 
 } 
@@ -145,7 +144,7 @@ $addSect = mysql_query("INSERT INTO prm_compte_desactiver (id_prm_compte,raison)
    echo "showonlyone('newboxes10');";
 
    echo "</script>";        
-href="javascript:void(0)" onclick="
+
 // -----------------------------------
 
 }
@@ -166,7 +165,7 @@ href="javascript:void(0)" onclick="
 
 	
 
-        <th scope="col" width="23%" style="background-color:#C1B3B0;color:white;"><strong>Intitul�</strong></th>
+        <th scope="col" width="23%" style="background-color:#C1B3B0;color:white;"><strong>Intitulé</strong></th>
 
         <th width="8%"colspan="2" style="background-color:#C1B3B0;color:white;"><strong>Actions</strong></th>
 

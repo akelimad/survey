@@ -26,29 +26,22 @@
 
 	<a class='bdp' href='<?php echo $urlinfos; ?>/liens/'>Plan du site</a>  
 
-	 <span class='bdp' style="color:#ffffff;" >|</span>
 
-
-
+	 <?php if(get_setting('menu_infos_signaler_probleme') == 1) : ?>
 	<a class='bdp' href='<?php echo $urlinfos; ?>/signaler_probleme/'>Signaler un problème</a>
 
 	 <span class='bdp' style="color:#ffffff;" >|</span>
-
-
-
-	<a class='bdp' href='<?php echo $urladmin; ?>/'>Espace administrateur</a>
-
-
-
+	<?php endif; ?>
 	 
 
 
-
+	<?php if(get_setting('show_copyright') == 1) : ?>
    <div style="display:inline;float:right;padding-right:30px;font-family:arial;font-size:10px;font-weight:bold;">	  
 
    <a class="copyright bdp" href="<?php echo $site_url_lycom ?>" target="_blank" title="E-Talent - Nouvelle fenêtre">  &copy;   E-Talent</a>
 
-   </div> 
+   </div>
+   <?php endif; ?>
 
 
 

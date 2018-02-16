@@ -10,10 +10,8 @@
  */
 namespace App\Controllers; 
 
-
 class Controller
 {
-
 	
 
 	/**
@@ -29,9 +27,6 @@ class Controller
 			return false;
 		return $keys[$found_index-1];
 	}
-
-
-
 
 
 	public function percent2Color($value, $brightness = 255, $max = 100, $min = 0, $thirdColorHex = '00')
@@ -50,14 +45,23 @@ class Controller
 		$firstHex = str_pad(dechex($first),2,0,STR_PAD_LEFT);     
 		$secondHex = str_pad(dechex($second),2,0,STR_PAD_LEFT); 
 
-		return $firstHex . $secondHex . $thirdColorHex ; 
-
-	    // alternatives:
-	    // return $thirdColorHex . $firstHex . $secondHex; 
-	    // return $firstHex . $thirdColorHex . $secondHex;
+		return $firstHex . $secondHex . $thirdColorHex ;
 	}
 
-	
+
+	public function verifyGoogleRecaptcha($response)
+	{
+		$secret = get_setting('google_recaptcha_secret');
+		$response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=". $secret ."&response=". $response);
+		$response = json_decode($response, true);
+		return ($response["success"] === true);
+	}
+
+
+	public function jsonResponse($status, $message)
+	{
+		return json_encode(['status' => $status, 'message' => $message]);
+	}
 
 
 } // END Class

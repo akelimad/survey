@@ -5,8 +5,11 @@ jQuery(document).ready(function($){
 	var modalTitle = '<img src="'+ loadingGifUrl +'" style="width: 30px;">&nbsp;Chargement en cours...';
 
 	showModal = function(ajax_args) {
-		$('[data-toggle="popover"]').popover('hide');
-		$('#candidaturesModal').modal({backdrop: 'static', keyboard: false})
+		ajax_args.type = 'POST';
+		ajax_args.url = site_url('src/includes/ajax/index.php')
+		window.chmModal.show(ajax_args)
+		// $('[data-toggle="popover"]').popover('hide');
+		/* $('#candidaturesModal').modal({backdrop: 'static', keyboard: false})
 
 		// Fire off the request
     	ajax_args.type = 'POST';
@@ -31,7 +34,7 @@ jQuery(document).ready(function($){
 			}
         }).fail(function (jqXHR, textStatus, errorThrown) {
         	ajax_error_message();
-        });
+        }); */
 	}
 
 	showCandidaturesFilterForm = function(url_params, fields) {

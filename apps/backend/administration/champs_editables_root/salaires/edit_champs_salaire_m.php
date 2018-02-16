@@ -38,7 +38,7 @@ if($p=='ec') {
 
    $af0="none";
 
-   $af="blohref="javascript:void(0)" onclick="
+   $af="blohref=";
 
    // -----------------------------------
 
@@ -135,7 +135,7 @@ $addSect = mysql_query("INSERT INTO prm_salaires (id_salr,salaire) VALUES ('','"
 // -----------------------------------
 
 }
-href="javascript:void(0)" onclick="
+
 ?>
 
 
@@ -150,7 +150,7 @@ href="javascript:void(0)" onclick="
 
     <tr>
 
-        <th scope="col" width="23%" style="background-color:#C1B3B0;color:white;"><strong>Intitul�</strong></th>
+        <th scope="col" width="23%" style="background-color:#C1B3B0;color:white;"><strong>Intitulé</strong></th>
 
         <th width="8%"colspan="2" style="background-color:#C1B3B0;color:white;"><strong>Actions</strong></th>
 

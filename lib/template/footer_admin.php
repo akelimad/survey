@@ -51,13 +51,13 @@ $ppp='/liens/';
 
 
    
-
+	<?php if(get_setting('show_copyright') == 1) : ?>
    <div style="display:inline;float:right;padding-right:30px;font-family:arial;font-size:10px;font-weight:bold;">	 
 
    <a class='bdp' href="<?php echo $site_url_lycom ?>" target="_blank" title="E-Talent- Nouvelle fenêtre">  &copy;   E-Talent</a>
 
    </div> 
-
+	<?php endif; ?>
 
 
     </div>	

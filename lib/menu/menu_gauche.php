@@ -25,7 +25,8 @@ $menu__1='ctl00_liSpontanee';	$menu__2='ctl00_liSpontanee'; $menu__3='ctl00_liSp
 
 
 
-
+// get current route
+$route = \App\Permission::getRoute();
 
 
 
@@ -73,14 +74,16 @@ if($c_stage>0){  $menu__1='ctl00_liSpontanee';	$menu__2='ctl00_liSpontanee'; $me
 
 		</li>
 
+		<?php if(get_setting('menu_offres_candidature_spontannee') == 1) : ?>
 		<li id="ctl00_liAlerte" class="<?php echo $menu__2; ?>"> 
 
 		<a  id="ctl00_lnkSpontanee" class="<?php echo $menu__1; ?>" href="<?php echo $urloffre ?>/candidature_spontannee/" >
 
 		<i class="fa fa-book fa-fw fa-lg"></i> Déposer une candidature spontanée </a> 
 
-		</li>																																			
-
+		</li>		
+		<?php endif; ?>																																	
+		<?php if(get_setting('menu_offres_candidature_stage') == 1) : ?>
 		<li id="ctl00_liSpontanee" class="<?php echo $menu__3; ?>">
 
 			<a id="ctl00_lnkSpontanee" class="<?php echo $menu__1; ?>" href="<?php echo $urloffre ?>/candidature_stage/" >
@@ -90,10 +93,11 @@ if($c_stage>0){  $menu__1='ctl00_liSpontanee';	$menu__2='ctl00_liSpontanee'; $me
 			</a>			
 
 		</li>
+		<?php endif; ?>
 
-		<li id="ctl00_liAlerte" class="<?php echo $menu__4; ?>">
+		<li id="ctl00_liAlerte">
 
-			<a id="ctl00_lnkAlerte" class="<?php echo $menu__1; ?>" href="<?php echo $urloffre ?>/" >
+			<a id="ctl00_lnkAlerte" <?= ($route=='offres') ? 'class="active"' : '' ?> href="<?php echo $urloffre ?>/" >
 
 			<i class="fa fa-list fa-fw fa-lg"></i> Offres d'emploi
 
@@ -101,37 +105,15 @@ if($c_stage>0){  $menu__1='ctl00_liSpontanee';	$menu__2='ctl00_liSpontanee'; $me
 
 		</li>
 
-		
+		<li id="ctl00_liAlerte">
 
-		<!--	
+			<a id="ctl00_lnkAlerte" <?= ($route=='offres/stage') ? 'class="active"' : '' ?> href="<?php echo $urloffre ?>/stage/" >
 
-<?php  
-
-
-
-	if($_SESSION['r_prm_menu_rh']==0){
-
-		 	
-
-?>
-
-		<li id="ctl00_liAlerte2" class="<?php echo $menu__5; ?>">
-
-			<a id="ctl00_lnkAlerte" class="<?php echo $menu__5; ?>" href="<?php echo $urlinfos ?>/politique_rh/" >
-
-			<i class="fa fa-book fa-fw fa-lg"></i> Politique RH
+			<i class="fa fa-list fa-fw fa-lg"></i> Offres de stage
 
 			</a>
 
-		</li> 
-
-<?php
-
- 	} 
-
-?> 		 
-
--->
+		</li>
 
 	</ul>
 

@@ -1,0 +1,120 @@
+.navbar-default {
+	border: none !important;
+}
+
+/* Admin navbar */
+#admin-navbar {
+	background-color: #f7f7f7;
+	border-color: #f7f7f7;
+	border-radius: 0px;
+	min-height: 25px;
+	margin-bottom: 10px;
+	box-shadow: 0 0.1em 0 0 #777;
+	border: none;
+	margin-top: -1px;
+	a {
+		float: left;
+		padding: 0 40px;
+		color: $color_bg_menu;
+		text-transform: uppercase;
+		text-decoration: none;
+		text-shadow: 0 1px 0 #000;
+		font: bold 12px/25px Arial, Helvetica;
+		border-bottom: none;
+	}
+	.dropdown-menu {
+		width: 218px;
+		background: linear-gradient(#f7f7f7, #f7f7f7);
+		box-shadow: none;
+		border: none;
+		padding: 0px;
+		a {
+			padding: 5px;
+			width: 100%;
+			text-transform: none;
+			box-shadow: 0 1px 0 #cccccc, 0 2px 0 #cccccc;
+		}
+	}
+	li {
+		&:hover > a, &.active > a {
+			color: #fff;
+			background-color: $color_bg_menu;
+		}
+	}
+	.navbar-nav > li.dropdown:hover > a {
+		background-color: rgb(231, 231, 231);
+		color: rgb(85, 85, 85);
+		&:hover, &:focus {
+			background-color: rgb(231, 231, 231);
+			color: rgb(85, 85, 85);
+		}
+	}
+	li.dropdown:hover > .dropdown-menu {
+		display: block;
+	}
+}
+
+/* top navbar */
+#top-navbar a {
+	color: #fff;
+	padding: 10px;
+	font-size: 10px;
+	padding: 5px 10px;
+	font-size: 11px;
+}
+
+/* Footer navbar */
+#footer-navbar, #top-navbar {
+	background-color: $color_bg;
+	min-height: 28px;
+	border-radius: 0px;
+	margin-bottom: 0px;
+}
+
+#footer-navbar a {
+	color: #fff;
+	padding: 10px;
+	font-size: 10px;
+}
+
+#footer-navbar li:not(:first-child) a:before, #top-navbar li:not(:first-child) a:before {
+	content: '|';
+	margin-left: -10px;
+	position: absolute;
+}
+
+#footer-navbar a:hover, #top-navbar a:hover {
+	text-decoration: underline;
+}
+
+/* nav-pills */
+.nav-pills {
+	li {
+		border-top: 1px dotted #cccccc;
+		&:last-child {
+			border-bottom: 1px dotted #cccccc;
+		}
+		padding: 0px;
+		&.active > a, &.active > a:hover, &.active > a:focus, 
+		> a:hover, > a:active, > a:focus {
+			background: $color_bg_menu;
+			color: #FFF;
+			i {
+				color: #fff;
+			}
+		}
+		a {
+			border: none !important;
+			border-radius: 0px;
+			text-transform: uppercase;
+			padding: 5px 10px !important;
+			margin-bottom: -2px;
+			color: #000000;
+			font-size: 11px;
+			i {
+				font-size: 14px;
+			}
+		}
+	}
+}
+

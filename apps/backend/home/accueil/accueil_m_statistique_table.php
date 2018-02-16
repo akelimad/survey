@@ -1,5 +1,33 @@
 <?php use Modules\Candidatures\Models\Candidatures; ?>
 
+<?php if(\App\Session::get('id_type_role') == 2) : ?>
+<table width="100%" border="0">
+	<tr colspan="2"><div class="subscription" style="width:100%; margin: 10px 0pt;height: 22px;">
+		<h1>Offres partagés avec moi</h1>
+	</tr>
+	<?php 
+	$sharedOffers = getDB()->prepare("SELECT o.id_offre, o.Name, ro.id_role_offre FROM role_offre ro JOIN offre o ON o.id_offre = ro.id_offre WHERE ro.id_role = ? LIMIT 5", [read_session('id_role')]); 
+	if(!empty($sharedOffers)) : foreach ($sharedOffers as $key => $offer) : ?>
+		<tr>
+			<td>
+				<a href="<?= site_url('backend/module/offer/partner/offer-entries/'.$offer->id_role_offre) ;?>"><?= $offer->Name; ?></a>
+			</td>
+			<td>
+				<a href="<?= site_url('backend/module/offer/partner/offer-entries/'.$offer->id_role_offre) ;?>" class="btn btn-default btn-xs pull-right"><i class="fa fa-eye"></i></a>
+			</td>
+		</tr>
+	<?php endforeach;?>
+	<tr>
+		<td colspan="2">
+			<a href="<?= site_url('backend/module/offer/partner/offers'); ?>" class="btn btn-primary btn-xs mt-10"><i class="fa fa-bars"></i>&nbsp;Afficher tous les offres</a>
+		</td>
+	</tr>
+	<?php else : ?>
+		<strong>Aucune offre n'a été partagé avec vous.</strong>
+	<?php endif; ?>
+</table>
+<?php endif; ?>
+
 <?php if(isAdmin()) : ?>
 <table width="100%" border="0">
 
@@ -128,6 +156,10 @@ echo '<span class="badge badge-error">'.$accept.'</span> ';?>
 
  <!--////////////////// ///////////////////////-->
 
+ <?php $roleCandidatures = getDB()->count('role_candidature', 'id_role', read_session('id_role')); 
+ if($roleCandidatures > 0) :
+ ?>
+
 <table width="100%" border="0">
 
 <tr colspan="2"><div class="subscription" style="width:100%; margin: 10px 0pt;">
@@ -150,6 +182,7 @@ echo '<span class="badge badge-error">'.$accept.'</span> ';?>
 <?php endforeach; ?>
 
 </table>  
+<?php endif; ?>
 
 
 <?php if(isAdmin()) : ?>

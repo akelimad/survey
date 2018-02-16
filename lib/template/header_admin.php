@@ -1,7 +1,7 @@
 <div class="container mb-30 mb-xs-15 pl-0 pr-0">
   <div class="row">
     <div class="col-md-12">
-      <nav class="navbar navbar-default" id="topNav">
+      <nav class="navbar navbar-default" id="top-navbar">
         <div class="container-fluid pl-5 pl-xs-15">
           <ul class="nav navbar-nav navbar-right pr-5">
             <li><a href="<?= get_site('site_url'); ?>" target="_blank" style="color:#ffffff;" title="Accès au site de l'institution - Nouvelle fenêtre">Accès au site de l'institution</a></li>

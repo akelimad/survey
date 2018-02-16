@@ -768,7 +768,7 @@ echo $show;
 
 <form action="<?php echo($_SERVER['REQUEST_URI']); ?>" method="post" id="form_standard" enctype="multipart/form-data">
 
-      <table border="0">
+      <table border="0" width="100%">
 
     
 
@@ -800,7 +800,7 @@ echo $show;
 
     <li style="list-style-type: none;" class='even'><label>Arabe </label> </li>
 
-    <li style="list-style-type: none;" class='odd'>    <select  id="ar" name="ar" style="width:120px">
+    <li style="list-style-type: none;" class='odd'>    <select  id="ar" name="ar" style="width:95%">
 
        <option value=""></option>
 
@@ -826,7 +826,7 @@ echo $show;
 
     <li style="list-style-type: none;" class='even'><label>Fran&ccedil;ais </label> </li>
 
-    <li style="list-style-type: none;" class='odd'>   <select  id="fr" name="fr" style="width:120px">
+    <li style="list-style-type: none;" class='odd'>   <select  id="fr" name="fr" style="width:95%">
 
        <option value=""></option>
 
@@ -854,7 +854,7 @@ echo $show;
 
     <li style="list-style-type: none;" class='even'><label>Anglais </label> </li>
 
-    <li style="list-style-type: none;" class='odd'>   <select  id="en" name="en" style="width:120px">
+    <li style="list-style-type: none;" class='odd'>   <select  id="en" name="en" style="width:95%">
 
        <option value=""></option>
 
@@ -892,13 +892,13 @@ echo $show;
 
     <ul>
 
-    <li style="list-style-type: none;" class='even'><label>Autres 1 : </label> <input id="autre00" name="autre" type="text" value="<?php if ($count) echo $retour['autre']; ?>" style="width: 100px;" pattern="[a-zA-Z0-9ÀÁÂÄàáâäÒÓÔÖòóôöÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ' ]+"  />
+    <li style="list-style-type: none;width: 235px;" class='even'><label>Autres 1 : <a  href="#"  class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
 
-        <a  href="#"  class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
+        <em><span></span>  Veuillez entrer une langue avant de préciser le niveau de maîtrise </em> </a></label><br> <input id="autre00" name="autre" type="text" value="<?php if ($count) echo $retour['autre']; ?>" style="width: 95%;" pattern="[a-zA-Z0-9ÀÁÂÄàáâäÒÓÔÖòóôöÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ' ]+"  />
 
-        <em><span></span>  Veuillez entrer une langue avant de préciser le niveau de maîtrise </em> </a></li>
+        </li>
 
-    <li style="list-style-type: none;" class='odd'><select id="autre_n00" name="autre_n" style="width:120px">
+    <li style="list-style-type: none;" class='odd'><select id="autre_n00" name="autre_n" style="width:96.5%">
 
        <option value=""></option>
 
@@ -924,13 +924,13 @@ echo $show;
 
 
 
-      <li style="list-style-type: none;" class='even'><label>Autres 2 : </label> <input id="autre01" name="autre1" type="text" value="<?php if ($count) echo $retour['autre1']; ?>" style="width: 100px;" pattern="[a-zA-Z0-9ÀÁÂÄàáâäÒÓÔÖòóôöÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ' ]+"  />
+      <li style="list-style-type: none;width: 235px;" class='even'><label>Autres 2 : <a  href="#"  class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
 
-        <a  href="#"  class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
+        <em><span></span>  Veuillez entrer une langue avant de préciser le niveau de maîtrise </em> </a></label><br> <input id="autre01" name="autre1" type="text" value="<?php if ($count) echo $retour['autre1']; ?>" style="width: 95%" pattern="[a-zA-Z0-9ÀÁÂÄàáâäÒÓÔÖòóôöÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ' ]+"  />
 
-        <em><span></span>  Veuillez entrer une langue avant de préciser le niveau de maîtrise </em> </a></li>
+        </li>
 
-      <li style="list-style-type: none;" class='odd'><select id="autre1_n01" name="autre1_n" style="width:120px">
+      <li style="list-style-type: none;" class='odd'><select id="autre1_n01" name="autre1_n" style="width:96.5%">
 
          <option value=""></option>
 
@@ -952,13 +952,13 @@ echo $show;
 
       <ul>
 
-      <li style="list-style-type: none;" class='even'><label>Autres 3 : </label> <input id="autre02" name="autre2" type="text" value="<?php if ($count) echo $retour['autre2']; ?>" style="width: 100px;" pattern="[a-zA-Z0-9ÀÁÂÄàáâäÒÓÔÖòóôöÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ' ]+"  />
+      <li style="list-style-type: none;width: 235px;" class='even'><label>Autres 3 : <a  href="#"  class="tooltip" align="center">    <i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
 
-        <a  href="#"  class="tooltip" align="center">    <i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
+        <em><span></span>  Veuillez entrer une langue avant de préciser le niveau de maîtrise </em> </a></label>
 
-        <em><span></span>  Veuillez entrer une langue avant de préciser le niveau de maîtrise </em> </a></li>
+        <br> <input id="autre02" name="autre2" type="text" value="<?php if ($count) echo $retour['autre2']; ?>" style="width: 95%;" pattern="[a-zA-Z0-9ÀÁÂÄàáâäÒÓÔÖòóôöÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ' ]+"  /></li>
 
-      <li style="list-style-type: none;" class='odd'><select id="autre2_n02" name="autre2_n" style="width:120px">
+      <li style="list-style-type: none;" class='odd'><select id="autre2_n02" name="autre2_n" style="width:96.5%">
 
          <option value=""></option>
 
@@ -979,6 +979,7 @@ echo $show;
 
 
       </tr>
+      
 
    </table>
 

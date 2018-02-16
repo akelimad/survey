@@ -902,7 +902,7 @@ class Table extends Pagination {
                 'callback' => null
             );
         }
-        $args = array_merge($default, $args);
+        $args = array_replace_recursive($default, $args);
         $this->_actions[$name] = $args;
     }
 

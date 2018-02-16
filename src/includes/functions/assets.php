@@ -33,15 +33,22 @@ function add_js($unique_id, $params=[]){
  * @return void
  */
 \App\Event::add('head', function($args){
+	$scripts = Assets::getScripts();
 	$styles = Assets::getStyles();
-	if( empty($styles) )
-		return false;
+		
+	$output = "\n";
+	if(!empty($scripts['head'])) {
+		foreach ($scripts['head'] as $unique_id => $s) {
+			$version = ($s['version']) ? "?ver=".$s['version'] : "";
+			$output .= '<script id="'. $unique_id .'" src="'. $s['src'] . $version .'" type="text/javascript"></script>'. "\n";
+		}
+	}
 
-	$output = get_dynamic_assets('css') ."\n";
-	$output .= get_dynamic_assets('js') ."\n";
-	foreach ($styles as $unique_id => $s) {
-		$version = ($s['version']) ? "?v=".$s['version'] : "";
-		$output .= '<link id="'. $unique_id .'" href="'. $s['src'] . $version .'" rel="stylesheet" type="text/css" media="'. $s['media'] .'" />'. "\n";
+	if(!empty($styles['head'])) {
+		foreach ($styles['head'] as $unique_id => $s) {
+			$version = ($s['version']) ? "?v=".$s['version'] : "";
+			$output .= '<link id="'. $unique_id .'" href="'. $s['src'] . $version .'" rel="stylesheet" type="text/css" media="'. $s['media'] .'" />'. "\n";
+		}
 	}
 	print $output;
 });
@@ -53,53 +60,55 @@ function add_js($unique_id, $params=[]){
  */
 \App\Event::add('footer', function($args){
 	$scripts = Assets::getScripts();
-	if( empty($scripts) )
-		return false;
+	$styles = Assets::getStyles();
 		
 	$output = "\n";
-	foreach ($scripts as $unique_id => $s) {
-		$version = ($s['version']) ? "?ver=".$s['version'] : "";
-		$output .= '<script id="'. $unique_id .'" src="'. $s['src'] . $version .'" type="text/javascript"></script>'. "\n";
+	if(!empty($scripts['footer'])) {
+		foreach ($scripts['footer'] as $unique_id => $s) {
+			$version = ($s['version']) ? "?ver=".$s['version'] : "";
+			$output .= '<script id="'. $unique_id .'" src="'. $s['src'] . $version .'" type="text/javascript"></script>'. "\n";
+		}
+	}
+
+	if(!empty($styles['footer'])) {
+		foreach ($styles['footer'] as $unique_id => $s) {
+			$version = ($s['version']) ? "?v=".$s['version'] : "";
+			$output .= '<link id="'. $unique_id .'" href="'. $s['src'] . $version .'" rel="stylesheet" type="text/css" media="'. $s['media'] .'" />'. "\n";
+		}
 	}
 	print $output;
 });
 
 
-function get_dynamic_assets($type = 'css') {
-	$devEnv = ((strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || read_cookie('env') === 'dev'));
-	$output = '';
-	$assets = json_decode(file_get_contents(site_base('/public/build/assets.json')), true);
-	if(isset($assets['app'][$type])) {
-		foreach ($assets as $key => $asset) {
-			if($devEnv && $type === 'css') continue;
-
-			$assetsUrl = ($devEnv) ? 'http://localhost:3003/public/build/'. $key .'.'. $type : $asset[$type];
-			if($type === 'js') {
-				$output .= '<script src="'. $assetsUrl .'" type="text/javascript"></script>'. "\n";
-			} else {
-				$output .= '<link href="'. $assetsUrl .'" rel="stylesheet" type="text/css" />'. "\n";
-			}
-
-			/* if($devEnv) {
-				if($type === 'css') {
-					$output .= '<script src="http://localhost:3003/public/build/'. $key .'.js" type="text/javascript"></script>'. "\n";
-				}
-			} else {
-				$assetsUrl = ($devEnv) ? 'http://localhost:3003/public/build/'. $key .'.'. $type : $asset[$type];
-				if($type === 'js') {
-					$output .= '<script src="'. $assetsUrl .'" type="text/javascript"></script>'. "\n";
-				} else if($type === 'css' && !$devEnv) {
-					$output .= '<link href="'. $assetsUrl .'" rel="stylesheet" type="text/css" />'. "\n";
-				}
-			} */
-		}
-	}
-	return $output;
-}
-
 /**
  * Register global CSS and JS
  */
+// local dynamic assets
+$assetsPath = site_base('/public/build/assets.json');
+if(file_exists($assetsPath) && is_readable($assetsPath)) {
+	$devEnv = (defined('ETA_ENV') && ETA_ENV == 'dev');
+	$assets = json_decode(file_get_contents($assetsPath), true);
+	foreach ($assets as $key => $asset) {
+		$cssUrl = ($devEnv) ? 'http://localhost:3003/public/build/'. $key .'.css' : $asset['css'];
+		$jsUrl = ($devEnv) ? 'http://localhost:3003/public/build/'. $key .'.js' : $asset['js'];
+		add_js('app', ['src'=> $jsUrl, 'admin' => true, 'in_footer' => false]);
+		if(!$devEnv) {
+			add_css('app', ['src'=> $cssUrl, 'admin' => true]);
+		}
+	}
+}
+
+add_js('jquery-ui-js', [
+	'src' => 'http://code.jquery.com/ui/1.11.3/jquery-ui.js', 
+	'admin' => true,
+	'in_footer' => false
+]);
+
+add_css('jquery-ui-css', [
+	'src'=> 'http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css', 
+	'admin' => true
+]);
+
 /* add_js('jquery', [
 	'src' => SITE_URL .'assets/js/jquery/jquery-1.11.2.min.js', 
 	'admin' => true,
@@ -153,17 +162,31 @@ add_js('eta-scripts', [
 	'version' => ETA_ASSETS_VERSION
 ]);
 
-add_css('style_admin', [
-	'src'=> SITE_URL .'assets/css/style_admin.php', 
-	'admin' => true,
-	'version' => ETA_ASSETS_VERSION
-]);
+// add_css('style_admin', [
+// 	'src'=> SITE_URL .'assets/css/style_admin.php', 
+// 	'admin' => true,
+// 	'front' => false,
+// 	'version' => ETA_ASSETS_VERSION
+// ]);
 
-add_css('menuprincipal', [
-	'src'=> SITE_URL .'assets/css/styles/menuprincipal.php', 
-	'admin' => true,
-	'version' => ETA_ASSETS_VERSION
-]);
+// add_css('menuprincipal', [
+// 	'src'=> SITE_URL .'assets/css/styles/menuprincipal.php', 
+// 	'admin' => true,
+// 	'front' => false,
+// 	'version' => ETA_ASSETS_VERSION
+// ]);
+
+// add_css('style', [
+// 	'src'=> SITE_URL .'assets/css/style.php', 
+// 	'admin' => false,
+// 	'version' => ETA_ASSETS_VERSION
+// ]);
+
+// add_css('generiques', [
+// 	'src'=> SITE_URL .'assets/css/styles/Styles_generiques.php', 
+// 	'admin' => false,
+// 	'version' => ETA_ASSETS_VERSION
+// ]);
 
 /* add_css('chm-alerts', [
 	'src'=> SITE_URL .'assets/css/etalent-alerts.css', 
@@ -177,8 +200,8 @@ add_css('eta-popup', [
 	'version' => ETA_ASSETS_VERSION
 ]); */
 
-add_css('eta-styles', [
-	'src'=> SITE_URL .'assets/css/etalent-styles.css', 
-	'admin' => true,
-	'version' => ETA_ASSETS_VERSION
-]);
+// add_css('eta-styles', [
+// 	'src'=> SITE_URL .'assets/css/etalent-styles.css', 
+// 	'admin' => true,
+// 	'version' => ETA_ASSETS_VERSION
+// ]);

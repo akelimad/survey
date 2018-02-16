@@ -13,5 +13,5 @@ module.exports = {
   html: false,
   assets_url: '/public/build/',  // Urls dans le fichier final
   assets_path: './public/build/', // ou build ?
-  refresh: ['src/**/*.php', 'modules/**/*.php'] // Permet de forcer le rafraichissement du navigateur lors de la modification de ces fichiers
+  refresh: ['src/views/**/*.php', 'modules/views/**/*.php'] // Permet de forcer le rafraichissement du navigateur lors de la modification de ces fichiers
 }

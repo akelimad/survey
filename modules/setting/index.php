@@ -6,7 +6,7 @@
  * @param string $name
  * @return string
  **/
-function get_setting($name = null) {
+function get_setting($name = null, $dafault = null) {
 	$settings = $GLOBALS['etalent']->settings;
 	if( empty($settings) ) {
 		$settings = [];
@@ -14,7 +14,7 @@ function get_setting($name = null) {
 		if(!empty($setting)) : foreach ($setting as $key => $s) :
 			$settings[$s->name] = $s->value;
 		endforeach; endif;
-		$GLOBALS['etalent'] = new \stdClass;
+		// $GLOBALS['etalent'] = new \stdClass;
 		$GLOBALS['etalent']->settings = $settings;
 	}
 	if( is_null($name) ) {
@@ -22,7 +22,7 @@ function get_setting($name = null) {
 	} elseif ( isset($settings[$name]) ) {
 		return $settings[$name];
 	}
-	return $name;
+	return $dafault;
 }
 
 

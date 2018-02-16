@@ -67,29 +67,37 @@ class View {
 
         global $lang;
         global $languages;
+        global $nom_site;
 
         $variables['lang']      = $lang;
         $variables['languages'] = $languages;
+        $variables['nom_site']  = SITE_NAME;
         $variables['roles']     = getDB()->findOne('root_roles', 'login', $_SESSION['abb_admin']) ?: [];
         $variables['site']      = site_url();
         $variables['jsurl']     = site_url('assets/js/');
         $variables['cssurl']    = site_url('assets/css/');
-        $variables['ariane']    = implode(' > ', array_map('ucfirst', $variables['breadcrumbs']));
-        $variables['nom_page_site'] = implode(' || ', array_map('strtoupper', $variables['breadcrumbs']));;
-        ob_start(); // Initiate the output buffer
-        ob_clean();
+        $variables['ariane'] = $variables['nom_page_site'] = '';
+        if(isset($variables['breadcrumbs'])) {
+            $variables['ariane'] = implode(' > ', array_map('ucfirst', $variables['breadcrumbs']));
+            $variables['nom_page_site'] = SITE_NAME .' || '. strtoupper(end($variables['breadcrumbs']));            
+        }
+
+        ob_start();
         self::get($viewPath, $variables, $file);
         $variables['content'] = ob_get_clean();
 
-        // Render page
-        self::get('partials/header', $variables, $file);
-        $template = (isset($variables['template'])) ? $variables['template'] : 'full-width'; 
-        if( isBackend() ) {
-            self::get('templates/'.$template, $variables, $file);
+        if(isset($variables['layout'])) {
+            self::get('layouts/'.$variables['layout'], $variables, $file);
         } else {
-            self::get('templates/front/'.$template, $variables, $file);
+            self::get('partials/header', $variables, $file);
+            $template = (isset($variables['template'])) ? $variables['template'] : 'full-width'; 
+            if( isBackend() ) {
+                self::get('templates/'.$template, $variables, $file);
+            } else {
+                self::get('templates/front/'.$template, $variables, $file);
+            }
+            self::get('partials/footer', $variables, $file);
         }
-        self::get('partials/footer', $variables, $file);
     }
 
     

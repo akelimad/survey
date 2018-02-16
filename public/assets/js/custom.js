@@ -1,11 +1,6 @@
 import $ from 'jquery'
 
 $(document).ready(function () {
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': document.head.querySelector('[name="csrf-token"]').content
-    }
-  })
   // Check all table rows
   $('.chmTable_checkAll').change(function () {
     $('.chmTable_checkAll').not($(this)).prop('checked', $(this).is(':checked'))
@@ -87,6 +82,52 @@ $(document).ready(function () {
     return e.preventDefault()
   })
 
+  // Add new Line
+  $('body').on('click', '.addLine', function (event) {
+    event.preventDefault()
+    var $row = $(this).closest('tr')
+    var copy = $row.clone()
+    copy.find('button').toggleClass('addLine deleteLine')
+    copy.find('button').toggleClass('btn-success btn-danger')
+    copy.find('button>i').toggleClass('fa-plus fa-minus')
+    $row.find('input').val('')
+    $(copy).insertBefore($row)
+  })
+
+  // Delete added Line
+  $('body').on('click', '.deleteLine', function () {
+    $(this).closest('tr').remove()
+  })
+
+  // We can attach the `fileselect` event to all file inputs on the page
+  $(document).on('change', '.file-upload input[type="file"]', function () {
+    var input = $(this)
+    var numFiles = input.get(0).files ? input.get(0).files.length : 1
+    var label = input.val().replace(/\\/g, '/').replace(/.*\//, '')
+    input.trigger('fileselect', [numFiles, label])
+  })
+
+  // We can watch for our custom `fileselect` event like this
+  $(document).ready(function () {
+    $('.file-upload input[type="file"]').on('fileselect', function (event, numFiles, label) {
+      var input = $(this).parents('.input-group').find(':text')
+      var log = numFiles > 1 ? numFiles + ' files selected' : label
+      if (input.length) {
+        input.val(log)
+      }
+    })
+  })
+
+  getSearchFormPosition()
+
   // Initialise filter form
   window.chmFilter.init()
 })
+
+$(window).resize(function () {
+  getSearchFormPosition()
+})
+
+function getSearchFormPosition () {
+  $('#topSearchForm').css('right', $('#logo-banner').offset().left + 90)
+}

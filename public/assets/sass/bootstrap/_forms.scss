@@ -1,0 +1,64 @@
+.chm-simple-form {
+	label:not(.input-group-btn) {
+		font-size: 11px;
+		display: block;
+		margin-bottom: 5px;
+		font-weight: normal;
+		&.pointer {
+			cursor: pointer;
+		}
+	}
+	.form-control {
+	    height: 28px;
+	    padding: 0px 5px;
+	    font-size: 12px;
+	    border-radius: 0px;
+	    box-shadow: none;
+	    transition: none;
+	    color: #000;
+	    &[type="file"] {
+	    	padding: 4px;
+	    }
+	}
+	.form-group {
+	    margin-bottom: 10px;
+	    display: table;
+	    width: 100%;
+	}
+	input[type="radio"], input[type="checkbox"] {
+		margin: 0;
+	    vertical-align: top;
+	    vertical-align: sub;
+	}
+	.required>label:first-child:after {
+		content: "*";
+	    font-size: 16px;
+	    color: #ff0000;
+	    margin-left: 5px;
+	    position: absolute;
+	    top: 0;
+	}
+
+	input, select, textarea {
+	    background: transparent !important;
+	    box-shadow: none !important;
+	    border-color: #ccc !important;
+	    margin-bottom: 10px;
+	}
+	.help-block {
+	    margin-top: -5px;
+	    font-size: 11px;
+	}
+}
+
+/* file upload btn */
+.file-upload {
+	width: 100%;
+	input[type="file"]{
+		display: none !important;
+	}
+	span {
+	    padding: 4px 12px;
+	}
+
+}

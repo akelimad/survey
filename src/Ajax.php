@@ -71,6 +71,14 @@ class Ajax
         return false;
     }
 
+    
+    public function renderAjaxView($title, $viewPath, $variables=[], $file)
+    {
+        ob_start();
+        get_view($viewPath, $variables, $file);
+        $content = ob_get_clean();
+        return json_encode(['content' => $content, 'title' => $title]);
+    }
 
 
 } // END Class
