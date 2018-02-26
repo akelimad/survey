@@ -10,10 +10,12 @@ export default class chmModal {
     // Fire off the request
     var classInstance = this
     var loadingMessage = ('message' in options) ? options.message : ''
-    var modalTemplate = this.loading(loadingMessage)
+    var id = ('id' in options) ? options.id : ''
+    var modalTemplate = this.loading(loadingMessage, id)
 
     var modalWidth = (window.outerWidth >= 600) ? 600 : (window.outerWidth - 20)
-    if (options.width !== '' && window.outerWidth > options.width) modalWidth = options.width
+
+    if (options.width !== '' && window.outerWidth > (options.width + 20)) modalWidth = options.width
     modalTemplate.find('.modal-dialog').css('width', modalWidth)
 
     modalTemplate.attr('chm-modal-id', null)
@@ -31,13 +33,14 @@ export default class chmModal {
           classInstance.destroy(modalTemplate)
         } else {
           // add title
-          if (response['title'] !== undefined) {
+          if (response.title !== undefined && response.title !== '') {
             modalTemplate.find('.modal-title').html(response.title)
           } else {
-            modalTemplate.find('.modal-title').hide()
+            modalTemplate.find('.modal-header').hide()
+            modalTemplate.find('.modal-body').css('border', 'none')
           }
           // add content
-          if (response['content'] !== undefined) {
+          if (response.content !== undefined) {
             modalTemplate.find('.modal-body').html('<div class="chm-modal-content">' + response.content + '</div>').show()
           } else {
             modalTemplate.find('.modal-body').hide()
@@ -47,7 +50,7 @@ export default class chmModal {
           modalTemplate.removeClass('chm-loading-modal')
           modalTemplate.removeClass('chm-confirm-modal')
           // add footer actions
-          if ('footer' in options) {
+          if ('footer' in options && response.status !== 'hide_form') {
             var label = ('label' in options.footer) ? options.footer.label : 'Valider'
             var footerBloc = '<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-hidden="true">Fermer</button><button type="submit" class="btn btn-primary btn-sm pull-right">' + label + '</button></div>'
             if (modalTemplate.find('.panel-footer').length === 0) {
@@ -57,17 +60,34 @@ export default class chmModal {
             }
             var formMethod = 'POST'
             var formClass = 'form-horizontal'
+            var formId = ''
             var formCallback = ''
             var formAction = ''
             if ('form' in options) {
               if ('action' in options.form) formAction = options.form.action
               if ('method' in options.form) formMethod = options.form.method
               if ('class' in options.form) formClass = options.form.class
+              if ('id' in options.form) formId = 'id="' + options.form.id + '"'
               if ('callback' in options.form) formCallback = 'onsubmit="return ' + options.form.callback + '(event)"'
             }
             var enctype = ('enctype' in options.form && options.form.enctype === true) ? 'enctype="multipart/form-data"' : ''
-            $('.modal-content').wrap('<form method="' + formMethod + '" action="' + formAction + '" role="form" class="' + formClass + '" ' + formCallback + ' ' + enctype + '></div>')
+
+            // make modal dragablle
+            if ('draggable' in options && options.draggable === true) {
+              try {
+                $(modalTemplate).find('.modal-dialog').draggable({
+                  cursor: 'move',
+                  handle: '.modal-header'
+                })
+                $(modalTemplate).find('.modal-header').css('cursor', 'move')
+              } catch (e) {
+                console.error(e.message)
+              }
+            }
+
+            $('.modal-content').wrap('<form method="' + formMethod + '" action="' + formAction + '" role="form" class="' + formClass + '" ' + formId + ' ' + formCallback + ' ' + enctype + '></div>')
           }
+
           if (!$(modalTemplate).find('.modal-title').is(':visible') && !$(modalTemplate).find('.modal-body').is(':visible')) {
             classInstance.destroy(modalTemplate)
           }
@@ -82,8 +102,14 @@ export default class chmModal {
 
         // Trigger callback
         if ('onSuccess' in options) {
-          // TODO - trigger onSuccess action
-          console.log(options.onSuccess)
+          switch (typeof options.onSuccess) {
+            case 'function':
+              options.onSuccess(response)
+              break
+            case 'string':
+              window[options.onSuccess](response)
+              break
+          }
         }
       } catch (e) {
         classInstance.setError(modalTemplate, e.message)
@@ -96,7 +122,7 @@ export default class chmModal {
     return modalObject
   }
 
-  static confirm (target, title = '', message = '', callable = '', args = {}, params = {}) {
+  static confirm (target = '', title = '', message = '', callable = '', args = {}, params = {}) {
     // prepare action
     var action = ''
     if (callable !== '') {
@@ -166,9 +192,11 @@ export default class chmModal {
     return modal
   }
 
-  static loading (message = '') {
+  static loading (message = '', id = '') {
     var content = (message !== '') ? message : '<i class="fa fa-circle-o-notch fa-spin fast-spin"></i>&nbsp;Chargement en cours...'
-    var tpl = ($('.chm-modal').length > 0) ? $('.chm-modal') : $(this.template())
+    this.destroy()
+    // var tpl = ($('.chm-modal').length > 0) ? $('.chm-modal') : $(this.template())
+    var tpl = $(this.template(id))
     tpl.find('.panel-footer').remove()
     tpl.removeClass('chm-confirm-modal')
     tpl.addClass('chm-loading-modal')
@@ -187,11 +215,13 @@ export default class chmModal {
     $(instance).find('button.close').trigger('click')
   }
 
-  static template () {
-    return '<div class="modal chm-modal fade" role="dialog" data-keyboard="false"><div class="modal-dialog"><div class="modal-content"><div class="modal-header" style="border-bottom: none;"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title"></h4></div><div class="modal-body" style="border-top: 1px solid #e5e5e5;"><div class="chm-response-messages"></div></div></div></div></div>'
+  static template (id = '') {
+    if (id !== '') id = 'id="' + id + '"'
+    return '<div class="modal chm-modal fade"' + id + 'role="dialog" data-keyboard="false"><div class="modal-dialog"><div class="modal-content"><div class="modal-header" style="border-bottom: none;"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title"></h4></div><div class="modal-body" style="border-top: 1px solid #e5e5e5;"><div class="chm-response-messages"></div></div></div></div></div>'
   }
 
   static showAlertMessage (type, message, dismissible = true) {
+    // var alert = window.chmAlert.getAlertBlock(type, message, dismissible)
     if (type === 'error') type = 'danger'
     var icon = ''
     switch (type) {

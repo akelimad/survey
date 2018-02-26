@@ -26,7 +26,7 @@ $menu__1='ctl00_liSpontanee';	$menu__2='ctl00_liSpontanee'; $menu__3='ctl00_liSp
 
 
 // get current route
-$route = \App\Permission::getRoute();
+$route = \App\Route::getRoute();
 
 
 

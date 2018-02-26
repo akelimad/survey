@@ -122,7 +122,48 @@ $(document).ready(function () {
 
   // Initialise filter form
   window.chmFilter.init()
+
+  // offer search
+  if ($('#chm-offer-search').length > 0) {
+    window.chmOffer.renderSearchForm()
+  }
+
+  // Select2 jquery plugin show number of selected items in the result instead of tags
+  if ($.fn.select2) {
+    $('body').on('select2:selecting', 'select[multiple]', function (evt) {
+      showNumberOfSelectedItems($(this))
+    })
+    $(document).on('DOMNodeInserted', function (e) {
+      if ($(e.target).hasClass('select2-selection')) {
+        window.setTimeout(function () {
+          var $target = $(e.target).closest('.select2-container').prev('select')
+          showNumberOfSelectedItems($target)
+        })
+      }
+    })
+  }
 })
+
+function showNumberOfSelectedItems (target) {
+  var $ul = $(target).next('span').find('ul')
+  $ul.hide()
+  window.setTimeout(function () {
+    var count = $ul.find('li').length - 1
+    switch (count) {
+      case 0:
+        $ul.empty().hide()
+        break
+      case 1:
+        $ul.empty().html('<li class="count-selected">' + count + ' élément sélectionné</li>')
+        $ul.show()
+        break
+      default:
+        $ul.html('<li class="count-selected">' + count + ' éléments sélectionnés</li>')
+        $ul.show()
+        break
+    }
+  }, 200)
+}
 
 $(window).resize(function () {
   getSearchFormPosition()

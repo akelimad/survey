@@ -14,7 +14,7 @@
  * @author Mhamed Chanchaf
  */
 function get_candidat_id(){
-	return $_SESSION['abb_id_candidat'] ?: false;
+	return read_session('abb_id_candidat', false);
 }
 
 

@@ -72,7 +72,7 @@ class Table extends Pagination {
      * @access protected
      * @var    int
      */
-    protected $currentPage;
+    protected static $currentPage;
 
 
     /**
@@ -273,7 +273,7 @@ class Table extends Pagination {
 
         // Set url
         if( !isset($options['url']) ) {
-            $this->_options['url'] = $this->setUrl();
+            $this->_options['url'] = self::getPaginationUrl();
         }
 
         if( !isset($options['db_handle']) ) {
@@ -281,7 +281,7 @@ class Table extends Pagination {
         }
 
         if( isset($options['currentPage']) ) {
-            $this->currentPage = $options['currentPage'];
+            self::$currentPage = $options['currentPage'];
         }
         
         if( isset($_GET['module']) ) {
@@ -329,7 +329,7 @@ class Table extends Pagination {
                 }
             }
 
-            $pagi = new Pagination($this->getPage(), $this->_query, $options);
+            $pagi = new Pagination(self::getPage(), $this->_query, $options);
 
             if( true === $pagi->success ){
                 $this->_success = true;
@@ -379,7 +379,7 @@ class Table extends Pagination {
             $html .= '<div class="col-md-12">';
 
                 /*if( $this->total_results > 0 ) {
-                    $show_start = (($this->perpage * $this->getPage()) - $this->perpage)+1;
+                    $show_start = (($this->perpage * self::getPage()) - $this->perpage)+1;
                     $show_end = ($show_start + $this->perpage)-1;
                     if( $show_end > $this->total_results ) $show_end = $this->total_results;
                     $html .= '<strong>Affichage de '.$show_start.' à '.$show_end.' des '.$this->total_results.' entrées</strong>'; //  style="margin-left: 10px;"
@@ -692,12 +692,12 @@ class Table extends Pagination {
      *
      * @return int $page
      */
-    public function getPage()
+    public static function getPage()
     {
-        if( is_null($this->currentPage) ) {
+        if( is_null(self::$currentPage) ) {
             return (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) ? intval($_GET['page']) : 1;
         }
-        return $this->currentPage;
+        return self::$currentPage;
     }
 
 
@@ -708,9 +708,9 @@ class Table extends Pagination {
      */
     public function getSortLink($field)
     {
-        $url = $this->getCurrentUrl();
+        $url = self::getCurrentUrl();
 
-        $sep = $this->getSeparator();
+        $sep = self::getSeparator();
 
         if( isset($_GET['orderby']) ) {
             $arr = explode("orderby=", $url, 2);
@@ -741,7 +741,7 @@ class Table extends Pagination {
      *
      * @return string $url
      */
-    public function getCurrentUrl()
+    public static function getCurrentUrl()
     {
         $scheme = (isset($_SERVER['REQUEST_SCHEME'])) ? $_SERVER['REQUEST_SCHEME'] : 'http';
         $url = $scheme . '://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -754,19 +754,23 @@ class Table extends Pagination {
      *
      * @return string url
      */
-    public function setUrl()
+    public static function getPaginationUrl()
     {
-        $url = $this->getCurrentUrl();
+        $url = self::getCurrentUrl();
 
-        $sep = $this->getSeparator();
+        $sep = self::getSeparator();
 
         if( isset($_GET['page']) ) {
             $arr = explode("page=", $url, 2);
             $sep = substr($arr[0], -1);
-            $page = $this->getPage();
+            $page = self::getPage();
             $url = str_replace($sep.'page='. $page, $sep .'page=*VAR*', $url);
         } else {
-            $url .= $sep .'page=*VAR*';
+            if (strpos($url, '?') !== false) {
+                $url = str_replace('?', '?page=*VAR*&', $url);
+            } else {
+                $url .= '?page=*VAR*';
+            }
         }
 
         return $url;
@@ -802,7 +806,7 @@ class Table extends Pagination {
      */
     public function getIncrement()
     {
-        $page = $this->getPage();
+        $page = self::getPage();
         $perpage = $this->getPerpage();
         if( is_null($this->increment) ) {
             $this->increment = (($perpage * $page) - $perpage)+1;
@@ -1026,7 +1030,7 @@ class Table extends Pagination {
      *
      * @return string $separator
      */
-    public function getSeparator()
+    public static function getSeparator()
     {
         $separator = '?';
         if (strpos($_SERVER['REQUEST_URI'], '?') !== false) {

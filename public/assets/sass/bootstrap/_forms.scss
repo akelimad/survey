@@ -60,5 +60,44 @@
 	span {
 	    padding: 4px 12px;
 	}
+}
 
+
+
+/* select 2 */
+.select2-container {
+  display: block !important;
+  width: 100% !important;
+  &.select2-container--open {
+  	span.select2-selection:after {
+  		content: "\f0de";
+  		top: 6px;
+  	}
+  }
+	span.select2-selection {
+		border: 1px solid #ccc !important;
+		border-radius: 0px !important;
+		height: 22px !important;
+		min-height: 22px !important;
+		&:after {
+			content: "\f0dd";
+	    font-family: FontAwesome;
+	    position: absolute;
+	    right: 5px;
+	    top: 1px;
+	    font-size: 11px;
+		}
+		ul {
+			display: none;
+			.count-selected {
+				font-size: 10px;
+				margin-top: 2px;
+			}
+		}
+	}
+
+	.select2-results__option {
+		font-size: 10px !important;
+		padding: 3px 5px !important;
+	}
 }

@@ -72,12 +72,15 @@ class Ajax
     }
 
     
-    public function renderAjaxView($title, $viewPath, $variables=[], $file)
+    public function renderAjaxView($title, $viewPath, $variables=[], $file = null)
     {
         ob_start();
         get_view($viewPath, $variables, $file);
         $content = ob_get_clean();
-        return json_encode(['content' => $content, 'title' => $title]);
+        $response = ['content' => $content, 'title' => $title, 'data' => $variables];
+        if(isset($variables['status'])) $response['status'] = $variables['status'];
+        if(isset($variables['message'])) $response['message'] = $variables['message'];
+        return json_encode($response);
     }
 
 

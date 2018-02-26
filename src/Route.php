@@ -16,18 +16,26 @@ class Route
 	private static $routes = [];
 
 
-	public static function add($url, $callback)
+	public static function add($url, $callback, $is_ajax = false)
 	{
-		self::$routes[$url] = $callback;
+		self::$routes[$url] = [
+			'callback' => $callback,
+			'is_ajax' => $is_ajax
+		];
 	}
 
 
 	public static function dispach()
 	{
-		$route = Permission::getRoute();
-		if(!isset(self::$routes[$route])) return;
+		$route = self::getRouteParams();
+		if(!$route) return;
 
-		$callable = explode('@', self::$routes[$route]);
+		if($route['is_ajax'] && !is_ajax()) {
+			header('HTTP/1.0 403 Forbidden');
+			exit;
+		}
+
+		$callable = explode('@', $route['callback']);
 		if(!isset($callable[1])) return;
 
 		$controller = $callable[0];
@@ -42,6 +50,29 @@ class Route
 			}
 			exit;
 		}
+	}
+
+
+  public static function getRoute()
+  {
+    $route = str_replace('?'.$_SERVER['REDIRECT_QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
+    if(PHYSICAL_URI != '/') {
+      $route = str_replace(PHYSICAL_URI, '', $route);
+    }
+    return ($route == '' || $route == '/') ? '/' : trim($route, '/');
+  }
+
+
+	public static function getRouteParams()
+	{
+		$route = self::getRoute();
+		foreach(self::$routes as $k => $v) {
+      $patern = '!^'. $k .'$!';
+      if (preg_match($patern, $route)) {
+        return self::$routes[$k];
+      }
+    }
+    return false;
 	}
 
 }

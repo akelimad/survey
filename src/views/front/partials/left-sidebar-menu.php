@@ -1,4 +1,4 @@
-<?php $route = \App\Permission::getRoute();
+<?php $route = \App\Route::getRoute();
 $secondaryMenu = array(
 	[
 		"label" => "Accueil",
@@ -24,7 +24,7 @@ $secondaryMenu = array(
 	],
 	[
 		"label" => "Offres de stage",
-		"route" => "offres",
+		"route" => "offres/stage",
 		"icon" => "fa fa-list"
 	],
 );

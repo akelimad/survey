@@ -1,9 +1,9 @@
-<h1>CRÉER MON ESPACE CANDIDAT</h1>
-<div class="ligneBleu"></div>
-
 <div class="chm-response-messages"></div>
 
-<form method="POST" action="<?= site_url('candidat/store'); ?>" class="chm-simple-form" onsubmit="return window.chmForm.sumbit(event)" enctype="multipart/form-data">
+<form method="POST" action="<?= site_url('candidat/store'); ?>" class="chm-simple-form" onsubmit="return window.chmForm.submit(event)" enctype="multipart/form-data">
+
+	<h1>CRÉER MON ESPACE CANDIDAT</h1>
+	<div class="ligneBleu"></div>
 
 	<div class="mt-10 mb-10"><?php get_alert('warning', ['Les champs marqués par (*) sont obligatoires', 'La taille maximal de chaque fichiers est 400 ko.'], false) ?></div>
 
@@ -295,7 +295,7 @@
 			<div class="input-group file-upload">
 			    <input type="text" class="form-control" readonly>
 			    <label class="input-group-btn">
-			        <span class="btn btn-default btn-sm">
+			        <span class="btn btn-success btn-sm">
 			            <i class="fa fa-upload"></i>
 			            <input type="file" class="form-control" id="forma_copie_diplome" name="copie_diplome" accept="image/*|.doc,.docx,.pdf">
 			        </span>
@@ -394,7 +394,7 @@
 			<div class="input-group file-upload">
 			    <input type="text" class="form-control" readonly>
 			    <label class="input-group-btn">
-			        <span class="btn btn-default btn-sm">
+			        <span class="btn btn-success btn-sm">
 			            <i class="fa fa-upload"></i>
 			            <input type="file" class="form-control" id="copie_attestation" name="copie_attestation" accept="image/*|.doc,.docx,.pdf">
 			        </span>
@@ -491,7 +491,7 @@
 			<div class="input-group file-upload">
 			    <input type="text" class="form-control" readonly>
 			    <label class="input-group-btn">
-			        <span class="btn btn-default btn-sm">
+			        <span class="btn btn-success btn-sm">
 			            <i class="fa fa-upload"></i>
 			            <input type="file" class="form-control" id="candidat_photo" name="photo" accept="image/*">
 			        </span>
@@ -503,7 +503,7 @@
 			<div class="input-group file-upload">
 			    <input type="text" class="form-control" readonly>
 			    <label class="input-group-btn">
-			        <span class="btn btn-default btn-sm">
+			        <span class="btn btn-success btn-sm">
 			            <i class="fa fa-upload"></i>
 			            <input type="file" class="form-control" id="candidat_cv" name="cv" accept=".doc,.docx,.pdf">
 			        </span>
@@ -515,7 +515,7 @@
 			<div class="input-group file-upload">
 			    <input type="text" class="form-control" readonly>
 			    <label class="input-group-btn">
-			        <span class="btn btn-default btn-sm">
+			        <span class="btn btn-success btn-sm">
 			            <i class="fa fa-upload"></i>
 			            <input type="file" class="form-control" id="candidat_lm" name="lm" accept=".doc,.docx,.pdf">
 			        </span>
@@ -562,9 +562,9 @@ jQuery(document).ready(function(){
 	// birthday
 	$('#candidat_date_n').change(function() {
 		if(!$(this).val().startsWith(0)) {
-			var maxDate  = new Date(new Date().setFullYear(new Date().getFullYear() -16))
-			var selected = new Date($(this).val().replace('-', '/'));
-			if(selected >= maxDate) {
+			var maxDate = new Date(new Date().setFullYear(new Date().getFullYear() -16))
+			var date_n = new Date($(this).val());
+			if(date_n > maxDate) {
 				$(this).val('')
 				error_message('Votre âge doit être supérieur à 16 ans.')
 			}
@@ -577,11 +577,11 @@ jQuery(document).ready(function(){
 		var date_debut = row.find('[id$="date_debut"]').val()
 		var date_fin   = row.find('[id$="date_fin"]').val()
 		if(!date_fin.startsWith(0) && date_fin != '' && date_debut != '') {
-			var maxDate  = new Date(date_debut.replace('-', '/'))
-			var selected = new Date(date_fin.replace('-', '/'))
-			if(selected >= maxDate) {
+			var date_d  = new Date(date_debut)
+			var date_f = new Date(date_fin)
+			if(date_f <= date_d) {
 				row.find('[id$="date_fin"]').val('')
-				error_message('La date de fin doit être inférieur à date de début.')
+				error_message('La date de fin doit être supérieur à date de début.')
 			}
 		}
 	})
@@ -635,8 +635,10 @@ jQuery(document).ready(function(){
 	})
 
 	// Trigger success
-	$('form').on('chm_form_success', function(response) {
-		$(this).hide()
+	$('form').on('chm_form_success', function(event, response) {
+		if(response.status === 'success') {
+			$(this).hide()
+		}
 	})
 
 

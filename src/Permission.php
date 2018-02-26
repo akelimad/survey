@@ -12,6 +12,7 @@ namespace App;
 
 use Modules\Candidatures\Models\Candidatures;
 use Modules\Offer\Models\Offer;
+use App\Route;
 
 class Permission
 {
@@ -27,7 +28,7 @@ class Permission
 
   public static function allowed()
   {
-    $route = self::getRoute();
+    $route = Route::getRoute();
     $allowedRoutes = self::getAllowedRoutes();
 
     if (in_array($route, $allowedRoutes))
@@ -51,14 +52,5 @@ class Permission
       'backend/accueil'
     ], Candidatures::getUserStatusUrls(), Offer::getSharedOffersUrls());
   }
-
-
-  public static function getRoute()
-  {
-    $route = str_replace(PHYSICAL_URI, '', $_SERVER['REQUEST_URI']);
-    $route = (PHYSICAL_URI != '/') ? $route : $_SERVER['REQUEST_URI'];
-    return ($route == '/') ? $route : trim($route, '/');
-  }
-
 
 }

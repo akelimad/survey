@@ -7,24 +7,26 @@
   }
 }
 
-#candidat-login-form {
+#candidat-login-form, #candidat-account-menu {
 	background-color: #fdfdff;
-	border-radius: 5px;
+	border-radius: 0px;
 	.panel-heading {
-	    background-color: transparent;
-    	border-color: transparent;
-    	.panel-title {
-    		font-family: Helvetica;
-    		font-size: 17px;
-    	}
+    background-color: transparent;
+  	border-color: transparent;
+    padding: 15px;
+  	.panel-title {
+  		color: $color_bg_menu;
+      font-size: 18px;
+      margin-bottom: 5px;
+  	}
 	}
 	.panel-body {
 	    h3 {
-	    	font-size: 1.1em;
+	    	font-size: 12px;
 		    font-weight: bold;
 		    text-transform: none;
-		    margin: 8px 0 15px 0;
-		    color: #906F31;
+		    margin: 8px 0 8px 0;
+		    color: $color_bg_menu;
 		    font-family: Helvetica;
 		    i {
 		    	color: $color_bg;
@@ -34,13 +36,13 @@
 	    	font-size: 11px;
 	    }
 	    .register {
-    		margin-top: -32px !important;
+    		margin-top: -25px !important;
     		i {
     			color: $color_bg;
     		}
     	}
 	    hr {
-			border: none;
+			 border: none;
 		    border-bottom: 3px dotted #cccccc;
 		    padding: 0;
 		    margin: 15px auto;
@@ -51,4 +53,45 @@
 		    line-height: 16px;
 		}
 	}
+}
+
+#candidat-account-menu {
+  ul {
+    padding: 0 0 0 20px;
+    margin-bottom: 0px;
+  }
+  li {
+    list-style: none;
+    a {
+      font-size: 12px;
+      line-height: 20px;
+    }
+  }
+}
+
+#chm-offer-search {
+  background-color: #fdfdff;
+  border-radius: 5px;
+  border-bottom: 2px solid #6d6a6a;
+  min-height: 155px;
+  .panel-body {
+    padding: 7px 12px 15px;
+    label {
+      font-size: 10px;
+      font-weight: normal;
+      margin-bottom: 2px;
+    }
+    input, select {
+      height: 22px;
+      width: 100%;
+      font-size: 11px;
+      outline: 0;
+    }
+    input {
+      padding: 8px 5px;
+    }
+    a {
+      font-size: 11px;
+    }
+  }
 }

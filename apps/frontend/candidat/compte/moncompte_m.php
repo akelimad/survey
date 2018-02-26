@@ -151,7 +151,7 @@
         <?php include('./moncompte_m_alerts.php'); ?>
 
         </table>
-        <?php if(\App\Permission::getRoute() == 'candidat/compte') : ?>
+        <?php if(\App\Route::getRoute() == 'candidat/compte') : ?>
         <br>
         <?php endif; ?>
 </div>

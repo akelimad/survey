@@ -2,7 +2,7 @@ import $ from 'jquery'
 
 export default class chmForm {
 
-  static sumbit (event) {
+  static submit (event) {
     event.preventDefault()
 
     // Get form data
@@ -21,8 +21,15 @@ export default class chmForm {
     // Disable submit button
     var btn = $(event.target).find('[type="submit"]')
     var btnHtml = btn.html()
-    btn.html('<i class="fa fa-circle-o-notch"></i>&nbsp;Traitement en cours...')
+    var loadingLabel = 'Traitement en cours...'
+    var loadingAttr = $(event.target).attr('chm-loading-label')
+    if (loadingAttr !== undefined) {
+      loadingLabel = loadingAttr
+    }
+    btn.html('<i class="fa fa-circle-o-notch"></i>&nbsp;' + loadingLabel)
     btn.prop('disabled', true)
+
+    $('.chm-response-messages').empty()
 
     // Prepare ajax arguments
     var ajaxArgs = {
@@ -40,21 +47,22 @@ export default class chmForm {
     $.ajax(ajaxArgs).done(function (response, textStatus, jqXHR) {
       try {
         response = $.parseJSON(response)
-        if (response.status === 'success') {
-          window.chmModal.destroy()
-          // Trigger callback
-          $(event.target).trigger('chm_form_success', [response])
-          /* if ('onSuccess' in options) {
-            console.log(options.onSuccess)
-          } */
-        }
-        if (response.message) {
+
+        // Trigger callback
+        $(event.target).trigger('chm_form_success', response)
+
+        if (response.message !== '' && ['success', 'info', 'warning', 'danger', 'error'].indexOf(response.status) !== -1) {
           if (typeof response.message === 'object') {
             if (response.status !== 'success') window.chmAlert.danger("L'opération est fini avec des erreurs.")
-            window.chmForm.showMessagesBlock(response.status, response.message, event.target)
+            var dismissible = (response.data.dismissible && response.data.dismissible === true)
+            console.log(dismissible)
+            window.chmForm.showMessagesBlock(response.status, response.message, event.target, dismissible)
           } else {
             window['chmAlert'][response.status](response.message)
           }
+        }
+        if (response.status === 'success') {
+          window.chmModal.destroy()
         }
       } catch (error) {
         window.ajax_error_message()
@@ -65,23 +73,28 @@ export default class chmForm {
     }).always(function () {
       btn.html(btnHtml)
       btn.prop('disabled', false)
-      window.grecaptcha.reset()
+      if (window.grecaptcha !== undefined) {
+        window.grecaptcha.reset()
+      }
     })
   }
 
   static showMessagesBlock (type, messages, target, dismissible = true) {
-    var alertWrapClass = '.chm-response-messages'
     var alert = window.chmAlert.getAlertBlock(type, messages, dismissible)
     var modal = $(target).closest('.chm-modal')
-    var container = (modal.length !== 0) ? modal : target
-    var alertWrap = $(alertWrapClass)
-    if ($(alertWrap).length === 0) {
-      alertWrap = $(container).prepend('<div class="chm-response-messages"></div>')
+    var container = (modal.length > 0) ? modal : target
+    if (modal.length > 0) {
+      if ($('.chm-response-messages').length < 1) {
+        $(container).find('.modal-body').prepend('<div class="chm-response-messages"></div>')
+      }
+      $('.chm-response-messages').html(alert)
+    } else {
+      if ($('.chm-response-messages').length === 0) {
+        $(container).prepend('<div class="chm-response-messages"></div>')
+      }
+      $('.chm-response-messages').html(alert)
+      $('body, html').animate({scrollTop: $(target).offset().top}, 1000)
     }
-    $(alertWrap).empty().html(alert)
-    $('body, html').animate({
-      scrollTop: $(target).offset().top
-    }, 1000)
   }
 
 }

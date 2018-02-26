@@ -5,44 +5,48 @@ Options All -Indexes
 RewriteEngine on
 
 # RewriteRule ^(/*)$ ./public/index.php$1 [L,QSA]
-RewriteRule ^(/*)$ ./apps/frontend/home/$1 [L,QSA]
-RewriteRule ^()$ ./apps/frontend/home/$1 [L,QSA]
-RewriteRule ^index.php ./apps/frontend/home/index.php [L,QSA]
+# RewriteRule ^(/*)$ ./apps/frontend/home/$1 [L,QSA]
+# RewriteRule ^()$ ./apps/frontend/home/$1 [L,QSA]
+# RewriteRule ^index.php ./apps/frontend/home/index.php [L,QSA]
 
 RewriteRule ^confirmation/(.*)$ ./apps/frontend/home/confirmation/$1 [L,QSA]
 
+# RewriteRule ^video$ ./apps/frontend/video/index.php$1 [L,QSA] 
 
-RewriteRule ^video$ ./apps/frontend/video/index.php$1 [L,QSA] 
-
-RewriteRule ^infos/mentions_legales(.*)$ /public/index.php [L,QSA]
-RewriteRule ^infos/conditions(.*)$ /public/index.php [L,QSA]
-RewriteRule ^infos/liens(.*)$ /public/index.php [L,QSA]
+# RewriteRule ^infos/mentions_legales(.*)$ /public/index.php [L,QSA]
+# RewriteRule ^infos/conditions(.*)$ /public/index.php [L,QSA]
+# RewriteRule ^infos/liens(.*)$ /public/index.php [L,QSA]
 # RewriteRule ^infos/contact(.*)$ /public/index.php [L,QSA]
 
-RewriteRule ^infos/(.*)$ ./apps/frontend/infos/$1 [L,QSA]
-RewriteRule ^infos ./apps/frontend/infos/conditions/$1 [L,QSA]
-RewriteRule ^infos ./apps/frontend/infos/contact/$1 [L,QSA]
-RewriteRule ^infos ./apps/frontend/infos/contact_form/$1 [L,QSA]
-RewriteRule ^infos ./apps/frontend/infos/liens/$1 [L,QSA]
-RewriteRule ^infos ./apps/frontend/infos/liens_confidentiel/$1 [L,QSA]
+# RewriteRule ^infos/(.*)$ ./apps/frontend/infos/$1 [L,QSA]
+# RewriteRule ^infos ./apps/frontend/infos/conditions/$1 [L,QSA]
+# RewriteRule ^infos ./apps/frontend/infos/contact/$1 [L,QSA]
+# RewriteRule ^infos ./apps/frontend/infos/contact_form/$1 [L,QSA]
+# RewriteRule ^infos ./apps/frontend/infos/liens/$1 [L,QSA]
+# RewriteRule ^infos ./apps/frontend/infos/liens_confidentiel/$1 [L,QSA]
 # RewriteRule ^infos ./apps/frontend/infos/mentions_legales/$1 [L,QSA]
-RewriteRule ^infos ./apps/frontend/infos/probleme_form/$1 [L,QSA]
-RewriteRule ^infos ./apps/frontend/infos/rechercher/$1 [L,QSA]
-RewriteRule ^infos ./apps/frontend/infos/signaler_probleme/$1 [L,QSA]
-RewriteRule ^infos/sitemap.php ./apps/frontend/infos/sitemap.php [L,QSA]   
+# RewriteRule ^infos ./apps/frontend/infos/probleme_form/$1 [L,QSA]
+# RewriteRule ^infos ./apps/frontend/infos/rechercher/$1 [L,QSA]
+# RewriteRule ^infos ./apps/frontend/infos/signaler_probleme/$1 [L,QSA]
+# RewriteRule ^infos/sitemap.php ./apps/frontend/infos/sitemap.php [L,QSA]   
 
+RewriteRule ^candidat/compte(.*)$ ./public/index.php$1 [L,QSA]
 RewriteRule ^candidat/inscription(.*)$ ./public/index.php$1 [L,QSA]
-RewriteRule ^candidat/(.*)$ ./apps/frontend/candidat/$1 [L,QSA]
-RewriteRule ^candidat ./apps/frontend/candidat/index.php [L,QSA]
-RewriteRule ^candidat/moncompte.php ./apps/frontend/candidat/moncompte.php [L,QSA]
-RewriteRule ^candidat/password-perdu.php ./apps/frontend/candidat/password-perdu.php [L,QSA] 
+# RewriteRule ^candidat/(.*)$ ./apps/frontend/candidat/$1 [L,QSA]
+# RewriteRule ^candidat ./apps/frontend/candidat/index.php [L,QSA]
+# RewriteRule ^candidat/moncompte.php ./apps/frontend/candidat/moncompte.php [L,QSA]
+# RewriteRule ^candidat/password-perdu.php ./apps/frontend/candidat/password-perdu.php [L,QSA] 
 
-RewriteRule ^offres/stage/$ ./apps/frontend/offres/stage/$1 [L,QSA]
-RewriteRule ^offres/(.*)$ ./apps/frontend/offres/$1 [L,QSA]
-RewriteRule ^offres ./apps/frontend/offres/index.php [L,QSA]
-RewriteRule ^offres/offre-([0-9]+)$ ./apps/frontend/offres/offre.php?id=$1
-
-
+RewriteRule ^offre/([0-9]+)$ /public/index.php?id=$1 [L,QSA]
+RewriteRule ^offre/([0-9]+)/postuler$ /public/index.php?id=$1 [L,QSA]
+RewriteRule ^offre/([0-9]+)/postuler/store$ /public/index.php?id=$1 [L,QSA]
+RewriteRule ^offre/([0-9]+)/print$ /public/index.php?id=$1 [L,QSA]
+RewriteRule ^offre/([0-9]+)/send-to-friend$ /public/index.php?id=$1 [L,QSA]
+# RewriteRule ^offres(.*)$ /public/index.php [L,QSA]
+# RewriteRule ^offres/stage/$ ./apps/frontend/offres/stage/$1 [L,QSA]
+# RewriteRule ^offres/(.*)$ ./apps/frontend/offres/$1 [L,QSA]
+# RewriteRule ^offres ./apps/frontend/offres/index.php [L,QSA]
+# RewriteRule ^offres/offre-([0-9]+)$ ./apps/frontend/offres/offre.php?id=$1
 
 RewriteRule ^backend/offres/(.*)$ ./apps/backend/offres/$1 [L,QSA]
 RewriteRule ^backend/offres ./apps/backend/offres/index.php [L,QSA]
@@ -51,7 +55,6 @@ RewriteRule ^backend/candidats/(.*)$ ./apps/backend/candidats/$1 [L,QSA]
 RewriteRule ^backend/candidats ./apps/backend/candidats/index.php [L,QSA]
 
 RewriteRule ^backend/cv_import_uploads/(.*)$ ./apps/upload/backend/cv_import_uploads/$1 [L,QSA] 
-
 
 RewriteRule ^backend/candidatures_f/(.*)$ ./apps/backend/candidatures_f/$1 [L,QSA]
 RewriteRule ^backend/candidatures_f ./apps/backend/candidatures_f/index.php [L,QSA]

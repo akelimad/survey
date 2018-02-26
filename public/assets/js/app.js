@@ -16,6 +16,8 @@ import chmFilter from './modules/filter'
 import chmAlert from './modules/alert'
 import chmForm from './modules/form'
 import chmOffer from './modules/offer'
+import chmAuth from './modules/auth'
+import chmCandidat from './modules/candidat'
 
 // Global storage
 window.$ = window.jQuery = $
@@ -27,6 +29,9 @@ window.chmModal = chmModal
 window.chmAlert = chmAlert
 window.chmFilter = chmFilter
 window.chmOffer = chmOffer
+window.chmAuth = chmAuth
+window.chmCandidat = chmCandidat
 
 // Standart jQuery script
 import './custom'
+import './scripts/auth'

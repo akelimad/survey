@@ -14,6 +14,7 @@
  * @return string $url
  */
 function site_url($path='') {
+  if($path == '/') $path = '';
 	return SITE_URL . $path;
 }
 

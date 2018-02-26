@@ -8,11 +8,52 @@
  * @version 1.0
  * @since 1.5.0
  */
-namespace App\Models; 
-
-use \App\Controllers\authController;
+namespace App\Models;
 
 class Candidat {
+
+  
+  /**
+   * Get candidat display name
+   *
+   * @param object $candidat 
+   * @return array $data 
+   * 
+   * @author Mhamed Chanchaf
+   */
+  public static function getDisplayName($candidat = null, $with_civilite = true) {
+    // Get candidat data
+    if (!isset($candidat->candidats_id) && isLogged('candidat')) {
+      $candidat = getDB()->findOne('candidats', 'candidats_id', read_session('abb_id_candidat'));
+    }
+
+    if (!isset($candidat->candidats_id)) return;
+    
+    $fullname = trim($candidat->prenom .' '. $candidat->nom);
+    if($with_civilite && isset($candidat->id_civi)) {
+      $civilite = getDB()->findOne('prm_civilite', 'id_civi', $candidat->id_civi);
+      if (isset($civilite->civilite) && !empty($civilite->civilite)) {
+        $fullname = $civilite->civilite .' '. $fullname;
+      }
+    }
+    return $fullname;
+  }
+
+
+  /**
+   * Tell if password is strong
+   *
+   * @param string $password
+   *
+   * @author Mhamed Chanchaf
+   */
+  public static function isStrongPassword($password)
+  {
+    $containsLetter  = preg_match('/[a-zA-Z]/', $password);
+    $containsDigit   = preg_match('/\d/', $password);
+    $containsAll = $containsLetter && $containsDigit;
+    return $containsAll;
+  }
 
 
 	/**

@@ -99,13 +99,13 @@ if(file_exists($assetsPath) && is_readable($assetsPath)) {
 }
 
 add_js('jquery-ui-js', [
-	'src' => 'http://code.jquery.com/ui/1.11.3/jquery-ui.js', 
+	'src' => SITE_URL .'assets/js/jquery-ui/jquery-ui.min.js', 
 	'admin' => true,
 	'in_footer' => false
 ]);
 
 add_css('jquery-ui-css', [
-	'src'=> 'http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css', 
+	'src'=> SITE_URL .'assets/js/jquery-ui/jquery-ui.min.css', 
 	'admin' => true
 ]);
 
@@ -205,3 +205,15 @@ add_css('eta-popup', [
 // 	'admin' => true,
 // 	'version' => ETA_ASSETS_VERSION
 // ]);
+
+
+if (in_array(\App\Route::getRoute(), ['/', 'offres', 'offres/stage'])) {
+	add_js('select2', [
+		'src' => SITE_URL .'assets/vendors/select2/js/select2.min.js',
+		'admin' => true
+	]);
+	add_css('select2', [
+		'src'=> SITE_URL .'assets/vendors/select2/css/select2.min.css', 
+		'admin' => true
+	]);
+}

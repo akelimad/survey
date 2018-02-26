@@ -13,7 +13,7 @@
 
     <?php \App\Event::trigger('head'); ?>
 </head>
-<body>
+<body<?= isLogged('candidat') ? ' class="logged"' : ''; ?>>
 
     <div class="container">
         <nav class="navbar navbar-default" id="top-navbar">
@@ -45,7 +45,11 @@
     <div class="container mt-20 mb-20">
         <div class="row">
             <div class="col-sm-4 custom col-xs-12 pr-0 pr-xs-15">
-                <?php // get_view('front/partials/candidat-login-form') ?>
+                <?php if (isLogged('candidat')) : ?>
+                    <?php get_view('front/partials/candidat-account-menu') ?>
+                <?php else : ?>
+                    <?php get_view('front/partials/candidat-login-form') ?>
+                <?php endif; ?>
                 <?php get_view('front/partials/left-sidebar-menu') ?>
             </div>
             <div class="col-sm-8 custom col-xs-12 column-body">
@@ -56,13 +60,12 @@
 
     <footer id="footer">
         <div class="container">
-            <?php $planSitePath = (read_session('abb_admin') == '') ? 'liens/' : 'liens_a/'; ?>
             <nav class="navbar navbar-default" id="footer-navbar">
                 <div class="container-fluid pl-5 pl-xs-15">
                     <ul class="nav navbar-nav">
                         <li><a href="<?= site_url('infos/mentions_legales/'); ?>">Mentions légales</a></li>
                         <li><a href="<?= site_url('infos/conditions/'); ?>">Conditions Générales d'utilisation</a></li>
-                        <li><a href="<?= site_url('infos/'.$planSitePath); ?>">Plan du site</a></li>
+                        <li><a href="<?= site_url('infos/liens'); ?>">Plan du site</a></li>
                         <?php if(get_setting('show_signaler_probleme') == 1) : ?>
                         <li><a href="<?= site_url('infos/signaler_probleme/'); ?>">Signaler un problème</a></li>
                         <?php endif; ?>

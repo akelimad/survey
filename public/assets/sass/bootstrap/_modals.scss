@@ -14,4 +14,13 @@
   input {
     width: 100%;
   }
+  #candidat-login-form {
+    margin-bottom: 0px;
+  }
+}
+
+#login-modal {
+  .modal-body {
+    padding: 0;
+  }
 }

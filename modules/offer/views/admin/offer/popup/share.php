@@ -1,4 +1,4 @@
-<form action="<?= site_url('backend/module/offer/offer/share'); ?>" method="post" onsubmit="return window.chmForm.sumbit(event)">
+<form action="<?= site_url('backend/module/offer/offer/share'); ?>" method="post" onsubmit="return window.chmForm.submit(event)">
 
 	<input type="hidden" name="id_offer" value="<?= $id_offer ?>">
 

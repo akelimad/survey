@@ -54,9 +54,10 @@ function create_session($name, $value){
  * Read session
  *
  * @param string $name
+ * @param string $default
  * @return $cookie_value
  */ 
-function read_session($name){
+function read_session($name, $default = null){
 	return \App\Session::get($name);
 }
 

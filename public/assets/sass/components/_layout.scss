@@ -20,6 +20,10 @@ a {
     padding-bottom: 1px;
 }
 
+.font-weight-normal {
+  font-weight: normal !important;
+}
+
 #welcome {
 	height: 30px;
     padding: 1px 6px;
@@ -49,12 +53,13 @@ a {
 
 .column-body h1 {
 	font-size: 1.6em;
-    font-weight: lighter;
-    margin-bottom: 15px;
-    color: #906F31;
-    font-family: Helvetica;
-    margin-top: 0;
-    text-transform: uppercase;
+  font-weight: lighter;
+  margin-bottom: 0px;
+  color: $color_bg_menu;
+  font-family: Helvetica;
+  margin-top: 0;
+  text-transform: uppercase;
+  line-height: 28px;
 }
 
 .styled-title, .subscription {
@@ -63,7 +68,7 @@ a {
 	-moz-border-radius-topleft: 3px;
 	-moz-border-radius-topright: 3px;
 	background-color: $color_bg;
-	height: 18px;
+	height: 23px;
 	margin: 0 0 5px;
 	padding-top: 5px;
 	width: 100%;
@@ -83,4 +88,33 @@ a {
 	font-size: 1px;
 	line-height: 1px;
 	background-color: $color_bg;
+}
+
+
+article.offer-box {
+  .title {
+    font-size: 14px;
+    a {
+      color: $color_bg;
+    }
+  }
+  hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-top: 2px solid #777777;
+  }
+}
+
+#offer-actions {
+  padding: 0 !important;
+  li {
+    list-style: none;
+    display: inline-block;
+  }
+}
+
+table#offer-infos {
+  td {
+    font-size: 12px;
+  }
 }
