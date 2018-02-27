@@ -49,8 +49,8 @@ class AuthController extends Controller
 		'candidat_mdp' => ['required|min_len,6', 'Mot de passe'],
 		'candidat_mdp_confirm' => ['required|min_len,6', 'Confirmation de mot de passe'], // not a field
 		'candidat_mobilite' => ['required|alpha', 'Mobilité géographique'],
-		'candidat_niveau_mobilite' => ['required|alpha', 'Niveau de mobilité'],
-		'candidat_taux_mobilite' => ['required|alpha',  'Taux de mobilité'],
+		'candidat_niveau_mobilite' => ['required|numeric', 'Niveau de mobilité'],
+		'candidat_taux_mobilite' => ['required|numeric',  'Taux de mobilité'],
 		'candidat_arabic' => ['alpha', 'Langue Arabe'],
 		'candidat_french' => ['alpha', 'Langue Français'],
 		'candidat_english' => ['alpha', 'Langue Anglais'],
@@ -136,6 +136,7 @@ class AuthController extends Controller
     getDB()->update('candidats', 'candidats_id', $candidat->candidats_id, ['last_connexion' => date("Y-m-d H:i:s")]);
 
 		$fullname = trim(ucfirst($candidat->prenom) .' '. strtoupper($candidat->nom));
+
     create_session('abb_login_candidat', $candidat->email);
     create_session('abb_nom', $fullname);
     create_session('abb_id_candidat', $candidat->candidats_id);
@@ -296,6 +297,7 @@ class AuthController extends Controller
 			// Create candidat
 			$cdata = $this->getCandidatData($params);
 			$cdata['photo'] = (isset($upload['files']['photo'])) ? $upload['files']['photo'] : '';
+			$cdata['date_n'] = \english_to_french_date($cdata['date_n']);
 			$id_candidat = $db->create('candidats', $cdata, false);
 			
 			// Create formation

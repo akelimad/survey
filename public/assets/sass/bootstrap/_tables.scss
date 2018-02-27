@@ -1,16 +1,24 @@
 .chmTable {
   text-align: center; 
-  border-top: 3px solid #e32b2b !important; 
-  border-bottom: 3px solid #e32b2b !important;
+  /*border-top: 3px solid #e32b2b !important; 
+  border-bottom: 3px solid #e32b2b !important;*/
+  margin-bottom: 8px;
   thead th {
     vertical-align: sub !important;
   }
-  tfoot th {
+  /*tfoot th {
     border-top: 2px solid #ddd;
+  }*/
+  thead th, tfoot th {
+    background-color: $color_bg !important;
+    color: #fff;
   }
-  td, td {
+  th, td {
     text-align: left;
-    padding: 8px 8px 3px !important;
+    padding: 5px 8px !important;
+    font-size: 11px !important;
+    font-weight: normal;
+    border: none !important;
   }
   .btn-xs {
     margin-bottom: 5px;
@@ -19,6 +27,12 @@
   .fa-mobile {
     font-size: 18px;
     margin-right: 5px;
+  }
+}
+
+.pagination-wrap {
+  .pagination > li > a, .pagination > li > span {
+    padding: 3px 12px;
   }
 }
 

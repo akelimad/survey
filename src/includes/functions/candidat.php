@@ -13,8 +13,30 @@
  *
  * @author Mhamed Chanchaf
  */
-function get_candidat_id(){
+function get_candidat_id() {
 	return read_session('abb_id_candidat', false);
+}
+
+
+/**
+ * Get candidat data by key
+ *
+ * @param $key
+ * @return $value
+ *
+ * @author Mhamed Chanchaf
+ */
+function get_candidat($name = null, $dafault = null) {
+	$candidat = $GLOBALS['etalent']->candidat;
+	if( empty($candidat) ) {
+		$candidat = getDB()->findOne('candidats', 'candidats_id', get_candidat_id());
+		if (isset($candidat->candidats_id)) {
+			$GLOBALS['etalent']->candidat = $candidat;
+			return (isset($candidat->$name)) ? $candidat->$name : $dafault;
+		}
+	} else {
+		return (isset($GLOBALS['etalent']->candidat->$name)) ? $GLOBALS['etalent']->candidat->$name : $dafault;
+	}
 }
 
 

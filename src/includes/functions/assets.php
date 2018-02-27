@@ -99,13 +99,13 @@ if(file_exists($assetsPath) && is_readable($assetsPath)) {
 }
 
 add_js('jquery-ui-js', [
-	'src' => SITE_URL .'assets/js/jquery-ui/jquery-ui.min.js', 
+	'src' => SITE_URL .'assets/vendors/jquery-ui/jquery-ui.min.js', 
 	'admin' => true,
 	'in_footer' => false
 ]);
 
 add_css('jquery-ui-css', [
-	'src'=> SITE_URL .'assets/js/jquery-ui/jquery-ui.min.css', 
+	'src'=> SITE_URL .'assets/vendors/jquery-ui/jquery-ui.min.css', 
 	'admin' => true
 ]);
 
@@ -162,19 +162,19 @@ add_js('eta-scripts', [
 	'version' => ETA_ASSETS_VERSION
 ]);
 
-// add_css('style_admin', [
-// 	'src'=> SITE_URL .'assets/css/style_admin.php', 
-// 	'admin' => true,
-// 	'front' => false,
-// 	'version' => ETA_ASSETS_VERSION
-// ]);
+add_css('style_admin', [
+	'src'=> SITE_URL .'assets/css/style_admin.php', 
+	'admin' => true,
+	'front' => false,
+	'version' => ETA_ASSETS_VERSION
+]);
 
-// add_css('menuprincipal', [
-// 	'src'=> SITE_URL .'assets/css/styles/menuprincipal.php', 
-// 	'admin' => true,
-// 	'front' => false,
-// 	'version' => ETA_ASSETS_VERSION
-// ]);
+add_css('menuprincipal', [
+	'src'=> SITE_URL .'assets/css/styles/menuprincipal.php', 
+	'admin' => true,
+	'front' => false,
+	'version' => ETA_ASSETS_VERSION
+]);
 
 // add_css('style', [
 // 	'src'=> SITE_URL .'assets/css/style.php', 

@@ -16,11 +16,12 @@ class Route
 	private static $routes = [];
 
 
-	public static function add($url, $callback, $is_ajax = false)
+	public static function add($url, $callback, $is_ajax = false, $can_access = true)
 	{
 		self::$routes[$url] = [
 			'callback' => $callback,
-			'is_ajax' => $is_ajax
+			'is_ajax' => $is_ajax,
+      'can_access' => $can_access
 		];
 	}
 
@@ -34,6 +35,8 @@ class Route
 			header('HTTP/1.0 403 Forbidden');
 			exit;
 		}
+
+    if(!$route['can_access']) redirect('/');
 
 		$callable = explode('@', $route['callback']);
 		if(!isset($callable[1])) return;

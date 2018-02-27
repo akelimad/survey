@@ -72,7 +72,7 @@ class Ajax
     }
 
     
-    public function renderAjaxView($title, $viewPath, $variables=[], $file = null)
+    public static function renderAjaxView($title, $viewPath, $variables=[], $file = null)
     {
         ob_start();
         get_view($viewPath, $variables, $file);
@@ -81,6 +81,17 @@ class Ajax
         if(isset($variables['status'])) $response['status'] = $variables['status'];
         if(isset($variables['message'])) $response['message'] = $variables['message'];
         return json_encode($response);
+    }
+
+
+    public static function getUrlParams($data = [])
+    {
+        $params = [];
+        if (strpos($_SERVER['HTTP_REFERER'], '?') !== false) {
+          $query = strstr($_SERVER['HTTP_REFERER'], '?');
+          parse_str(ltrim($query, '?'), $params);
+        }
+        return array_merge($data, $params);
     }
 
 

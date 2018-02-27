@@ -1,20 +1,18 @@
+import $ from 'jquery'
+
 export default class chmCandidat {
 
-  static formationForm (fid = null) {
-    var url = (fid === null) ? 'candidat/cv/formation' : 'candidat/cv/formation/' + fid
+  static deletePhoto (params) {
     window.chmModal.show({
       type: 'POST',
-      url: window.chmSite.url(url),
-      data: {
-        id_formation: fid
-      }
+      url: window.chmSite.url('candidat/cv/langues_pj/delete-photo'),
+      data: params
     }, {
-      form: {
-        action: window.chmSite.url(url),
-        callback: 'window.chmForm.submit'
-      },
-      footer: {
-        label: (fid === null) ? 'Créer' : 'Mettre à jour'
+      message: '<i class="fa fa-trash"></i>&nbsp;Suppression en cours...',
+      onSuccess: (response) => {
+        $('#candidatPhoto').hide()
+        $('.file-upload.photo').show()
+        window['chmAlert'][response.status](response.message)
       }
     })
   }

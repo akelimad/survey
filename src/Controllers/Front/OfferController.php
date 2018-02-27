@@ -516,12 +516,7 @@ class OfferController extends Controller
 
 	public function searchForm($data)
 	{
-    $params = [];
-    if (strpos($_SERVER['HTTP_REFERER'], '?') !== false) {
-      $query = strstr($_SERVER['HTTP_REFERER'], '?');
-      parse_str(ltrim($query, '?'), $params);
-    }
-    $data = array_merge($data, $params);
+    $data = Ajax::getUrlParams($data);
     return Ajax::renderAjaxView('', 'front/partials/offer-search', $data);
 	}
 

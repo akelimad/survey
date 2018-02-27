@@ -109,7 +109,7 @@ $(document).ready(function () {
 
   // We can watch for our custom `fileselect` event like this
   $(document).ready(function () {
-    $('.file-upload input[type="file"]').on('fileselect', function (event, numFiles, label) {
+    $(document).on('fileselect', '.file-upload input[type="file"]', function (event, numFiles, label) {
       var input = $(this).parents('.input-group').find(':text')
       var log = numFiles > 1 ? numFiles + ' files selected' : label
       if (input.length) {

@@ -560,7 +560,7 @@ jQuery(document).ready(function(){
 	$('#candidat_titre').focus()
 
 	// birthday
-	$('#candidat_date_n').change(function() {
+	/*$('#candidat_date_n').change(function() {
 		if(!$(this).val().startsWith(0)) {
 			var maxDate = new Date(new Date().setFullYear(new Date().getFullYear() -16))
 			var date_n = new Date($(this).val());
@@ -632,7 +632,7 @@ jQuery(document).ready(function(){
 			$(select).val('')
 			$(select).hide()
 		}
-	})
+	})*/
 
 	// Trigger success
 	$('form').on('chm_form_success', function(event, response) {

@@ -90,7 +90,7 @@ class Table extends Pagination {
      * @access protected
      * @var    bool
      */
-    protected $perpages = array(10, 15, 20, 50, 100);
+    protected $perpages = array(5, 10, 15, 20, 50, 100);
 
 
     /**
@@ -515,7 +515,7 @@ class Table extends Pagination {
                 $html .= '</tr>';
             endforeach; else :
 
-            $html .= '<tr><td colspan="'. $rowspan .'" style="text-align: center; border-top: 3px solid #e32b2b !important; border-bottom: 3px solid #e32b2b !important;">Aucune donnée à afficher.</td></tr>';
+            $html .= '<tr><td class="empty" colspan="'. $rowspan .'" style="text-align: center; border-top: 3px solid #e32b2b !important; border-bottom: 3px solid #e32b2b !important;">Aucune donnée à afficher.</td></tr>';
 
                 endif; // END Table
                 $html .= '</tbody>';
@@ -558,7 +558,8 @@ class Table extends Pagination {
                     // add pagination
                 if( !empty($this->links_html) ) {
                     $links_pull = ( $this->_options['bulk_actions'] && $this->hasBulkActions() ) ? 'pull-right' : 'pull-left';
-                    $html .= '<div class="col-md-7 pagination-wrap"><div class="'. $this->table_id .'_pagination '.$links_pull.'">';
+                    $col_width = ($this->_options['bulk_actions']) ? 'col-md-7' : 'col-md-12';
+                    $html .= '<div class="'. $col_width .' pagination-wrap"><div class="'. $this->table_id .'_pagination '.$links_pull.'">';
                     $html .= $this->links_html;
                     $html .= '</div></div>';
                 }
@@ -700,6 +701,16 @@ class Table extends Pagination {
         return self::$currentPage;
     }
 
+    /**
+     * Set page number
+     *
+     * @return int $number
+     */
+    public static function setPage($number)
+    {
+        self::$currentPage = $number;
+    }
+
 
     /**
      * Get sort link
@@ -743,9 +754,13 @@ class Table extends Pagination {
      */
     public static function getCurrentUrl()
     {
-        $scheme = (isset($_SERVER['REQUEST_SCHEME'])) ? $_SERVER['REQUEST_SCHEME'] : 'http';
-        $url = $scheme . '://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-        return $url;
+        if (is_ajax()) {
+            return $_SERVER['HTTP_REFERER'];
+        } else {
+            $scheme = (isset($_SERVER['REQUEST_SCHEME'])) ? $_SERVER['REQUEST_SCHEME'] : 'http';
+            $url = $scheme . '://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            return $url;
+        }
     }
 
 
@@ -757,22 +772,22 @@ class Table extends Pagination {
     public static function getPaginationUrl()
     {
         $url = self::getCurrentUrl();
-
         $sep = self::getSeparator();
 
-        if( isset($_GET['page']) ) {
+        if( isset($_GET['page']) && !is_ajax() ) {
             $arr = explode("page=", $url, 2);
             $sep = substr($arr[0], -1);
             $page = self::getPage();
             $url = str_replace($sep.'page='. $page, $sep .'page=*VAR*', $url);
         } else {
-            if (strpos($url, '?') !== false) {
+            if (strpos($url, 'page=') !== false) {
+                $url = preg_replace("/page=[0-9]+/", "page=*VAR*", $url);
+            } elseif (strpos($url, '?') !== false) {
                 $url = str_replace('?', '?page=*VAR*&', $url);
             } else {
                 $url .= '?page=*VAR*';
             }
         }
-
         return $url;
     }
 

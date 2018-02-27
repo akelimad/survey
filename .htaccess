@@ -32,6 +32,13 @@ RewriteRule ^confirmation/(.*)$ ./apps/frontend/home/confirmation/$1 [L,QSA]
 
 RewriteRule ^candidat/compte(.*)$ ./public/index.php$1 [L,QSA]
 RewriteRule ^candidat/inscription(.*)$ ./public/index.php$1 [L,QSA]
+
+RewriteRule ^candidat/cv/formation/([0-9]+)$ ./public/index.php?id=$1 [L,QSA]
+RewriteRule ^candidat/cv/formation/([0-9]+)/delete$ ./public/index.php?id=$1 [L,QSA]
+
+RewriteRule ^candidat/cv/experience/([0-9]+)$ ./public/index.php?id=$1 [L,QSA]
+RewriteRule ^candidat/cv/experience/([0-9]+)/delete$ ./public/index.php?id=$1 [L,QSA]
+
 # RewriteRule ^candidat/(.*)$ ./apps/frontend/candidat/$1 [L,QSA]
 # RewriteRule ^candidat ./apps/frontend/candidat/index.php [L,QSA]
 # RewriteRule ^candidat/moncompte.php ./apps/frontend/candidat/moncompte.php [L,QSA]
