@@ -32,6 +32,7 @@ RewriteRule ^confirmation/(.*)$ ./apps/frontend/home/confirmation/$1 [L,QSA]
 
 RewriteRule ^candidat/compte(.*)$ ./public/index.php$1 [L,QSA]
 RewriteRule ^candidat/inscription(.*)$ ./public/index.php$1 [L,QSA]
+RewriteRule ^candidat/account/confirm/([a-zA-Z0-9]+)$ ./public/index.php?token=$1 [L,QSA]
 
 RewriteRule ^candidat/cv/formation/([0-9]+)$ ./public/index.php?id=$1 [L,QSA]
 RewriteRule ^candidat/cv/formation/([0-9]+)/delete$ ./public/index.php?id=$1 [L,QSA]

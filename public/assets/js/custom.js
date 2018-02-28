@@ -142,6 +142,33 @@ $(document).ready(function () {
       }
     })
   }
+
+  // Tooltip
+  if ($('[data-toggle="tooltip"]').length > 0) {
+    $('[data-toggle="tooltip"]').tooltip({trigger: 'hover'}).on('click', function (event) {
+      event.preventDefault()
+    })
+  }
+
+  // Popover
+  if ($('[data-toggle="popover"]').length > 0) {
+    $('[data-toggle="popover"]').popover({
+      container: 'body',
+      html: true,
+      content: function () {
+        var clone = $($(this).data('popover-content')).clone(true).removeClass('hidden')
+        return clone
+      }
+    }).click(function (event) {
+      event.preventDefault()
+      $('[data-toggle="popover"]').not(this).popover('hide')
+      $('.popover-title>i').remove()
+      $('.popover-title').append('<i class="fa fa-times pull-right"></i>')
+    })
+    $('body').on('click', '.popover-title>i', function () {
+      $('[data-toggle="popover"]').popover('hide')
+    })
+  }
 })
 
 function showNumberOfSelectedItems (target) {

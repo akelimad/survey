@@ -15,6 +15,21 @@ if(isBackend() && !Permission::canViewPage() && !Permission::allowed())	redirect
 
 $GLOBALS['etalent'] = new \stdClass;
 
+// set default settings
+$GLOBALS['etalent']->default_settings = [
+	'share_offers' => '1',
+	'menu_offres_candidature_spontannee' => '0',
+	'menu_offres_candidature_stage' => '0',
+	'show_copyright' => '0',
+	'menu_infos_signaler_probleme' => '0',
+	'show_contact_destination' => '0',
+	'terms_site_title' => 'E-talent',
+	'welcome_message' => 'Bienvenue au portail RH de l\'AMMC',
+	'google_recaptcha_secret' => '6Le8fUUUAAAAAAUfOoyniYLIF_I6ozIK7VH4paYw',
+	'google_recaptcha_sitekey' => '6Le8fUUUAAAAAMYlHDy8imTgEq8wcl-d9r4MyQ0z',
+	'max_file_size' => '400'
+];
+
 // Get root configuration
 $reponse = getDB()->prepare('SELECT * from root_configuration', [], true);
 $nom_site            = $reponse->nom_site;

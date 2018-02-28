@@ -1,11 +1,13 @@
 <div class="chm-response-messages"></div>
-
+<?php
+$max_file_size = get_setting('max_file_size');
+?>
 <form method="POST" action="<?= site_url('candidat/store'); ?>" class="chm-simple-form" onsubmit="return window.chmForm.submit(event)" enctype="multipart/form-data">
 
 	<h1>CRÉER MON ESPACE CANDIDAT</h1>
 	<div class="ligneBleu"></div>
 
-	<div class="mt-10 mb-10"><?php get_alert('warning', ['Les champs marqués par (*) sont obligatoires', 'La taille maximal de chaque fichiers est 400 ko.'], false) ?></div>
+	<div class="mt-10 mb-10"><?php get_alert('warning', ['Les champs marqués par (*) sont obligatoires', 'La taille maximal de chaque fichiers est <?= $max_file_size; ?>ko.'], false) ?></div>
 
 	<div class="styled-title mt-0 mb-10" style="height: 23px;">
 	  <h3>Intitulé du profil</h3>
@@ -85,12 +87,12 @@
 		</div>
 		<div class="col-sm-4 col-xs-12 pl-0 pl-xs-15 required">
 			<label for="tel1">Téléphone</label>
-			<input type="text" class="form-control deal_code" name="candidat[tel1_deal_code]" placeholder="(+212)" style="float: left;max-width: 55px;" required>
+			<input type="text" class="form-control deal_code" name="candidat[tel1_deal_code]" placeholder="(+212)" style="float: left;max-width: 55px;" disabled>
 			<input type="number" min="1" step="1" class="form-control" id="tel1" name="candidat[tel1]" placeholder="0611223344" style="float: left;max-width: 165px;margin-left: 5px;" required>
 		</div>
 		<div class="col-sm-4 col-xs-12 pl-0 pl-xs-15">
 			<label for="tel2">Téléphone secondaire</label>
-			<input type="text" class="form-control deal_code" name="candidat[tel2_deal_code]" placeholder="(+212)" style="float: left;max-width: 55px;">
+			<input type="text" class="form-control deal_code" name="candidat[tel2_deal_code]" placeholder="(+212)" style="float: left;max-width: 55px;" disabled>
 			<input type="number" min="1" step="1" class="form-control" id="tel2" name="candidat[tel2]" placeholder="0511223344" style="float: left;max-width: 165px;margin-left: 5px;">
 		</div>
 	</div>
@@ -105,7 +107,7 @@
 			<input type="email" class="form-control" id="email" name="candidat[email]" required>
 		</div>
 		<div class="col-sm-4 pl-0 pl-xs-15 required">
-			<label for="mdp">Mot de passe</label>
+			<label for="mdp">Mot de passe&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="Le mot de passe doit avoir un nombre de caractère de 6 ou plus et au moins un chiffre et un caractère."></i></label>
 			<input type="password" class="form-control" id="mdp" name="candidat[mdp]" required>
 		</div>
 		<div class="col-sm-4 pl-0 pl-xs-15 required">
@@ -221,16 +223,16 @@
 		<div class="col-sm-4 col-xs-12 required" id="taux-container" style="display: none;">
 			<label>Taux de mobilité</label>
 			<label for="25percent" class="pull-left">
-				<input id="25percent" name="candidat[taux_mobilite]" type="radio" value="1" checked>&nbsp;25 %
+				<input id="25percent" name="candidat[taux_mobilite]" type="radio" value="1" checked>&nbsp;25%
 			</label>
 			<label for="50percent" class="pull-left ml-10">
-				<input id="50percent" name="candidat[taux_mobilite]" type="radio" value="2">&nbsp;50 %
+				<input id="50percent" name="candidat[taux_mobilite]" type="radio" value="2">&nbsp;50%
 			</label>
 			<label for="75percent" class="pull-left ml-10">
-				<input id="75percent" name="candidat[taux_mobilite]" type="radio" value="3">&nbsp;75 %
+				<input id="75percent" name="candidat[taux_mobilite]" type="radio" value="3">&nbsp;75%
 			</label>
 			<label for="100percent" class="pull-left ml-10">
-				<input id="100percent" name="candidat[taux_mobilite]" type="radio" value="4">&nbsp;100 %
+				<input id="100percent" name="candidat[taux_mobilite]" type="radio" value="4">&nbsp;100%
 			</label>
 		</div>
 	</div>
@@ -291,7 +293,7 @@
 	</div>
 	<div class="row mt-0">
 		<div class="col-sm-4">
-			<label for="forma_copie_diplome">Copie du diplôme</label>
+			<label for="forma_copie_diplome">Copie du diplôme&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="Vous pouvez joindre votre Copie du diplôme format Word, PDF ou Image, la taille ne doit pas dépassé <?= $max_file_size; ?>ko"></i></label>
 			<div class="input-group file-upload">
 			    <input type="text" class="form-control" readonly>
 			    <label class="input-group-btn">
@@ -390,7 +392,7 @@
 	        </select>
 		</div>
 		<div class="col-sm-4 mb-10 pl-0 pl-xs-15">
-			<label for="copie_attestation">Copie de l’attestation</label>
+			<label for="copie_attestation">Copie de l’attestation&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="Vous pouvez joindre votre Copie de l’attestation format Word, PDF ou Image, la taille ne doit pas dépassé <?= $max_file_size; ?>ko"></i></label>
 			<div class="input-group file-upload">
 			    <input type="text" class="form-control" readonly>
 			    <label class="input-group-btn">
@@ -487,7 +489,7 @@
 	</div>
 	<div class="row mb-10">
 		<div class="col-sm-4 mb-10">
-			<label for="candidat_photo">Photo</label>
+			<label for="candidat_photo">Photo&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="Vous pouvez joindre votre Photo, la taille ne doit pas dépassé <?= $max_file_size; ?>ko."></i></label>
 			<div class="input-group file-upload">
 			    <input type="text" class="form-control" readonly>
 			    <label class="input-group-btn">
@@ -499,7 +501,7 @@
 			</div>
 		</div>
 		<div class="col-sm-4 mb-10 pl-0 pl-xs-15 required">
-			<label for="candidat_cv">CV</label>
+			<label for="candidat_cv">CV&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="Vous pouvez joindre votre CV format Word ou PDF, la taille ne doit pas dépassé <?= $max_file_size; ?>ko"></i></label>
 			<div class="input-group file-upload">
 			    <input type="text" class="form-control" readonly>
 			    <label class="input-group-btn">
@@ -511,7 +513,7 @@
 			</div>
 		</div>
 		<div class="col-sm-4 mb-10 pl-0 pl-xs-15">
-			<label for="candidat_lm">Lettre de motivation</label>
+			<label for="candidat_lm">Lettre de motivation&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="Vous pouvez joindre votre Lettre de motivation format Word ou PDF, la taille ne doit pas dépassé <?= $max_file_size; ?>ko"></i></label>
 			<div class="input-group file-upload">
 			    <input type="text" class="form-control" readonly>
 			    <label class="input-group-btn">

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Get setting by name
  *
@@ -14,13 +13,14 @@ function get_setting($name = null, $dafault = null) {
 		if(!empty($setting)) : foreach ($setting as $key => $s) :
 			$settings[$s->name] = $s->value;
 		endforeach; endif;
-		// $GLOBALS['etalent'] = new \stdClass;
 		$GLOBALS['etalent']->settings = $settings;
 	}
 	if( is_null($name) ) {
 		return $settings;
 	} elseif ( isset($settings[$name]) ) {
 		return $settings[$name];
+	} elseif (isset($GLOBALS['etalent']->default_settings[$name])) {
+		return $GLOBALS['etalent']->default_settings[$name];
 	}
 	return $dafault;
 }

@@ -1,5 +1,5 @@
-<?php $route = \App\Route::getRoute();
-$secondaryMenu = array(
+<ul class="nav nav-pills nav-stacked mb-15">
+<?php echo \App\Models\Menu::draw([
 	[
 		"label" => "Accueil",
 		"route" => "/",
@@ -27,13 +27,5 @@ $secondaryMenu = array(
 		"route" => "offres/stage",
 		"icon" => "fa fa-list"
 	],
-);
-?>
-<ul class="nav nav-pills nav-stacked mb-15">
-<?php foreach ($secondaryMenu as $key => $menu) : ?>
-	<?php if(isset($menu['isVisible']) && $menu['isVisible'] === false) continue; ?>
-	<li<?= ($route == $menu['route']) ? ' class="active"' : '' ?>>
-		<a href="<?= site_url($menu['route']) ?>"><i class="<?= $menu['icon']; ?>"></i>&nbsp;<?= $menu['label']; ?></a>
-	</li>
-<?php endforeach; ?>
+]); ?>
 </ul>

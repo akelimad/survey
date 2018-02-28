@@ -46,11 +46,11 @@
         <div class="row">
             <div class="col-sm-4 custom col-xs-12 pr-0 pr-xs-15">
                 <?php if (isLogged('candidat')) : ?>
-                    <?php get_view('front/partials/candidat-account-menu') ?>
+                    <?php get_view('front/menu/candidat-account') ?>
                 <?php else : ?>
-                    <?php get_view('front/partials/candidat-login-form') ?>
+                    <?php get_view('front/candidat/login-form') ?>
                 <?php endif; ?>
-                <?php get_view('front/partials/left-sidebar-menu') ?>
+                <?php get_view('front/menu/left-sidebar') ?>
             </div>
             <div class="col-sm-8 custom col-xs-12 column-body">
                 <?= $content; ?>

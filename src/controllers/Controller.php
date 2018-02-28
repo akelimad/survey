@@ -64,4 +64,16 @@ class Controller
 	}
 
 
+	public function koToOctet($size)
+	{
+		return round($size * 1024, 2);
+	}
+
+
+	public function octetToKo($size)
+	{
+		return round($size/1024, 2);
+  }
+
+
 } // END Class

@@ -51,15 +51,15 @@ class AuthController extends Controller
 		'candidat_mobilite' => ['required|alpha', 'Mobilité géographique'],
 		'candidat_niveau_mobilite' => ['required|numeric', 'Niveau de mobilité'],
 		'candidat_taux_mobilite' => ['required|numeric',  'Taux de mobilité'],
-		'candidat_arabic' => ['alpha', 'Langue Arabe'],
-		'candidat_french' => ['alpha', 'Langue Français'],
-		'candidat_english' => ['alpha', 'Langue Anglais'],
-		'candidat_autre' => ['alpha', 'Autres 1'],
-		'candidat_autre_n' => ['alpha', 'Autres 1 niveau'],
-		'candidat_autre1' => ['alpha', 'Autres 2'],
-		'candidat_autre1_n' => ['alpha', 'Autres 2 niveau'],
-		'candidat_autre2' => ['alpha', 'Autres 3'],
-		'candidat_autre2_n' => ['alpha', 'Autres 3 niveau'],
+		'candidat_arabic' => ['eta_string', 'Langue Arabe'],
+		'candidat_french' => ['eta_string', 'Langue Français'],
+		'candidat_english' => ['eta_string', 'Langue Anglais'],
+		'candidat_autre' => ['eta_string', 'Autres 1'],
+		'candidat_autre_n' => ['eta_string', 'Autres 1 niveau'],
+		'candidat_autre1' => ['eta_string', 'Autres 2'],
+		'candidat_autre1_n' => ['eta_string', 'Autres 2 niveau'],
+		'candidat_autre2' => ['eta_string', 'Autres 3'],
+		'candidat_autre2_n' => ['eta_string', 'Autres 3 niveau'],
 		// Formation
 		'formation_id_ecol' => ['required|numeric', 'École ou établissement'],
 		'formation_date_debut' => ['required|date', 'Date de début'],
@@ -98,7 +98,7 @@ class AuthController extends Controller
 			case '0':
 			return $this->jsonResponse(
 				'confirm_activation', 
-				'Votre compte a été desactivé, voulez vous le reactiver ?', [
+				'Votre compte a été désactivé, voulez vous le reactiver ?', [
 					"candidat_id" => $candidat->candidats_id
 				]);
 			break;
@@ -127,7 +127,7 @@ class AuthController extends Controller
 
 	public function loginModal()
 	{
-		return Ajax::renderAjaxView('', 'front/partials/candidat-login-form');
+		return Ajax::renderAjaxView('', 'front/candidat/login-form');
 	}
 
 
@@ -169,7 +169,7 @@ class AuthController extends Controller
 		$candidat = getDB()->findOne('candidats', 'candidats_id', $data['cid']);
     if(isset($candidat->candidats_id)) {
 			$fullname = $this->getCandidatFullname($candidat->id_civi, $candidat->nom, $candidat->prenom);
-			$this->sendVerificationEmail($candidat->candidats_id, $fullname, $candidat->email, $candidat->mdp);
+			$this->sendVerificationEmail($candidat->candidats_id, $fullname, $candidat->email);
 				
 			return $this->jsonResponse('success', ['Un e-mail vous a été envoyé avec des instructions détaillées sur la façon de l\'activer.']);
     }
@@ -184,7 +184,7 @@ class AuthController extends Controller
 				switch ($candidat->status) {
 					case '0':
 						$data['status'] = 'confirm_activation';
-						$data['message'] = 'Votre compte a été desactivé, voulez vous le reactiver ?';
+						$data['message'] = 'Votre compte a été désactivé, voulez vous le reactiver ?';
 						$data['candidat_id'] = $candidat->candidats_id;
 					break;
 					case '1':
@@ -216,7 +216,7 @@ class AuthController extends Controller
 			}
 			unset($data['email']);
 		}
-		return Ajax::renderAjaxView('Réinitialiser le mot de passe', 'front/candidat/account/reset-password', $data);
+		return Ajax::renderAjaxView('Réinitialiser le mot de passe', 'front/candidat/reset-password', $data);
 	}
 
 
@@ -297,7 +297,6 @@ class AuthController extends Controller
 			// Create candidat
 			$cdata = $this->getCandidatData($params);
 			$cdata['photo'] = (isset($upload['files']['photo'])) ? $upload['files']['photo'] : '';
-			$cdata['date_n'] = \english_to_french_date($cdata['date_n']);
 			$id_candidat = $db->create('candidats', $cdata, false);
 			
 			// Create formation
@@ -322,8 +321,8 @@ class AuthController extends Controller
 			// Create CV
 			$db->create('cv', [
 				'candidats_id' => $id_candidat,
-				'titre_cv' => $upload['files']['cv'],
-				'lien_cv' => $upload['files']['cv'],
+				'titre_cv' => $upload['files']['cv']['title'],
+				'lien_cv' => $upload['files']['cv']['name'],
 				'principal' => 1,
 				'actif' => 1
 			], false);
@@ -332,8 +331,8 @@ class AuthController extends Controller
 			if(isset($upload['files']['lm'])) {
 				$db->create('lettres_motivation', [
 					'candidats_id' => $id_candidat,
-					'lettre' => $upload['files']['lm'],
-					'titre' => $upload['files']['lm'],
+					'lettre' => $upload['files']['lm']['title'],
+					'titre' => $upload['files']['lm']['name'],
 					'principal' => 1,
 					'actif' => 1
 				], false);
@@ -341,7 +340,7 @@ class AuthController extends Controller
 
 			// Send email to candidat
 			$fullname = $this->getCandidatFullname($cdata['id_civi'], $cdata['nom'], $cdata['prenom']);
-			$this->sendVerificationEmail($id_candidat, $fullname, $cdata['email'], $cdata['mdp']);
+			$this->sendVerificationEmail($id_candidat, $fullname, $cdata['email']);
 			
 			return $this->jsonResponse('success', ['Votre compte à été créé avec succès.', 'Un e-mail vous a été envoyé avec des instructions détaillées sur la façon de l\'activer.'], ['dismissible' => false]);
 		} else {
@@ -396,6 +395,7 @@ class AuthController extends Controller
 				$data[$key] = $value;
 			}
 		}
+		$data['date_n'] = \english_to_french_date($data['date_n']);
 		$data['mdp'] = md5($data['mdp']);
 		return $data;
 	}
@@ -489,6 +489,11 @@ class AuthController extends Controller
 			]
 		];
 
+		// Store uploaded files paths to delete theme if errors
+    $upload_paths = [];
+		
+		$max_file_size = get_setting('max_file_size');
+
 		foreach ($rules as $key => $rule) {
 			$valid = true;
 			if($rule['required'] && $_FILES[$key]['size'] < 1) {
@@ -499,19 +504,31 @@ class AuthController extends Controller
 			if ($_FILES[$key]['size'] > 0) {
 				if(!in_array($extension, $rule['extensions'])) {
 					$return['errors'][] = "Le champ <strong>{$rule['name']}</strong> doit avoir les extensions suivantes (.". implode(', .', $rule['extensions']) .")";
-				} else if($valid) {
+				} elseif ($_FILES[$key]['size'] > $this->koToOctet($max_file_size)) {
+          $return['errors'][] = "Vous avez depassé la taille maximal <strong>({$max_file_size}ko)</strong> pour le champ <strong>{$rule['name']}</strong>";
+        } else if($valid) {
 					$upload = Media::upload($_FILES[$key], [
 						'extensions' => $rule['extensions'],
 						'uploadDir' => $rule['path']
 					]);
 					if(isset($upload['files'][0]) && $upload['files'][0] != '') {
-						$return['files'][$key] = $upload['files'][0];
+						$return['files'][$key] = [
+							'name' => $upload['files'][0], 
+							'title' => str_replace('.'.$extension, '', $_FILES[$key]['name'])
+						];
+						$upload_paths[] = $rule['path'] . $upload['files'][0];
 					} else {
 						$return['errors'][$key] = $upload['errors'][0];
 					}
 				}
 			}
 		}
+		// Remove uploaded files if errors
+		if (!empty($return['errors'])) {
+      foreach ($upload_paths as $key => $upath) {
+        unlinkFile(site_base($upath));
+      }
+    }
 		return $return;
 	}
 
@@ -531,7 +548,7 @@ class AuthController extends Controller
 	}
 
 	
-	private function sendVerificationEmail($id_candidat, $fullname, $email, $mdpHash)
+	private function sendVerificationEmail($id_candidat, $fullname, $email)
 	{
 		global $email_e;
 
@@ -539,11 +556,11 @@ class AuthController extends Controller
 		$template = getDB()->findOne('root_email_auto', 'ref', 'r');
 		if(!isset($template->id_email)) return;
 
-		$lien_confirmation = site_url("confirmation/?p=$mdpHash&i=$id_candidat");
+		$lien = site_url("candidat/account/confirm/". md5($email.$id_candidat));
 		$message = Mailer::renderMessage($template->message, [
 			'nom_candidat' => $fullname,
 			'lieu_statu' => site_url(),
-			'lien_confirmation' => '<a href="'. $lien_confirmation .'">'. $lien_confirmation .'</a>'
+			'lien_confirmation' => '<a href="'. $lien .'">'. $lien .'</a>'
 		]);
 
 		$bcc = [$email_e];

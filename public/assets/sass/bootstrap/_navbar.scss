@@ -118,3 +118,16 @@
 	}
 }
 
+
+.account-nav {
+	li {
+		&.disabled>a {
+			text-decoration: line-through !important;
+		  cursor: not-allowed;
+		}
+		&.active>a {
+			font-weight: 700;
+			color: $color_bg_menu;
+		}
+	}
+}

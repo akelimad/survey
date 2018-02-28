@@ -28,15 +28,15 @@ function get_candidat_id() {
  */
 function get_candidat($name = null, $dafault = null) {
 	$candidat = $GLOBALS['etalent']->candidat;
-	if( empty($candidat) ) {
+	if( !isset($candidat->candidats_id) ) {
 		$candidat = getDB()->findOne('candidats', 'candidats_id', get_candidat_id());
-		if (isset($candidat->candidats_id)) {
-			$GLOBALS['etalent']->candidat = $candidat;
-			return (isset($candidat->$name)) ? $candidat->$name : $dafault;
-		}
-	} else {
-		return (isset($GLOBALS['etalent']->candidat->$name)) ? $GLOBALS['etalent']->candidat->$name : $dafault;
+		if( !isset($candidat->candidats_id) ) return $dafault;
+		$GLOBALS['etalent']->candidat = $candidat;
 	}
+
+	if (is_null($name)) return $candidat;
+
+	return (isset($GLOBALS['etalent']->candidat->$name)) ? $GLOBALS['etalent']->candidat->$name : $dafault;
 }
 
 

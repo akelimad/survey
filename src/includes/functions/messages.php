@@ -29,9 +29,11 @@ function get_alert($type, $messages, $dismiss=true){
  *
  * @return $message array
  */
-function set_flash_message($type, $message){
-	if( !in_array($type, ['success', 'danger', 'info', 'warning']) )
+function set_flash_message($type, $message) {
+	if( !in_array($type, ['success', 'error', 'danger', 'info', 'warning']) )
 		return false;
+
+	if($type == 'error') $type = 'danger';
 
 	$flash = read_session('flash_message');
 	if( !$flash ) $flash = [];
