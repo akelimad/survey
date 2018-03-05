@@ -41,10 +41,11 @@ class ConfirmController
       $message = 'La convocation a été bien confirmé, merci.';
     }
 
-    return View::getPage('front/pages/confirm-convocation', [
+    return get_page('front/pages/confirm-convocation', [
       'type' => $type,
       'message' => $message,
-      'breadcrumbs' => ['Candidature', 'Confirmation']
+      'breadcrumbs' => ['Candidature', 'Confirmation'],
+      'layout' => 'front'
     ], __FILE__);
   }
 

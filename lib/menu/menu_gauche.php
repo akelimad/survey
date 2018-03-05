@@ -74,7 +74,7 @@ if($c_stage>0){  $menu__1='ctl00_liSpontanee';	$menu__2='ctl00_liSpontanee'; $me
 
 		</li>
 
-		<?php if(get_setting('menu_offres_candidature_spontannee') == 1) : ?>
+		<?php if(get_setting('front_menu_offres_candidature_spontannee') == 1) : ?>
 		<li id="ctl00_liAlerte" class="<?php echo $menu__2; ?>"> 
 
 		<a  id="ctl00_lnkSpontanee" class="<?php echo $menu__1; ?>" href="<?php echo $urloffre ?>/candidature_spontannee/" >

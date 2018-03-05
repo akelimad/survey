@@ -20,6 +20,20 @@ Route::add('candidat/account/resent-email', 'App\Controllers\Front\AuthControlle
 
 // Candidat account
 Route::add('candidat/account/confirm/[a-zA-Z0-9]+', 'App\Controllers\Front\CandidatController@confirmAccount');
+Route::add('candidat/account/candidature/deleteSpontanee', 'App\Controllers\Front\CandidatureController@deleteSpontanee');
+Route::add('candidat/account/candidature/deleteStage', 'App\Controllers\Front\CandidatureController@deleteStage');
+
+
+Route::add('candidat/account/alert/form', 'App\Controllers\Front\AlertController@form', true, $isLoggedCandidat);
+Route::add('candidat/account/alert/activate', 'App\Controllers\Front\AlertController@activate', true, $isLoggedCandidat);
+Route::add('candidat/account/alert/delete', 'App\Controllers\Front\AlertController@delete', true, $isLoggedCandidat);
+Route::add(
+  'candidat/account/alert/table', 
+  'App\Controllers\Front\Tables\AlertTableController@getTable', 
+  true, 
+  $isLoggedCandidat
+);
+
 Route::add(
   'candidat/compte', 
   'App\Controllers\Front\CandidatController@account', 
@@ -188,10 +202,10 @@ Route::add(
 
 
 // Pages
-Route::add('infos/mentions_legales', 'App\Controllers\Front\PageController@terms');
-Route::add('infos/conditions', 'App\Controllers\Front\PageController@conditions');
-Route::add('infos/liens', 'App\Controllers\Front\PageController@sitemap');
-Route::add('infos/contact', 'App\Controllers\Front\PageController@contact');
+Route::add('terms', 'App\Controllers\Front\PageController@terms');
+Route::add('conditions', 'App\Controllers\Front\PageController@conditions');
+Route::add('sitemap', 'App\Controllers\Front\PageController@sitemap');
+Route::add('contact', 'App\Controllers\Front\PageController@contact');
 
 // Advanced search
 Route::add('offres', 'App\Controllers\Front\OfferController@index');

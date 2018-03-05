@@ -28,18 +28,20 @@ class Route
 
 	public static function dispach()
 	{
-		$route = self::getRouteParams();
-		if(!$route) return;
+    // admin auth
+    if (isBackend() && !isLogged('admin')) return redirect('backend/login');
 
-		if($route['is_ajax'] && !is_ajax()) {
-			header('HTTP/1.0 403 Forbidden');
-			exit;
-		}
+    $route = self::getRouteParams();
+    if(!$route) return get_view('errors/404');
 
-    if(!$route['can_access']) redirect('/');
+    if($route['is_ajax'] && !is_ajax()) {
+      header('HTTP/1.0 403 Forbidden');
+      exit;
+    }
+    if(!$route['can_access']) return redirect('/');
 
 		$callable = explode('@', $route['callback']);
-		if(!isset($callable[1])) return;
+		if(!isset($callable[1])) return get_view('errors/404');
 
 		$controller = $callable[0];
 		$method = $callable[1];
@@ -51,8 +53,9 @@ class Route
 			} else {
 				call_user_func_array([new $controller(), $method], [$params]);
 			}
-			exit;
-		}
+		} else {
+      get_view('errors/404');
+    }
 	}
 
 

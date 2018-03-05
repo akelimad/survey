@@ -1,4 +1,4 @@
-<?= $terms_site_title = get_setting('terms_site_title', 'E-talent'); ?>
+<?= $terms_site_title = get_setting('front_terms_site_title', 'E-talent'); ?>
 
 <div class='texte' style="width:700px;">
 

@@ -10,11 +10,11 @@ import $ from 'jquery'
  */
 export default class chmTable {
 
-  static render (target, page = 1) {
+  static render (target, page = 1, scrollTo = false) {
     var self = this
     var route = $(target).attr('chm-table')
     if (route === '') return
-    self.fill(target, '<i class="fa fa-circle-o-notch fa-spin fast-spin"></i>&nbsp;Chargement de la table en cours...')
+    self.fill(target, '<i class="fa fa-circle-o-notch fa-spin fast-spin"></i>&nbsp;Chargement de la table en cours...', scrollTo)
     $.ajax({
       type: 'GET',
       url: route,
@@ -23,27 +23,32 @@ export default class chmTable {
       try {
         response = $.parseJSON(response)
         if (response.status === 'success') {
-          self.fill(target, response.content)
+          self.fill(target, response.content, scrollTo)
         } else {
-          self.fill(target, '<strong>Une erreur est survenue lors de chargement de la table.</strong>')
+          self.fill(target, '<strong>Une erreur est survenue lors de chargement de la table.</strong>', scrollTo)
         }
       } catch (e) {
-        self.fill(target, '<strong>' + e.message + '</strong>')
+        self.fill(target, '<strong>' + e.message + '</strong>', scrollTo)
       }
     }).fail(function (jqXHR, textStatus, errorThrown) {
-      self.fill(target, '<strong>' + jqXHR.status + ' - ' + jqXHR.statusText + '</strong>')
+      self.fill(target, '<strong>' + jqXHR.status + ' - ' + jqXHR.statusText + '</strong>', scrollTo)
     })
   }
 
-  static refresh (target, page = null) {
+  static refresh (target, page = null, scrollTo = false) {
     if (page === null) {
       page = window.chmUrl.getParam('page', 1)
     }
-    this.render(target, page)
+    this.render(target, page, scrollTo)
   }
 
-  static fill (target, content) {
+  static fill (target, content, scrollTo = false) {
     $(target).empty().html(content)
+    if (scrollTo) {
+      $('html, body').animate({
+        scrollTop: $(target).offset().top
+      }, 2000)
+    }
   }
 
 }

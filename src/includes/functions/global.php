@@ -21,7 +21,6 @@ include_once( dirname(__FILE__) .'/modules.php');
 include_once( dirname(__FILE__) .'/assets.php');
 include_once( dirname(__FILE__) .'/user.php');
 include_once( dirname(__FILE__) .'/candidat.php');
-include_once( dirname(__FILE__) .'/config.php');
 include_once( dirname(__FILE__) .'/cookie-session.php');
 include_once( dirname(__FILE__) .'/database.php');
 include_once( dirname(__FILE__) .'/datetime.php');

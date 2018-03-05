@@ -4,6 +4,13 @@ Options All -Indexes
 
 RewriteEngine on
 
+# upload directory rewrite
+RewriteRule ^uploads/front/(.*)$ ./apps/upload/frontend/$1 [L,QSA]
+RewriteRule ^uploads/admin/(.*)$ ./apps/upload/backend/$1 [L,QSA]
+RewriteRule ^uploads/candidat/resume/(.*)$ ./apps/upload/frontend/cv/$1 [L,QSA]
+RewriteRule ^uploads/candidat/motivation_letter/(.*)$ ./apps/upload/frontend/lmotivation/$1 [L,QSA]
+RewriteRule ^uploads/candidat/photo/(.*)$ ./apps/upload/frontend/photo_candidats/$1 [L,QSA]
+
 # RewriteRule ^(/*)$ ./public/index.php$1 [L,QSA]
 # RewriteRule ^(/*)$ ./apps/frontend/home/$1 [L,QSA]
 # RewriteRule ^()$ ./apps/frontend/home/$1 [L,QSA]

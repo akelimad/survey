@@ -11,7 +11,7 @@
 namespace Modules\Candidatures\Controllers;
 
 use App\Ajax;
-use App\Models\Cv;
+use App\Models\Resume;
 use App\Media;
 
 class AjaxController
@@ -125,7 +125,7 @@ class AjaxController
       'message' => 'Impossible de trouver cette candidature.'
     ];
 
-    $cv = Cv::getByID($candidature->id_cv);
+    $cv = Resume::getByID($candidature->id_cv);
     if( !isset($cv->lien_cv) ) return [
       'status' => 'error',
       'message' => 'Impossible de trouver le CV de ce candidat.'

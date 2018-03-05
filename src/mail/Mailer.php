@@ -31,7 +31,7 @@ class Mailer
 		],
 		'headers' => [],
 		'attachements' => [],
-		'isHTML' => false,
+		'isHTML' => true,
 		'CC' => [],
 		'BCC' => [],
 		'data' => []
@@ -71,11 +71,11 @@ class Mailer
 
 				if( defined('SMTP_ssl') && SMTP_ssl == true ) {
 					$mail->SMTPOptions = array(
-					    'ssl' => array(
-					        'verify_peer' => false,
-					        'verify_peer_name' => false,
-					        'allow_self_signed' => true
-					    )
+						'ssl' => array(
+							'verify_peer' => false,
+							'verify_peer_name' => false,
+							'allow_self_signed' => true
+						)
 					);
 				}
 			}
@@ -130,6 +130,7 @@ class Mailer
 					'message' => $message,
 					'ref_filiale' => (isset($args['ref_filiale'])) ? $args['ref_filiale'] : ''
 				]);
+				
 				return array("response" => "success", "message" => "L'email a été bien envoyé.");
 			} else {
 				return array("response" => "error", "message" => "Une erreur est survenu lors d'envoi de l'email.");

@@ -1,4 +1,4 @@
-<?= $terms_site_title = get_setting('terms_site_title', 'E-talent'); ?>
+<?= $terms_site_title = get_setting('front_terms_site_title', 'E-talent'); ?>
 
 <div class="text"><h1>CONDITIONS GÉNÉRALES D'UTILISATION</h1><div>
 

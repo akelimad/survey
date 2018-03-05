@@ -567,6 +567,12 @@ class OfferController extends Controller
     }
     $andWhere_array[] = (Route::getRoute() == 'offres/stage') ? "o.id_tpost='4'" : "o.id_tpost!='4'";
 
+    // Afficher les offres expirées au candidats dans la page des offres.
+    if (get_setting('front_show_expired_offers_on_frentend') != 1) {
+      $andWhere_array[] = "o.status='En cours'";
+      $andWhere_array[] = "DATE(o.date_expiration) >= CURDATE()";
+    }
+
     return (!empty($andWhere_array)) ? " {$separator} ". implode(' AND ', $andWhere_array) : '';
   }
 

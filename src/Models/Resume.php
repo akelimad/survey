@@ -1,6 +1,6 @@
 <?php
 /**
- * Cv
+ * Resume
  *
  * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
  *
@@ -10,7 +10,7 @@
  */
 namespace App\Models; 
 
-class Cv {
+class Resume {
 
 
   /**
@@ -23,6 +23,20 @@ class Cv {
    */
   public static function getByID($id_cv) {
     return getDB()->findOne('cv', 'id_cv', $id_cv);
+  }
+
+
+  /**
+   * Get candidat CVs
+   *
+   * @param int $candidat_id 
+   * @return array $cvs 
+   * 
+   * @author Mhamed Chanchaf
+   */
+  public static function getByCandidatId($candidat_id = null) {
+    if (is_null($candidat_id)) $candidat_id = get_candidat_id();
+    return getDB()->findByColumn('cv', 'candidats_id', $candidat_id);
   }
 
 

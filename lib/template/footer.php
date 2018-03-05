@@ -27,7 +27,7 @@
 	<a class='bdp' href='<?php echo $urlinfos; ?>/liens/'>Plan du site</a>  
 
 
-	 <?php if(get_setting('menu_infos_signaler_probleme') == 1) : ?>
+	 <?php if(get_setting('front_menu_infos_signaler_probleme') == 1) : ?>
 	<a class='bdp' href='<?php echo $urlinfos; ?>/signaler_probleme/'>Signaler un problème</a>
 
 	 <span class='bdp' style="color:#ffffff;" >|</span>

@@ -72,3 +72,45 @@ function get_candidat_offre_pertinence($id_candidat, $id_offre) {
 	}
 	return $pertinence;
 }
+
+
+/**
+ * Get resume url by name
+ *
+ * @param string $name
+ *
+ * @return string $url
+ *
+ * @author Mhamed Chanchaf
+ */
+function get_resume_url($name) {
+	return site_url('uploads/candidat/resume/'. $name);
+}
+
+
+/**
+ * Get motivation letter url by name
+ *
+ * @param string $name
+ *
+ * @return string $url
+ *
+ * @author Mhamed Chanchaf
+ */
+function get_motivation_letter_url($name) {
+	return site_url('uploads/candidat/motivation_letter/'. $name);
+}
+
+
+/**
+ * Get candidat photo url by name
+ *
+ * @param string $name
+ *
+ * @return string $url
+ *
+ * @author Mhamed Chanchaf
+ */
+function get_photo_url($name) {
+	return site_url('uploads/candidat/photo/'. $name);
+}

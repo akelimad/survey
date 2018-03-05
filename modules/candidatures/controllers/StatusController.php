@@ -37,7 +37,7 @@ class StatusController
   		'id_candidature' => $candidature->id_candidature,
       'status' => $prm_statut->statut,
       'date_modification' => date("Y-m-d H:i:s"),
-      'utilisateur' => $_SESSION['abb_admin'],
+      'utilisateur' => (isLogged('admin')) ? read_session('abb_admin') : get_candidat('email', 'na'),
       'commentaire' => $data['status']['comments'],
       'lieu' => ''
     ]);

@@ -64,7 +64,7 @@
 
        <tbody>
 
-          <?php $showDestinations = (get_setting('show_contact_destination') == 1); ?>
+          <?php $showDestinations = (get_setting('front_show_contact_destination') == 1); ?>
 
            <tr style="display:<?= ($showDestinations) ? 'block' : 'none' ?>">
 

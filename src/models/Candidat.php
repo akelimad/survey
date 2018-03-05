@@ -69,6 +69,33 @@ class Candidat {
   }
 
 
+  /**
+   * Get candidat matched offers
+   *
+   * @param int $limit
+   * @return array $offers
+   *
+   * @author Mhamed Chanchaf
+   */
+  public static function getMatchedOffers($limit = 5)
+  {
+    return getDB()->prepare("SELECT * FROM offre WHERE id_sect=? AND status=? AND DATE(date_expiration) >= CURDATE() ORDER BY id_offre DESC LIMIT {$limit}", [get_candidat('id_sect'), 'En cours']);
+  }
+
+
+  /**
+   * Get candidat job alerts
+   *
+   * @return array $alerts
+   *
+   * @author Mhamed Chanchaf
+   */
+  public static function getAlerts()
+  {
+    return getDB()->prepare("SELECT * FROM alert WHERE candidats_id=?", [get_candidat_id()]);
+  }
+
+
 	/**
 	 * Get last candidat formation
 	 *
@@ -80,8 +107,8 @@ class Candidat {
 	public static function getLastFormation($id_candidat) 
 	{
 		return getDB()->prepare("SELECT f.*, e.nom_ecole FROM `formations` AS f LEFT JOIN prm_ecoles AS e ON e.id_ecole=f.id_ecol WHERE f.candidats_id=? ORDER BY f.date_fin DESC", [$id_candidat], true);
-
 	}
+
 
 	/**
 	 * Get last candidat experience

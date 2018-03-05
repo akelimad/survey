@@ -13,6 +13,20 @@ namespace App\Models;
 class Formation {
 
 
+  /**
+   * Get candidat Formations
+   *
+   * @param int $candidat_id 
+   * @return array $fomations 
+   * 
+   * @author Mhamed Chanchaf
+   */
+  public static function getByCandidatId($candidat_id = null) {
+    if (is_null($candidat_id)) $candidat_id = get_candidat_id();
+    return getDB()->findByColumn('formations', 'candidats_id', $candidat_id);
+  }
+
+
   public static function getDiplomeName($diplome_id) 
   {
     $diplome = getDB()->findOne('prm_filieres', 'id_fili', $diplome_id);

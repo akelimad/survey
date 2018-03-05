@@ -35,6 +35,5 @@ class HomeController extends Controller
     return get_page('front/home/index', $this->data);
 	}
 
-
 	
 } // END Class

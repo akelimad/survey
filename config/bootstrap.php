@@ -29,5 +29,7 @@ $autoloader->setPsr4('App\\Models\\', site_base('src/models'));
 $autoloader->setPsr4('App\\Controllers\\', site_base('src/controllers'));
 $autoloader->setPsr4('App\\Mail\\', site_base('src/mail'));
 
+setlocale (LC_TIME, 'fr_FR.utf8','fra');
+
 // Initialise modules
 \App\Module::init();

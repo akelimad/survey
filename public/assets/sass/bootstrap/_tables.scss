@@ -51,3 +51,39 @@
   font-size: 14px;
   padding: 2px 5px;
 }
+
+.cvTable {
+  td, th {
+    font-size: 11px !important;
+    padding: 2px 1px;
+    font-family: Helvetica;
+    i {
+      min-width: 12px !important;
+    }
+  }
+}
+
+.accountTable {
+  margin-bottom: 0px;
+  tr {
+    &.empty {
+      td {
+        border-top: none;
+      }
+    }
+  }
+  th, td {
+    font-size: 11px !important;
+    padding: 3px !important;
+    vertical-align: middle !important;
+    strong {
+      font-size: 11px !important;
+    }
+  }
+}
+
+#cv-languages {
+  span {
+    font-size: 11px;
+  }
+}

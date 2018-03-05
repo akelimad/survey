@@ -1,29 +1,31 @@
 body {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-family: Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 0;
-    font-size: 13px;
     background-color: $color_bg_body;
     color: #000000;
+    font-size: 11px;
 }
 
 p {
-	font-size: 12px;
+	font-size: 11px;
 	font-family: Helvetica;
 	line-height: 20px;
 }
 
 a {
-    text-decoration: none;
-    color: #000000;
-    font-family: Helvetica;
-    padding-bottom: 1px;
+  text-decoration: none;
+  color: #000000;
+  font-family: Helvetica;
+  padding-bottom: 1px;
+  font-size: 11px;
 }
 
 ul {
   padding: 0;
   li {
     list-style: none;
+    font-size: 11px;
   }
 }
 

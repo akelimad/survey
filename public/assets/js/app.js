@@ -16,12 +16,15 @@ import chmAlert from './modules/core/alert'
 import chmForm from './modules/core/form'
 import chmTable from './modules/core/table'
 import chmFilter from './modules/core/filter'
+import chmPrint from './modules/core/print'
 
 import chmOffer from './modules/offer'
 import chmAuth from './modules/auth'
 import chmCandidat from './modules/candidat'
+import chmCandidature from './modules/candidature'
 import chmFormation from './modules/formation'
 import chmExperience from './modules/experience'
+import chmJobAlerts from './modules/job-alerts'
 
 // Global storage
 window.$ = window.jQuery = $
@@ -34,12 +37,15 @@ window.chmAlert = chmAlert
 window.chmForm = chmForm
 window.chmTable = chmTable
 window.chmFilter = chmFilter
+window.chmPrint = chmPrint
 
 window.chmOffer = chmOffer
 window.chmAuth = chmAuth
 window.chmCandidat = chmCandidat
+window.chmCandidature = chmCandidature
 window.chmFormation = chmFormation
 window.chmExperience = chmExperience
+window.chmJobAlerts = chmJobAlerts
 
 // Standart jQuery script
 import './custom'

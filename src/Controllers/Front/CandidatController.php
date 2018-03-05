@@ -13,8 +13,13 @@ namespace App\Controllers\Front;
 use App\Controllers\Controller;
 use App\Helpers\Form\Validator;
 use App\Models\Candidat;
+use App\Models\Resume;
+use App\Models\MotivationLetter;
+use App\Models\Formation;
+use App\Models\Experience;
 use App\Media;
 use App\Mail\Mailer;
+use Mpdf\Mpdf;
 
 class CandidatController extends Controller
 {
@@ -117,6 +122,10 @@ class CandidatController extends Controller
   {
     $this->data['layout'] = 'front';
     $this->data['breadcrumbs'] = ['Accueil', 'Candidat', 'Mon compte'];
+    $progress = $this->getAccountProgress();
+    $this->data['progress'] = $progress;
+    $this->data['progress_color'] = $this->percent2Color($progress, 180, 100);
+    
     return get_page('front/candidat/account/index', $this->data);
   }
 
@@ -125,10 +134,15 @@ class CandidatController extends Controller
   {
     $this->data['layout'] = 'front';
     $this->data['breadcrumbs'] = ['Accueil', 'Candidat', 'Mon CV'];
-    $this->data['progress'] = $this->getAccountProgress();
+    $progress = $this->getAccountProgress();
+    $this->data['progress'] = $progress;
+    $this->data['progress_color'] = $this->percent2Color($progress, 180, 100);
+    $this->data['cvs'] = Resume::getByCandidatId();
+    $this->data['lms'] = MotivationLetter::getByCandidatId();
+    $this->data['formations'] = Formation::getByCandidatId();
+    $this->data['experiences'] = Experience::getByCandidatId();
     return get_page('front/candidat/cv/index', $this->data);
   }
-
 
   public function getAccountProgress()
   {
@@ -288,8 +302,8 @@ class CandidatController extends Controller
       // Render page
       $this->data['layout'] = 'front';
       $this->data['breadcrumbs'] = ['Accueil', 'Candidat', 'Mon CV', 'Langues et piéces joints'];
-      $this->data['cvs'] = getDB()->findByColumn('cv', 'candidats_id', get_candidat_id());
-      $this->data['lms'] = getDB()->findByColumn('lettres_motivation', 'candidats_id', get_candidat_id());
+      $this->data['cvs'] = Resume::getByCandidatId();
+      $this->data['lms'] = MotivationLetter::getByCandidatId();
       return get_page('front/candidat/cv/langues_pj/index', $this->data);
     }
   }

@@ -8,6 +8,43 @@
 
 
 /**
+ * Format date
+ *
+ * @param string $date
+ * @param string $format
+ * @param bool $strftime
+ *
+ * @return string $date_formated
+ */
+function eta_date($date, $format = null, $strftime = false) {
+	// Transforme frensh date to englich date
+	if ( preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/[0-9]{4} [0-9]{2}:[0-9]{2}$/", $date) ) {
+		$date = french_to_english_datetime($date);
+	} else if ( preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/[0-9]{4}$/", $date) ) {
+		$date = french_to_english_date($date);
+	}
+
+	// Get default format
+	$fromFormat = 'Y-m-d';
+	$date_format = 'date_format';
+	if (strlen($date) > 10) {
+		$fromFormat = 'Y-m-d H:i:s';
+		$date_format = 'datetime_format';
+	}
+	if (is_null($format)) $format = get_setting($date_format);
+
+	// Format date
+	if ($strftime) {
+		$date = utf8_encode(strftime($format, strtotime($date)));
+    return ucwords($date);
+	} elseif (\DateTime::createFromFormat($fromFormat, $date)) {
+		return \DateTime::createFromFormat($fromFormat, $date)->format($format);
+	}
+	return $date;
+}
+
+
+/**
  * Get English date from French date
  *
  * @param string $date

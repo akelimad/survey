@@ -112,7 +112,7 @@ $hasCV = \App\Models\Candidat::hasCV(get_candidat_id());
     </div>
     <?php if (get_candidat('photo') != '') : ?>
       <div id="candidatPhoto">
-        <img class="img-responsive mt-10" src="<?= site_url('apps/upload/frontend/photo_candidats/'. get_candidat('photo')); ?>">
+        <img class="img-responsive mt-10" src="<?= get_photo_url(get_candidat('photo', 'no-photo.png')); ?>">
         <button type="button" class="btn btn-danger btn-xs" onclick="return chmModal.confirm('', '', 'Êtes-vous sûr de vouloir supprimer la photo ?', 'chmCandidat.deletePhoto', {'photo': '<?= get_candidat('photo'); ?>'}, {width: 332})" style="position: absolute;top: 25px;left: 15px;"><i class="fa fa-trash"></i></button>
       </div>
     <?php endif; ?>
@@ -135,7 +135,7 @@ $hasCV = \App\Models\Candidat::hasCV(get_candidat_id());
           <li class="cv_<?= $cv->id_cv; ?>">
             <label for="cv_input_<?= $cv->id_cv; ?>" style="cursor: pointer;">
               <button type="button" class="btn btn-danger btn-xs" onclick="return chmModal.confirm('', '', 'Êtes-vous sûr de vouloir supprimer le CV ?', 'chmCandidat.deleteCV', {'id': '<?= $cv->id_cv; ?>'}, {width: 312})" title="Supprimer"><i class="fa fa-trash"></i></button>
-              <a target="_blank" href="<?= site_url('apps/upload/frontend/cv/'. $cv->lien_cv); ?>" class="btn btn-default btn-xs" title="Télécharger"><i class="fa fa-download"></i></a>
+              <a target="_blank" href="<?= get_resume_url($cv->lien_cv); ?>" class="btn btn-default btn-xs" title="Télécharger"><i class="fa fa-download"></i></a>
               <span class="btn btn-primary btn-xs" title="Définir comme principal">
                 <input type="radio" name="cv_default" id="cv_input_<?= $cv->id_cv; ?>" onchange="return chmCandidat.setCVDefault(<?= $cv->id_cv; ?>)" <?= ($cv->principal == 1) ? 'checked' : ''; ?>>
               </span>
@@ -161,7 +161,7 @@ $hasCV = \App\Models\Candidat::hasCV(get_candidat_id());
           <li class="lm_<?= $lm->id_lettre; ?>">
             <label for="lm_input_<?= $lm->id_lettre; ?>" style="cursor: pointer;">
               <button type="button" class="btn btn-danger btn-xs" onclick="return chmModal.confirm('', '', 'Êtes-vous sûr de vouloir supprimer la Lettre de motivation ?', 'chmCandidat.deleteLM', {'id': '<?= $lm->id_lettre; ?>'}, {width: 428})" title="Supprimer"><i class="fa fa-trash"></i></button>
-              <a target="_blank" href="<?= site_url('apps/upload/frontend/lmotivation/'. $lm->lettre); ?>" class="btn btn-default btn-xs" title="Télécharger"><i class="fa fa-download"></i></a>
+              <a target="_blank" href="<?= get_motivation_letter_url($lm->lettre); ?>" class="btn btn-default btn-xs" title="Télécharger"><i class="fa fa-download"></i></a>
               <span class="btn btn-primary btn-xs" title="Définir comme principal">
                 <input type="radio" name="lm_default" id="lm_input_<?= $lm->id_lettre; ?>" onchange="return chmCandidat.setLMDefault(<?= $lm->id_lettre; ?>)" <?= ($lm->principal == 1) ? 'checked' : ''; ?>>
               </span>

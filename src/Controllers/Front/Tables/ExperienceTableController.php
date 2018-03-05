@@ -45,7 +45,7 @@ class ExperienceTableController extends Controller
     }, ['attributes' => ['width' => '100']]);
 
     $table->addColumn('date_fin', 'Date de fin', function($row) {
-      if ($row->date_fin == '') return "Jusqu'à aujourd'hui";
+      if ($row->date_fin == '') return "Aujourd'hui";
       
       if (strlen($row->date_fin) == 7) $row->date_fin = '01/'. $row->date_fin;
       return \french_to_english_date($row->date_fin, 'd.m.Y');

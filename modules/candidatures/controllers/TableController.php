@@ -16,6 +16,9 @@ use Modules\Candidatures\Models\Candidat;
 use Modules\Candidatures\Models\Candidatures;
 use Modules\Fiches\Models\Fiche;
 
+use App\Models\Resume;
+use App\Models\MotivationLetter;
+
 class TableController extends Controller
 {
 
@@ -261,14 +264,14 @@ class TableController extends Controller
   	$table->addColumn('details', 'Détails', function($row){
   		$details = '';
   		if( intval($row->id_cv) > 0 ) {
-  			$cv_ext = \App\Models\Cv::getExtension($row->id_cv);
+  			$cv_ext = Resume::getExtension($row->id_cv);
   			if( !is_null($cv_ext) ) {
   				$icon = $this->getIconByExtention($cv_ext);
   				$details .= '<a href="'. site_url('backend/module/candidatures/candidat/cv/'.$row->id_cv) .'" title="Télécharger le CV"><i class="'.$icon.'"></i></a>';
   			}
   		}
   		if( intval($row->id_lettre) > 0 ) {
-  			$lettre_ext = \App\Models\Lettre::getExtension($row->id_lettre);
+  			$lettre_ext = MotivationLetter::getExtension($row->id_lettre);
   			if( !is_null($lettre_ext) ) {
   				$icon = $this->getIconByExtention($lettre_ext);
   				$details .= '&nbsp;<a href="'. site_url('backend/module/candidatures/candidat/lettre/'.$row->id_lettre) .'" title="Télécharger la lettre de motivation"><i class="'.$icon.'"></i></a>';

@@ -1,6 +1,6 @@
 <?php
 /**
- * Lettre
+ * MotivationLetter
  *
  * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
  *
@@ -10,7 +10,7 @@
  */
 namespace App\Models; 
 
-class Lettre {
+class MotivationLetter {
 
 
 	/**
@@ -23,6 +23,20 @@ class Lettre {
    */
   public static function getByID($id_lettre) {
     return getDB()->findOne('lettres_motivation', 'id_lettre', $id_lettre);
+  }
+
+
+  /**
+   * Get candidat LMs
+   *
+   * @param int $candidat_id 
+   * @return array $cvs 
+   * 
+   * @author Mhamed Chanchaf
+   */
+  public static function getByCandidatId($candidat_id = null) {
+    if (is_null($candidat_id)) $candidat_id = get_candidat_id();
+    return getDB()->findByColumn('lettres_motivation', 'candidats_id', $candidat_id);
   }
 
 
