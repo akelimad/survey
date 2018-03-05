@@ -2,7 +2,7 @@
 /**
  * Route
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.route
  * @version 1.0

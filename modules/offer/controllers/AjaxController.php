@@ -2,7 +2,7 @@
 /**
  * AjaxController
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package modules.offer.controllers
  * @version 1.0

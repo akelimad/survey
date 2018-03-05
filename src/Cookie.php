@@ -2,7 +2,7 @@
 /**
  * Cookie
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.cookie
  * @version 1.0

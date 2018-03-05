@@ -2,7 +2,7 @@
 /**
  * Database
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.database
  * @version 1.0

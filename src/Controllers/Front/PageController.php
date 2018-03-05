@@ -2,7 +2,7 @@
 /**
  * PageController
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.controllers.front
  * @version 1.0

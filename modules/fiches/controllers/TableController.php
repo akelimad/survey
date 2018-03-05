@@ -2,7 +2,7 @@
 /**
  * TableController
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.assets
  * @version 1.0

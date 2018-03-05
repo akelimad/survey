@@ -4,7 +4,7 @@
  * 
  * Manage Ajax calls
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.ajax
  * @version 1.0

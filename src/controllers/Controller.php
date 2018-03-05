@@ -2,7 +2,7 @@
 /**
  * Controller
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.controllers
  * @version 1.0

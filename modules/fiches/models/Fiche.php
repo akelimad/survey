@@ -2,7 +2,7 @@
 /**
  * Fiche
  * 
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.fiches.models
  * @version 1.0

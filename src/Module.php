@@ -4,7 +4,7 @@
  * 
  * Manage modules
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.module
  * @version 1.0

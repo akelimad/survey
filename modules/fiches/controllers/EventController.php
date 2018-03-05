@@ -2,7 +2,7 @@
 /**
  * EventController
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package modules.fiches.controllers
  * @version 1.0

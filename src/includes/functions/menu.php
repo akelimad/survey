@@ -2,7 +2,7 @@
 /**
  * Menus
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  * @since 05/01/2018
  */
 

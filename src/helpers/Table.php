@@ -2,7 +2,7 @@
 /**
  * Table
  * 
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.table
  * @version 1.0

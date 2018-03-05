@@ -2,7 +2,7 @@
 /**
  * OfferController
  * 
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.offer.controllers
  * @version 1.0

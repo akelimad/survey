@@ -2,7 +2,7 @@
 /**
  * Situation
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.models
  * @version 1.0

@@ -2,7 +2,7 @@
 /**
  * Offer
  * 
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.offer.models
  * @version 1.0

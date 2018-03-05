@@ -2,7 +2,7 @@
 /**
  * View
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.view
  * @version 1.0

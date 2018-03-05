@@ -4,7 +4,7 @@
  * 
  * Send emails using php mail() function
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.mail.phpmail
  * @version 1.0
@@ -22,7 +22,7 @@ class PHPMail
 	 * @param string $templateRef 
 	 * @param array $variables 
 	 * 
-	 * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+	 * @author mchanchaf
 	 */
 	public static function sendMail($receiver, $subject, $message, $args=[]) {
 		$default = array(
@@ -59,7 +59,7 @@ class PHPMail
 	 * @param string $templateRef 
 	 * @param array $variables 
 	 * 
-	 * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+	 * @author mchanchaf
 	 */
 	public static function sendEmailFromTemplate($receiver, $templateRef, $variables=[], $args=[]) {
 

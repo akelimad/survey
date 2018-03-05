@@ -4,7 +4,7 @@
  * 
  * Send emails using PHPMailer library
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.mail.mailer
  * @version 1.0
@@ -48,7 +48,7 @@ class Mailer
 	 *
 	 * @return array $response 
 	 * 
-	 * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+	 * @author mchanchaf
 	 */
 	public static function send($receiver, $subject, $message, $args=[]) {
 		try {

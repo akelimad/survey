@@ -2,7 +2,7 @@
 /**
  * Datetime
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  * @since 03/10/2017
  */
 

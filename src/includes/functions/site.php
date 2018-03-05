@@ -2,7 +2,7 @@
 /**
  * Site informations
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  * @since 04/10/2017
  */
 

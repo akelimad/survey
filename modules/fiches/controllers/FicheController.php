@@ -2,7 +2,7 @@
 /**
  * FicheController
  * 
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.fiches.controllers
  * @version 1.0

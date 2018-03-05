@@ -2,7 +2,7 @@
 /**
  * Permission
  *
- * @author M'hamed Chanchaf <m.chanchaf@gmail.com>
+ * @author mchanchaf
  *
  * @package app.permission
  * @version 1.0
