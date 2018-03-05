@@ -590,6 +590,7 @@ class Table extends Pagination {
     public function getActionsLinks($columns, $row)
     {
         $html = '';
+        $i = 0;
 
         // $this->sortActions();
         
@@ -599,6 +600,8 @@ class Table extends Pagination {
             if( is_callable($permission) ) {
                 $permission = call_user_func($permission, $row);
             }
+
+            $i++;
 
             if( $permission !== true ) continue;
 
@@ -637,7 +640,9 @@ class Table extends Pagination {
                 $confirm = (!is_null($action['callback']) && $action['callback']!='') ? 'onclick="return '. $action['callback'] .'(event, ['. $columns[$this->primary_key] .']);"' : '';
             }
 
-            $html .= '<a title="'. $action['label'] .'" href="'. $actionLink .'" '. $attrs .' '. $confirm .'>'. $label .'&nbsp;</a>&nbsp;';
+            $html .= '<a title="'. $action['label'] .'" href="'. $actionLink .'" '. $attrs .' '. $confirm .'>'. $label .'&nbsp;</a>';
+
+            if($i < count($this->_actions)) $html .= '&nbsp;';
         }
         return $html;
     }
