@@ -7,6 +7,9 @@ include_once SITE_BASE .'/config/database.php';
 // Defines
 define('DS', DIRECTORY_SEPARATOR);
 
+// Assets version
+if (!defined('ETA_ASSETS_VERSION')) define('ETA_ASSETS_VERSION', false);
+
 // Get physical URL
 $dirname = str_replace(DS, "/", SITE_BASE);
 $root = $_SERVER['DOCUMENT_ROOT'];

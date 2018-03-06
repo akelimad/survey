@@ -46,7 +46,7 @@ function add_js($unique_id, $params=[]){
 
 	if(!empty($styles['head'])) {
 		foreach ($styles['head'] as $unique_id => $s) {
-			$version = ($s['version']) ? "?v=".$s['version'] : "";
+			$version = ($s['version'] && ETA_ASSETS_VERSION) ? "?v=".$s['version'] : "";
 			$output .= '<link id="'. $unique_id .'" href="'. $s['src'] . $version .'" rel="stylesheet" type="text/css" media="'. $s['media'] .'" />'. "\n";
 		}
 	}
@@ -72,7 +72,7 @@ function add_js($unique_id, $params=[]){
 
 	if(!empty($styles['footer'])) {
 		foreach ($styles['footer'] as $unique_id => $s) {
-			$version = ($s['version']) ? "?v=".$s['version'] : "";
+			$version = ($s['version'] && ETA_ASSETS_VERSION) ? "?v=".$s['version'] : "";
 			$output .= '<link id="'. $unique_id .'" href="'. $s['src'] . $version .'" rel="stylesheet" type="text/css" media="'. $s['media'] .'" />'. "\n";
 		}
 	}
