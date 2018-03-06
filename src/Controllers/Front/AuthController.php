@@ -35,11 +35,11 @@ class AuthController extends Controller
 		'candidat_titre' => ['required|eta_alpha_numeric|min_len,3|max_len,255', 'Titre de votre profil'],
 		'candidat_nom' => ['required|valid_name|min_len,3|max_len,32', 'Nom'],
 		'candidat_prenom' => ['required|valid_name|min_len,3|max_len,32', 'Prénom'],
-		'candidat_date_n' => ['required|date|min_age,17', 'Date de naissance'],
+		'candidat_date_n' => ['required|date|min_age,15', 'Date de naissance'],
 		'candidat_adresse' => ['required|eta_alpha_numeric|max_len,255', 'Adresse'],
 		'candidat_code' => ['numeric|max_len,10', 'Code postal'],
 		'candidat_ville' => ['required|alpha', 'Ville'],
-		'candidat_nationalite' => ['required|alpha|max_len,16', 'Nationalité'],
+		'candidat_nationalite' => ['required|eta_alpha_numeric|max_len,16', 'Nationalité'],
 		'candidat_cin' => ['required|alpha_numeric', 'CIN'],
 		'candidat_tel1_deal_code' => ['eta_alpha_numeric', 'Code du pays'], // not a field
 		'candidat_tel1' => ['required|phone_number', 'Téléphone'],
@@ -321,8 +321,8 @@ class AuthController extends Controller
 			// Create CV
 			$db->create('cv', [
 				'candidats_id' => $id_candidat,
-				'titre_cv' => $upload['files']['cv']['title'],
 				'lien_cv' => $upload['files']['cv']['name'],
+				'titre_cv' => $upload['files']['cv']['title'],
 				'principal' => 1,
 				'actif' => 1
 			], false);
@@ -331,8 +331,8 @@ class AuthController extends Controller
 			if(isset($upload['files']['lm'])) {
 				$db->create('lettres_motivation', [
 					'candidats_id' => $id_candidat,
-					'lettre' => $upload['files']['lm']['title'],
-					'titre' => $upload['files']['lm']['name'],
+					'lettre' => $upload['files']['lm']['name'],
+					'titre' => $upload['files']['lm']['title'],
 					'principal' => 1,
 					'actif' => 1
 				], false);

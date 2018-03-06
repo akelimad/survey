@@ -289,7 +289,7 @@ use App\Models\TypeFormation;
     <ul class="mt-10">
     <?php foreach ($lms as $key => $lm) : ?>
       <li class="mb-5">
-        <a target="_blank" href="<?= get_resume_url($lm->lettre); ?>" title="Télécharger"><i class="fa fa-download"></i></a>
+        <a target="_blank" href="<?= get_motivation_letter_url($lm->lettre); ?>" title="Télécharger"><i class="fa fa-download"></i></a>
         <?= $lm->titre; ?>
       </li>
     <?php endforeach; ?>
