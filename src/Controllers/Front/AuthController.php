@@ -296,7 +296,7 @@ class AuthController extends Controller
 			
 			// Create candidat
 			$cdata = $this->getCandidatData($params);
-			$cdata['photo'] = (isset($upload['files']['photo'])) ? $upload['files']['photo'] : '';
+			$cdata['photo'] = (isset($upload['files']['photo'])) ? $upload['files']['photo']['name'] : '';
 			$id_candidat = $db->create('candidats', $cdata, false);
 			
 			// Create formation
@@ -304,7 +304,7 @@ class AuthController extends Controller
 			$fdata['candidats_id'] = $id_candidat;
 			$fdata['date_debut'] = date('m/Y', strtotime($fdata['date_debut']));
 			$fdata['date_fin'] = date('m/Y', strtotime($fdata['date_fin']));
-			$fdata['copie_diplome'] = (isset($upload['files']['copie_diplome'])) ? $upload['files']['copie_diplome'] : '';
+			$fdata['copie_diplome'] = (isset($upload['files']['copie_diplome'])) ? $upload['files']['copie_diplome']['name'] : '';
 			$db->create('formations', $fdata, false);
 			
 			// Create experience
@@ -314,7 +314,8 @@ class AuthController extends Controller
 				$expData['candidats_id'] = $id_candidat;
 				$expData['date_debut'] = date('d/m/Y', strtotime($params['experience']['date_debut']));
 				$expData['date_fin'] = $exp_date_fin;
-				$expData['copie_attestation'] = (isset($upload['files']['copie_attestation'])) ? $upload['files']['copie_attestation'] : '';
+				$expData['copie_attestation'] = (isset($upload['files']['copie_attestation'])) ? $upload['files']['copie_attestation']['name'] : '';
+				$expData['bulletin_paie'] = (isset($upload['files']['bulletin_paie'])) ? $upload['files']['bulletin_paie']['name'] : '';
 				$db->create('experience_pro', $expData, false);
 			}
 
@@ -385,8 +386,8 @@ class AuthController extends Controller
 			'status' => 2,
 			'last_connexion' => null,
 			'vues' => 0,
-			'dateMAJ' => null,
-			'CVdateMAJ' => null,
+			'dateMAJ' => date('Y-m-d H:i:s'),
+			'CVdateMAJ' => date('Y-m-d H:i:s'),
 			'can_update_account' => 1
 		];
 		$rules = preg_filter('/^candidat_(.*)/', '$1', array_keys($this->rules));
@@ -484,6 +485,12 @@ class AuthController extends Controller
 			'copie_attestation' => [
 				'name' => 'Copie de l’attestation',
 				'path' => 'apps/upload/frontend/candidat/copie_diplome/',
+				'required' => false,
+				'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
+			],
+			'bulletin_paie' => [
+				'name' => 'Bulletin de paie',
+				'path' => 'apps/upload/frontend/candidat/bulletin_paie/',
 				'required' => false,
 				'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
 			]

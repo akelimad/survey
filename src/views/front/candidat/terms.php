@@ -9,11 +9,8 @@
 </p><p align="justify">
 5. <strong><?= get_setting('front_terms_site_title'); ?></strong> ne vous garantit pas l'exactitude, complétude, adéquation ou fonctionnement du site Web ou de l'information qu'il contient, ni que ladite information a été vérifiée.
 </p><p align="justify">
-6. <strong><?= get_setting('front_terms_site_title'); ?></strong> n'assume aucune responsabilité relative à l'information contenue et à l'existence ou la disponibilité de toute offre mentionnée dans le présent site Web et décline toute responsabilité découlant d'une négligence ou autre concernant cette information.
-</p><p align="justify">
-7. Le présent Site Web a été créé au Maroc. En utilisant le présent Site Web, vous acceptez les conditions d'utilisation décrites ci-avant, sans préjudice de tous recours de nature contractuelle ou délictuelle pouvant être exercés par <strong><?= get_setting('front_terms_site_title'); ?></strong>. Tout litige portant sur l'interprétation ou l'exécution d'un engagement contractuel prévu au présent site sera de la compétence exclusive des tribunaux marocaines faisant application de la loi marocaine.
-</p><p align="justify" class="mb-0">
-L'ensemble des éléments de ce site est protégé par copyright © AMMC par - tous droits réservés.
-<br>
-Tous les éléments de propriété intellectuelle, marques, noms commerciaux et logos sont la propriété de AMMC, sauf mentions contraires. Toute reproduction du présent site Web est interdit.
-</p>
+6. <strong><?= get_setting('front_terms_site_title'); ?></strong> n'assume aucune responsabilité relative à l'information contenue et à l'existence ou la disponibilité de toute offre mentionnée dans le présent site Web et décline toute responsabilité découlant d'une négligence ou autre concernant cette information.</p>
+<p align="justify">7. Le présent Site Web a été créé au Maroc. En utilisant le présent Site Web, vous acceptez les conditions d'utilisation décrites ci-avant, sans préjudice de tous recours de nature contractuelle ou délictuelle pouvant être exercés par <strong><?= get_setting('front_terms_site_title'); ?></strong>.</p>
+<p align="justify">8. Tout litige portant sur l'interprétation ou l'exécution d'un engagement contractuel prévu au présent site sera de la compétence exclusive des tribunaux marocaines faisant application de la loi marocaine.</p>
+<p align="justify">9. L'ensemble des éléments de ce site est protégé par copyright © AMMC par - tous droits réservés.</p>
+<p align="justify">10. Tous les éléments de propriété intellectuelle, marques, noms commerciaux et logos sont la propriété de AMMC, sauf mentions contraires. Toute reproduction du présent site Web est interdit.</p>

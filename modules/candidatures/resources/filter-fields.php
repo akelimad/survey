@@ -130,5 +130,13 @@ return array(
 			60 => 'Moyenne',
 			30 => 'Faible',
 		]
-	]
+	],
+	[
+		'name' => 'dfor',
+		'type' => 'select',
+		'value' => '',
+		'label' => 'Domaine de formation',
+		'sortOrder' => 140,
+		'options' => getDB()->prepare("SELECT domaine_id AS value, name AS text FROM prm_domaines_formation")
+	],
 );

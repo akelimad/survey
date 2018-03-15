@@ -216,3 +216,7 @@ Route::add('offre/[0-9]+/postuler/store', 'App\Controllers\Front\OfferController
 Route::add('offre/[0-9]+/print', 'App\Controllers\Front\OfferController@printOffer');
 Route::add('offre/[0-9]+/send-to-friend', 'App\Controllers\Front\OfferController@sendToFriend', true);
 Route::add('offer/search-form', 'App\Controllers\Front\OfferController@searchForm', true);
+
+
+// Backend
+Route::add('backend/offres/creer_offre', 'App\Controllers\Admin\OfferController@getForm');

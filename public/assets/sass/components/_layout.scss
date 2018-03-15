@@ -72,19 +72,17 @@ ul {
 }
 
 .styled-title, .subscription {
-	-moz-border-radius-bottomleft: 3px;
-	-moz-border-radius-bottomright: 3px;
-	-moz-border-radius-topleft: 3px;
-	-moz-border-radius-topright: 3px;
-	background-color: $color_bg;
-	height: 23px;
-	margin: 0 0 5px;
-	padding-top: 5px;
-	width: 100%;
+	background-color: $color_bg !important;
+  min-height: 23px;
+  height: auto;
+  margin: 0 0 5px;
+  padding: 5px 1px;
+  width: 100%;
 	h1, h3 {
 		color: #fff;
 		font-size: 11px;
-		font-weight: 700;
+    line-height: 15px;
+    font-weight: 700;
 		margin: 0px 5px;
 		text-transform: uppercase;
 	}

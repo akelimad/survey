@@ -1,15 +1,15 @@
 <div class="chm-response-messages"></div>
 <?php
-$max_file_size = get_setting('max_file_size');
+$max_file_size = get_setting('max_file_size', 400);
 ?>
 <form method="POST" action="<?= site_url('candidat/store'); ?>" class="chm-simple-form" onsubmit="return window.chmForm.submit(event)" enctype="multipart/form-data">
 
 	<h1>CRÉER MON ESPACE CANDIDAT</h1>
 	<div class="ligneBleu"></div>
 
-	<div class="mt-10 mb-10"><?php get_alert('warning', ['Les champs marqués par (*) sont obligatoires', 'La taille maximal de chaque fichiers est <?= $max_file_size; ?>ko.'], false) ?></div>
+	<div class="mt-10 mb-10"><?php get_alert('warning', ['Les champs marqués par (*) sont obligatoires', 'La taille maximal de chaque fichiers est '. $max_file_size .'ko.'], false) ?></div>
 
-	<div class="styled-title mt-0 mb-10" style="height: 23px;">
+	<div class="styled-title mt-0 mb-10">
 	  <h3>Intitulé du profil</h3>
 	</div>
 	<div class="row">
@@ -20,7 +20,7 @@ $max_file_size = get_setting('max_file_size');
 		</div>
 	</div>
 
-	<div class="styled-title mt-0 mb-10" style="height: 23px;">
+	<div class="styled-title mt-0 mb-10">
 	  <h3>État civil</h3>
 	</div>
 	<div class="row">
@@ -98,7 +98,7 @@ $max_file_size = get_setting('max_file_size');
 	</div>
 
 	
-	<div class="styled-title mt-0 mb-10" style="height: 23px;">
+	<div class="styled-title mt-0 mb-10">
 	  <h3>Indentifiants</h3>
 	</div>
 	<div class="row">
@@ -117,7 +117,7 @@ $max_file_size = get_setting('max_file_size');
 	</div>
 
 
-	<div class="styled-title mt-0 mb-10" style="height: 23px;">
+	<div class="styled-title mt-0 mb-10">
 	  <h3>Profil</h3>
 	</div>
 	<div class="row">
@@ -238,7 +238,7 @@ $max_file_size = get_setting('max_file_size');
 	</div>
 
 
-	<div class="styled-title mt-0 mb-10" style="height: 23px;">
+	<div class="styled-title mt-0 mb-10">
 	  <h3>Dernière formation</h3>
 	</div>
 	<div class="row">
@@ -313,7 +313,7 @@ $max_file_size = get_setting('max_file_size');
 	</div>
 
 	
-	<div class="styled-title mt-10 mb-10" style="height: 23px;">
+	<div class="styled-title mt-10 mb-10">
 	  <h3>Dernière expérience professionnelle</h3>
 	</div>
 	<div class="row">
@@ -404,6 +404,20 @@ $max_file_size = get_setting('max_file_size');
 			</div>
 		</div>
 	</div>
+	<div class="row mb-10">
+		<div class="col-sm-4">
+			<label for="bulletin_paie">Bulletin de paie&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="Vous pouvez joindre votre Bulletin de paie format Word, PDF ou Image, la taille ne doit pas dépassé <?= $max_file_size; ?>ko"></i></label>
+			<div class="input-group file-upload">
+			    <input type="text" class="form-control" readonly>
+			    <label class="input-group-btn">
+			        <span class="btn btn-success btn-sm">
+			            <i class="fa fa-upload"></i>
+			            <input type="file" class="form-control" id="bulletin_paie" name="bulletin_paie" accept="image/*|.doc,.docx,.pdf">
+			        </span>
+			    </label>
+			</div>
+		</div>
+	</div>
 	<div class="row">
 		<div class="col-sm-12">
 			<label for="exp_description">Description du poste</label>
@@ -412,7 +426,7 @@ $max_file_size = get_setting('max_file_size');
 	</div>
 
 
-	<div class="styled-title mt-10 mb-10" style="height: 23px;">
+	<div class="styled-title mt-10 mb-10">
 	  <h3>Langues</h3>
 	</div>
 	<div class="row">
@@ -484,7 +498,7 @@ $max_file_size = get_setting('max_file_size');
 	</div>
 	
 
-	<div class="styled-title mt-0 mb-10" style="height: 23px;">
+	<div class="styled-title mt-0 mb-10">
 	  <h3>Pièces jointes</h3>
 	</div>
 	<div class="row mb-10">
@@ -527,19 +541,23 @@ $max_file_size = get_setting('max_file_size');
 	</div>
 
 
-	<div class="styled-title mt-0 mb-5" style="height: 23px;">
-	  <h3>Conditions d'utilisation</h3>
+	<div class="styled-title mt-0 mb-10">
+	  <h3>Cocher la case suivant pour confirmer que vous n'êtes pas un robot.</h3>
 	</div>
 	<div class="row">
 		<div class="col-sm-12">
 			<div class="g-recaptcha" data-sitekey="<?= get_setting('google_recaptcha_sitekey') ?>"></div>
 		</div>
 	</div>
-	<div class="row mt-10">
+
+	<div class="styled-title mt-10 mb-5">
+	  <h3>Conditions d'utilisation</h3>
+	</div>
+	<div class="row">
 		<div class="col-sm-12">
+			<p><strong>Conformément à la loi 09-08, vous disposer d'un droit d'accès, de rectification et d'opposition au traitement de vos données personnelles, ce traitement a été autorisé par la CNDP sous le N°277 du 12 avril 2013.</strong></p>
 			<label for="accepte">
-				<input id="accepte" type="checkbox" title="J'accepte" style="width:20px;border:none" required>
-				<font style="color:red;">*</font>&nbsp;J'accepte <a href="javascript:void(0)" onclick="return window.chmModal.show({url:site_url('candidat/terms'), type:'GET'}, {width: 870})"> les conditions d'utilisation et les règles de confidentialité </a> du site.
+				<input id="accepte" type="checkbox" title="J'accepte" style="width:20px;border:none" required>J'ai lu et j'accepte <a href="javascript:void(0)" onclick="return window.chmModal.show({url:site_url('candidat/terms'), type:'GET'}, {width: 870})"><strong>les conditions générales d'utilisation</strong></a>, notamment la mention relative à la protection des données personnelles.
 			</label>
 		</div>
 	</div>
@@ -555,86 +573,11 @@ $max_file_size = get_setting('max_file_size');
 <script>
 jQuery(document).ready(function(){
 
-	// editors
+	// Editors
 	CKEDITOR.replace('forma_description', {height: 200});
 	CKEDITOR.replace('exp_description', {height: 200});
 
 	$('#candidat_titre').focus()
-
-	// birthday
-	/*$('#candidat_date_n').change(function() {
-		if(!$(this).val().startsWith(0)) {
-			var maxDate = new Date(new Date().setFullYear(new Date().getFullYear() -16))
-			var date_n = new Date($(this).val());
-			if(date_n > maxDate) {
-				$(this).val('')
-				error_message('Votre âge doit être supérieur à 16 ans.')
-			}
-		}
-	})
-
-	// date fin exp et formation
-	$('[id$="date_debut"], [id$="date_fin"]').change(function() {
-		var row = $(this).closest('.row')
-		var date_debut = row.find('[id$="date_debut"]').val()
-		var date_fin   = row.find('[id$="date_fin"]').val()
-		if(!date_fin.startsWith(0) && date_fin != '' && date_debut != '') {
-			var date_d  = new Date(date_debut)
-			var date_f = new Date(date_fin)
-			if(date_f <= date_d) {
-				row.find('[id$="date_fin"]').val('')
-				error_message('La date de fin doit être supérieur à date de début.')
-			}
-		}
-	})
-
-	// set deal_code
-	$('#candidat_pays').change(function() {
-		var code_formated = ''
-		var code = $(this).find('option:selected').data('code')
-		if(code != '') code_formated = '(+'+ code +')'
-		$('.deal_code').val(code_formated)
-	})
-
-	// mobilite
-	$('[name="candidat[mobilite]"]').change(function() {
-		if($(this).val() == 'oui') {
-			$('#niveau-container, #taux-container').show()
-		} else {
-			$('#niveau-container, #taux-container').hide()
-
-		}
-	})
-
-	// date_fin_today
-	$('.date_fin_today').change(function() {
-		var date_fin = $(this).closest('.col-sm-8').find('[type="date"]')
-		if($(this).is(':checked')) {
-			$(date_fin).hide()
-			$(date_fin).val('')
-			if($(this).is("#forma_today")) {
-				$(date_fin).prop('required', false)
-			}
-		} else {
-			$(date_fin).show()
-			if($(this).is("#forma_today")) {
-				$(date_fin).prop('required', true)
-			}
-		}
-	})
-
-	// other languages
-	$('input[id^="candidat_autre"]').on('keyup', function() {
-		var select = $(this).next('select')
-		if($(this).val() != '') {
-			$(select).show()
-			$(select).prop('required', true)
-		} else {
-			$(select).prop('required', false)
-			$(select).val('')
-			$(select).hide()
-		}
-	})*/
 
 	// Trigger success
 	$('form').on('chm_form_success', function(event, response) {
@@ -642,7 +585,6 @@ jQuery(document).ready(function(){
 			$(this).hide()
 		}
 	})
-
 
 });
 </script>

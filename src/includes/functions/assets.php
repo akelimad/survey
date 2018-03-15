@@ -50,6 +50,11 @@ function add_js($unique_id, $params=[]){
 			$output .= '<link id="'. $unique_id .'" href="'. $s['src'] . $version .'" rel="stylesheet" type="text/css" media="'. $s['media'] .'" />'. "\n";
 		}
 	}
+
+	ob_start();
+	get_view('partials/dynamic-styles');
+	$output .= ob_get_clean();
+
 	print $output;
 });
 

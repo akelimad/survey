@@ -19,17 +19,17 @@ export default class chmPrint {
         setTimeout(function () {
           window.chmModal.destroy($modal)
           $(target).show()
-          self.printFromDataUrl($modal.find('.modal-body>img').attr('src'), title)
+          self.print($modal.find('.modal-body>img').attr('src'), title)
         }, 500)
       })
     } catch (e) {
       window.chmModal.destroy($modal)
-      window.chmAlert('Une erreur est survenu, réessayez plus tard.')
+      window.chmAlert.warning(e.message)
       $(target).show()
     }
   }
 
-  printFromDataUrl (dataUrl, title) {
+  print (dataUrl, title) {
     var windowContent = '<!DOCTYPE html>'
     windowContent += '<html>'
     windowContent += '<head><title>' + title + '</title></head>'
@@ -38,12 +38,16 @@ export default class chmPrint {
     windowContent += '</body>'
     windowContent += '</html>'
     var printWin = window.open('', title)
-    printWin.document.open()
-    printWin.document.write(windowContent)
-    printWin.document.close()
-    printWin.focus()
-    printWin.print()
-    printWin.close()
+    if (printWin !== null) {
+      printWin.document.open()
+      printWin.document.write(windowContent)
+      printWin.document.close()
+      printWin.focus()
+      printWin.print()
+      printWin.close()
+    } else {
+      window.chmModal.alert('', 'Vous devez autoriser les fenêtres Pop-up pour imprimer cette page.', {width: 363})
+    }
   }
 
 }

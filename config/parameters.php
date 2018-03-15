@@ -7,7 +7,7 @@ define('SMTP_password', '3122cb7d31d3ae');
 define('SMTP_ssl', false);
 
 // Assets version
-define('ETA_ASSETS_VERSION', time());
+// define('ETA_ASSETS_VERSION', time());
 
 // ENV
 define('ETA_ENV', 'dev');

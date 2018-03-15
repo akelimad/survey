@@ -19,6 +19,8 @@ if ( preg_match("!\\$root(.*)!", $dirname, $matches) === 1 ) {
   $physical_uri  = ($physical_uri[0] !='/' ) ? '/' . $physical_uri : $physical_uri;
   $physical_uri .= (substr($physical_uri, -1) == '/' ? '' : '/');
 }
+
+// Define urls
 define('PHYSICAL_URI', $physical_uri);
 $isSecure = (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
 $scheme = ($isSecure) ? 'https' : 'http';
@@ -32,6 +34,7 @@ $autoloader->setPsr4('App\\Models\\', site_base('src/models'));
 $autoloader->setPsr4('App\\Controllers\\', site_base('src/controllers'));
 $autoloader->setPsr4('App\\Mail\\', site_base('src/mail'));
 
+// TODO - Make this multilingual 
 setlocale (LC_TIME, 'fr_FR.utf8','fra');
 
 // Initialise modules

@@ -133,6 +133,9 @@ $(document).ready(function () {
     $('body').on('select2:selecting', 'select[multiple]', function (evt) {
       showNumberOfSelectedItems($(this))
     })
+    $('body').on('select2:unselecting', 'select[multiple]', function (evt) {
+      showNumberOfSelectedItems($(this))
+    })
     $(document).on('DOMNodeInserted', function (e) {
       if ($(e.target).hasClass('select2-selection')) {
         window.setTimeout(function () {
@@ -197,5 +200,7 @@ $(window).resize(function () {
 })
 
 function getSearchFormPosition () {
-  $('#topSearchForm').css('right', $('#logo-banner').offset().left + 90)
+  if ($('#topSearchForm').length === 1) {
+    $('#topSearchForm').css('right', $('#logo-banner').offset().left + 90)
+  }
 }

@@ -183,7 +183,9 @@ class OfferController extends Controller
 
     $data['candidat_cvs'] = getDB()->prepare("SELECT id_cv, titre_cv FROM cv WHERE candidats_id=? AND actif=1 ORDER BY id_cv DESC", [$candidat_id]);
     $data['candidat_lms'] = getDB()->prepare("SELECT id_lettre, titre FROM lettres_motivation WHERE candidats_id=? AND actif=1 ORDER BY id_lettre DESC", [$candidat_id]);
-    
+
+    $data['domaines_formation'] = getDB()->prepare("SELECT * FROM prm_domaines_formation");
+
     return Ajax::renderAjaxView('Répondre à l\'offre: <span class="font-weight-normal">'. $data['offer']->Name .'</span>', 'front/offer/postuler', $data);
   }
 
@@ -321,6 +323,7 @@ class OfferController extends Controller
       'id_cv'             => $data['candidature']['id_cv'],
       'id_lettre'         => $id_lettre,
       'id_offre'          => $id_offre,
+      'domaine_formation_id' => $data['candidature']['domaine_formation_id'],
       'lettre_motivation' => $data['candidature']['motivation'],
       'date_candidature'  => date('Y-m-d'),
       'status'            => 0,

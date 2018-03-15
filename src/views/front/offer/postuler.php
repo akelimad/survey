@@ -40,6 +40,14 @@
   <?php endforeach; ?>
 </select>
 
+<label for="domaine_formation" class="form-label mt-0">Choisissez un domaine de formation</label>
+<select id="domaine_formation" name="candidature[domaine_formation_id]" class="form-control">
+  <option value=""></option>
+  <?php foreach ($domaines_formation as $key => $value) : ?>
+    <option value="<?= $value->domaine_id ?>"><?= $value->name ?></option>
+  <?php endforeach; ?>
+</select>
+
 <label for="motivation" class="form-label mt-0">Votre motivation&nbsp;<span style="color: red">*</span></label>
 <textarea name="candidature[motivation]" class="ckeditor form-control" id="motivation" required></textarea>
 

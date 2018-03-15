@@ -1,3 +1,5 @@
+<script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
 <div id="offer-container">
   <h1 class="mb-10"><?= $offer->Name ?></h1>
 
@@ -80,9 +82,9 @@
   <li class="mb-5">
     <a href="<?= site_url('offres') ?>" class="btn btn-primary btn-sm"><i class="fa fa-list-ul"></i>&nbsp;Toutes les offres d'emploi</a>
   </li>
-  <li class="mb-5">
-    <!--a href="javascript:void(0)" chm-print="#offer-container" chm-print-title="<?= $offer->Name; ?>" class="btn btn-primary btn-sm" id="offer-print"><i class="fa fa-print"></i>&nbsp;Imprimer l'offre</a-->
-    <a target="_blank" href="<?= site_url('offre/'. $offer->id_offre .'/print') ?>" class="btn btn-primary btn-sm"><i class="fa fa-print"></i>&nbsp;Imprimer l'offre</a>
+  <li class="mb-5 hidden-xs">
+    <a href="javascript:void(0)" chm-print="#offer-container" chm-print-title="<?= $offer->Name; ?>" class="btn btn-primary btn-sm" id="offer-print"><i class="fa fa-print"></i>&nbsp;Imprimer l'offre</a>
+    <!--a target="_blank" href="<?//= site_url('offre/'. $offer->id_offre .'/print') ?>" class="btn btn-primary btn-sm"><i class="fa fa-print"></i>&nbsp;Imprimer l'offre</a-->
   </li>
   <li class="mb-5">
     <a href="javascript:void(0)" class="btn btn-primary btn-sm" onclick="return chmOffer.sendToFriend(<?= $offer->id_offre; ?>)"><i class="fa fa-envelope"></i>&nbsp;Envoyer cette offre à un ami</a>

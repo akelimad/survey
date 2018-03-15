@@ -14,13 +14,14 @@ use App\Models\Mobilite;
 use App\Models\Salary;
 use App\Models\TypeFormation;
 ?>
+<script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 <div id="cv-container">
   <div class="row">
     <div class="col-sm-12">
       <h1 class="pull-left">Mon CV</h1>
       <div class="cv-print-btn">
-        <a href="javascript:void(0)" chm-print="#cv-container" chm-print-title="Mon CV" class="btn btn-primary btn-xs pull-right" id="cv-print" style="margin-top: 3px;"><i class="fa fa-print"></i>&nbsp;Imprimer</a>
+        <a href="javascript:void(0)" chm-print="#cv-container" chm-print-title="Mon CV" class="btn btn-primary btn-xs pull-right hidden-xs" id="cv-print" style="margin-top: 3px;"><i class="fa fa-print"></i>&nbsp;Imprimer</a>
       </div>
     </div>
   </div>
@@ -298,50 +299,3 @@ use App\Models\TypeFormation;
     <?php endif; ?>
   </div>
 </div><!-- / #cv-container -->
-
-
-<script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-<script type='text/javascript'>
-/*$(document).ready(function() {
-
-  $("#cv-print").click(function() {
-    var $btn = $(this)
-    $btn.hide()
-    var $modal = chmModal.loading('<i class="fa fa-circle-o-notch"></i>&nbsp;Traitement en cours...')
-    $modal.find('.modal-dialog').css('width', 230)
-
-    html2canvas(document.querySelector("#cv-container")).then(canvas => {
-      $modal = $(chmModal.template())
-      $modal.find('.modal-header').remove()
-      $modal.find('.modal-content').css('width', 660)
-      $modal.find('.modal-body')
-        .css('padding', 0)
-        .append('<img src="' + canvas.toDataURL() + '">')
-
-      setTimeout(function() {
-        $btn.show()
-        chmModal.destroy()
-        printFromDataUrl($modal.find('.modal-body>img').attr('src'))
-      }, 500)
-    });
-  });
-
-});
-
-function printFromDataUrl(dataUrl) {
-  var windowContent = '<!DOCTYPE html>';
-  windowContent += '<html>'
-  windowContent += '<head><title>Mon CV</title></head>';
-  windowContent += '<body>'
-  windowContent += '<img src="' + dataUrl + '">';
-  windowContent += '</body>';
-  windowContent += '</html>';
-  var printWin = window.open('','Mon CV');
-  printWin.document.open();
-  printWin.document.write(windowContent);
-  printWin.document.close();
-  printWin.focus();
-  printWin.print();
-  printWin.close();
-}*/
-</script>

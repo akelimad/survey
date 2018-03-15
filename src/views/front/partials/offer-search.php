@@ -80,7 +80,9 @@
         </div>
       </div>
 
-      <div class="row mt-10">
+      <p class="mb-0">* <strong>Ctrl + Bouton gauche</strong> de la souris pour séléctionner multiples choix.</p>
+
+      <div class="row mt-5">
         <div class="col-sm-3 col-xs-6">
           <a href="<?= site_url('offres'); ?>"><i class="fa fa-list-ul"></i>&nbsp;Voir toutes les offres</a>
         </div>

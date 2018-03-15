@@ -135,7 +135,7 @@ $file_courrier3       = '/../../../../apps/upload/backend/upload_courrier/';
 $file_upload_pj3      = '/../../../../apps/upload/frontend/signale_probleme/';
 $file_offres3         = '/../../../../apps/upload/backend/offres/';
 
-$urlhome              = $url.$rep_path;
+$urlhome              = site_url();
 $urloffre             = $urlhome ."offres";
 $urlcandidat          = $urlhome ."candidat";
 $urlinfos             = $urlhome."infos";
@@ -196,7 +196,7 @@ if(isset($_SESSION['abb_login_candidat']) and $_SESSION['abb_login_candidat']!='
 }
 
 // Candidat auth    
-$compte_desactive = false;
+/*$compte_desactive = false;
 if (isset($_POST['login']) && isset($_POST['pass'])) {
 	$login = $_POST['login']; 
 	$pass = md5($_POST['pass']);
@@ -219,4 +219,4 @@ if (isset($_POST['login']) && isset($_POST['pass'])) {
 			$compte_desactive = true;
 		}
 	}
-}
+}*/

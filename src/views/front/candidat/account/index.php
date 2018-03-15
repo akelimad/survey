@@ -5,6 +5,8 @@ use App\Models\Situation;
 use App\Models\Status;
 ?>
 
+<script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
 <style>
 #alertsTable .actions {
   width: 120px;
@@ -15,7 +17,7 @@ use App\Models\Status;
   <div class="row">
     <div class="col-sm-12">
       <h1 class="pull-left">Mon compte</h1>
-      <!--a href="javascript:void(0)" chm-print="#account-container" chm-print-title="Mon compte" class="btn btn-primary btn-xs pull-right" style="margin-top: 3px;"><i class="fa fa-print"></i>&nbsp;Imprimer</a-->
+      <a href="javascript:void(0)" chm-print="#account-container" chm-print-title="Mon compte" class="btn btn-primary btn-xs pull-right hidden-xs" style="margin-top: 3px;"><i class="fa fa-print"></i>&nbsp;Imprimer</a>
     </div>
   </div>
 

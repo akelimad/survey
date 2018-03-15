@@ -13,49 +13,41 @@
 
     <?php \App\Event::trigger('head'); ?>
 </head>
-<body<?= isLogged('candidat') ? ' class="logged candidat"' : ''; ?>>
+<body<?= isLogged('admin') ? ' class="logged admin"' : ''; ?>>
 
+    
     <div class="container">
-        <nav class="navbar navbar-default" id="top-navbar">
-            <div class="container-fluid pl-5 pl-xs-15">
-                <ul class="nav navbar-nav navbar-right pr-5">
-                    <li><a href="<?= get_site('site_url'); ?>" target="_blank" style="color:#ffffff;" title="Accès au site de l'institution - Nouvelle fenêtre">Accès au site de l'institution</a></li>
-                    <li><a href="<?= site_url('contact') ?>" title="Contactez-nous">Contactez-nous</a></li>
-                </ul>
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-default" id="top-navbar">
+                    <div class="container-fluid pl-5 pl-xs-15">
+                        <ul class="nav navbar-nav navbar-right pr-5">
+                            <li><a href="<?= get_site('site_url'); ?>" target="_blank" style="color:#ffffff;" title="Accès au site de l'institution - Nouvelle fenêtre">Accès au site de l'institution</a></li>
+                            <li><a href="<?= site_url('contact') ?>" title="Contactez-nous">Contactez-nous</a></li>
+                        </ul>
+                    </div>
+                </nav>
             </div>
-        </nav>
-        
-        <a href="<?= site_url(); ?>" id="logo-banner">
-            <img src="<?= site_url('assets/images/bannier/'. $GLOBALS['etalent']->config['banniere']); ?>" class="img-responsive">
-        </a>
-       
-        <form action="<?= site_url('offres'); ?>" method="GET" name="formulaire_a" class="hidden-xs" id="topSearchForm" style="position: absolute;top: 68px;">
-            <input class='rsh' type='text' name='s' placeholder="Rechercher..." style="height: 22px;padding: 0 5px;">&nbsp;&nbsp;            
-            <input type='hidden' value="" name='button' class='env' />
-            <button style="margin-left: -10px;margin-top: -3px;" type="submit" class="btn btn-default btn-xs"><i class="fa fa-search" style="color:<?= $GLOBALS['etalent']->config['color_bg']; ?>"></i></button>
-        </form>
-
-        <div id="welcome">
-            <h3><?= get_setting('front_welcome_message', 'Bienvenue sur Etalent'); ?></h3>
+            <div class="col-md-12">
+                <?php get_view('partials/admin_menu'); ?>
+            </div>
         </div>
-
-        <div id="breadcrumb">Vous êtes ici: <strong><?php echo $ariane; ?></strong></div>
+        <div class="row">
+            <div class="col-md-8 col-xs-12">
+                <div id="breadcrumb">Vous êtes ici: <strong><?php echo $ariane; ?></strong></div>
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <?php if($admin_email = read_session('abb_admin', false)) : ?>
+                    <div class="pull-right">
+                        Connecté en tant que: <b><?= $admin_email; ?></b> | <a href="<?= site_url('index.php?action=logout') ?>">Déconnexion</a>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
 
-    <div class="container mt-20 mb-20">
-        <div class="row">
-            <div class="col-sm-4 custom col-xs-12 pr-0 pr-xs-15">
-                <?php if (isLogged('candidat')) : ?>
-                    <?php get_view('front/menu/candidat-account') ?>
-                <?php else : ?>
-                    <?php get_view('front/candidat/login-form') ?>
-                <?php endif; ?>
-                <?php get_view('front/menu/left-sidebar') ?>
-            </div>
-            <div class="col-sm-8 custom col-xs-12 column-body">
-                <?= $content; ?>
-            </div> 
-        </div>
+    <div class="container mt-30 mb-20">
+        <?= $content; ?>
     </div>
 
     <footer id="footer">
