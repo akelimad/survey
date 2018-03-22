@@ -292,7 +292,7 @@ if (isset($_GET['r'])) {
 
                     {
 
-                        mysql_query("Update offre Set status = 'Archiv�e' where id_offre = '$id'");
+                        mysql_query("Update offre Set status = 'Archivée' where id_offre = '$id'");
 
                         $affected = mysql_affected_rows();
 

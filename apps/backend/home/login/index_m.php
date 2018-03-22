@@ -1,26 +1,11 @@
   <div class='texte' style="padding-top:5px">
 
-  <?php
-
-/* Mise a jour de status offre */
-
-	  $today = date("Y-m-d"); 
-
-     $request0 = mysql_query("select * from offre  where offre.date_expiration < '$today'  ");
-
-       $req_offr='-';
-
-            while ( $retour0 = mysql_fetch_array ( $request0 ) )  { 
-
-					$req_offr="UPDATE offre SET status='Archivée'  where id_offre= ".$retour0['id_offre']." ";
-
-					mysql_query($req_offr);	
-
-				//echo $req_offr.'<br>';
-
-				}
-
-?>
+    <?php
+    /* Mise a jour de status offre */
+    if (get_setting('admin_auto_archive_offers') == 1) {
+        getDB()->prepare("UPDATE offre SET status = 'Archivée' WHERE offre.date_expiration < CURDATE() AND status != 'Archivée'");
+    }
+    ?>
 
                             <div align="center">
 
