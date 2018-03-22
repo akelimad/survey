@@ -9,8 +9,13 @@ $data = ($_SERVER['REQUEST_METHOD'] === 'POST') ? $_POST : $_GET;
 if( is_ajax() && isset($data['action']) && $data['action'] != '' ) {
 	$action = $data['action'];
 	unset($data['action']);
-	$return = \App\Ajax::trigger($action, $data);
-	die(json_encode($return));
+  $return = \App\Ajax::trigger($action, $data);
+
+  if (!is_string($return)) {
+    $return = json_encode($return);
+  }
+  
+	die($return);
 } else {
 	die(0);
 }
