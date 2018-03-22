@@ -39,7 +39,7 @@
 		<div class="col-md-4 col-xs-12">
 			<?php if(isset($_SESSION['abb_admin'])) : ?>
 				<div class="pull-right">
-					Connecté en tant que: <b><?= $_SESSION['abb_admin']; ?></b> | <a href="<?= site_url('index.php?action=logout') ?>">Déconnexion</a>
+					Connecté en tant que: <b><?= $_SESSION['abb_admin']; ?></b> | <a href="<?= site_url('backend/logout') ?>">Déconnexion</a>
 				</div>
 			<?php endif; ?>
 		</div>
