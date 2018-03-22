@@ -22,13 +22,13 @@ $ppp='/liens/';
 
 
 
-	<a class='bdp' href='<?php echo $urlinfos; ?>/mentions_legales/'>Mentions l&eacute;gales</a>    
+	<a class='bdp' href='<?= site_url('terms'); ?>'>Mentions l&eacute;gales</a>    
 
     <span class='bdp' style="color:#ffffff;" >|</span>
 
 
 
-	<a class='bdp' href='<?php echo $urlinfos; ?>/conditions/'>Conditions G&eacute;n&eacute;rales d'utilisation</a>    	   
+	<a class='bdp' href='<?= site_url('conditions'); ?>'>Conditions G&eacute;n&eacute;rales d'utilisation</a>    	   
 
 	 <span class='bdp' style="color:#ffffff;" >|</span>
 
@@ -36,14 +36,14 @@ $ppp='/liens/';
 
 
 
-	<a class='bdp' href='<?php echo $urlinfos. $ppp; ?>'>Plan du site</a>      	   
+	<a class='bdp' href='<?= site_url('sitemap'); ?>'>Plan du site</a>      	   
 
+
+
+  <?php if(get_setting('show_signaler_probleme') == 1) : ?>
 	 <span class='bdp' style="color:#ffffff;" >|</span>
-
-
-
-	<a class='bdp' href='<?php echo $urlinfos; ?>/signaler_probleme/'>Signaler un problème</a>
-
+	<a class='bdp' href='<?= site_url('infos/signaler_probleme/'); ?>'>Signaler un problème</a>
+<?php endif; ?>
 	   
 
               
