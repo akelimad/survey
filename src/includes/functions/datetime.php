@@ -105,19 +105,24 @@ function english_to_french_datetime($datetime, $format='d/m/Y H:i') {
  * Validate date format
  *
  * @param date $date
+ * @param string $format
  *
  * @return bool
  *
  * @author Mhamed Chanchaf
  */
-function isValidDate($date)
+function isValidDate($date, $format = 'Y-m-d')
 {
-    $d = DateTime::createFromFormat('Y-m-d', $date);
-    return $d && $d->format('Y-m-d') === $date;
+	$d = \DateTime::createFromFormat($format, $date);
+	return $d && $d->format($format) === $date;
 }
 
 
+
 function timeAgo($date, $granularity = 2) {
+	if(!isValidDate($date, 'Y-m-d H:i:s'))
+		return '---';
+		
 	$date = strtotime($date);
 	$difference = time() - $date;
 	$periods = array(
