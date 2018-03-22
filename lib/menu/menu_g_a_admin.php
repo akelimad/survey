@@ -1,4 +1,4 @@
-<div id="menu-fo" style="width: 260px;">
+<div id="menu-fo" style="width: 250px;">
   
 	<ul id="menu_site_carriere"  style="padding: 1px;">
 
