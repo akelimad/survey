@@ -11,7 +11,13 @@ define('SITE_BASE', dirname(__DIR__));
 include_once SITE_BASE .'/config/bootstrap.php';
 
 // Redirect to backend homepage
-if(isBackend() && !Permission::canViewPage() && !Permission::allowed())	redirect('backend/accueil/');
+if (isBackend() && \App\Route::getRoute() != 'backend/login') {
+	if (!isLogged('admin')) {
+		redirect('backend/login/');
+	} else if (!Permission::canViewPage() && !Permission::allowed()) {
+		redirect('backend/accueil/');
+	}
+}
 
 $GLOBALS['etalent'] = new \stdClass;
 
