@@ -43,7 +43,7 @@ class Menu {
 
       // Set url
       $url = site_url($item['route']);
-      if(!$item['isActive']) $url = 'javascript:void(0)';
+      if(!$item['isActive'] || $item['route'] == '') $url = 'javascript:void(0)';
 
       // Add active class
       if ($route == $item['route']) $classes[] = 'active';
@@ -53,9 +53,17 @@ class Menu {
 
       $class = (!empty($classes)) ? ' class="'. implode(' ', $classes) .'"' : '';
 
+      // add attributes
+      $attrs = '';
+      if (!empty($item['attributes'])) {
+        foreach ($item['attributes'] as $key => $value) {
+          $attrs .= ' '. $key .'="'. $value .'"';
+        }
+      }
+
       // Draw menu item
       $output .= '<li'. $class .'>';
-      $output .= '<a href="'. $url .'"><i class="'. $item['icon'] .'"></i>&nbsp;'. $item['label'] .'</a>';
+      $output .= '<a href="'. $url .'" '. $attrs .'><i class="'. $item['icon'] .'"></i>&nbsp;'. $item['label'] .'</a>';
       if( isset($item['childrens']) && !empty($item['childrens']) ) {
         $output .= '<ul>';
         $output .= self::draw($item['childrens']);
