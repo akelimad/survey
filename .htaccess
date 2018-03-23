@@ -64,7 +64,7 @@ RewriteRule ^offre/([0-9]+)/send-to-friend$ ./public/index.php?id=$1 [L,QSA]
 # RewriteRule ^offres/offre-([0-9]+)$ ./apps/frontend/offres/offre.php?id=$1
 
 
-RewriteRule ^backend/offres/creer_offre/$ ./public/index.php?id=$1 [L,QSA]
+# RewriteRule ^backend/offres/creer_offre/$ ./public/index.php?id=$1 [L,QSA]
 RewriteRule ^backend/offres/(.*)$ ./apps/backend/offres/$1 [L,QSA]
 RewriteRule ^backend/offres ./apps/backend/offres/index.php [L,QSA]
 
@@ -103,6 +103,10 @@ RewriteRule ^module/([a-z-_]+)/([a-z-_]+)$ ./modules/index.php?module=$1&control
 
 RewriteRule ^backend(.*)$ ./apps/backend/home/$1 [L,QSA] 
 RewriteRule ^accueil.php$ ./apps/backend/home/accueil.php [L,QSA]
+
+
+RewriteRule ^src/includes/ajax.php$ ./src/includes/ajax/index.php [L,QSA]
+
 
 # redirect to index directory
 RewriteRule ^index\.php$ - [L]
