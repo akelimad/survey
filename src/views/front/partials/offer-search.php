@@ -1,8 +1,23 @@
 <form method="GET" action="<?= site_url('offres'); ?>">
   <div class="panel panel-default">
     <div class="panel-body">
-      <?php // $count = getDB()->prepare("SELECT COUNT(*) AS nbr FROM offre", [], true); intval($count->nbr) ?>
-      <p><strong class="total-offers">0</strong>&nbsp;offres en ligne</p>
+
+      <?php
+      $route = str_replace(site_url(), '', strtok($_SERVER['HTTP_REFERER'], '?'));
+      switch ($route) {
+        case 'offres':
+          $label = 'offre(s) d\'emploi trouvé(s)';
+          break;
+        case 'offres/stage':
+          $label = 'offre(s) de stage trouvé(s)';
+          break;
+        default:
+          $label = 'offres en ligne';
+          break;
+      }
+      ?>
+      <p><strong class="total-offers">0</strong>&nbsp;<?php echo $label ?></p>
+
         <div class="row">
           <div class="col-sm-5 mb-5 mb-xs-5">
             <label for="keywords">Mots clés</label>
