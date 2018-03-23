@@ -224,3 +224,12 @@ Route::add('offer/search-form', 'App\Controllers\Front\OfferController@searchFor
 // Backend
 Route::add('backend/offres/creer_offre', 'App\Controllers\Admin\OfferController@getForm');
 Route::add('backend/logout', 'App\Controllers\Admin\AuthController@logout');
+
+
+// Dashboard Statistiques
+Route::add('dashboard/chart/sector', 'App\Controllers\Admin\StatsController@sectorChart', true, isLogged('admin'));
+Route::add('dashboard/chart/residence-country', 'App\Controllers\Admin\StatsController@residenceCountryChart', true, isLogged('admin'));
+Route::add('dashboard/chart/situation', 'App\Controllers\Admin\StatsController@situationChart', true, isLogged('admin'));
+Route::add('dashboard/chart/experience', 'App\Controllers\Admin\StatsController@experienceChart', true, isLogged('admin'));
+Route::add('dashboard/chart/offers-status', 'App\Controllers\Admin\StatsController@offersStatusChart', true, isLogged('admin'));
+Route::add('dashboard/chart/candidatures-status', 'App\Controllers\Admin\StatsController@candidaturesStatusChart', true, isLogged('admin'));
