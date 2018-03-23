@@ -40,11 +40,11 @@ class AuthController extends Controller
 		'candidat_code' => ['numeric|max_len,10', 'Code postal'],
 		'candidat_ville' => ['required|alpha', 'Ville'],
 		'candidat_nationalite' => ['required|eta_alpha_numeric|max_len,16', 'Nationalité'],
-		'candidat_cin' => ['required|alpha_numeric', 'CIN'],
+		'candidat_cin' => ['required|alpha_numeric|max_len,8', 'CIN'],
 		'candidat_tel1_deal_code' => ['eta_alpha_numeric', 'Code du pays'], // not a field
-		'candidat_tel1' => ['required|phone_number', 'Téléphone'],
+		'candidat_tel1' => ['required|phone_number|max_len,16', 'Téléphone'],
 		'candidat_tel2_deal_code' => ['required', 'Code du pays'], // not a field
-		'candidat_tel2' => ['phone_number', 'Téléphone secondaire'],
+		'candidat_tel2' => ['phone_number|max_len,16', 'Téléphone secondaire'],
 		'candidat_email' => ['required|valid_email', 'Email'],
 		'candidat_mdp' => ['required|min_len,6', 'Mot de passe'],
 		'candidat_mdp_confirm' => ['required|min_len,6', 'Confirmation de mot de passe'], // not a field
@@ -296,7 +296,7 @@ class AuthController extends Controller
 			
 			// Create candidat
 			$cdata = $this->getCandidatData($params);
-			$cdata['photo'] = (isset($upload['files']['photo'])) ? $upload['files']['photo']['name'] : '';
+			$cdata['photo'] = (isset($upload['files']['photo'])) ? $upload['files']['photo']['name'] : null;
 			$id_candidat = $db->create('candidats', $cdata, false);
 			
 			// Create formation
