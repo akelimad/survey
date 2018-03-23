@@ -157,11 +157,15 @@ class OfferController extends Controller
     }
 
     $candidat_id = read_session('abb_id_candidat');
-    $id_offre = (isset($data['id'])) ? $data['id'] : 0;
+    $id_offre = (isset($data['id'])) ? $data['id'] : 0;   
 
     // Check if candidat has formation
-    $count = getDB()->prepare("SELECT COUNT(*) as nbr FROM formations WHERE candidats_id=?", [$candidat_id], true);
-    if(intval($count->nbr) == 0) {
+    if(!Candidat::hasResume()) {
+      return json_encode(['status' => 'hide_form', 'title' => 'Profile incomplète !', 'content' => 'Il faut avoir renseigné au moins un CV pour pouvoir pour postuler à cet offre.']);
+    }
+
+    // Check if candidat has formation
+    if(!Candidat::hasFormation()) {
       return json_encode(['status' => 'hide_form', 'title' => 'Profile incomplète !', 'content' => 'Il faut avoir renseigné au moins une formation pour pouvoir pour postuler à cet offre.']);
     }
 
@@ -415,6 +419,11 @@ class OfferController extends Controller
 
     // Notify website RH about new candidature
     $this->sendCandidatureEmail($candidat, $offer->Name);
+
+    // Notify Admin
+    $notifMessage  = '<p>Une nouvelle candidature a été reçu sur l\'offre: '. $offer->Name;
+    $notifMessage .= '</p><p>Pour consulter les nouvelles candidatures <strong><a href="'.site_url('backend/module/candidatures/candidature/list/0').'">cliquez ici</a></strong></p>';
+    Mailer::send(get_setting('email_e'), 'Nouvelle candidature reçu', $notifMessage);
 
     // Return success message
     return $this->jsonResponse('success', 'Votre candidature a bien été envoyée avec succès.');

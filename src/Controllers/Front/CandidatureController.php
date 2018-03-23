@@ -10,10 +10,133 @@
  */
 namespace App\Controllers\Front;
 
+use App\Ajax;
+use App\Mail\Mailer;
 use App\Controllers\Controller;
+use App\Models\Candidat;
 
 class CandidatureController extends Controller
 {
+
+  public function spontanee($data)
+  {
+    // Check if candiat logged
+    if(!isLogged('candidat')) {
+      return json_encode(['status' => 'hide_form', 'title' => 'Connectez-vous !', 'content' => 'Vous devez <strong onclick="return chmAuth.loginModal()" style="cursor: pointer;">vous connecter</strong> pour répondre à cet l\'offre.']);
+    }
+
+    // Check if candidat has resume
+    if(!Candidat::hasResume()) {
+      return json_encode(['status' => 'hide_form', 'title' => 'Profile incomplète !', 'content' => 'Il faut avoir renseigné au moins un CV pour pouvoir envoyer la candidature.']);
+    }
+
+    // Check if candidat has formation
+    if(!Candidat::hasFormation()) {
+      return json_encode(['status' => 'hide_form', 'title' => 'Profile incomplète !', 'content' => 'Il faut avoir renseigné au moins une formation pour pouvoir envoyer la candidature.']);
+    }
+
+    // Check if candidat already postuled
+    if(Candidat::hasCandidatureSpontannee()) {
+      return json_encode(['status' => 'hide_form', 'title' => 'Vous avez déjà deposé une candidature spontanée.']);
+    }
+
+    // Store candidature
+    if (form_submited()) {
+
+      if(!isset($data['motivation']) || $data['motivation'] == '') {
+        return $this->jsonResponse('error', 'Vous n\'avez pas précisé vos motivations pour cette candidature spontanée!');
+      }
+
+      // Save candidature
+      $candidature_id = getDB()->create('candidature_spontanee', [
+        'candidats_id' => get_candidat_id(),
+        'message' => $data['motivation'],
+        'id_cv' => $data['id_cv'],
+        'id_fonc' => $data['id_fonc'],
+        'date_cs' => date('Y-m-d H:i:s')
+      ]);
+
+      if ($candidature_id > 0) {
+        // Send email
+        $template = getDB()->findOne('root_email_auto', 'ref', 'd');
+        if(isset($template->id_email)) {
+          $message = Mailer::renderMessage($template->message, [
+            'nom_candidat' => Candidat::getDisplayName()
+          ]);
+          Mailer::send(get_candidat('email'), $template->objet, $message, [
+            'titre' => $template->titre,
+            'type_email' => 'Envoi automatique'
+          ]);
+          return $this->jsonResponse('success', 'Votre candidature a bien été envoyée.');
+        }
+      }
+      return $this->jsonResponse('error', 'Une erreur est survenue réessayer plus tard.');
+    } else {
+      return Ajax::renderAjaxView('Déposer une candidature spontanée', 'front/candidature/spontanee', $data);
+    }
+  }
+
+
+  public function stage($data)
+  {
+    // Check if candidat has resume
+    if(!Candidat::hasResume()) {
+      return json_encode(['status' => 'hide_form', 'title' => 'Profile incomplète !', 'content' => 'Il faut avoir renseigné au moins un CV pour pouvoir envoyer la candidature.']);
+    }
+
+    // Check if candidat has formation
+    if(!Candidat::hasFormation()) {
+      return json_encode(['status' => 'hide_form', 'title' => 'Profile incomplète !', 'content' => 'Il faut avoir renseigné au moins une formation pour pouvoir envoyer la candidature.']);
+    }
+
+    // Check if candidat already postuled
+    if(Candidat::hasCandidatureStage()) {
+      return json_encode(['status' => 'hide_form', 'title' => 'Vous avez déjà deposé une candidature pour un stage.']);
+    }
+
+    // Store candidature
+    if (form_submited()) {
+
+      if(!isset($data['stage_subject']) || $data['stage_subject'] == '') {
+        return $this->jsonResponse('error', 'Le champs <b>Objet du stage</b> est obligatoire.');
+      }
+
+      if(!isset($data['motivation']) || $data['motivation'] == '') {
+        return $this->jsonResponse('error', 'Le champs <b>Vos motivations</b> est obligatoire.');
+      }
+
+      // Save candidature
+      $candidature_id = getDB()->create('candidature_stage', [
+        'candidats_id' => get_candidat_id(),
+        'etat' => 'en attente',
+        'ecole' => $data['school'],
+        'type' => $data['stage_type'],
+        'entite' => $data['direction'],
+        'duree' => $data['duree'],
+        'motivations' => $data['motivation'],
+        'objet' => $data['stage_subject'],
+        'date' => date('Y-m-d H:i:s')
+      ]);
+
+      if ($candidature_id > 0) {
+        // Send email
+        $template = getDB()->findOne('root_email_auto', 'ref', 'a');
+        if(isset($template->id_email)) {
+          $message = Mailer::renderMessage($template->message, [
+            'nom_candidat' => Candidat::getDisplayName()
+          ]);
+          Mailer::send(get_candidat('email'), $template->objet, $message, [
+            'titre' => $template->titre,
+            'type_email' => 'Envoi automatique'
+          ]);
+          return $this->jsonResponse('success', 'Votre candidature a bien été envoyée.');
+        }
+      }
+      return $this->jsonResponse('error', 'Une erreur est survenue réessayer plus tard.');
+    } else {
+      return Ajax::renderAjaxView('Déposer une candidature pour un stage', 'front/candidature/stage', $data);
+    }
+  }
 
 
   public function deleteSpontanee($data)

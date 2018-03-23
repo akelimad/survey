@@ -25,9 +25,13 @@ class Session
      *
      * @return $value || false
      */
-	public static function get($key, $default = null)
+	public static function get($key = null, $default = null)
     {
         self::startSession();
+
+        if (is_null($key)) {
+            return $_SESSION;
+        }
         
         return (isset($_SESSION[$key]) && !empty($_SESSION[$key])) ? $_SESSION[$key] : $default;	
 	}

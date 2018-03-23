@@ -28,12 +28,6 @@
         <a href="<?= site_url(); ?>" id="logo-banner">
             <img src="<?= site_url('assets/images/bannier/'. $GLOBALS['etalent']->config['banniere']); ?>" class="img-responsive">
         </a>
-       
-        <form action="<?= site_url('offres'); ?>" method="GET" name="formulaire_a" class="hidden-xs" id="topSearchForm" style="position: absolute;top: 68px;">
-            <input class='rsh' type='text' name='s' placeholder="Rechercher..." style="height: 22px;padding: 0 5px;">&nbsp;&nbsp;            
-            <input type='hidden' value="" name='button' class='env' />
-            <button style="margin-left: -10px;margin-top: -3px;" type="submit" class="btn btn-default btn-xs"><i class="fa fa-search" style="color:<?= $GLOBALS['etalent']->config['color_bg']; ?>"></i></button>
-        </form>
 
         <div id="welcome">
             <h3><?= get_setting('front_welcome_message', 'Bienvenue sur Etalent'); ?></h3>
@@ -66,8 +60,8 @@
                         <li><a href="<?= site_url('terms'); ?>">Mentions légales</a></li>
                         <li><a href="<?= site_url('conditions'); ?>">Conditions Générales d'utilisation</a></li>
                         <li><a href="<?= site_url('sitemap'); ?>">Plan du site</a></li>
-                        <?php if(get_setting('show_signaler_probleme') == 1) : ?>
-                        <li><a href="<?= site_url('infos/signaler_probleme/'); ?>">Signaler un problème</a></li>
+                        <?php if(get_setting('allow_bugs_report') == 1) : ?>
+                        <li><a href="<?= site_url('bug-report'); ?>">Signaler un problème</a></li>
                         <?php endif; ?>
                     </ul>
                     <?php if(get_setting('show_copyright') == 1) : ?>

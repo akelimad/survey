@@ -48,7 +48,7 @@
   <?php endforeach; ?>
 </select>
 
-<label for="motivation" class="form-label mt-0">Votre motivation&nbsp;<span style="color: red">*</span></label>
+<label for="motivation" class="form-label mt-0">Vos motivations&nbsp;<span style="color: red">*</span></label>
 <textarea name="candidature[motivation]" class="ckeditor form-control" id="motivation" required></textarea>
 
 <label for="confirm" class="mt-10">

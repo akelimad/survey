@@ -6,8 +6,8 @@
                     <li><a href="<?= site_url('terms'); ?>">Mentions légales</a></li>
                     <li><a href="<?= site_url('conditions'); ?>">Conditions Générales d'utilisation</a></li>
                     <li><a href="<?= site_url('sitemap'); ?>">Plan du site</a></li>
-                    <?php if(get_setting('show_signaler_probleme') == 1) : ?>
-                    <li><a href="<?= site_url('infos/signaler_probleme/'); ?>">Signaler un problème</a></li>
+                    <?php if(get_setting('allow_bugs_report') == 1) : ?>
+                    <li><a href="<?= site_url('bug-report'); ?>">Signaler un problème</a></li>
                     <?php endif; ?>
                 </ul>
                 <?php if(get_setting('show_copyright') == 1) : ?>

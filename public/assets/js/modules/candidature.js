@@ -2,6 +2,52 @@ import $ from 'jquery'
 
 export default class chmCandidature {
 
+  static spontanee () {
+    if (!window.chmAuth.isLogged()) {
+      window.chmAuth.loginModal('Vous devez vous connecter pour déposer une candidature spontanée.')
+      return
+    }
+
+    window.chmModal.show({
+      type: 'GET',
+      url: window.chmSite.url('candidature/spontanee')
+    }, {
+      form: {
+        action: window.chmSite.url('candidature/spontanee'),
+        method: 'POST',
+        callback: 'chmForm.submit',
+        id: 'candidature-spontanee',
+        class: 'chm-simple-form'
+      },
+      footer: {
+        label: 'Envoyer ma candidature'
+      }
+    })
+  }
+
+  static stage () {
+    if (!window.chmAuth.isLogged()) {
+      window.chmAuth.loginModal('Vous devez vous connecter pour déposer une candidature pour un stage.')
+      return
+    }
+
+    window.chmModal.show({
+      type: 'GET',
+      url: window.chmSite.url('candidature/stage')
+    }, {
+      form: {
+        action: window.chmSite.url('candidature/stage'),
+        method: 'POST',
+        callback: 'chmForm.submit',
+        id: 'candidature-stage',
+        class: 'chm-simple-form'
+      },
+      footer: {
+        label: 'Envoyer ma candidature'
+      }
+    })
+  }
+
   static deleteSpontanee (params) {
     window.chmModal.show({
       type: 'POST',

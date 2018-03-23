@@ -168,6 +168,7 @@ use App\Models\Status;
   </table>
 
 
+  <?php if (get_setting('front_menu_offres_candidature_spontannee') == 1) : ?>
   <div class="styled-title mt-10 mb-5">
     <h3>Mes candidatures spontanées</h3>
   </div>
@@ -200,8 +201,10 @@ use App\Models\Status;
     </tr>
   <?php endif; ?>
   </table>
+  <?php endif; ?>
 
 
+  <?php if (get_setting('front_menu_offres_candidature_stage') == 1) : ?>
   <div class="styled-title mt-10 mb-5">
     <h3>Mes candidature pour stage</h3>
   </div>
@@ -234,6 +237,7 @@ use App\Models\Status;
     </tr>
   <?php endif; ?>
   </table>
+  <?php endif; ?>
 
   <div class="styled-title mt-10 mb-0">
     <h3 class="pull-left">Mes alertes</h3>

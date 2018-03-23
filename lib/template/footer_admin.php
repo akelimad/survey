@@ -40,9 +40,9 @@ $ppp='/liens/';
 
 
 
-  <?php if(get_setting('show_signaler_probleme') == 1) : ?>
+  <?php if(get_setting('allow_bugs_report') == 1) : ?>
 	 <span class='bdp' style="color:#ffffff;" >|</span>
-	<a class='bdp' href='<?= site_url('infos/signaler_probleme/'); ?>'>Signaler un problème</a>
+	<a class='bdp' href='<?= site_url('bug-report'); ?>'>Signaler un problème</a>
 <?php endif; ?>
 	   
 

@@ -11,6 +11,15 @@ export default class chmForm {
     var form = $(target)[0]
     var data = new window.FormData(form)
 
+    // Check if google captcha checked
+    if (
+      $(target).find('#g-recaptcha-response').length === 1 &&
+      $(target).find('#g-recaptcha-response').val() === ''
+    ) {
+      window.chmAlert.warning('Merci de cocher la case "Je ne suis pas un robot.')
+      return
+    }
+
     // Check if there is textarea with ckeditor
     if ($('textarea.ckeditor').length > 0) {
       $.each($('textarea.ckeditor'), function () {

@@ -76,4 +76,19 @@ class Controller
   }
 
 
+	/**
+	 * Generate random string
+	 *
+	 * @param int $length
+	 *
+	 * @return string $string
+	 *
+	 * @author Mhamed Chanchaf
+	 */
+	public function randomString($length=6)
+	{
+    return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
+	}
+
+
 } // END Class

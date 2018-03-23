@@ -23,6 +23,8 @@ Route::add('candidat/account/confirm/[a-zA-Z0-9]+', 'App\Controllers\Front\Candi
 Route::add('candidat/account/candidature/deleteSpontanee', 'App\Controllers\Front\CandidatureController@deleteSpontanee');
 Route::add('candidat/account/candidature/deleteStage', 'App\Controllers\Front\CandidatureController@deleteStage');
 
+Route::add('candidature/spontanee', 'App\Controllers\Front\CandidatureController@spontanee', true, $isLoggedCandidat);
+Route::add('candidature/stage', 'App\Controllers\Front\CandidatureController@stage', true, $isLoggedCandidat);
 
 Route::add('candidat/account/alert/form', 'App\Controllers\Front\AlertController@form', true, $isLoggedCandidat);
 Route::add('candidat/account/alert/activate', 'App\Controllers\Front\AlertController@activate', true, $isLoggedCandidat);
@@ -206,6 +208,7 @@ Route::add('terms', 'App\Controllers\Front\PageController@terms');
 Route::add('conditions', 'App\Controllers\Front\PageController@conditions');
 Route::add('sitemap', 'App\Controllers\Front\PageController@sitemap');
 Route::add('contact', 'App\Controllers\Front\PageController@contact');
+Route::add('bug-report', 'App\Controllers\Front\PageController@bugReport');
 
 // Advanced search
 Route::add('offres', 'App\Controllers\Front\OfferController@index');

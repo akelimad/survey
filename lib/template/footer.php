@@ -27,8 +27,8 @@
 	<a class='bdp' href='<?= site_url('sitemap'); ?>'>Plan du site</a>  
 
 
-	 <?php if(get_setting('show_signaler_probleme') == 1) : ?>
-	<a class='bdp' href='<?= site_url('infos/signaler_probleme/'); ?>'>Signaler un problème</a>
+	 <?php if(get_setting('allow_bugs_report') == 1) : ?>
+	<a class='bdp' href='<?= site_url('bug-report'); ?>'>Signaler un problème</a>
 
 	 <span class='bdp' style="color:#ffffff;" >|</span>
 	<?php endif; ?>

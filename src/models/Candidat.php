@@ -96,6 +96,70 @@ class Candidat {
   }
 
 
+  /**
+   * Check if candidat has at least one resume
+   *
+   * @return bool
+   *
+   * @author Mhamed Chanchaf
+   */
+  public static function hasResume($candidat_id = null)
+  {
+    if (is_null($candidat_id)) $candidat_id = get_candidat_id();
+    
+    $count = getDB()->prepare("SELECT COUNT(*) as nbr FROM cv WHERE candidats_id=?", [$candidat_id], true);
+    return (intval($count->nbr) > 0);
+  }
+
+
+  /**
+   * Check if candidat has at least one formation
+   *
+   * @return bool
+   *
+   * @author Mhamed Chanchaf
+   */
+  public static function hasFormation($candidat_id = null)
+  {
+    if (is_null($candidat_id)) $candidat_id = get_candidat_id();
+    
+    $count = getDB()->prepare("SELECT COUNT(*) as nbr FROM formations WHERE candidats_id=?", [$candidat_id], true);
+    return (intval($count->nbr) > 0);
+  }
+
+
+  /**
+   * Check if candidat has candidature spontannee
+   *
+   * @return bool
+   *
+   * @author Mhamed Chanchaf
+   */
+  public static function hasCandidatureSpontannee($candidat_id = null)
+  {
+    if (is_null($candidat_id)) $candidat_id = get_candidat_id();
+    
+    $count = getDB()->prepare("SELECT COUNT(*) as nbr FROM candidature_spontanee WHERE candidats_id=?", [$candidat_id], true);
+    return (intval($count->nbr) > 0);
+  }
+
+
+  /**
+   * Check if candidat has candidature stage
+   *
+   * @return bool
+   *
+   * @author Mhamed Chanchaf
+   */
+  public static function hasCandidatureStage($candidat_id = null)
+  {
+    if (is_null($candidat_id)) $candidat_id = get_candidat_id();
+    
+    $count = getDB()->prepare("SELECT COUNT(*) as nbr FROM candidature_stage WHERE candidats_id=?", [$candidat_id], true);
+    return (intval($count->nbr) > 0);
+  }
+
+
 	/**
 	 * Get last candidat formation
 	 *

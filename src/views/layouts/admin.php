@@ -33,10 +33,10 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-8 col-xs-12">
+            <div class="col-md-7 col-xs-12">
                 <div id="breadcrumb">Vous êtes ici: <strong><?php echo $ariane; ?></strong></div>
             </div>
-            <div class="col-md-4 col-xs-12">
+            <div class="col-md-5 col-xs-12">
                 <?php if($admin_email = read_session('abb_admin', false)) : ?>
                     <div class="pull-right">
                         Connecté en tant que: <b><?= $admin_email; ?></b> | <a href="<?= site_url('backend/logout') ?>">Déconnexion</a>
@@ -58,8 +58,8 @@
                         <li><a href="<?= site_url('terms'); ?>">Mentions légales</a></li>
                         <li><a href="<?= site_url('conditions'); ?>">Conditions Générales d'utilisation</a></li>
                         <li><a href="<?= site_url('sitemap'); ?>">Plan du site</a></li>
-                        <?php if(get_setting('show_signaler_probleme') == 1) : ?>
-                        <li><a href="<?= site_url('infos/signaler_probleme/'); ?>">Signaler un problème</a></li>
+                        <?php if(get_setting('allow_bugs_report') == 1) : ?>
+                        <li><a href="<?= site_url('bug-report'); ?>">Signaler un problème</a></li>
                         <?php endif; ?>
                     </ul>
                     <?php if(get_setting('show_copyright') == 1) : ?>
