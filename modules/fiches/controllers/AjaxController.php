@@ -66,8 +66,7 @@ class AjaxController
     if( !isset($fiche_offre->id_fiche) ) {
       return [
         'status' => 'error',
-        'title' => 'Fiche introuvable !',
-        'message' => 'Il y a aucune fiche attaché à cet offre.'
+        'title' => 'Aucune fiche n\'a été attaché à cette offre.'
       ];
     }
 
