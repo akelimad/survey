@@ -290,7 +290,7 @@ margin-left: 820px;
 
 			<div id="menulangue-panier"  >
 
-						<h3 class="titreh1">Bienvenue au portail RH de l'AMMC</h3>
+						<h3 class="titreh1"><?= get_setting('front_welcome_message', 'Bienvenue sur Etalent'); ?></h3>
 
 				<div id="menulangue">
 
