@@ -31,7 +31,7 @@
 
 
 			$id_role		= isset($_POST['id_role']) 			? $_POST['id_role']			: "";
-			$id_departement		= isset($_POST['id_departement']) 			? $_POST['id_departement']			: "";
+			$id_departement		= isset($_POST['id_departement']) 			? $_POST['id_departement']			: 0;
 
  			$nom    		= isset($_POST['nom'])  			? $_POST['nom']    		 	: "";
 
