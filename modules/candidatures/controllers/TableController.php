@@ -175,6 +175,9 @@ class TableController extends Controller
   	$table->setOrder('DESC');
     $table->setSortables(['note_ecrit', 'note_orale', 'date_cand']);
 
+    $temp_actions = get_setting('show_candidatures_actions_for_temp_account', 1);
+    if ($temp_actions == 0 && read_session('id_type_role') == 3) $this->actions = [];
+
     $this->actions['fiche_evaluation'] = [
       'label' => 'Évaluer ce candidat',
       'patern' => '#',
