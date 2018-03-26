@@ -190,7 +190,7 @@ if(isset($messages) and !empty($messages))  {
           'candidature' => 0,
           'status' => 'Archivée', 
           'anonymat' => $anonymat, 
-          'send_candidature' => $send_candidature, 
+          'send_candidature' => true, 
           'ordre' => $ordre, 
           'id_fonc' => $fonction, 
           'id_nfor' => $formation, 
