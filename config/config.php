@@ -12,7 +12,9 @@ include_once SITE_BASE .'/config/bootstrap.php';
 
 // Redirect to backend homepage
 if (isBackend() && \App\Route::getRoute() != 'backend/login') {
-	if (!isLogged('admin')) {
+	if (\App\Route::getRoute() == 'backend/logout') {
+		$logout = (new \App\Controllers\Admin\AuthController())->logout([]);
+	} elseif (!isLogged('admin')) {
 		redirect('backend/login/');
 	} else if (!Permission::canViewPage() && !Permission::allowed()) {
 		redirect('backend/accueil/');

@@ -18,9 +18,12 @@ class AuthController extends Controller
 
   public function logout($data)
   {
+    if (session_status() == PHP_SESSION_NONE) {
+      session_start();
+    }
     session_destroy();
     redirect('backend/login/');
   }
 
-	
+  
 } // END Class
