@@ -6,9 +6,7 @@
 
                             <tr>
 
-                              <td colspan="2" >Par mot clé
-
-                                <label><br/>
+                              <td colspan="2" ><label>Par mot clé</label><br/>
 
                                   <input  type="text" name="motcle" style="width:185px" 
 
