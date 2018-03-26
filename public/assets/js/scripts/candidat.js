@@ -28,7 +28,7 @@ $(document).ready(function () {
     } else if (!dateDebut.startsWith(0) && dateDebut !== '') {
       dateD = new Date(dateDebut)
       var dateN = new Date($('#candidat_date_n').val())
-      if (dateN <= dateD) {
+      if (dateN > dateD) {
         row.find('[id$="date_debut"]').val('')
         window.chmAlert.danger('La date de fin doit être supérieur à date de naissance.')
       }
