@@ -698,10 +698,10 @@ class Table extends Pagination {
      *
      * @return int $page
      */
-    public static function getPage()
+    public static function getPage($param = 'page')
     {
         if( is_null(self::$currentPage) ) {
-            return (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) ? intval($_GET['page']) : 1;
+            return (isset($_GET[$param]) && is_numeric($_GET[$param]) && $_GET[$param] > 0) ? intval($_GET[$param]) : 1;
         }
         return self::$currentPage;
     }
@@ -774,23 +774,23 @@ class Table extends Pagination {
      *
      * @return string url
      */
-    public static function getPaginationUrl()
+    public static function getPaginationUrl($param = 'page')
     {
         $url = self::getCurrentUrl();
         $sep = self::getSeparator();
 
-        if( isset($_GET['page']) && !is_ajax() ) {
-            $arr = explode("page=", $url, 2);
+        if( isset($_GET[$param]) && !is_ajax() ) {
+            $arr = explode($param ."=", $url, 2);
             $sep = substr($arr[0], -1);
-            $page = self::getPage();
-            $url = str_replace($sep.'page='. $page, $sep .'page=*VAR*', $url);
+            $currentPage = self::getPage($param);
+            $url = str_replace($sep. $param .'='. $currentPage, $sep . $param . '=*VAR*', $url);
         } else {
-            if (strpos($url, 'page=') !== false) {
-                $url = preg_replace("/page=[0-9]+/", "page=*VAR*", $url);
+            if (strpos($url, $param . '=') !== false) {
+                $url = preg_replace("/$param=[0-9]+/", $param ."=*VAR*", $url);
             } elseif (strpos($url, '?') !== false) {
-                $url = str_replace('?', '?page=*VAR*&', $url);
+                $url = str_replace('?', '?'. $param .'=*VAR*&', $url);
             } else {
-                $url .= '?page=*VAR*';
+                $url .= '?'. $param .'=*VAR*';
             }
         }
         return $url;
