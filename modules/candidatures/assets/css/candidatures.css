@@ -196,3 +196,11 @@ a.sort{
 a.sort>.fa {
   font-size: 12px !important;
 }
+
+#candidatures-alert .chm-alerts {
+  margin-bottom: 12px;
+}
+
+#candidatures-alert .chm-alerts ul {
+  margin: 10px 0 10px 55px;
+}
