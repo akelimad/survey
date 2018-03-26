@@ -76,7 +76,7 @@ if($p=='ec') {
 
         <input name="sendAdd" type="hidden" class="btnEnregistrer" value=" Enregistrer " />
 
-         <a href="#" onclick="formulaire_a.submit()" title="Modifier">
+         <a href="javascript:void(0)" onclick="formulaire_a.submit()" title="Modifier">
 
           <i class="fa fa-floppy-o fa-fw fa-2x"></i>
 
@@ -266,7 +266,7 @@ $delet = mysql_query("delete from prm_sectors where id_sect='$id'");
 
     <input name="send" type="hidden" class="btnEnregistrer"  value="Enregistrer" />               
 
-       <a href="#" onclick="formulaire_m<?php echo $ii; ?>.submit()" title="Modifier">
+       <a href="javascript:void(0)" onclick="formulaire_m<?php echo $ii; ?>.submit()" title="Modifier">
 
           <i class="fa fa-floppy-o fa-fw fa-lg"></i>
 
@@ -284,7 +284,7 @@ $delet = mysql_query("delete from prm_sectors where id_sect='$id'");
 
     <input name="delet" type="hidden" class="btnSupprimer"  value="Supprimer" />              
 
-       <a href="#" onclick="formulaire_s<?php echo $jj; ?>.submit()" title="Modifier">
+       <a href="javascript:void(0)" onclick="formulaire_s<?php echo $jj; ?>.submit()" title="Modifier">
 
           <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i>
 

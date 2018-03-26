@@ -78,7 +78,7 @@ if($p=='ec') {
 
         <input name="sendAdd_tp" type="hidden" class="btnEnregistrer"  value=" Enregistrer " />
 
-         <a href="#" onclick="formulaire_a.submit()" title="Modifier">
+         <a href="javascript:void(0)" onclick="formulaire_a.submit()" title="Modifier">
 
           <i class="fa fa-floppy-o fa-fw fa-2x"></i>
 
@@ -146,7 +146,7 @@ $addSect = mysql_query("INSERT INTO prm_type_partenaire (id_tparte,type_partenai
 
 
 
-<br><div chref="javascript:void(0)" onclick="/div><br>
+<br>
 
 <table width="100%" border="0" cellspacing="0" id="type_partenaire" class="tablesorter" style="background: none;">
 
@@ -158,7 +158,7 @@ $addSect = mysql_query("INSERT INTO prm_type_partenaire (id_tparte,type_partenai
 
         <th scope="col" width="23%" style="background-color:#C1B3B0;color:white;"><strong>Intitulé</strong></th>
 
-        <th width="8%"colspan="2" style="background-color:#C1B3B0;color:white;"><strong>Actions</strong></th>
+        <th width="8%" colspan="2" style="background-color:#C1B3B0;color:white;"><strong>Actions</strong></th>
 
     </tr>
 
@@ -276,7 +276,7 @@ $delet = mysql_query("delete from prm_type_partenaire where id_tparte='$id'");
 
     <input name="send_tp" type="hidden" class="btnEnregistrer"  value="Enregistrer" />               
 
-       <a href="#" onclick="formulaire_m<?php echo $ii; ?>.submit()" title="Modifier">
+       <a href="javascript:void(0)" onclick="formulaire_m<?php echo $ii; ?>.submit()" title="Modifier">
 
           <i class="fa fa-floppy-o fa-fw fa-lg"></i>
 
@@ -294,7 +294,7 @@ $delet = mysql_query("delete from prm_type_partenaire where id_tparte='$id'");
 
     <input name="delet_tp" type="hidden" class="btnSupprimer"  value="Supprimer" />              
 
-       <a href="#" onclick="formulaire_s<?php echo $jj; ?>.submit()" title="Modifier">
+       <a href="javascript:void(0)" onclick="formulaire_s<?php echo $jj; ?>.submit()" title="Modifier">
 
           <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i>
 

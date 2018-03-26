@@ -9,7 +9,7 @@ Total des candidatures : <span class="badge"><?php echo $tpc; ?></span>
 </div> 
 
 <div style=" float: right; margin: -5px 10px 0px 0px;">
-<a href="#"    title="Imprimer" onclick="PrintElem('#imprime');return false;" style=" border-bottom: none; ">
+<a href="javascript:void(0)" title="Imprimer" onclick="PrintElem('#imprime');return false;" style=" border-bottom: none; ">
 <img src="<?php echo $imgurl ?>/icons/print.png" title="Imprimer"/> 
 </a>
 

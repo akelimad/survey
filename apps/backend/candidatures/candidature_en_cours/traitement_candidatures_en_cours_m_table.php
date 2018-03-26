@@ -490,7 +490,7 @@ if($r_cv['lien_cv'])
 
         <div style="float: right;margin:1px 20px 1px 0px ;">
 
-          <a href="#" class="info">
+          <a href="javascript:void(0)" class="info">
 
 
 

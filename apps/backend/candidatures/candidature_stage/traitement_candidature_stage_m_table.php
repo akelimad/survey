@@ -320,7 +320,7 @@ if(strlen($motiv)<strlen($resultat['objet']))
 
 ?>
 
-<a class="info1" href="#" onclick="return false">
+<a class="info1" href="javascript:void(0)" onclick="return false">
 
     <i class="fa fa-external-link"></i>                          
 
@@ -348,7 +348,7 @@ if(strlen($motiv)<strlen($resultat['motivations']))
 
 ?>
 
-<a class="info1" href="#" onclick="return false">
+<a class="info1" href="javascript:void(0)" onclick="return false">
 
       <i class="fa fa-external-link"></i>                          
 

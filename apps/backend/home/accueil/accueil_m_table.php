@@ -544,7 +544,7 @@ echo '<b>'.$r_c_nom.' |  '.number_format($age,0).' ans </b>'; ?>
 
         <div style="float: right;margin:1px 20px 1px 0px ;">
 
-          <a href="#" class="info">
+          <a href="javascript:void(0)" class="info">
 
 
 
@@ -762,7 +762,7 @@ echo '<b>'.$r_c_nom.' |  '.number_format($age,0).' ans </b>'; ?>
 
 
 
-            echo '<center><a href="#" title="'.$conf0.'"><i class="fa fa-paper-plane-o fa-fw fa-lg" style="color : '.$conf1.'"></i></a> </center>';                  
+            echo '<center><a href="javascript:void(0)" title="'.$conf0.'"><i class="fa fa-paper-plane-o fa-fw fa-lg" style="color : '.$conf1.'"></i></a> </center>';                  
 
 
 

@@ -702,7 +702,7 @@ echo $row01[1]; ?> <br /><br />
 
         echo '<div style="float: right;margin:1px 20px 1px 0px ;">';    
 
-            echo '<a href="#" class="info"><div style="width: 15px; height: 15px; background: '.$color.'; -moz-border-radius: 10px; -webkit-border-radius: 10px;  border-radius: 10px;"></div><br/><span id="tableau" ><table>
+            echo '<a href="javascript:void(0)" class="info"><div style="width: 15px; height: 15px; background: '.$color.'; -moz-border-radius: 10px; -webkit-border-radius: 10px;  border-radius: 10px;"></div><br/><span id="tableau" ><table>
 
             <tr><td style=" background-color: white; width:77% ">Pertinence formation </td>
 

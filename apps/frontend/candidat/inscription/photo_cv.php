@@ -18,7 +18,7 @@
 
          
 
-        <a  href="#"  class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
+        <a href="javascript:void(0)" class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
 
 
 
@@ -86,7 +86,7 @@
 
          
 
-        <a  href="#"  class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
+        <a href="javascript:void(0)" class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
 
 
 
@@ -128,7 +128,7 @@
 
 <label>Lettre de motivation</label> 
 
-        <a  href="#"  class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
+        <a href="javascript:void(0)" class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
 
 <br/>
 

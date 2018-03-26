@@ -98,9 +98,9 @@ $rst_pagination = mysql_query($sql_pagination);
 
     
 
-<div style="float:right"><button class="espace_candidat" ><a href="#" id="myButtonControlID_txt"  role='button' style="color: #fff;">Exporté la table vers text</button></div>
+<div style="float:right"><button class="espace_candidat" ><a href="javascript:void(0)" id="myButtonControlID_txt"  role='button' style="color: #fff;">Exporté la table vers text</button></div>
 
-<div style="float:right"><button class="espace_candidat" ><a href="#" id="myButtonControlID_csv"  role='button' style="color: #fff;">Exporté la table vers CSV</a></button></div>
+<div style="float:right"><button class="espace_candidat" ><a href="javascript:void(0)" id="myButtonControlID_csv"  role='button' style="color: #fff;">Exporté la table vers CSV</a></button></div>
 
  
 
@@ -332,7 +332,7 @@ $age = (time() - strtotime($newformat)) / 3600 / 24 / 365;
 
         <div style="float: right;margin:1px 20px 1px 0px ;">
 
-          <a href="#" class="info">
+          <a href="javascript:void(0)" class="info">
 
           <div style="width: 15px; height: 15px; background: <?php echo $color; ?>;
 

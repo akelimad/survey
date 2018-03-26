@@ -136,7 +136,7 @@ href="javascript:void(0)" onclick="
 
 
 
-			   <a  href="#" onclick="editAlert(<?php echo $alerte['id_alert']; ?>,'<?php  $titre= str_replace("'","\'",$alerte['titre']); echo $titre; ?>')"    title="Editer cette alerte" ><img src="<?php echo $imgurl ?>/icons/edit.png" /></a>
+			   <a href="javascript:void(0)" onclick="editAlert(<?php echo $alerte['id_alert']; ?>,'<?php  $titre= str_replace("'","\'",$alerte['titre']); echo $titre; ?>')"    title="Editer cette alerte" ><img src="<?php echo $imgurl ?>/icons/edit.png" /></a>
 
 
 
@@ -168,7 +168,7 @@ href="javascript:void(0)" onclick="
 
 
 
-                <a href="#" onclick="if(confirm('&ecirc;tes vous sur de vouloir supprimer cette alerte?')) formu<?php echo $cc; ?>.submit();" title="Supprimer l'alerte" ><img src="<?php echo $imgurl ?>/icons/delete.png" /></a>
+                <a href="javascript:void(0)" onclick="if(confirm('&ecirc;tes vous sur de vouloir supprimer cette alerte?')) formu<?php echo $cc; ?>.submit();" title="Supprimer l'alerte" ><img src="<?php echo $imgurl ?>/icons/delete.png" /></a>
 
 
 
@@ -304,7 +304,7 @@ href="javascript:void(0)" onclick="
 
 
 
-            <td colspan="3"> Vous n'avez aucune alerte. <a href="#" onclick="createAlert(<?php     if(isset($_POST['requete'])) echo $_POST['requete']; else echo "'norequete'";        ?>);" >Cr�er une alerte e-mail</a></td>
+            <td colspan="3"> Vous n'avez aucune alerte. <a href="javascript:void(0)" onclick="createAlert(<?php     if(isset($_POST['requete'])) echo $_POST['requete']; else echo "'norequete'";        ?>);" >Cr�er une alerte e-mail</a></td>
 
 
 

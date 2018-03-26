@@ -270,7 +270,7 @@ if (strpos($_SESSION['page_courant '],'offres') !== false) {
 
                                     <div style=" float: left; margin: -2px 0px 0px 10px;">
 
-                                     <a href="#"    title="Imprimer" onclick="PrintElem('#imprime');return false;" style=" border-bottom: none; ">
+                                     <a href="javascript:void(0)" title="Imprimer" onclick="PrintElem('#imprime');return false;" style=" border-bottom: none; ">
 
                                             <img src="<?php echo $imgurl ?>/icons/print.png" title="Imprimer"/> 
 

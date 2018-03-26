@@ -42,7 +42,7 @@ $returnrole = mysql_fetch_array($requserrole);
 
         <p><b>Status</b></p>
 
-        <p><b>Pourcentage</b>href="javascript:void(0)" onclick="
+        <p><b>Pourcentage</b>
 
     </div>
 
@@ -86,7 +86,7 @@ $returnrole = mysql_fetch_array($requserrole);
 
         <p><b><?php echo couperChaine(strip_tags($return['msg']), 10, 10); ?></b>
 
-            <a class="info1" href="#" onclick="return false">
+            <a class="info1" href="javascript:void(0)" onclick="return false">
 
                 <i class="fa fa-external-link"></i>
 
@@ -118,7 +118,7 @@ $returnrole = mysql_fetch_array($requserrole);
 
 <input type="hidden"  id="edit" name="edit"  value=""   title="Edit ce message" class="cu" /> 
 
-<a href="#" onclick="formulaire<?php echo $jj; ?>.submit()" title="modifier" >
+<a href="javascript:void(0)" onclick="formulaire<?php echo $jj; ?>.submit()" title="modifier" >
 
 <i class="fa fa-pencil-square-o fa-fw fa-lg"></i> </a>
 

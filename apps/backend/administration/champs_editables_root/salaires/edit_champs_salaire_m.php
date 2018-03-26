@@ -78,7 +78,7 @@ if($p=='ec') {
 
         <input name="sendAdd_sal" type="hidden" class="btnEnregistrer"  value=" Enregistrer " />
 
-        <a href="#" onclick="formulaire_a.submit()" title="Modifier">
+        <a href="javascript:void(0)" onclick="formulaire_a.submit()" title="Modifier">
 
           <i class="fa fa-floppy-o fa-fw fa-2x"></i>
 
@@ -144,7 +144,7 @@ $addSect = mysql_query("INSERT INTO prm_salaires (id_salr,salaire) VALUES ('','"
 
 
 
-<table widhref="javascript:void(0)" onclick="0" cellspacing="0" id="salaire" class="tablesorter" style="background: none;">
+<table onclick="0" cellspacing="0" id="salaire" class="tablesorter" style="background: none;">
 
 <thead>
 
@@ -272,7 +272,7 @@ $delet = mysql_query("delete from prm_salaires where id_salr='$id'");
 
     <input name="send_sal" type="hidden" class="btnEnregistrer"  value="Enregistrer" />               
 
-       <a href="#" onclick="formulaire_m<?php echo $ii; ?>.submit()" title="Modifier">
+       <a href="javascript:void(0)" onclick="formulaire_m<?php echo $ii; ?>.submit()" title="Modifier">
 
           <i class="fa fa-floppy-o fa-fw fa-lg"></i>
 
@@ -290,7 +290,7 @@ $delet = mysql_query("delete from prm_salaires where id_salr='$id'");
 
     <input name="delet_sal" type="hidden" class="btnSupprimer"  value="Supprimer" />              
 
-       <a href="#" onclick="formulaire_s<?php echo $jj; ?>.submit()" title="Modifier">
+       <a href="javascript:void(0)" onclick="formulaire_s<?php echo $jj; ?>.submit()" title="Modifier">
 
           <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i>
 

@@ -1,9 +1,11 @@
-<?php get_flash_message(); ?>
+<div id="candidatures-alert">
+	<?php get_flash_message(); ?>
+</div>
 <h1 class="page-title">TRAITEMENT DES CANDIDATURES</h1>
 <table>
 	<tbody>
 		<tr class="odd">
-			<td><b>Nombre des candidaturess : </b></td>
+			<td><b>Nombre des candidatures : </b></td>
 			<td>&nbsp;<span class="badge badge-success"><?= $table->total_results ?></span></td>
 		</tr>
 	</tbody>

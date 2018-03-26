@@ -536,7 +536,7 @@
 
 <td colspan="2">
 
-         <br><a  href="#"  class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
+         <br><a href="javascript:void(0)" class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
 
 
 
@@ -934,7 +934,7 @@ elseif(isset($_SESSION['fb___email'] )){$email___v=$_SESSION['fb___email'];}
 
                 type="password" name="mdp1" style="width:198px"  maxlength="15" required/>
 
-           <a  href="#"  class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
+           <a href="javascript:void(0)" class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
 
 
 

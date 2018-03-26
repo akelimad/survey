@@ -96,14 +96,14 @@ input, select {
                             <input type="text" name="block_items[<?= $block->id_block; ?>][<?= $item->id_item; ?>]" class="mb-5" value="<?= $item->name; ?>">
                         </td>
                         <td style="vertical-align: top;width: 30px;">
-                            <a href="#" class="btn btn-danger btn-xs deleteLine ml-5" style="margin-top: -1px;"><i class="fa fa-trash"></i></a>
+                            <a href="javascript:void(0)" class="btn btn-danger btn-xs deleteLine ml-5" style="margin-top: -1px;"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
 
                 <?php endforeach; endif; ?>
                 </table>
 
-                <a href="#" class="btn btn-default btn-xs addLine" data-table="<?= $block->id_block; ?>"><i class="fa fa-plus"></i>&nbsp;Ajouter une ligne</a>
+                <a href="javascript:void(0)" class="btn btn-default btn-xs addLine" data-table="<?= $block->id_block; ?>"><i class="fa fa-plus"></i>&nbsp;Ajouter une ligne</a>
                 
             <?php endforeach; ?>
 

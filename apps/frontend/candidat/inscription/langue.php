@@ -61,7 +61,7 @@
        <td>
            <ul>
 
-      <li style="list-style-type: none;" ><label>Autres 1 : </label> <a  href="#"  class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>        <em><span></span>  Veuillez entrer une langue avant de préciser le niveau de maîtrise </em> </a></li>
+      <li style="list-style-type: none;" ><label>Autres 1 : </label> <a href="javascript:void(0)" class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>        <em><span></span>  Veuillez entrer une langue avant de préciser le niveau de maîtrise </em> </a></li>
       <li style="list-style-type: none;" >
       <input id="autre" name="autre" type="text" value="<?php if (isset($autre))  echo $autre; ?>" style="width: 115px;" maxlength="100"/>
         </li>
@@ -78,7 +78,7 @@
        <td>
          <ul>
 
-      <li style="list-style-type: none;" ><label>Autres 2 : </label>  <a  href="#"  class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>        <em><span></span>  Veuillez entrer une langue avant de préciser le niveau de maîtrise </em> </a></li>
+      <li style="list-style-type: none;" ><label>Autres 2 : </label>  <a href="javascript:void(0)" class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>        <em><span></span>  Veuillez entrer une langue avant de préciser le niveau de maîtrise </em> </a></li>
       <li style="list-style-type: none;" >
       <input id="autre1" name="autre1" type="text" value="<?php if (isset($autre1))  echo $autre1; ?>" style="width: 115px;" maxlength="100"/>
        </li>
@@ -95,7 +95,7 @@
        <td>
           <ul>
 
-      <li style="list-style-type: none;" ><label>Autres 3 : </label> <a  href="#"  class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>        <em><span></span>  Veuillez entrer une langue avant de préciser le niveau de maîtrise </em> </a></li>
+      <li style="list-style-type: none;" ><label>Autres 3 : </label> <a href="javascript:void(0)" class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>        <em><span></span>  Veuillez entrer une langue avant de préciser le niveau de maîtrise </em> </a></li>
       <li style="list-style-type: none;" >
       <input id="autre2" name="autre2" type="text" value="<?php if (isset($autre2))  echo $autre2; ?>" style="width: 115px;" maxlength="100" />
         </li>

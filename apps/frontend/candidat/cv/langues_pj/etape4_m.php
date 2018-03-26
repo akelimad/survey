@@ -892,7 +892,7 @@ echo $show;
 
     <ul>
 
-    <li style="list-style-type: none;width: 235px;" class='even'><label>Autres 1 : <a  href="#"  class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
+    <li style="list-style-type: none;width: 235px;" class='even'><label>Autres 1 : <a href="javascript:void(0)" class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
 
         <em><span></span>  Veuillez entrer une langue avant de préciser le niveau de maîtrise </em> </a></label><br> <input id="autre00" name="autre" type="text" value="<?php if ($count) echo $retour['autre']; ?>" style="width: 95%;" pattern="[a-zA-Z0-9ÀÁÂÄàáâäÒÓÔÖòóôöÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ' ]+"  />
 
@@ -924,7 +924,7 @@ echo $show;
 
 
 
-      <li style="list-style-type: none;width: 235px;" class='even'><label>Autres 2 : <a  href="#"  class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
+      <li style="list-style-type: none;width: 235px;" class='even'><label>Autres 2 : <a href="javascript:void(0)" class="tooltip" align="center"><i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
 
         <em><span></span>  Veuillez entrer une langue avant de préciser le niveau de maîtrise </em> </a></label><br> <input id="autre01" name="autre1" type="text" value="<?php if ($count) echo $retour['autre1']; ?>" style="width: 95%" pattern="[a-zA-Z0-9ÀÁÂÄàáâäÒÓÔÖòóôöÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ' ]+"  />
 
@@ -952,7 +952,7 @@ echo $show;
 
       <ul>
 
-      <li style="list-style-type: none;width: 235px;" class='even'><label>Autres 3 : <a  href="#"  class="tooltip" align="center">    <i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
+      <li style="list-style-type: none;width: 235px;" class='even'><label>Autres 3 : <a href="javascript:void(0)" class="tooltip" align="center">    <i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
 
         <em><span></span>  Veuillez entrer une langue avant de préciser le niveau de maîtrise </em> </a></label>
 
@@ -1081,7 +1081,7 @@ else
 
           <label>CVs </label> <font style="color:red;">*</font> 
 
-        <a  href="#"  class="tooltip" align="center">    <i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
+        <a href="javascript:void(0)" class="tooltip" align="center">    <i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
 
 
 
@@ -1265,7 +1265,7 @@ echo '<span  id="leschampscv_'.$cvnbr2.'"><a class="cvchamp" href="javascript:cr
 
 <label>Lettre de motivation</label> 
 
-        <a  href="#"  class="tooltip" align="center">    <i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
+        <a href="javascript:void(0)" class="tooltip" align="center">    <i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
 
 
 

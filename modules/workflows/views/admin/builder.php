@@ -54,7 +54,7 @@
 							<span class="placeholder" data-bind="if: description() === '', event: { dblclick: editStep.bind($data) }">
 								Description...
 							</span>
-							<a href="#" data-update="desc" data-bind="text: description, 
+							<a href="javascript:void(0)" data-update="desc" data-bind="text: description, 
 							visible: activeField() != 'desc',
 							event: { dblclick: editStep.bind($data) }">
 						</a>
@@ -77,7 +77,7 @@
 </div><!-- / STEPS -->
 
 <div class="key">
-	<a href="#" class="help"><i class="glyphicon glyphicon-question-sign"></i></a>
+	<a href="javascript:void(0)" class="help"><i class="glyphicon glyphicon-question-sign"></i></a>
 	<div class="content">
 		<h2>Instructions <button class="close" data-dismiss="key">&times;</button></h2>
 		<p>Cliquez avec le bouton droit sur le fond de la grille pour ajouter une nouvelle étape.</p>
@@ -117,14 +117,14 @@
 		<tbody data-bind="foreach: workflows">
 			<tr>
 				<td class="action">
-					<a href="#" data-bind="click: editWorkflowName.bind($data)"><i class="glyphicon glyphicon-pencil"></i></a>
+					<a href="javascript:void(0)" data-bind="click: editWorkflowName.bind($data)"><i class="glyphicon glyphicon-pencil"></i></a>
 				</td>
 				<td>
 					<!-- ko if: isSelected() -->
 					<span data-bind="text: name, visible: !isActive()"></span>
 					<!-- /ko -->
 					<!-- ko if: !isSelected() -->
-					<a href="#" data-bind="text: name, visible: !isActive(), click: $root.selectWorkflow.bind($data)"></a>
+					<a href="javascript:void(0)" data-bind="text: name, visible: !isActive(), click: $root.selectWorkflow.bind($data)"></a>
 					<!-- /ko -->
 					<input type="text" data-bind="value: name,
 					visible: isActive(),
@@ -134,7 +134,7 @@
 					escPress: cancelEditWorkflowName,
 					event: { blur: saveOrCancelEdit, focus: selectText.bind($data) }" />
 				</td>
-				<td class="action delete"><a href="#" data-bind="click: deleteWorkflow.bind($data, $parent, 'a', 'b')">&times;</a></td>
+				<td class="action delete"><a href="javascript:void(0)" data-bind="click: deleteWorkflow.bind($data, $parent, 'a', 'b')">&times;</a></td>
 			</tr>
 		</tbody>
 	</table>

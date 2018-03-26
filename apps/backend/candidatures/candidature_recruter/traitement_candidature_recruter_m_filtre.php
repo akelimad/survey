@@ -726,9 +726,9 @@ echo " </optgroup>";
 
 <?php if($_SESSION['r_prm_export_candidature']==0){ ?>
 
-<div style="float:right"><button class="espace_candidat" ><a href="#" id="myButtonControlID_txt"  role='button' style="color: #fff;">Exporté la table vers text</button></div>
+<div style="float:right"><button class="espace_candidat" ><a href="javascript:void(0)" id="myButtonControlID_txt"  role='button' style="color: #fff;">Exporté la table vers text</button></div>
 
-<div style="float:right"><button class="espace_candidat" ><a href="#" id="myButtonControlID_csv"  role='button' style="color: #fff;">Exporté la table vers CSV</a></button></div>
+<div style="float:right"><button class="espace_candidat" ><a href="javascript:void(0)" id="myButtonControlID_csv"  role='button' style="color: #fff;">Exporté la table vers CSV</a></button></div>
 
 <div style="float:right"><button class="espace_candidat" 
 

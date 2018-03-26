@@ -812,7 +812,7 @@ echo $row01[1]; ?> <br /><br />
 
         <div style="float: right;margin:1px 20px 1px 0px ;">
 
-          <a href="#" class="info">
+          <a href="javascript:void(0)" class="info">
 
 
 

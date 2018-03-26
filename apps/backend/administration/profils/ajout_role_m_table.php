@@ -463,7 +463,7 @@ else{
 
 										<?php if($reponse['login'] != $_SESSION['abb_admin']) {?>
 
-										<a href="javascript:void(0)" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ce profil?'))location.href='?action=delete&id=<?php echo $reponse['id_role'] ?>'">
+										<a href="javascript:void(0)" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ce profil?'))location.href='<?= site_url('backend/administration/profils/?action=delete&id='. $reponse['id_role']); ?>'">
 
                                         <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i></a>
 

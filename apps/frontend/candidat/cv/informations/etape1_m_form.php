@@ -22,7 +22,7 @@
 
         <input type="text" name="titre" value="<?php  echo  $titre; ?>"  style="width:400px" title="Veuillez entrez le titre de profil"  pattern="[a-zA-Z0-9ÀÁÂÄàáâäÒÓÔÖòóôöÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ' ]+"   required/></td>
 
-    <td ><br><a  href="#"  class="tooltip" align="center">
+    <td ><br><a  href="javascript:void(0)"  class="tooltip" align="center">
 
     <i class="fa fa-info-circle fa-lg" style="color:<?php echo $color_bg; ?>"></i>
 
