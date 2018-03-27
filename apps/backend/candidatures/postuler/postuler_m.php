@@ -292,7 +292,23 @@ else
 
 			$date_i = date("Y-m-d");
 
-			$insertion = mysql_query("INSERT INTO candidature 
+
+      $id_cd = getDB()->create('candidature', [
+        'candidats_id' => $id_candidat,
+        'id_cv' => $id_cv,
+        'id_lettre' => $id_lettre,
+        'id_offre' => $id_offre,
+        'domaine_formation_id' => null,
+        'lettre_motivation' => $motivation1,
+        'date_candidature' => $date_i,
+        'status' => 0,
+        'pertinence' => intval($percent),
+        'notation' => null,
+        'note_orale' => null,
+        'note_ecrit' => null
+      ]);
+
+			/*$insertion = mysql_query("INSERT INTO candidature 
 
                 VALUES ('','".safe($id_candidat)."', '".safe($id_cv)."' ,'".safe($id_lettre)."',
 
@@ -300,7 +316,7 @@ else
 
                  '0','".safe($percent)."','' )");
 
-            $id_cd = mysql_insert_id(); 
+            $id_cd = mysql_insert_id();*/ 
 
             $insertion_historique = mysql_query("INSERT INTO historique 
 

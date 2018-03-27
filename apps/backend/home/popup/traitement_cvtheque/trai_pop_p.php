@@ -168,7 +168,7 @@ if($cvtheque_page>0){$dsbl='../candidatures/';}
 
             <div id="content_dossier" class="content_dossier" style="height: 180px;">
 
-                <form action="../<?php echo $dsbl; ?>postuler/" id="form_pop_dossier" method="post">
+                <form action="<?php echo site_url('backend/candidatures/postuler/') ?>" id="form_pop_dossier" method="post">
 
                     <table border="0" cellspacing="0" cellpadding="2" align="center">
 
