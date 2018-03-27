@@ -217,6 +217,7 @@ class Table extends Pagination {
      */
     protected $_actions = array(
         'edit' => array(
+            'name' => 'edit',
             'label' => 'Modifier',
             'patern' => 'action=edit&id={primary_key}',
             'icon' => 'fa fa-pencil',
@@ -229,6 +230,7 @@ class Table extends Pagination {
             'callback' => null
         ),
         'delete' => array(
+            'name' => 'delete',
             'label' => 'Supprimer',
             'patern' => 'action=delete&id={primary_key}',
             'icon' => 'fa fa-trash',
@@ -598,6 +600,7 @@ class Table extends Pagination {
         {
             $permission = $action['permission'];
             if( is_callable($permission) ) {
+                $row->table_action = $action;
                 $permission = call_user_func($permission, $row);
             }
 
@@ -914,6 +917,7 @@ class Table extends Pagination {
             $default = $this->_actions[$name];
         } else {
             $default = array(
+                'name' => $name,
                 'label' => 'Sans titre',
                 'patern' => '#',
                 'icon' => '',
