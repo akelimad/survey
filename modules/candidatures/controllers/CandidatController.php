@@ -27,6 +27,9 @@ class CandidatController
   {
   	if( !isLogged('admin') ) redirect( site_url('backend/login') );
     $cv = Resume::getByID($id_cv);
+    if (!isset($cv->lien_cv) || empty($cv->lien_cv)) {
+      die("Impossible de trouvez ce CV.");
+    }
     $cvPath = site_base('apps/upload/frontend/cv/'. $cv->lien_cv);
     if(file_exists($cvPath)) {
 	    header("Content-Description: Téléchargement de CV"); 
@@ -50,6 +53,9 @@ class CandidatController
   {
   	if( !isLogged('admin') ) redirect( site_url('backend/login') );
     $lettre = MotivationLetter::getByID($id_lettre);
+    if (!isset($lettre->lettre) || empty($lettre->lettre)) {
+      die("Impossible de trouvez ce CV.");
+    }
     $lettrePath = site_base('apps/upload/frontend/lmotivation/'. $lettre->lettre);
     if(file_exists($lettrePath)) {
 	    header("Content-Description: Téléchargement de lettre de motivation"); 

@@ -226,10 +226,14 @@ class AjaxController
         $data['candidatures'][] = $c->id_candidature;
       endforeach; endif;
     }
+    $table_actions = json_decode($data['table_actions'], true);
+    if (!is_array($table_actions)) $table_actions = [];
+
     return $this->renderAjaxView(
       'Partager les candidatures', 
       'admin/candidature/popup/share-candidatures', [
-        'candidatures' => $data['candidatures']
+        'candidatures' => $data['candidatures'],
+        'table_actions' => $table_actions
     ]);
   }
 

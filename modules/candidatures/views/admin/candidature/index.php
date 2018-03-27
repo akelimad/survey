@@ -22,6 +22,8 @@
 
 <?= $table->render(); ?>
 
+<input type="hidden" id="table_actions" value="<?php echo htmlentities(json_encode($table_actions)); ?>">
+
 <div id="candidaturesModal" class="modal fade" role="dialog" data-keyboard="false">
 	<div class="modal-dialog">
 		<div class="modal-content">

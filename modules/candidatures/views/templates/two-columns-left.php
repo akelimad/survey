@@ -3,15 +3,18 @@
 	<div class="row" style="margin-bottom: 15px;">
 		<div class="col-md-3">
 			<ul id="menu_site_carriere" style="padding: 1px;">
-				<li <?= ($_GET['action'] == 'status') ? 'class="menufo-active"' : ''; ?>>
-					<a href="<?= site_url('backend/module/candidatures/candidature/status'); ?>"><i class="fa fa-pie-chart"></i>&nbsp;État des candidatures</a>
-				</li>
-				<li <?= (isset($_GET['id']) && $_GET['id']==0) ? 'class="menufo-active"' : ''; ?>>
-					<a href="<?= site_url('backend/module/candidatures/candidature/list/0'); ?>"><i class="fa fa-spinner"></i>&nbsp;Nouvelles candidatures</a>
-				</li>
-				<li <?= (!isset($_GET['id']) && $_GET['action'] == 'index') ? 'class="menufo-active"' : ''; ?>>
-					<a href="<?= site_url('backend/module/candidatures/candidature'); ?>"><i class="fa fa-list-ol"></i>&nbsp;Candidatures en cours</a>
-				</li>
+				<?php if (read_session('id_type_role') == 1) : ?>
+					<li <?= ($_GET['action'] == 'status') ? 'class="menufo-active"' : ''; ?>>
+						<a href="<?= site_url('backend/module/candidatures/candidature/status'); ?>"><i class="fa fa-pie-chart"></i>&nbsp;État des candidatures</a>
+					</li>
+					<li <?= (isset($_GET['id']) && $_GET['id']==0) ? 'class="menufo-active"' : ''; ?>>
+						<a href="<?= site_url('backend/module/candidatures/candidature/list/0'); ?>"><i class="fa fa-spinner"></i>&nbsp;Nouvelles candidatures</a>
+					</li>
+					<li <?= (!isset($_GET['id']) && $_GET['action'] == 'index') ? 'class="menufo-active"' : ''; ?>>
+						<a href="<?= site_url('backend/module/candidatures/candidature'); ?>"><i class="fa fa-list-ol"></i>&nbsp;Candidatures en cours</a>
+					</li>
+				<?php endif; ?>
+
 				<?php
 					foreach (Candidatures::getStatus() as $key => $status) : 
 					$count = Candidatures::countByStatus($status->id_prm_statut_c);

@@ -28,11 +28,16 @@ class CandidatureController extends Controller
     }
 
     $this->addAssets();
-    $table = new TableController();
-    $this->data['table'] = $table->getTable();
-    $this->data['params'] = $table->params;
+    $tableCtrl = new TableController();
+    $this->data['table'] = $tableCtrl->getTable();
+    $this->data['params'] = $tableCtrl->params;
     $this->data['template'] = 'two-columns-left';
     $this->data['breadcrumbs'] = ['Candidatures', 'Nouvelle candidatures'];
+
+    $this->data['table_actions'] = array_map(function($action) {
+      return $action['label'];
+    }, $this->data['table']->getActions());
+
     return get_page('admin/candidature/index', $this->data, __FILE__);
   }
 

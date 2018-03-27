@@ -47,6 +47,17 @@
 		</div>
 	</div>
 
+	<div class="styled-title mt-0 mb-0">
+	  <h3>Actions autorisées</h3>
+	</div>
+	<div class="row mb-10">
+	<?php foreach ($table_actions as $key => $label) : ?>
+		<div class="col-md-6">
+			<label for="<?= $key ?>"><input type="checkbox" name="share[authorized_actions][]" id="<?= $key ?>" value="<?= $key ?>" style="vertical-align: sub;">&nbsp;<?= $label ?></label>
+		</div>
+	<?php endforeach; ?>
+	</div>
+
 	<div class="ligneBleu" style="width: 100%;"></div>
 	<div class="form-group mt-10 mb-0">
 		<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-hidden="true">Fermer</button>

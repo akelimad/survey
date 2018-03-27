@@ -56,6 +56,8 @@ export default class chmCandidat {
       data: {id: id}
     }, {
       onSuccess: (response) => {
+        $('#cvItems button.delete').show()
+        $('.cv_' + id).find('button.delete').hide()
         window['chmAlert'][response.status](response.message)
       }
     })
@@ -68,6 +70,8 @@ export default class chmCandidat {
       data: {id: id}
     }, {
       onSuccess: (response) => {
+        $('#lmItems button.delete').show()
+        $('.lm_' + id).find('button.delete').hide()
         window['chmAlert'][response.status](response.message)
       }
     })

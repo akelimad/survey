@@ -55,7 +55,8 @@ class TableController extends Controller
       'bulk_action' => false,
       'attributes' => [
         'class' => 'btn btn-success btn-xs',
-      ]
+      ],
+      'permission' => 'can_view_action'
     ],
     'send_cv_mail' => [
       'label' => 'Transférer le CV',
@@ -66,7 +67,8 @@ class TableController extends Controller
       'bulk_action' => false,
       'attributes' => [
         'class' => 'btn btn-default btn-xs',
-      ]
+      ],
+      'permission' => 'can_view_action'
     ],
     'send_mail' => [
       'label' => 'Envoyer un email au candidat',
@@ -76,7 +78,8 @@ class TableController extends Controller
       'callback' => 'showSendEmailPopup',
       'attributes' => [
         'class' => 'btn btn-info btn-xs',
-      ]
+      ],
+      'permission' => 'can_view_action'
     ],
     'note_ecrit' => [
       'label' => 'Afficher la note écrit',
@@ -86,17 +89,19 @@ class TableController extends Controller
       'attributes' => [
         'class' => 'btn btn-primary btn-xs',
         'onclick' => 'return showNoteEcritPopup({id_candidature})'
-      ]
+      ],
+      'permission' => 'can_view_action'
     ],
     'attachments' => [
-      'label' => 'Pièces jointes',
+      'label' => 'Ajouter des pièces jointes',
       'patern' => '#',
       'icon' => 'fa fa-files-o',
       'callback' => 'showAttachmentsPopup',
       'bulk_action' => false,
       'attributes' => [
         'class' => 'btn btn-default btn-xs',
-      ]
+      ],
+      'permission' => 'can_view_action'
     ],
     'share_candidature' => [
       'label' => 'Partager la candidature',
@@ -106,7 +111,8 @@ class TableController extends Controller
       'callback' => 'showShareCandidaturePopup',
       'attributes' => [
         'class' => 'btn btn-success btn-xs',
-      ]
+      ],
+      'permission' => 'can_view_action'
     ],
     'change_offre' => [
       'label' => 'Changer l\'offre',
@@ -116,8 +122,21 @@ class TableController extends Controller
       'attributes' => [
         'class' => 'btn btn-warning btn-xs',
         'onclick' => 'return showChangeOffrePopup({id_candidature}, {id_offre})'
-      ]
-    ]		
+      ],
+      'permission' => 'can_view_action'
+    ],
+    'fiche_evaluation' => [
+      'label' => 'Évaluer ce candidat',
+      'patern' => '#',
+      'icon' => 'fa fa-file-text-o',
+      'callback' => 'showFicheEvaluationPopup',
+      'sort_order' => 6,
+      'bulk_action' => false,
+      'attributes' => [
+        'class' => 'btn btn-default btn-xs',
+      ],
+      'permission' => 'can_view_action'
+    ]
 	];
 
 	private $pertinence;
@@ -174,22 +193,6 @@ class TableController extends Controller
     
   	$table->setOrder('DESC');
     $table->setSortables(['note_ecrit', 'note_orale', 'date_cand']);
-
-    $temp_actions = get_setting('show_candidatures_actions_for_temp_account', 1);
-    if ($temp_actions == 0 && read_session('id_type_role') != 1) $this->actions = [];
-
-    $this->actions['fiche_evaluation'] = [
-      'label' => 'Évaluer ce candidat',
-      'patern' => '#',
-      'icon' => 'fa fa-file-text-o',
-      'callback' => 'showFicheEvaluationPopup',
-      'sort_order' => 6,
-      'bulk_action' => false,
-      'attributes' => [
-        'class' => 'btn btn-default btn-xs',
-      ],
-      'permission' => (isset($_GET['id']) && $_GET['id'] == 45)
-    ];
 
   	foreach ($this->actions as $key => $attributes) {
   		if( isset($this->params['actions'][$key]) && $this->params['actions'][$key] == false ) continue;

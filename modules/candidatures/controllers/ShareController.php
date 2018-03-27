@@ -67,6 +67,13 @@ class ShareController
 
       if( $id_role > 0 ) {
 
+        $authorized = (is_array($data['authorized_actions'])) ? $data['authorized_actions'] : [];
+        $id_share = $db->create('role_candidatures_share', [
+          'authorized_actions' => json_encode($authorized),
+          'created_by' => read_session('id_type_role', 0),
+          'created_at' => date('Y-m-d H:i:s')
+        ]);
+
         // attach canddiatures
         foreach ($candidatures as $key => $id_candidature) {
           $count = $db->prepare("
@@ -76,6 +83,7 @@ class ShareController
 
           if( $count->nbr == 0 ) {
             $db->create('role_candidature', [
+              'id_share' => $id_share,
               'id_role' => $id_role,
               'id_candidature' => $id_candidature
             ]);

@@ -125,7 +125,8 @@ jQuery(document).ready(function($){
 		showModal({
 			data: {
 				'action': 'cand_share_candidature_popup',
-				'candidatures': candidatures
+				'candidatures': candidatures,
+				'table_actions': $('#table_actions').val()
 			}
 		})
 	}
