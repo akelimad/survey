@@ -268,25 +268,7 @@ margin-left: 820px;
 
 				</div>
 
-            </div>
-
-	<div id='rsearch' style=" margin: 40px 0 0 20px;">        
-
-        <form action='<?php echo $urlinfos; ?>/rechercher/' method="post" name="formulaire_a"  onsubmit="return go_search()"><br/>            
-
-            <input class='rsh' type='text' name='keywords' placeholder="RECHERCHER">&nbsp;&nbsp;            
-
-            <input type='hidden' value="" name='button' class='env' /> 
-
-            <a  onclick="formulaire_a.submit()">
-
-            <i class="fa fa-search fa-lg" style="color:<?php echo $color_bg; ?>"></i></a>
-
-                   
-
-        </form>    
-
-    </div> 		
+            </div>	
 
 			<div id="menulangue-panier"  >
 
