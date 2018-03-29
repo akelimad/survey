@@ -240,15 +240,7 @@ $msg_alert ='';
 
     $messages=array();
 
-$msgs ="<div class='alert alert-error'>
-
-<ul><li style='color:#FF0000'>Votre Email et/ou votre mot de passe est incorrect !</li></ul>
-
-</div>";
-
-array_push($messages,$msgs);
-
-	//$msg_alert ="<li style='color:#FF0000'>Utilisateur ou mot de passe non reconnu !</li>	";
+set_flash_message('error', 'Votre Email et/ou votre mot de passe est incorrect !');
 
 	 }
 

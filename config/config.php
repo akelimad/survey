@@ -10,17 +10,6 @@ define('SITE_BASE', dirname(__DIR__));
 // Include bootstrap
 include_once SITE_BASE .'/config/bootstrap.php';
 
-// Redirect to backend homepage
-if (isBackend() && \App\Route::getRoute() != 'backend/login') {
-	if (\App\Route::getRoute() == 'backend/logout') {
-		$logout = (new \App\Controllers\Admin\AuthController())->logout([]);
-	} elseif (!isLogged('admin')) {
-		redirect('backend/login/');
-	} else if (!Permission::canViewPage() && !Permission::allowed()) {
-		redirect('backend/accueil/');
-	}
-}
-
 $GLOBALS['etalent'] = new \stdClass;
 
 // Get root configuration
@@ -56,6 +45,24 @@ $email_e             = $prm_config->email_e;
 $variable_r          = $prm_config->variable_r;
 
 $GLOBALS['etalent']->config = array_merge((array)$prm_config, (array)$reponse);
+
+// Redirect to backend homepage
+if (isBackend() && \App\Route::getRoute() != 'backend/login') {
+	$ips = get_setting('admin_whitelist_ip_addresses', null);
+	if (!empty($ips)) {
+		$ips = explode(',', str_replace(' ', '', $ips));
+		if (!in_array(getRealIpAddr(), $ips)) {
+			set_flash_message('warning', 'Vous n\'avez pas les permissions pour accèder à cette page.');
+			redirect('backend/login/');
+		}
+	} elseif (\App\Route::getRoute() == 'backend/logout') {
+		$logout = (new \App\Controllers\Admin\AuthController())->logout([]);
+	} elseif (!isLogged('admin')) {
+		redirect('backend/login/');
+	} else if (!Permission::canViewPage() && !Permission::allowed()) {
+		redirect('backend/accueil/');
+	}
+}
 
 define('SITE_NAME', $nom_site);
 define('SITE_EMAIL', $info_contact);

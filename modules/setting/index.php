@@ -13,7 +13,8 @@ function get_setting($name = null, $dafault = null) {
 		if(!empty($setting)) : foreach ($setting as $key => $s) :
 			$settings[$s->name] = $s->value;
 		endforeach; endif;
-		$settings = array_merge($GLOBALS['etalent']->config, $settings);
+		$config = $GLOBALS['etalent']->config ?: [];
+		$settings = array_merge($config, $settings);
 		$GLOBALS['etalent']->settings = $settings;
 	}
 	if( is_null($name) ) {
