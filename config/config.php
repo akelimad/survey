@@ -53,12 +53,10 @@ if (isBackend() && \App\Route::getRoute() != 'backend/login') {
 		$ips = explode(',', str_replace(' ', '', $ips));
 		if (!in_array(getRealIpAddr(), $ips)) {
 			set_flash_message('warning', 'Vous n\'avez pas les permissions pour accèder à cette page.');
-			redirect('backend/login/');
+			$logout = (new \App\Controllers\Admin\AuthController())->logout([]);
 		}
-	} elseif (\App\Route::getRoute() == 'backend/logout') {
+	} elseif (\App\Route::getRoute() == 'backend/logout' || !isLogged('admin')) {
 		$logout = (new \App\Controllers\Admin\AuthController())->logout([]);
-	} elseif (!isLogged('admin')) {
-		redirect('backend/login/');
 	} else if (!Permission::canViewPage() && !Permission::allowed()) {
 		redirect('backend/accueil/');
 	}

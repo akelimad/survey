@@ -66,13 +66,7 @@ include ( dirname(__FILE__) . $tempurl2 . "/header.php");  } ?>
 
 <?php include ( dirname(__FILE__) . $tempurl2 . "/footer_admin.php"); ?>
 
-<?php       include ( "./index_b.php");
-
-if (session_status() == PHP_SESSION_NONE) {
-  session_start();
-}
-session_destroy();
-?>
+<?php       include ( "./index_b.php"); ?>
 
 </body>
 
