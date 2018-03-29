@@ -9,33 +9,7 @@ RewriteRule ^uploads/front/(.*)$ ./apps/upload/frontend/$1 [L,QSA]
 RewriteRule ^uploads/admin/(.*)$ ./apps/upload/backend/$1 [L,QSA]
 RewriteRule ^uploads/candidat/resume/(.*)$ ./apps/upload/frontend/cv/$1 [L,QSA]
 RewriteRule ^uploads/candidat/motivation_letter/(.*)$ ./apps/upload/frontend/lmotivation/$1 [L,QSA]
-RewriteRule ^uploads/candidat/photo/(.*)$ ./apps/upload/frontend/photo_candidats/$1 [L,QSA]
-
-# RewriteRule ^(/*)$ ./public/index.php$1 [L,QSA]
-# RewriteRule ^(/*)$ ./apps/frontend/home/$1 [L,QSA]
-# RewriteRule ^()$ ./apps/frontend/home/$1 [L,QSA]
-# RewriteRule ^index.php ./apps/frontend/home/index.php [L,QSA]
-
-RewriteRule ^confirmation/(.*)$ ./apps/frontend/home/confirmation/$1 [L,QSA]
-
-# RewriteRule ^video$ ./apps/frontend/video/index.php$1 [L,QSA] 
-
-# RewriteRule ^infos/mentions_legales(.*)$ ./public/index.php [L,QSA]
-# RewriteRule ^infos/conditions(.*)$ ./public/index.php [L,QSA]
-# RewriteRule ^infos/liens(.*)$ ./public/index.php [L,QSA]
-# RewriteRule ^infos/contact(.*)$ ./public/index.php [L,QSA]
-
-# RewriteRule ^infos/(.*)$ ./apps/frontend/infos/$1 [L,QSA]
-# RewriteRule ^infos ./apps/frontend/infos/conditions/$1 [L,QSA]
-# RewriteRule ^infos ./apps/frontend/infos/contact/$1 [L,QSA]
-# RewriteRule ^infos ./apps/frontend/infos/contact_form/$1 [L,QSA]
-# RewriteRule ^infos ./apps/frontend/infos/liens/$1 [L,QSA]
-# RewriteRule ^infos ./apps/frontend/infos/liens_confidentiel/$1 [L,QSA]
-# RewriteRule ^infos ./apps/frontend/infos/mentions_legales/$1 [L,QSA]
-# RewriteRule ^infos ./apps/frontend/infos/probleme_form/$1 [L,QSA]
-# RewriteRule ^infos ./apps/frontend/infos/rechercher/$1 [L,QSA]
-# RewriteRule ^infos ./apps/frontend/infos/signaler_probleme/$1 [L,QSA]
-# RewriteRule ^infos/sitemap.php ./apps/frontend/infos/sitemap.php [L,QSA]   
+RewriteRule ^uploads/candidat/photo/(.*)$ ./apps/upload/frontend/photo_candidats/$1 [L,QSA]  
 
 RewriteRule ^candidat/compte(.*)$ ./public/index.php$1 [L,QSA]
 RewriteRule ^candidat/inscription(.*)$ ./public/index.php$1 [L,QSA]
@@ -47,22 +21,11 @@ RewriteRule ^candidat/cv/formation/([0-9]+)/delete$ ./public/index.php?id=$1 [L,
 RewriteRule ^candidat/cv/experience/([0-9]+)$ ./public/index.php?id=$1 [L,QSA]
 RewriteRule ^candidat/cv/experience/([0-9]+)/delete$ ./public/index.php?id=$1 [L,QSA]
 
-# RewriteRule ^candidat/(.*)$ ./apps/frontend/candidat/$1 [L,QSA]
-# RewriteRule ^candidat ./apps/frontend/candidat/index.php [L,QSA]
-# RewriteRule ^candidat/moncompte.php ./apps/frontend/candidat/moncompte.php [L,QSA]
-# RewriteRule ^candidat/password-perdu.php ./apps/frontend/candidat/password-perdu.php [L,QSA] 
-
 RewriteRule ^offre/([0-9]+)$ ./public/index.php?id=$1 [L,QSA]
 RewriteRule ^offre/([0-9]+)/postuler$ ./public/index.php?id=$1 [L,QSA]
 RewriteRule ^offre/([0-9]+)/postuler/store$ ./public/index.php?id=$1 [L,QSA]
 RewriteRule ^offre/([0-9]+)/print$ ./public/index.php?id=$1 [L,QSA]
 RewriteRule ^offre/([0-9]+)/send-to-friend$ ./public/index.php?id=$1 [L,QSA]
-# RewriteRule ^offres(.*)$ ./public/index.php [L,QSA]
-# RewriteRule ^offres/stage/$ ./apps/frontend/offres/stage/$1 [L,QSA]
-# RewriteRule ^offres/(.*)$ ./apps/frontend/offres/$1 [L,QSA]
-# RewriteRule ^offres ./apps/frontend/offres/index.php [L,QSA]
-# RewriteRule ^offres/offre-([0-9]+)$ ./apps/frontend/offres/offre.php?id=$1
-
 
 # RewriteRule ^backend/offres/creer_offre/$ ./public/index.php?id=$1 [L,QSA]
 RewriteRule ^backend/offres/(.*)$ ./apps/backend/offres/$1 [L,QSA]
@@ -100,13 +63,10 @@ RewriteRule ^module/([a-z-_]+)/([a-z-_]+)/([a-z-_(\.php)]+)$ ./modules/index.php
 RewriteRule ^module/([a-z-_]+)/([a-z-_]+)/([a-z-_]+)/([0-9]+)$ ./modules/index.php?module=$1&controller=$2&action=$3&id=$4 [L,QSA]
 RewriteRule ^module/([a-z-_]+)/([a-z-_]+)$ ./modules/index.php?module=$1&controller=$2&action=index [L,QSA]
 
-
 RewriteRule ^backend(.*)$ ./apps/backend/home/$1 [L,QSA] 
 RewriteRule ^accueil.php$ ./apps/backend/home/accueil.php [L,QSA]
 
-
 RewriteRule ^src/includes/ajax.php$ ./src/includes/ajax/index.php [L,QSA]
-
 
 # redirect to index directory
 RewriteRule ^index\.php$ - [L]
@@ -114,20 +74,12 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . ./public/index.php [L]
 
-
-## controle les erreurs des pages dans le navigateur -debut-
-ErrorDocument 403 /apps/frontend/home/erreur/403.php
-ErrorDocument 404 /apps/frontend/home/erreur/404.php
-ErrorDocument 500 /apps/frontend/home/erreur/500.php
-ErrorDocument 503 /apps/frontend/home/erreur/503.php
-
- 
 <IfModule mod_deflate.c>
-    SetOutputFilter DEFLATE
-    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip
+  SetOutputFilter DEFLATE
+  SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip
 </IfModule>
   
-## contr�le du cache navigateur - Expire headers
+## controle du cache navigateur - Expire headers
 <IfModule mod_expires.c>
 	ExpiresActive On
 	ExpiresDefault "access plus 7200 seconds"
@@ -150,25 +102,26 @@ ErrorDocument 503 /apps/frontend/home/erreur/503.php
 </IfModule>
 
 <IfModule mod_headers.c>
+	<FilesMatch "\\.(ico|jpe?g|png|gif|swf)$">
+	Header set Cache-Control "max-age=2592000, public"
+	</FilesMatch>
 
-<FilesMatch "\\.(ico|jpe?g|png|gif|swf)$">
-Header set Cache-Control "max-age=2592000, public"
-</FilesMatch>
+	<FilesMatch "\\.(css)$">
+	Header set Cache-Control "max-age=604800, public"
+	</FilesMatch>
 
-<FilesMatch "\\.(css)$">
-Header set Cache-Control "max-age=604800, public"
-</FilesMatch>
+	<FilesMatch "\\.(js)$">
+	Header set Cache-Control "max-age=216000, private"
+	</FilesMatch>
 
-<FilesMatch "\\.(js)$">
-Header set Cache-Control "max-age=216000, private"
-</FilesMatch>
+	<FilesMatch "\\.(x?html?|php)$">
+	Header set Cache-Control "max-age=600, private, must-revalidate"
+	</FilesMatch>
 
-<FilesMatch "\\.(x?html?|php)$">
-Header set Cache-Control "max-age=600, private, must-revalidate"
-</FilesMatch>
-
+	Header set X-XSS-Protection "1; mode=block"
+  Header always append X-Frame-Options SAMEORIGIN
+  Header set X-Content-Type-Options nosniff
 </IfModule>
-
 
 
 ###########################################
@@ -206,7 +159,7 @@ php_value docref_root 0
 php_value docref_ext 0
 
 # specify path to php error log
-php_value error_log "D:\web\projects\lycom\etalent\1.5.0\error_log"
+php_value error_log ./error_log
 
 # specify recording of all php errors
 # [see footnote 3] # php_value error_reporting 999999999
@@ -221,9 +174,3 @@ php_value log_errors_max_len 0
 	Deny from all
 	Satisfy All
 </Files>
-
-<IfModule mod_headers.c>
-  Header set X-XSS-Protection "1; mode=block"
-  Header always append X-Frame-Options SAMEORIGIN
-  Header set X-Content-Type-Options nosniff
-</IfModule>
