@@ -256,6 +256,7 @@ export default class chmModal {
       $('.chm-modal').find('.modal-body').prepend('<div class="chm-response-messages"></div>')
     }
     $('.chm-modal').find('.chm-response-messages').empty().html(alert)
+    $('body, html').animate({scrollTop: $('.chm-response-messages').offset().top}, 1000)
   }
 
   static setError (modal, message) {
