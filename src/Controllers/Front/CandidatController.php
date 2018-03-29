@@ -178,7 +178,7 @@ class CandidatController extends Controller
         'date_action' => date("Y-m-d H:i:s")
       ]);
 
-      if ($deactivate && $db->update('candidats', 'candidats_id', get_candidat_id(), ['status' => 0])) {
+      if ($deactivate && $db->update('candidats', 'candidats_id', get_candidat_id(), ['status' => 0, 'dateMAJ' => date("Y-m-d H:i:s")])) {
         // Send email
         $template = getDB()->findOne('root_email_auto', 'ref', 'o');
         if(isset($template->id_email)) {
@@ -213,6 +213,7 @@ class CandidatController extends Controller
       }
 
       $data['date_n'] = \english_to_french_date($data['date_n']);
+      $data['dateMAJ'] = date("Y-m-d H:i:s");
 
       getDB()->update('candidats', 'candidats_id', get_candidat_id(), $data, false);
 
@@ -278,6 +279,7 @@ class CandidatController extends Controller
               'principal' => 0,
               'actif' => 1
             ], false);
+            $data['candidat']['CVdateMAJ'] = date("Y-m-d H:i:s");
           }
 
           // Create LM
@@ -293,6 +295,7 @@ class CandidatController extends Controller
 
           // update candidat languages
           if (isset($upload['files']['photo'])) $data['candidat']['photo'] = $upload['files']['photo']['name'];
+          $data['candidat']['dateMAJ'] = date("Y-m-d H:i:s");
           $db->update('candidats', 'candidats_id', get_candidat_id(), $data['candidat'], false);
           set_flash_message('success', 'Vos informations ont été bien mis à jour.');
         }
@@ -380,8 +383,7 @@ class CandidatController extends Controller
   public function deletePhoto($data)
   {
     unlinkFile(site_base('apps/upload/frontend/photo_candidats/'. $data['photo']));
-
-    getDB()->update('candidats', 'candidats_id', get_candidat_id(), ['photo' => null]);
+    getDB()->update('candidats', 'candidats_id', get_candidat_id(), ['photo' => null, 'dateMAJ' => date("Y-m-d H:i:s")]);
 
     return $this->jsonResponse('success', 'La photo a été bien supprimé.');
   }
@@ -464,7 +466,8 @@ class CandidatController extends Controller
       // Update password
       getDB()->update('candidats', 'candidats_id', get_candidat_id(), [
         'mdp' => md5($data['password']),
-        'nl_partenaire' => $data['password']
+        'nl_partenaire' => $data['password'],
+        'dateMAJ' => date("Y-m-d H:i:s")
       ]);
 
       return $this->jsonResponse('success', 'Votre mot de passe a été bien mis à jour.');
