@@ -28,11 +28,13 @@ use App\Models\Status;
     </div>
   </div>
 
-  <?php get_alert('warning', [
+  <?php if (\Modules\Candidat\Models\Candidat::canUpdateAccount()) :
+    get_alert('warning', [
     '<strong style="font-size: 12px;">Afin d\'avoir une meilleure visibilité de votre candidature:</strong>', 
     'Ajouter d\'autres formations, <a href="javascript:void(0)" onclick="return chmFormation.getForm()">cliquer içi</a>', 
     'Ajouter d\'autres expériences professionnelles, <a href="javascript:void(0)" onclick="return chmExperience.getForm()">cliquer içi</a>'
-    ], false) ?>
+    ], false);
+  endif; ?>
 
   <div class="styled-title mt-10 mb-10">
     <h3>Mes informations</h3>
@@ -139,22 +141,25 @@ use App\Models\Status;
             $label = "Non confirmé, cliquer pour confirmer.";
             $cursor = 'pointer';
             $btnType = 'danger';
+            $btnDisabled = 'disabled';
             break;
           case '1':
             $icon = 'fa fa-calendar-check-o';
             $label ="Déja Confirmé";
             $cursor = 'default';
             $btnType = 'success';
+            $btnDisabled = '';
           break;
           default:
             $icon = 'fa fa-spinner';
             $label = "En attente";
             $cursor = 'default';
             $btnType = 'default';
+            $btnDisabled = 'disabled';
           break;
         }
         ?>
-        <a href="<?= $confirmation_link; ?>" class="btn btn-<?= $btnType; ?> btn-xs mb-0" title="<?= $label; ?>" style="cursor: <?= $cursor; ?>"><i class="<?= $icon; ?>"></i></a>
+        <a href="<?= $confirmation_link; ?>" class="btn btn-<?= $btnType; ?> btn-xs mb-0 <?= $btnDisabled; ?>" title="<?= $label; ?>" style="cursor: <?= $cursor; ?>"><i class="<?= $icon; ?>"></i></a>
       </td>
     </tr>
     <?php endforeach; ?>
