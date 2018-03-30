@@ -1,6 +1,6 @@
 {
 	"files": [
-		"public/assets/app.js"
+		"assets/app.js"
 	],
 	"compilerOptions": {
 		"target": "es5",

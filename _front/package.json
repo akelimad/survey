@@ -1,8 +1,8 @@
 {
   "name": "etalent",
   "scripts": {
-    "build": "rimraf public/build && webpack --config public/assets/build/webpack.prod.js",
-    "dev": "node public/assets/build/server.js"
+    "build": "rimraf ./../public/assets/dynamic && webpack --config config/webpack.prod.js",
+    "dev": "node config/server.js"
   },
   "dependencies": {
     "bootstrap-sass": "^3.3.7",
