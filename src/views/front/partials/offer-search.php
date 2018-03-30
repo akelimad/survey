@@ -24,7 +24,7 @@
             <input type="text" name="s" id="keywords" value="<?= (isset($s)) ? $s : ''; ?>" title="Saisissez vos mots clés (EX: Informatique, infographiste,...)">
           </div>
           <div class="col-sm-4 mb-5 mb-xs-5 pl-0 pl-xs-15">
-            <label for="fonction">Fonctions</label>
+            <label for="fonction"><?php trans_e("Fonctions"); ?></label>
             <select name="f[]" id="fonction" multiple>
               <?php foreach (getDB()->read('prm_fonctions') as $key => $value) : ?>
                 <?php $selected = (isset($f) && in_array($value->id_fonc, $f)) ? 'selected' : ''; ?>

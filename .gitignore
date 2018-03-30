@@ -1,6 +1,7 @@
 .phpintel
 /_front/node_modules
 /apps/upload
+/messages
 /uploads
 /public/uploads
 /public/assets/dynamic
