@@ -73,6 +73,13 @@
             </nav>
         </div>
     </footer>
+
+    <?php if (get_setting('show_cookie_notification') == 1 && read_cookie('ac') != 1) : ?>
+    <div class="alert alert-info fade in chm-float-alert" style="padding: 8px 0 6px !important;background-color: <?= get_setting('color_bg_menu') ?>;border-color: <?= get_setting('color_bg_menu') ?>;">
+        <strong style="font-size: 14px;font-weight: normal;color: #fff;"><?php trans_e("Nous utilisons des cookies pour vous garantir la meilleure expérience sur notre site. Si vous continuez à utiliser ce dernier, nous considérerons que vous acceptez l'utilisation des cookies.") ?></strong>
+        <button class="btn btn-default btn-xs" data-dismiss="alert" aria-hidden="true" style="margin-top: -5px;margin-left: 10px;" onclick="return chmCookie.create('ac', 1)">OK</button>
+    </div>
+    <?php endif; ?>
     
     <?php \App\Event::trigger('footer'); ?>
 </body>
