@@ -89,13 +89,13 @@ function add_js($unique_id, $params=[]){
  * Register global CSS and JS
  */
 // local dynamic assets
-$assetsPath = site_base('/public/build/assets.json');
+$assetsPath = site_base('/public/assets/dynamic/assets.json');
 if(file_exists($assetsPath) && is_readable($assetsPath)) {
 	$devEnv = (defined('ETA_ENV') && ETA_ENV == 'dev');
 	$assets = json_decode(file_get_contents($assetsPath), true);
 	foreach ($assets as $key => $asset) {
-		$cssUrl = ($devEnv) ? 'http://localhost:3003/public/build/'. $key .'.css' : $asset['css'];
-		$jsUrl = ($devEnv) ? 'http://localhost:3003/public/build/'. $key .'.js' : $asset['js'];
+		$cssUrl = ($devEnv) ? 'http://localhost:3003/public/assets/dynamic/'. $key .'.css' : $asset['css'];
+		$jsUrl = ($devEnv) ? 'http://localhost:3003/public/assets/dynamic/'. $key .'.js' : $asset['js'];
 		add_js('app', ['src'=> $jsUrl, 'admin' => true, 'in_footer' => false]);
 		if(!$devEnv) {
 			add_css('app', ['src'=> $cssUrl, 'admin' => true]);
