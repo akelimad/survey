@@ -16,7 +16,7 @@ $color_bg_menu =  get_setting('color_bg_menu', '#e1a04e');
     #footer-navbar, #top-navbar,
     .styled-title, .subscription,
     .chmTable thead th, .chmTable tfoot th {
-        background-color: <?= $color_bg ?>;
+        background-color: <?= $color_bg ?> !important;
     }
 
     .nav-pills li.active > a, 
