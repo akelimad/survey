@@ -162,10 +162,10 @@ function isBackend(){
 function isLogged($accountType){
 	switch ($accountType) {
 		case 'candidat':
-			return \App\Session::get('abb_login_candidat', false);
+			return (\App\Session::get('abb_login_candidat', false) !== false);
 			break;
 		case 'admin':
-			return \App\Session::get('abb_admin', false);
+			return (\App\Session::get('abb_admin', false) !== false);
 			break;
 	}
 	return false;

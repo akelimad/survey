@@ -57,7 +57,7 @@ if (isBackend() && \App\Route::getRoute() != 'backend/login') {
 		}
 	} elseif (\App\Route::getRoute() == 'backend/logout' || !isLogged('admin')) {
 		$logout = (new \App\Controllers\Admin\AuthController())->logout([]);
-	} else if (!Permission::canViewPage() && !Permission::allowed()) {
+	} else if (!Permission::canViewPage()) {
 		redirect('backend/accueil/');
 	}
 }

@@ -4,11 +4,11 @@ session_start();
 
 
 
-if (isset($_SESSION["abb_admin"]) && $_SESSION["abb_admin"] != "root") {
+/*if (isset($_SESSION["abb_admin"]) && $_SESSION["abb_admin"] != "root") {
 
     header("Location: ../../");
 
-}
+}*/
 
 if (!isset($_SESSION["abb_admin"]) || $_SESSION["abb_admin"] == "") {
 

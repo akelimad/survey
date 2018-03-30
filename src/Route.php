@@ -61,10 +61,12 @@ class Route
 
   public static function getRoute()
   {
-    $route = str_replace('?'.$_SERVER['REDIRECT_QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
+    $route = strtok($_SERVER['REQUEST_URI'], '?');
+
     if(PHYSICAL_URI != '/') {
       $route = str_replace(PHYSICAL_URI, '', $route);
     }
+    
     return ($route == '' || $route == '/') ? '/' : trim($route, '/');
   }
 

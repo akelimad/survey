@@ -21,9 +21,7 @@ class Permission
   {
     if(isAdmin()) return true;
 
-    $id_type_role = \App\Session::get('id_type_role');
-
-    return (self::allowed() && in_array($id_type_role, [1, 2, 3]));
+    return self::allowed();
   }
 
   public static function allowed()
@@ -47,10 +45,21 @@ class Permission
 
   public static function getAllowedRoutes()
   {
-    return array_merge([
-      'backend/login',
-      'backend/accueil'
-    ], Candidatures::getUserStatusUrls(), Offer::getSharedOffersUrls());
+    $allowedRoutes = ['backend/login', 'backend/accueil'];
+    if (read_session('menu7', 0) == 1) {
+      $allowedRoutes[] = 'backend/administration/champs_editables_root/([a-zA-Z_-]+)';
+    }
+    $menuLinks = require( site_base('src/includes/data/adminMenuLinks.php') );
+    for ($i=1; $i < 8; $i++) {
+      if (read_session('menu'. $i, 0) == 1) {
+        $allowedRoutes[] = $menuLinks[$i-1]['route'];
+        if (isset($menuLinks[$i-1]['childrens'])) {
+          $menuRoutes = array_column($menuLinks[$i-1]['childrens'], 'route');
+          $allowedRoutes = array_merge($allowedRoutes, preg_replace('{/$}', '', $menuRoutes));
+        }
+      }
+    }
+    return array_merge($allowedRoutes, Candidatures::getUserStatusUrls(), Offer::getSharedOffersUrls());
   }
 
 }

@@ -1,278 +1,302 @@
 <?php
+$isSuperAdmin = (read_session('id_type_role') == 1);
 return array(
 	[
-		"name" => "Accueil",
-		"uri" => "backend/"
+		"label" => "Accueil",
+		"route" => "backend/",
+		"isVisible" => (read_session('menu1', 0) == 1)
 	],
 	[
-		"name" => "Offres",
-		"uri" => "backend/offres/",
-		"show" => isAdmin(),
-		"sub_menu" => [
+		"label" => "Offres",
+		"route" => "backend/offres/",
+		"isVisible" => (read_session('menu2', 0) == 1),
+		"childrens" => [
 			[
-				"name" => "Etat des offres",
-				"uri" => "backend/offres/"
+				"label" => "Etat des offres",
+				"route" => "backend/offres/"
 			],
 			[
-				"name" => "Créer une offre",
-				"uri" => "backend/offres/creer_offre/"
+				"label" => "Créer une offre",
+				"route" => "backend/offres/creer_offre/"
 			],
 			[
-				"name" => "Liste des offres",
-				"uri" => "backend/offres/liste_offre/"
+				"label" => "Liste des offres",
+				"route" => "backend/offres/liste_offre/"
 			],
 			[
-				"name" => "Partager des offres",
-				"uri" => "backend/offres/partager_offre/"
+				"label" => "Partager des offres",
+				"route" => "backend/offres/partager_offre/"
 			],
 			[
-				"name" => "Matching des offres",
-				"uri" => "backend/offres/matching_offre/"
+				"label" => "Matching des offres",
+				"route" => "backend/offres/matching_offre/"
 			],
 			[
-				"name" => "Campagne de recrutement",
-				"uri" => "backend/offres/campagne_recrutement/"
+				"label" => "Campagne de recrutement",
+				"route" => "backend/offres/campagne_recrutement/"
 			],
 			[
-				"name" => "Rechercher des offres",
-				"uri" => "backend/offres/rechercher_offre/"
+				"label" => "Rechercher des offres",
+				"route" => "backend/offres/rechercher_offre/"
 			]
 		]
 	],
 	[
-		"name" => "Candidats",
-		"uri" => "backend/candidats/",
-		"show" => isAdmin(),
-		"sub_menu" => [
+		"label" => "Candidats",
+		"route" => "backend/candidats/",
+		"isVisible" => (read_session('menu3', 0) == 1),
+		"childrens" => [
 			[
-				"name" => "Etat des candidats",
-				"uri" => "backend/candidats/"
+				"label" => "Etat des candidats",
+				"route" => "backend/candidats/"
 			],
 			[
-				"name" => "CV thèque",
-				"uri" => "backend/candidats/cvtheque/"
+				"label" => "CV thèque",
+				"route" => "backend/candidats/cvtheque/"
 			],
 			[
-				"name" => "CV Importer",
-				"uri" => "backend/candidats/cvimporter/"
+				"label" => "CV Importer",
+				"route" => "backend/candidats/cvimporter/"
 			],
 			[
-				"name" => "Import manuel des CVs",
-				"uri" => "backend/candidats/import_manuel_des_cv/"
+				"label" => "Import manuel des CVs",
+				"route" => "backend/candidats/import_manuel_des_cv/"
 			],
 			[
-				"name" => "Dossier",
-				"uri" => "backend/candidats/dossier/"
+				"label" => "Dossier",
+				"route" => "backend/candidats/dossier/"
 			]
 		]
 	],
 	[
-		"name" => "Candidatures",
-		"uri" => "backend/module/candidatures/candidature/status",
-		"show" => (isModuleEnabled('candidatures') && isAdmin()),
-		"sub_menu" => [
+		"label" => "Candidatures",
+		"route" => "backend/module/candidatures/candidature/status",
+		"isVisible" => (read_session('menu4', 0) == 1),
+		"childrens" => [
 			[
-				"name" => "État des candidatures",
-				"uri" => "backend/module/candidatures/candidature/status"
+				"label" => "État des candidatures",
+				"route" => "backend/module/candidatures/candidature/status"
 			],
 			[
-				"name" => "Nouvelles candidatures",
-				"uri" => "backend/module/candidatures/candidature/list/0"
+				"label" => "Nouvelles candidatures",
+				"route" => "backend/module/candidatures/candidature/list/0"
 			],
 			[
-				"name" => "Candidatures en cours",
-				"uri" => "backend/module/candidatures/candidature"
+				"label" => "Candidatures en cours",
+				"route" => "backend/module/candidatures/candidature"
 			],
 			[
-				"name" => "Préselectionnés",
-				"uri" => "backend/module/candidatures/candidature/list/17"
+				"label" => "Préselectionnés",
+				"route" => "backend/module/candidatures/candidature/list/17"
 			],
 			[
-				"name" => "Non préselectionnés",
-				"uri" => "backend/module/candidatures/candidature/list/31"
+				"label" => "Non préselectionnés",
+				"route" => "backend/module/candidatures/candidature/list/31"
 			],
 			[
-				"name" => "Convoquées à l'écrit",
-				"uri" => "backend/module/candidatures/candidature/list/32"
+				"label" => "Convoquées à l'écrit",
+				"route" => "backend/module/candidatures/candidature/list/32"
 			],
 			[
-				"name" => "Confirmées l'écrit",
-				"uri" => "backend/module/candidatures/candidature/list/33"
+				"label" => "Confirmées l'écrit",
+				"route" => "backend/module/candidatures/candidature/list/33"
 			],
 			[
-				"name" => "Non confirmées l'écrit",
-				"uri" => "backend/module/candidatures/candidature/list/34"
+				"label" => "Non confirmées l'écrit",
+				"route" => "backend/module/candidatures/candidature/list/34"
 			],
 			[
-				"name" => "Présentes à l'écrit",
-				"uri" => "backend/module/candidatures/candidature/list/35"
+				"label" => "Présentes à l'écrit",
+				"route" => "backend/module/candidatures/candidature/list/35"
 			],
 			[
-				"name" => "Absentes à l'écrit",
-				"uri" => "backend/module/candidatures/candidature/list/36"
+				"label" => "Absentes à l'écrit",
+				"route" => "backend/module/candidatures/candidature/list/36"
 			],
 			[
-				"name" => "Admissibles",
-				"uri" => "backend/module/candidatures/candidature/list/38"
+				"label" => "Admissibles",
+				"route" => "backend/module/candidatures/candidature/list/38"
 			],
 			[
-				"name" => "Non admissibles",
-				"uri" => "backend/module/candidatures/candidature/list/37"
+				"label" => "Non admissibles",
+				"route" => "backend/module/candidatures/candidature/list/37"
 			],
 			[
-				"name" => "Convoquées à l'oral",
-				"uri" => "backend/module/candidatures/candidature/list/39"
+				"label" => "Convoquées à l'oral",
+				"route" => "backend/module/candidatures/candidature/list/39"
 			],
 			[
-				"name" => "Confirmées l'oral",
-				"uri" => "backend/module/candidatures/candidature/list/40"
+				"label" => "Confirmées l'oral",
+				"route" => "backend/module/candidatures/candidature/list/40"
 			],
 			[
-				"name" => "Non confirmées l'oral",
-				"uri" => "backend/module/candidatures/candidature/list/41"
+				"label" => "Non confirmées l'oral",
+				"route" => "backend/module/candidatures/candidature/list/41"
 			],
 			[
-				"name" => "Admises",
-				"uri" => "backend/module/candidatures/candidature/list/44"
+				"label" => "Admises",
+				"route" => "backend/module/candidatures/candidature/list/44"
 			],
 			[
-				"name" => "Non admises",
-				"uri" => "backend/module/candidatures/candidature/list/42"
+				"label" => "Non admises",
+				"route" => "backend/module/candidatures/candidature/list/42"
 			],
 			[
-				"name" => "Retenu",
-				"uri" => "backend/module/candidatures/candidature/list/49"
+				"label" => "Retenu",
+				"route" => "backend/module/candidatures/candidature/list/49"
 			],
 			[
-				"name" => "Non retenu",
-				"uri" => "backend/module/candidatures/candidature/list/50"
+				"label" => "Non retenu",
+				"route" => "backend/module/candidatures/candidature/list/50"
 			],
 			[
-				"name" => "Liste d'attente",
-				"uri" => "backend/module/candidatures/candidature/list/43"
+				"label" => "Liste d'attente",
+				"route" => "backend/module/candidatures/candidature/list/43"
 			],
 			[
-				"name" => "Desistement",
-				"uri" => "backend/module/candidatures/candidature/list/51"
+				"label" => "Desistement",
+				"route" => "backend/module/candidatures/candidature/list/51"
 			],
 			[
-				"name" => "Présentes à l'oral",
-				"uri" => "backend/module/candidatures/candidature/list/45"
+				"label" => "Présentes à l'oral",
+				"route" => "backend/module/candidatures/candidature/list/45"
 			],
 			[
-				"name" => "Absentes à l'oral",
-				"uri" => "backend/module/candidatures/candidature/list/46"
+				"label" => "Absentes à l'oral",
+				"route" => "backend/module/candidatures/candidature/list/46"
 			],
 			[
-				"name" => "Complétude du dossier",
-				"uri" => "backend/module/candidatures/candidature/list/47"
+				"label" => "Complétude du dossier",
+				"route" => "backend/module/candidatures/candidature/list/47"
 			],
 			[
-				"name" => "Non complétude",
-				"uri" => "backend/module/candidatures/candidature/list/48"
+				"label" => "Non complétude",
+				"route" => "backend/module/candidatures/candidature/list/48"
 			]
 		]
 	],
 	[
-		"name" => "Reporting",
-		"uri" => "backend/reporting/",
-		"show" => isAdmin(),
-		"sub_menu" => [
+		"label" => "Reporting",
+		"route" => "backend/reporting/",
+		"isVisible" => (read_session('menu5', 0) == 1),
+		"childrens" => [
 			[
-				"name" => "Statistiques",
-				"uri" => "backend/reporting/"
+				"label" => "Statistiques",
+				"route" => "backend/reporting/"
 			],
 			[
-				"name" => "Offres",
-				"uri" => "backend/reporting/statistiques_offres/"
+				"label" => "Offres",
+				"route" => "backend/reporting/statistiques_offres/"
 			],
 			[
-				"name" => "Candidats",
-				"uri" => "backend/reporting/statistiques_candidats/"
+				"label" => "Candidats",
+				"route" => "backend/reporting/statistiques_candidats/"
 			],
 			[
-				"name" => "Requêteur",
-				"uri" => "backend/reporting/requeteur/"
+				"label" => "Requêteur",
+				"route" => "backend/reporting/requeteur/"
 			]
 		]
 	],
 	[
-		"name" => "Courriers",
-		"uri" => "backend/courriers/",
-		"show" => isAdmin(),
-		"sub_menu" => [
+		"label" => "Courriers",
+		"route" => "backend/courriers/",
+		"isVisible" => (read_session('menu6', 0) == 1),
+		"childrens" => [
 			[
-				"name" => "Historique des correspondances",
-				"uri" => "backend/courriers/correspondances/"
+				"label" => "Historique des correspondances",
+				"route" => "backend/courriers/correspondances/"
 			],
 			[
-				"name" => "Courriers type",
-				"uri" => "backend/courriers/courriers_type/"
+				"label" => "Courriers type",
+				"route" => "backend/courriers/courriers_type/"
 			],
 			[
-				"name" => "E-Mailing",
-				"uri" => "backend/courriers/mailing/"
+				"label" => "E-Mailing",
+				"route" => "backend/courriers/mailing/"
 			]
 		]
 	],
 	[
-		"name" => "Root",
-		"uri" => "backend/administration/profils/",
-		"show" => isAdmin(),
-		"sub_menu" => [
+		"label" => "Admin",
+		"route" => "#",
+		"isVisible" => (read_session('menu7', 0) == 1),
+		"childrens" => [
 			[
-				"name" => "Gestion des workflows",
-				"uri" => "backend/module/workflows/workflow",
-				"show" => isModuleEnabled('workflows')
+				"label" => "Gestion des workflows",
+				"route" => "backend/module/workflows/workflow",
+				"icon" => "fa fa-code-fork",
+				"isVisible" => (isModuleEnabled('workflows') && $isSuperAdmin)
 			],
 			[
-				"name" => "Gestion des profils",
-				"uri" => "backend/administration/profils/"
+				"label" => "Gestion des profils",
+				"route" => "backend/administration/profils/",
+				"icon" => "fa fa-users",
+				"isVisible" => $isSuperAdmin
 			],
 			[
-				"name" => "Gestion des filiales",
-				"uri" => "backend/administration/filiales/"
+				"label" => "Gestion des filiales",
+				"route" => "backend/administration/filiales/",
+				"icon" => "fa fa-asterisk",
+				"isVisible" => $isSuperAdmin
 			],
 			[
-				"name" => "Gestion des permissions",
-				"uri" => "backend/administration/permissions/"
+				"label" => "Gestion des permissions",
+				"route" => "backend/administration/permissions/",
+				"icon" => "fa fa-user-secret",
+				"isVisible" => $isSuperAdmin
 			],
 			[
-				"name" => "Gestion des profils de stage",
-				"uri" => "backend/administration/profils_stage/"
+				"label" => "Gestion des profils de stage",
+				"route" => "backend/administration/profils_stage/",
+				"icon" => "fa fa-users",
+				"isVisible" => $isSuperAdmin
 			],
 			[
-				"name" => "Courriers automatique",
-				"uri" => "backend/administration/courriers_automatique/"
+				"label" => "Courriers automatique",
+				"route" => "backend/administration/courriers_automatique/",
+				"icon" => "fa fa-at",
+				"isVisible" => $isSuperAdmin
 			],
 			[
-				"name" => "Personnalisation des champs",
-				"uri" => "backend/administration/personnalisation_champs/"
+				"label" => "Personnalisation des champs",
+				"route" => "backend/administration/personnalisation_champs/",
+				"icon" => "fa fa-cog",
 			],
 			[
-				"name" => "Champs éditables",
-				"uri" => "backend/administration/champs_editables_root/"
+				"label" => "Champs éditables",
+				"route" => "backend/administration/champs_editables_root/",
+				"icon" => "fa fa-cog",
+				"isVisible" => isLogged('admin')
 			],
 			[
-				"name" => "Gestion des problèmes signalés",
-				"uri" => "backend/administration/problemes_signales/"
+				"label" => "Gestion des problèmes signalés",
+				"route" => "backend/administration/problemes_signales/",
+				"icon" => "fa fa-bug",
+				"isVisible" => (isLogged('admin') && $isSuperAdmin)
 			],
 			[
-				"name" => "Fiches de présélection / evaluation",
-				"uri" => "backend/module/fiches/fiche",
-				"show" => isModuleEnabled('fiches')
+				"label" => "Fiches de présélection / evaluation",
+				"route" => "backend/module/fiches/fiche",
+				"icon" => "fa fa-file-text-o",
+				"isVisible" => (isModuleEnabled('fiches') && $isSuperAdmin)
 			],
 			[
-				"name" => "Historique de connexion",
-				"uri" => "backend/administration/historique_connexion/"
+				"label" => "Historique de connexion",
+				"route" => "backend/administration/historique_connexion/",
+				"icon" => "fa fa-history",
+				"isVisible" => (isLogged('admin') && $isSuperAdmin)
 			],
 			[
-				"name" => "Paramètrage",
-				"uri" => "backend/administration/parametrage/"
+				"label" => "Paramètrage",
+				"route" => "backend/administration/parametrage/",
+				"icon" => "fa fa-cogs",
+				"isVisible" => (isLogged('admin') && $isSuperAdmin)
 			],
 			[
-				"name" => "Config",
-				"uri" => "backend/administration/config/"
+				"label" => "Config",
+				"route" => "backend/administration/config/",
+				"icon" => "fa fa-cogs"
 			]
 		]
 	]

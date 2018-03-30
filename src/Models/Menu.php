@@ -46,7 +46,7 @@ class Menu {
       if(!$item['isActive'] || $item['route'] == '') $url = 'javascript:void(0)';
 
       // Add active class
-      if ($route == $item['route']) $classes[] = 'active';
+      if ($route == rtrim($item['route'], '/')) $classes[] = 'active';
 
       // Add disabled class
       if(!$item['isActive']) $classes[] = 'disabled';
