@@ -1,5 +1,24 @@
 <?php
 $isSuperAdmin = (read_session('id_type_role') == 1);
+$status = getDB()->prepare("SELECT id_prm_statut_c as id, statut as label FROM prm_statut_candidature ORDER BY order_statut DESC");
+$candidaturesStatus = [
+	[
+		"label" => "État des candidatures",
+		"route" => "backend/module/candidatures/candidature/status"
+	],
+	[
+		"label" => "Nouvelles candidatures",
+		"route" => "backend/module/candidatures/candidature/list/0"
+	],
+	[
+		"label" => "Candidatures en cours",
+		"route" => "backend/module/candidatures/candidature"
+	]
+];
+foreach ($status as $key => $value) {
+	$candidaturesStatus[] = ["route" => "backend/module/candidatures/candidature/list/". $value->id, "label" => $value->label];
+}
+
 return array(
 	[
 		"label" => "Accueil",
@@ -72,108 +91,7 @@ return array(
 		"label" => "Candidatures",
 		"route" => "backend/module/candidatures/candidature/status",
 		"isVisible" => (read_session('menu4', 0) == 1),
-		"childrens" => [
-			[
-				"label" => "État des candidatures",
-				"route" => "backend/module/candidatures/candidature/status"
-			],
-			[
-				"label" => "Nouvelles candidatures",
-				"route" => "backend/module/candidatures/candidature/list/0"
-			],
-			[
-				"label" => "Candidatures en cours",
-				"route" => "backend/module/candidatures/candidature"
-			],
-			[
-				"label" => "Préselectionnés",
-				"route" => "backend/module/candidatures/candidature/list/17"
-			],
-			[
-				"label" => "Non préselectionnés",
-				"route" => "backend/module/candidatures/candidature/list/31"
-			],
-			[
-				"label" => "Convoquées à l'écrit",
-				"route" => "backend/module/candidatures/candidature/list/32"
-			],
-			[
-				"label" => "Confirmées l'écrit",
-				"route" => "backend/module/candidatures/candidature/list/33"
-			],
-			[
-				"label" => "Non confirmées l'écrit",
-				"route" => "backend/module/candidatures/candidature/list/34"
-			],
-			[
-				"label" => "Présentes à l'écrit",
-				"route" => "backend/module/candidatures/candidature/list/35"
-			],
-			[
-				"label" => "Absentes à l'écrit",
-				"route" => "backend/module/candidatures/candidature/list/36"
-			],
-			[
-				"label" => "Admissibles",
-				"route" => "backend/module/candidatures/candidature/list/38"
-			],
-			[
-				"label" => "Non admissibles",
-				"route" => "backend/module/candidatures/candidature/list/37"
-			],
-			[
-				"label" => "Convoquées à l'oral",
-				"route" => "backend/module/candidatures/candidature/list/39"
-			],
-			[
-				"label" => "Confirmées l'oral",
-				"route" => "backend/module/candidatures/candidature/list/40"
-			],
-			[
-				"label" => "Non confirmées l'oral",
-				"route" => "backend/module/candidatures/candidature/list/41"
-			],
-			[
-				"label" => "Admises",
-				"route" => "backend/module/candidatures/candidature/list/44"
-			],
-			[
-				"label" => "Non admises",
-				"route" => "backend/module/candidatures/candidature/list/42"
-			],
-			[
-				"label" => "Retenu",
-				"route" => "backend/module/candidatures/candidature/list/49"
-			],
-			[
-				"label" => "Non retenu",
-				"route" => "backend/module/candidatures/candidature/list/50"
-			],
-			[
-				"label" => "Liste d'attente",
-				"route" => "backend/module/candidatures/candidature/list/43"
-			],
-			[
-				"label" => "Desistement",
-				"route" => "backend/module/candidatures/candidature/list/51"
-			],
-			[
-				"label" => "Présentes à l'oral",
-				"route" => "backend/module/candidatures/candidature/list/45"
-			],
-			[
-				"label" => "Absentes à l'oral",
-				"route" => "backend/module/candidatures/candidature/list/46"
-			],
-			[
-				"label" => "Complétude du dossier",
-				"route" => "backend/module/candidatures/candidature/list/47"
-			],
-			[
-				"label" => "Non complétude",
-				"route" => "backend/module/candidatures/candidature/list/48"
-			]
-		]
+		"childrens" => $candidaturesStatus
 	],
 	[
 		"label" => "Reporting",
