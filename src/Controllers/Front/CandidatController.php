@@ -42,7 +42,7 @@ class CandidatController extends Controller
     'adresse' => 'required|eta_alpha_numeric|max_len,255',
     'code' => 'numeric|max_len,5',
     'ville' => 'required|eta_alpha_numeric',
-    'nationalite' => 'required|eta_alpha_numeric|max_len,16',
+    'nationalite' => 'required|eta_string|max_len,16',
     'cin' => 'required|alpha_numeric|max_len,8',
     'tel1' => 'required|phone_number|max_len,16',
     'tel2' => 'phone_number|max_len,16',
@@ -347,7 +347,7 @@ class CandidatController extends Controller
         $return['errors'][] = "Le champs <strong>{$rule['name']}</strong> est obligatoire.";
         $valid = false;
       }
-      $extension = pathinfo($_FILES[$key]['name'], PATHINFO_EXTENSION);
+      $extension = strtolower(pathinfo($_FILES[$key]['name'], PATHINFO_EXTENSION));
       if ($_FILES[$key]['size'] > 0) {
         if(!in_array($extension, $rule['extensions'])) {
           $return['errors'][] = "Le champ <strong>{$rule['name']}</strong> doit avoir les extensions suivantes (.". implode(', .', $rule['extensions']) .")";

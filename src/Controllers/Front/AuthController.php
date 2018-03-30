@@ -39,7 +39,7 @@ class AuthController extends Controller
 		'candidat_adresse' => ['required|eta_alpha_numeric|max_len,255', 'Adresse'],
 		'candidat_code' => ['numeric|max_len,10', 'Code postal'],
 		'candidat_ville' => ['required|alpha', 'Ville'],
-		'candidat_nationalite' => ['required|eta_alpha_numeric|max_len,16', 'Nationalité'],
+		'candidat_nationalite' => ['required|eta_string|max_len,16', 'Nationalité'],
 		'candidat_cin' => ['required|alpha_numeric|max_len,8', 'CIN'],
 		'candidat_tel1_deal_code' => ['eta_alpha_numeric', 'Code du pays'], // not a field
 		'candidat_tel1' => ['required|phone_number|max_len,16', 'Téléphone'],
@@ -507,7 +507,7 @@ class AuthController extends Controller
 				$return['errors'][] = "Le champs <strong>{$rule['name']}</strong> est obligatoire.";
 				$valid = false;
 			}
-			$extension = pathinfo($_FILES[$key]['name'], PATHINFO_EXTENSION);
+			$extension = strtolower(pathinfo($_FILES[$key]['name'], PATHINFO_EXTENSION));
 			if ($_FILES[$key]['size'] > 0) {
 				if(!in_array($extension, $rule['extensions'])) {
 					$return['errors'][] = "Le champ <strong>{$rule['name']}</strong> doit avoir les extensions suivantes (.". implode(', .', $rule['extensions']) .")";
