@@ -45,6 +45,8 @@ $email_e             = $prm_config->email_e;
 $variable_r          = $prm_config->variable_r;
 
 $GLOBALS['etalent']->config = array_merge((array)$prm_config, (array)$reponse);
+$GLOBALS['etalent']->settings = [];
+$GLOBALS['etalent']->site =  [];
 
 // Redirect to backend homepage
 if (isBackend() && \App\Route::getRoute() != 'backend/login') {
