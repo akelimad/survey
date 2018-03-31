@@ -22,7 +22,7 @@ export default class chmModal {
     $.ajax(params).done(function (response, textStatus, jqXHR) {
       try {
         try {
-          response = $.parseJSON(response)
+          if (typeof response === 'string') response = $.parseJSON(response)
         } catch (error) {
           response = undefined
         }

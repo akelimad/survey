@@ -62,7 +62,7 @@ export default class chmForm {
     // Fire ajax request
     $.ajax(ajaxArgs).done(function (response, textStatus, jqXHR) {
       try {
-        response = $.parseJSON(response)
+        if (typeof response === 'string') response = $.parseJSON(response)
 
         // Trigger callback
         $(target).trigger('chm_form_success', response)
@@ -79,8 +79,8 @@ export default class chmForm {
         if (response.status === 'success') {
           window.chmModal.destroy()
         }
-      } catch (error) {
-        window.ajax_error_message()
+      } catch (e) {
+        window.chmAlert.error('Une erreur est survenu: ' + e.message)
       }
     }).fail(function (jqXHR, textStatus, errorThrown) {
       var message = jqXHR.status + ' - ' + jqXHR.statusText
@@ -91,6 +91,8 @@ export default class chmForm {
       if (window.grecaptcha !== undefined) {
         window.grecaptcha.reset()
       }
+      // Trigger callback
+      $(target).trigger('chm_form_finished')
     })
   }
 

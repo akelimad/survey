@@ -21,7 +21,7 @@ export default class chmTable {
       data: {page: page}
     }).done(function (response, textStatus, jqXHR) {
       try {
-        response = $.parseJSON(response)
+        if (typeof response === 'string') response = $.parseJSON(response)
         if (response.status === 'success') {
           self.fill(target, response.content, scrollTo)
         } else {
