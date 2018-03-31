@@ -1,6 +1,6 @@
 <?php
 $isSuperAdmin = (read_session('id_type_role') == 1);
-$status = getDB()->prepare("SELECT id_prm_statut_c as id, statut as label FROM prm_statut_candidature ORDER BY order_statut DESC");
+$status = getDB()->prepare("SELECT id_prm_statut_c as id, statut as label FROM prm_statut_candidature ORDER BY order_statut ASC");
 $candidaturesStatus = [
 	[
 		"label" => "État des candidatures",
