@@ -775,16 +775,21 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
       </td>
   </tr>
   <tr>
-      <td colspan="2"><input type="file" id="attachements" name="attachements[]" multiple />
-      <?php if(isset($r01['attachements']) && !empty(json_decode($r01['attachements'], true))) : ?>
-        <ul style="margin-top: 10px;display: block;">
-          <?php foreach (json_decode($r01['attachements'], true) as $key => $attachement): ?>
-            <li style="list-style: none;">
-              <a href="<?= site_url('apps/upload/frontend/offre/attachements/'.$attachement) ;?>"><i class="fa fa-download"></i>&nbsp;Télécharger (<?= $attachement; ?>)</a>
-            </li>
-          <?php endforeach ?>
-        </ul>
-      <?php endif; ?><br></td>
+    <td colspan="2"><input type="file" id="attachements" name="attachements[]" multiple />
+    <?php if(isset($r01['attachements']) && !empty($r01['attachements'])) : ?>
+      <?php 
+      $attachements = json_decode($r01['attachements'], true);
+      if (!empty($attachements)) :
+      ?>
+      <ul style="margin-top: 10px;display: block;">
+        <?php foreach (json_decode($r01['attachements'], true) as $key => $attachement): ?>
+          <li style="list-style: none;">
+            <a href="<?= site_url('apps/upload/frontend/offre/attachements/'.$attachement) ;?>"><i class="fa fa-download"></i>&nbsp;Télécharger (<?= $attachement; ?>)</a>
+          </li>
+        <?php endforeach ?>
+      </ul>
+      <?php endif; ?>
+    <?php endif; ?><br></td>
   </tr>
 
   <?php \App\Event::trigger('after_offre_fields', ['id_offre' => $_POST['id']]); ?>
