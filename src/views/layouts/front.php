@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="Description" content="<?php echo $seo_description; ?>,Mon compte"/>
-    <meta name="keywords" content="<?php echo $seo_keywords; ?>,Mon compte"/>
+    <meta name="Description" content="<?= get_setting('seo_description'); ?>"/>
+    <meta name="keywords" content="<?= get_setting('seo_keywords'); ?>"/>
     <link rel="icon" type="image/x-icon" href="<?= site_url('public/favicon.ico'); ?>">
     <title><?= ($nom_page_site != '') ? $nom_page_site : get_setting('nom_site'); ?></title>
     <base href="<?= site_url(); ?>">
