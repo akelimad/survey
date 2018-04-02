@@ -72,7 +72,7 @@ class View {
         $variables['lang']      = $lang;
         $variables['languages'] = $languages;
         $variables['nom_site']  = SITE_NAME;
-        $variables['roles']     = getDB()->findOne('root_roles', 'login', $_SESSION['abb_admin']) ?: [];
+        $variables['roles']     = getDB()->findOne('root_roles', 'login', read_session('abb_admin', false)) ?: [];
         $variables['site']      = site_url();
         $variables['jsurl']     = site_url('assets/js/');
         $variables['cssurl']    = site_url('assets/css/');
