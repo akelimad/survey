@@ -146,14 +146,11 @@ if ( ($_SESSION['f_size'] < 900000) && in_array($extension, $allowedExts))
 
   if( isset($_FILES["file"]["tmp_name"])and $_FILES["file"]["tmp_name"]!="")
 
-
-    $target = SITE_BASE . '/apps/upload/backend/cv_import_uploads/'. basename($_SESSION['f_name']);
-
-  copy($_FILES["file"]["tmp_name"], $target)  or 
+  copy($_FILES["file"]["tmp_name"], SITE_BASE . '/apps/upload/backend/cv_import_uploads/'. basename($_SESSION['f_name']))  or 
 
 
 
-           die( "Could not copy file!".$_SESSION['f_name']);
+           die( "Could not copy file! ". basename($_SESSION['f_name']));
 
 
 

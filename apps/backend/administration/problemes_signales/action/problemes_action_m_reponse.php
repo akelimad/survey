@@ -4,7 +4,7 @@
 
 
 
-/* fin modifier probl�me signal�*/ 
+/* fin modifier problème signalé*/ 
 
 $requet='';
 
@@ -53,12 +53,11 @@ $returnrole = mysql_fetch_array($requserrole);
         <p>
 
             <?php 
-
             if($return['status'] =='0'){echo "<b style=\"color:red\">En attente</b>";}
 
             elseif($return['status'] =='1'){echo "<b style=\"color:#F4702B\">En traitement</b>";}
 
-   href="javascript:void(0)" onclick="eturn['status'] =='2'){echo "<b style=\"color:green\">Fermer</b>";}
+            elseif($return['status'] =='2'){echo "<b style=\"color:green\">Fermer</b>";}
 
             ?>
 
@@ -106,7 +105,7 @@ $returnrole = mysql_fetch_array($requserrole);
 
 <div style="float:right">
 
-<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="form2" name="formulaire<?php echo ++$jj; ?>">
+<form method="post" action="<?= get_current_url(); ?>" id="form2" name="formulaire<?php echo ++$jj; ?>">
 
 <input type="hidden" name="id_rprob" value="<?php echo $return['id_rprob'] ?>" />
 
@@ -144,28 +143,19 @@ $returnrole = mysql_fetch_array($requserrole);
 
 <?php }
 
-}else{  ?><center> <p>Aucune r�ponse</p> </center>        <?php }    ?>  
+}else{  ?><center> <p>Aucune réponse</p> </center>        <?php }    ?>  
 
 <!-- -->
 
 <?php      
 
 if(isset($_GET['id_p']) && $_GET['id_p']!='')  {
-
-//echo $_GET['id_p'];
-
-$id = $_GET['id_p']; 
-
-if (mysql_query("delete from root_signale_prob_r  where id_rprob='$id'")) { 
-
-    echo '<script type="text/javascript">alert("Suppression avec succ�s");window.location="./?id_action='.$id_action.'";</script>'; 
-
-} else {
-
-    echo '<script type="text/javascript">alert("Une erreur est survenue lors de la suppression "); window.location="../";</script>'; 
-
-} 
-
+    $id = $_GET['id_p']; 
+    if (mysql_query("delete from root_signale_prob_r  where id_rprob='$id'")) { 
+        echo '<script type="text/javascript">alert("Suppression avec succès");window.location="'. site_url('backend/administration/problemes_signales/?id_action='. $id_action ) .'";</script>'; 
+    } else {
+        echo '<script type="text/javascript">alert("Une erreur est survenue lors de la suppression"); window.location="'. site_url('backend/administration/problemes_signales/') .'";</script>';
+    } 
 } 
 
 ?> 

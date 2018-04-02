@@ -74,9 +74,9 @@ if (isset($_GET['r'])) {
 
 <td>
 
-<input name="radio" type="radio" value="off_archiv"  <?php echo $ck2; ?> onchange="submit(this.form)"/>Archiv�es:&nbsp;(<?php
+<input name="radio" type="radio" value="off_archiv"  <?php echo $ck2; ?> onchange="submit(this.form)"/>Archivées:&nbsp;(<?php
 
-                                     $select_archive = mysql_query("select * from offre where  status = 'Archiv�e'   ".$q_ref_fili_and."  ");
+                                     $select_archive = mysql_query("select * from offre where  status = 'Archivée'   ".$q_ref_fili_and."  ");
 
                                      $archive = mysql_num_rows($select_archive);
 
@@ -86,7 +86,7 @@ if (isset($_GET['r'])) {
 
 <td>
 
-<input name="radio" type="radio" value="off_echeance" <?php echo $ck4; ?> onchange="submit(this.form)"/>Arrivant � �ch�ance dans moins de 7 jours:&nbsp;(<?php
+<input name="radio" type="radio" value="off_echeance" <?php echo $ck4; ?> onchange="submit(this.form)"/>Arrivant à échéance dans moins de 7 jours:&nbsp;(<?php
 
                                     $select_accept1 = mysql_query("select * from offre where (DATEDIFF(date_expiration,CURDATE())>0 And DATEDIFF(date_expiration,CURDATE())<7)  ".$q_ref_fili_and." ");
 
@@ -104,7 +104,7 @@ if (isset($_GET['r'])) {
 
 
 
-<!--  ajout du tri � la table des offers  -->
+<!--  ajout du tri à la table des offers  -->
 
         <table width="100%" border="0" cellspacing="0" id="matching_offres" class="tablesorter" style="background: none;">
 
@@ -126,7 +126,7 @@ if (isset($_GET['r'])) {
 
             <th width="10%"><b>Filiale</b></th>
 
-            <th width="7%"><b>R�f<b></th>
+            <th width="7%"><b>Réf<b></th>
 
             <th width="8%"><b>Etat<b></th>
 
@@ -160,7 +160,7 @@ if (isset($_GET['r'])) {
 
         $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
 
-        $headers .= 'From: '.$nom_site.' <'.$admin_email.'>' . "\r\n"; //on d�finit l'exp�diteur
+        $headers .= 'From: '.$nom_site.' <'.$admin_email.'>' . "\r\n"; //on définit l'expéditeur
 
         
 
@@ -194,7 +194,7 @@ if (isset($_GET['r'])) {
 
             $message = $rep_partenaire['message'];
 
-            // G�n�re : message
+            // Génère : message
 
                 $var = array("{{nom}}", "{{lien}}");
 
@@ -256,7 +256,7 @@ if (isset($_GET['r'])) {
 
                     if($maj > 0)
 
-                    echo '<script type="text/javascript">alert("votre message a �t� modifi� avec succ�s");</script>';
+                    echo '<script type="text/javascript">alert("votre message a été modifié avec succès");</script>';
 
                     }
 
@@ -268,7 +268,7 @@ if (isset($_GET['r'])) {
 
                     
 
-                    echo '<script type="text/javascript">alert("votre message a �t� modifi� avec succ�s");</script>';
+                    echo '<script type="text/javascript">alert("votre message a été modifié avec succès");</script>';
 
             }
 
@@ -298,7 +298,7 @@ if (isset($_GET['r'])) {
 
                         if ($affected > 0 )
 
-                            echo '<h3>Offre archiv�e avec succ�s</h3>';
+                            echo '<h3>Offre archivée avec succés</h3>';
 
                     }
 
@@ -312,7 +312,7 @@ if (isset($_GET['r'])) {
 
                         if ($affected > 0 )
 
-                            echo '<h3>Offre d�sarchiv�e avec succ�s</h3>';
+                            echo '<h3>Offre désarchivée avec succès</h3>';
 
                     }
 
@@ -338,7 +338,7 @@ if (isset($_GET['r'])) {
 
                         $affected = mysql_affected_rows();
 
-                            echo '<h3>Suppression avec succ�s</h3>';
+                            echo '<h3>Suppression avec succès</h3>';
 
                     
 
@@ -486,7 +486,7 @@ $limitstart = $pageCourante * $itemsParPage - $itemsParPage;
 
             elseif($action == "archive")
 
-                $sql = mysql_query("select * from offre where  status = 'Archiv�e'  ".$q_ref_fili_and."  ORDER BY date_insertion DESC
+                $sql = mysql_query("select * from offre where  status = 'Archivée'  ".$q_ref_fili_and."  ORDER BY date_insertion DESC
 
                     LIMIT " . $limitstart . ", " . $itemsParPage ."");
 
@@ -516,7 +516,7 @@ $limitstart = $pageCourante * $itemsParPage - $itemsParPage;
 
 		if ($_SESSION['rad2'] == 'off_archiv' || (isset($_GET['r']) and $_GET['r'] == 'a')) {
 
-		$sql = mysql_query("select * from offre where  status = 'Archiv�e'  ".$q_ref_fili_and."  ORDER BY date_insertion DESC
+		$sql = mysql_query("select * from offre where  status = 'Archivée'  ".$q_ref_fili_and."  ORDER BY date_insertion DESC
 
             LIMIT " . $limitstart . ", " . $itemsParPage ."");
 
@@ -646,7 +646,7 @@ $limitstart = $pageCourante * $itemsParPage - $itemsParPage;
 
             elseif($action == "archive")
 
-                $sqll_000 = "select * from offre where  status = 'Archiv�e'   ".$q_ref_fili_and."   ORDER BY date_insertion DESC 
+                $sqll_000 = "select * from offre where  status = 'Archivée'   ".$q_ref_fili_and."   ORDER BY date_insertion DESC 
 
                       ";
 
@@ -682,7 +682,7 @@ if (isset($_SESSION['rad1']) || isset($_GET['r'])) {
 
     if ((isset($_SESSION['rad1']) and $_SESSION['rad1'] == 'off_archiv') || (isset($_GET['r']) and $_GET['r'] == 'a')){
 
-    $sqll_000 = "select * from offre where  status = 'Archiv�e' ".$q_ref_fili_and."   ORDER BY date_insertion DESC   ";
+    $sqll_000 = "select * from offre where  status = 'Archivée' ".$q_ref_fili_and."   ORDER BY date_insertion DESC   ";
 
 
 
@@ -900,7 +900,7 @@ $count00 = mysql_num_rows($rst_pagination);
 
                 <input name="action" type="hidden" value="<?php echo $action;?>" />
 
-                <a href="<?php echo $urlad_offr;?>/consulter_offre/?offre=<?php echo $result['id_offre'] ?>" onclick="formulaire<?php echo $jj; ?>.submit()" title="Voir l�offre "> 
+                <a href="<?php echo $urlad_offr;?>/consulter_offre/?offre=<?php echo $result['id_offre'] ?>" onclick="formulaire<?php echo $jj; ?>.submit()" title="Voir l'offre "> 
 
                 <i class="fa fa-search fa-fw fa-lg"></i></a>&nbsp;  
 
@@ -1048,7 +1048,7 @@ $count00 = mysql_num_rows($rst_pagination);
 
                                         else
 
-                                        {echo '<br>Aucune donn�e<br>';}
+                                        {echo '<br>Aucune donnée<br>';}
 
                                         ?>
 
@@ -1104,7 +1104,7 @@ $count00 = mysql_num_rows($rst_pagination);
 
                                         else
 
-                                        {echo '<br>Aucune donn�e<br>';}
+                                        {echo '<br>Aucune donnée<br>';}
 
                                         ?>
 
@@ -1266,7 +1266,7 @@ $select_candidature1 = $select_candidature;
 
     <div class="subscription" style="margin: 10px 0pt;">
 
-                  <h1>Personnalisation du message envoy� aux candidats postulant</h1>
+                  <h1>Personnalisation du message envoyé aux candidats postulant</h1>
 
                 </div>    <form method="post" action="<?php echo($_SERVER['REQUEST_URI']); ?>">
 
@@ -1296,7 +1296,7 @@ $select_candidature1 = $select_candidature;
 
          <tr>
 
-             <td valign="top">Message personnalis� <font style="color:#FF0000 ;">*</font></td>
+             <td valign="top">Message personnalisé <font style="color:#FF0000 ;">*</font></td>
 
              
 
@@ -1316,9 +1316,9 @@ else
 
         $details="Bonjour,<br/>
 
-Nous vous remercions d'avoir postuler � l'offre : ".$reponse['Name'].".<br/>
+Nous vous remercions d'avoir postuler à l'offre : ".$reponse['Name'].".<br/>
 
-Sans r�ponse de notre part dans un d�lai de 30 jours, vous pourrez consid�rer que votre candidature n'a pas �t� retenue pour le poste demand�.
+Sans réponse de notre part dans un délai de 30 jours, vous pourrez considérer que votre candidature n'a pas été retenue pour le poste demandé.
 
 Cordialement." ;
 

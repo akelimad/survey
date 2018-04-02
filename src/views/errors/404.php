@@ -115,7 +115,7 @@
 				<div class="error-description">Malheureusement, nous avons du mal à charger la page que vous recherchez. Veuillez attendre un instant et réessayer ou utiliser les actions ci-dessous.</div>
 				<div class="row" style="margin-bottom: 20px;">
 					<div class="col-md-6">
-						<a href="#" class="button btn-block text-center" onClick="history.back();">Page précédente</a>
+						<a href="#" class="button btn-block text-center" onclick="window.history.go(-1); return false;">Page précédente</a>
 					</div>
 					<div class="col-md-6" style="padding-left: 0px;">
 						<a href="<?php echo site_url('contact'); ?>" class="button orange btn-block text-center">Contactez-nous</a>

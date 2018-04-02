@@ -6,7 +6,7 @@
 
 <tr>
 
-<td colspan="2" >Par mot clé<label><br/>
+<td colspan="2" ><label>Par mot clé</label><br/>
 
 <input  type="text" name="motcle" style="width:185px" value="<?php if (!empty($_SESSION['motcle'])) echo $_SESSION['motcle']; ?>" maxlength="100" />
 
@@ -446,4 +446,4 @@ $ville = $ville['ville'];
 
 <input  title="Historique des requêtes" class="espace_candidat" value="Historique des requêtes "
 
-onclick="location.href='./historique/' ">
+onclick="location.href='<?= site_url('backend/candidats/cvimporter/historique/'); ?>' ">

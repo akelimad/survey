@@ -112,23 +112,29 @@ $nom = $_POST['nom'];
 
 if($id_filiale != '')	{
 
-$sql= "UPDATE per_filiale 
-
-SET  nom_filiale = '". safe($nom)."',  description = '". safe($desc)."', date_modification = '". safe($date)."' where id_filiale = '". safe($id_filiale)."'";
+	$saveFiliale = getDB()->update('per_filiale', 'id_filiale', $id_filiale, [
+		'nom_filiale' => $nom,
+		'description' => $desc,
+		'logo_f' => '',
+		'date_modification' => $date
+	]);
 
 }
 
 else	{
 
-$sql= " insert into per_filiale
-
-(ref_filiale,nom_filiale,description,date_creation,date_modification) 
-
-Values ('".safe($ref_filiale)."','".safe($nom)."','".safe($desc)."','".safe($date)."','".safe($date)."') ";
+	$saveFiliale = getDB()->create('per_filiale', [
+		'ref_filiale' => $ref_filiale,
+		'nom_filiale' => $nom,
+		'description' => $desc,
+		'logo_f' => '',
+		'date_creation' => $date,
+		'date_modification' => $date
+	]);
 
 }
 
-if(mysql_query($sql))	{
+if($saveFiliale > 0)	{
 
 array_push($messages,"<div class='alert alert-success'><ul><li style='color:#468847'> Entrée ajouté avec succes</li></ul></div>");
 
@@ -145,6 +151,8 @@ array_push($messages,"<div class='alert alert-error'><ul><li style='color:#FF000
 
 
 }
+
+redirect('backend/administration/filiales/');
 
 } 
 

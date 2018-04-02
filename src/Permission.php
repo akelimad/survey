@@ -45,7 +45,13 @@ class Permission
 
   public static function getAllowedRoutes()
   {
-    $allowedRoutes = ['backend/login', 'backend/accueil'];
+    $allowedRoutes = [
+      'backend/login', 
+      'backend/accueil', 
+      'backend/cv', 
+      'backend/module/candidatures/candidat/lettre/([0-9]+)',
+      'backend/module/candidatures/candidat/cv/([0-9]+)'
+    ];
     if (read_session('menu7', 0) == 1) {
       $allowedRoutes[] = 'backend/administration/champs_editables_root/([a-zA-Z_-]+)';
     }

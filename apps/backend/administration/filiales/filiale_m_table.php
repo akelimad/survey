@@ -104,15 +104,13 @@ if (isset($_SESSION['erreur']) and !empty($_SESSION['erreur'])) {
 
                               if ($_GET['action'] == "delete") {
 
-                        
-
                               
 
 							 echo '<script type="text/javascript">window.location="'.$_SERVER['HTTP_REFERER'].'";</script>';
 
 
 
-                                        if (mysql_query("delete from per_filiale  where id_filiale='$id'")) {
+                                        if (getDB()->delete('per_filiale', 'id_filiale', $id)) {
 
 
 
@@ -422,7 +420,7 @@ else{
 
 										<?php if($reponse['nom_filiale'] != $_SESSION['abb_admin']) {?>
 
-										<a href="javascript:void(0)" onclick="if(confirm('Êtes-vous sûre de vouloir supprimer ce profil?'))location.href='?action=delete&id=<?php echo $reponse['id_filiale'] ?>'"><i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i></a>
+										<a href="<?= site_url('backend/administration/filiales/?action=delete&id='. $reponse['id_filiale']); ?>" onclick="return chmModal.confirm(this, '', 'Êtes-vous sûre de vouloir supprimer ce profil?', '', '', {width: 278})"><i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i></a>
 
 										</td>
 

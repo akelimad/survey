@@ -68,7 +68,7 @@ $rst_pagination = mysql_query($sql_pagination);
 
    <tr>
 
-    <th width="5%"><b>N�</b></th>
+    <th width="5%"><b>N°</b></th>
 
     <th  width="70%" colspan="5" > <b>Informations Candidats</b></th>
 
@@ -264,9 +264,9 @@ echo $r_prm_pays['pays']; ?><b> |
 
 <strong>Type de stage :</strong> <br/>
 
-<strong>Direction demand�e :</strong> <br/>
+<strong>Direction demandée :</strong> <br/>
 
-<strong>Nom de l'�cole :</strong> <br/>
+<strong>Nom de l'école :</strong> <br/>
 
 </td>
 
@@ -296,7 +296,7 @@ echo $r_prm_pays['pays']; ?><b> |
 
 <td width="11%">
 
-<strong>Dur�e du stage :</strong><br/>
+<strong>Durée du stage :</strong><br/>
 
 <strong>Objet du stage :</strong> <br/>
 
@@ -384,7 +384,7 @@ if(strlen($motiv)<strlen($resultat['motivations']))
 
 if($hist['date_modification']=="")
 
-$his="non d�finie";
+$his="non définie";
 
 //*/
 
@@ -404,7 +404,7 @@ echo '<a href="javascript:showDiv2(\''.$r_candidats['nom'].'\',\''.$r_candidats[
 
   echo '<a href="javascript:showDiv(\''.$r_candidats['prenom'] .'\',\''.$r_candidats['nom'] .'\',
 
-   \''.$r_candidats['candidats_id'] .'\')" title="Affecter � une offre" class="dossier1"                      
+   \''.$r_candidats['candidats_id'] .'\')" title="Affecter à une offre" class="dossier1"                      
 
     id="dossier1"> <i class="fa fa-pencil-square-o fa-fw fa-lg"></i></a>';                                     
 
@@ -480,7 +480,7 @@ echo ' <a href="../../popup/transferer_email/?email='.$r_candidats['email'].'&cv
 
     <div id="pager_archive">
 
-        <img  style="float: right" class="selectallarrow" src="<?php echo $imgurl ?>/arrow_ltr_b.png" width="38" height="22"alt="Pour la s�lection :">
+        <img  style="float: right" class="selectallarrow" src="<?php echo $imgurl ?>/arrow_ltr_b.png" width="38" height="22" alt="Pour la sélection :">
 
       
 
@@ -488,7 +488,7 @@ echo ' <a href="../../popup/transferer_email/?email='.$r_candidats['email'].'&cv
 
      <div style="float: right" >
 
-  Pour la s�lection : 
+  Pour la sélection : 
 
      <input   name="email_tt" class="espace_candidat" type="submit" value="Email avec liste" 
 

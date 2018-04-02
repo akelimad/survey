@@ -50,7 +50,8 @@ if (file_exists($fichier)) {
 
 }
 else{
-$repertoire=dirname(__FILE__).$file_courrier3;
+$repertoire = site_base('apps/upload/backend/upload_courrier/');
+// $repertoire=dirname(__FILE__).$file_courrier3;
 $le_repertoire = opendir($repertoire) or die("Erreur le repertoire $repertoire existe pas");
 while($file = @readdir($le_repertoire))
 {

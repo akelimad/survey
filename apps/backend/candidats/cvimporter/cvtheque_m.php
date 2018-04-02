@@ -546,7 +546,7 @@ $id_list='';
 
 
 
-<form enctype="multipart/form-data" action="./?a=2&b=24" method="post">
+<form enctype="multipart/form-data" action="<?= site_url('backend/candidats/cvimporter/?a=2&b=24'); ?>" method="post">
 
 <?php include('cvtheque_m_filtre.php'); ?>
 

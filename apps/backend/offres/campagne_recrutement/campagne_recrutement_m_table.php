@@ -92,7 +92,7 @@ else{
 
                                             </a>
 
-                                            <a href="<?= site_url('backend/offres/campagne_recrutement/?action=delete&id='.$reponse['id_compagne']) ?>" onclick="confirm('Êtes-vous sûre de vouloir supprimer ce dossier?')">
+                                            <a href="<?= site_url('backend/offres/campagne_recrutement/?action=delete&id='.$reponse['id_compagne']) ?>" onclick="return chmModal.confirm(this, '', 'Êtes-vous sûre de vouloir supprimer ce dossier?', '', '', {width: 290})">
 
                                              <i class="fa fa-trash-o fa-fw fa-lg" style="color:#DB1212;"></i>
 

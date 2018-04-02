@@ -36,6 +36,8 @@ class ConfirmController
       $data['status']['date'] = date("Y-m-d");
       $data['status']['time'] = date("H:m");
       $data['status']['agenda']['confirmation_statu'] = 1;
+
+      
       $confirm = (new StatusController())->saveStatus($data);
       $type = 'success';
       $message = 'La convocation a été bien confirmé, merci.';

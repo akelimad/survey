@@ -436,11 +436,11 @@ $google_doc = "https://docs.google.com/viewer?url=". urlencode(site_url('apps/up
 
 
 
-       <li><a href="#fragment-1">Etape 1</a></li>
+       <li><a href="<?= site_url('backend/candidats/import_manuel_des_cv/import_manuel_des_cv_info/#fragment-1'); ?>">Etape 1</a></li>
 
 
 
-       <li><a href="#fragment-2">Etape 2</a></li>
+       <li><a href="<?= site_url('backend/candidats/import_manuel_des_cv/import_manuel_des_cv_info/#fragment-2'); ?>">Etape 2</a></li>
 
 
 

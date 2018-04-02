@@ -80,7 +80,7 @@ if($tmail!='') {
 }
 ?>
  
-<form action="./emailtrans_a.php" method="post" >
+<form action="<?= site_url('apps/backend/home/popup/transferer_email/emailtrans_a.php'); ?>" method="post" >
 <table>
                <tr><td align="center" valign="bottom"><div id="display"></div></td></tr>                                 
 			   <tr><td align="left" valign="bottom">Votre email <font style="color:red">*</font> </td></tr>

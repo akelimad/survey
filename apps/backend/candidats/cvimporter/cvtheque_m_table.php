@@ -180,7 +180,7 @@ echo $rcc['FR']."<b> || </b>".$resultat['email']; ?> <br /><br />
 
 
      
-             echo '<a   href="'.$urladmin.'/cv/dcv/?cv='.$result_cv['lien_cv'].'&id_candidat='.$resultat['candidats_id'].'&id_cv=' . $result_cv['id_cv'] . '  "   onclick="showUser()">' . $img . '</a>';
+             echo '<a   href="'. site_url('apps/upload/frontend/cv/'. $result_cv['lien_cv']) .'">' . $img . '</a>';
    
          ?>
 

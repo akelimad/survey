@@ -134,29 +134,26 @@ use App\Models\Status;
           }
           $calendar_status = $calendar->action;
         }
+        
         // Prepare link attributes
-        switch ($confirmation_status) {
-          case '0':
-            $icon = 'fa fa-calendar-times-o';
-            $label = "Non confirmé, cliquer pour confirmer.";
-            $cursor = 'pointer';
-            $btnType = 'danger';
-            $btnDisabled = 'disabled';
-            break;
-          case '1':
-            $icon = 'fa fa-calendar-check-o';
-            $label ="Déja Confirmé";
-            $cursor = 'default';
-            $btnType = 'success';
-            $btnDisabled = '';
-          break;
-          default:
-            $icon = 'fa fa-spinner';
-            $label = "En attente";
-            $cursor = 'default';
-            $btnType = 'default';
-            $btnDisabled = 'disabled';
-          break;
+        if ($confirmation_status == '0' && in_array($ca->c_status, [32, 39])) {
+          $icon = 'fa fa-calendar-times-o';
+          $label = "Non confirmé, cliquer pour confirmer.";
+          $cursor = 'pointer';
+          $btnType = 'danger';
+          $btnDisabled = '';
+        } elseif ($confirmation_status == '1' && in_array($ca->c_status, [33, 40])) {
+          $icon = 'fa fa-calendar-check-o';
+          $label ="Déja Confirmé";
+          $cursor = 'default';
+          $btnType = 'success';
+          $btnDisabled = '';
+        } else {
+          $icon = 'fa fa-spinner';
+          $label = "En attente";
+          $cursor = 'default';
+          $btnType = 'default';
+          $btnDisabled = 'disabled';
         }
         ?>
         <a href="<?= $confirmation_link; ?>" class="btn btn-<?= $btnType; ?> btn-xs mb-0 <?= $btnDisabled; ?>" title="<?= $label; ?>" style="cursor: <?= $cursor; ?>"><i class="<?= $icon; ?>"></i></a>

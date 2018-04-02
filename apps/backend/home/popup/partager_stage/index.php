@@ -158,7 +158,7 @@ if($tmail!='') {
 
 
 
-<form action="./email_list_stage_suit.php" method="post" >
+<form action="<?= site_url('apps/backend/home/popup/partager_stage/email_list_stage_suit.php'); ?>" method="post" >
 
 <table>
 

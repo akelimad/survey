@@ -148,7 +148,7 @@ var rel02=c;
 
                 type: 'POST',
 
-                url: 'dossier_suit.php',
+                url: site_url('backend/candidats/cvimporter/dossier_suit.php'),
 
                 data:  variable,
 

@@ -13,7 +13,7 @@ Total des candidatures : <span class="badge"><?php echo $tpc; ?></span>
 <img src="<?php echo $imgurl ?>/icons/print.png" title="Imprimer"/> 
 </a>
 
-<a href="../" style=" border-bottom: none; ">
+<a href="javascript:void(0)" onclick="window.history.go(-1); return false;" style=" border-bottom: none; ">
 <img src="<?php echo $imgurl ?>/arrow_ltr.png" title="Retour"/><strong style="color:#fff">Retour</strong>
 </a>
 </div>

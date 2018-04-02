@@ -60,7 +60,8 @@ if (file_exists($fichier)) {
 }
 else{
 
-$repertoire=dirname(__FILE__).$file_cv3;
+// $repertoire=dirname(__FILE__).$file_cv3;
+$repertoire = site_base('apps/upload/frontend/cv/');
     $le_repertoire = opendir($repertoire) or die("Erreur le repertoire $repertoire existe pas");
     while($file = @readdir($le_repertoire))
     {
@@ -69,7 +70,7 @@ $fichier1 = preg_replace("/[0-9]/", "", $filename);
         // enlever les traitements inutile
 if( $file1== $fichier1 )
 {
-$fichier=dirname(__FILE__).$file_cv3.$file;
+$fichier=site_base('apps/upload/frontend/cv/'.$file);
 $path=$fichier;
 }
  

@@ -535,12 +535,53 @@ $CVdateMAJ=date("Y-m-d")." ".date("H:i:s");
 	  	 $name = strtoupper($nom_req);
 
 
+  $insertion = getDB()->create('candidats', [
+    'id_civi' => intval($civilite_req),
+    'titre' => $titre_req,
+    'nom' => $name,
+    'prenom' => $prename,
+    'adresse' => $adresse_req,
+    'code' => $code_req,
+    'ville' => intval($ville_req),
+    'id_pays' => intval($pays_req),
+    'date_n' => $date_req,
+    'nationalite' => $nationalite_req,
+    'tel1' => $tel1_req,
+    'tel2' => $tel2_req,
+    'email' => $email1_req, 
+    'mdp' => $mdp_req,
+    'id_situ' => intval($situation_req),
+    'id_expe' => intval($exp_req),
+    'id_nfor' => intval($formation_req),
+    'id_tfor' => intval($type_formation_req),
+    'id_sect' => intval($domaine_req),
+    'id_fonc' => intval($fonction_req),
+    'id_salr' => intval($salaire_req),
+    'id_dispo' => intval($dispo),
+    'mobilite' => $mobilite,
+    'niveau_mobilite' => $niveau,
+    'taux_mobilite' => $taux,
+    'arabic' => $arabic,
+    'french' => $french,
+    'english' => $english,
+    'autre' => $autre,
+    'autre_n' => $autre_n,
+    'autre1' => $autre1,
+    'autre1_n' => $autre1_n,
+    'autre2' => $autre2,
+    'autre2_n' => $autre2_n,
+    'nl_partenaire' => $mdp1,
+    'date_inscription' => $date_inscription,
+    'status' => 2,
+    'last_connexion' => null,
+    'CVdateMAJ' => $CVdateMAJ
+  ]);
 
-  $sql_candidat = 'INSERT INTO candidats    
-(candidats_id, id_civi, titre, nom, prenom, adresse, code, ville, id_pays, date_n, nationalite, tel1, tel2, email, 
+  /*$sql_candidat = 'INSERT INTO candidats    
+(id_civi, titre, nom, prenom, adresse, code, ville, id_pays, date_n, nationalite, tel1, tel2, email, 
 mdp, id_situ, id_expe, id_nfor, id_tfor, id_sect, id_fonc, id_salr, id_dispo  , mobilite, niveau_mobilite , taux_mobilite,arabic,french,english,autre,autre_n,autre1,autre1_n,autre2,autre2_n , nl_partenaire, date_inscription, status, last_connexion, CVdateMAJ) 
-VALUES ("", "'.safe($civilite_req).'", "'.safe($titre_req).'", "'.safe($name).'", "'.safe($prename).'", "'.safe($adresse_req).'",
- "'.safe($code_req).'", "'.safe($ville_req).'", "'.safe($pays_req).'", "'.safe($date_req).'", "'.safe($nationalite_req).'",
+VALUES ("'. intval($civilite_req).'", "'.safe($titre_req).'", "'.safe($name).'", "'.safe($prename).'", "'.safe($adresse_req).'",
+ "'.safe($code_req).'", "'.safe($ville_req).'", "'. intval($pays_req).'", "'.safe($date_req).'", "'.safe($nationalite_req).'",
   "'.safe($tel1_req).'", "'.safe($tel2_req).'","'.safe($email1_req).'", "'.safe($mdp_req).'", "'.safe($situation_req).'",
    "'.safe($exp_req).'","'.safe($formation_req).'", "'.safe($type_formation_req).'","'.safe($domaine_req).'",
    "'.safe($fonction_req).'","'.safe($salaire_req).'","'.safe($dispo).'","'.safe($mobilite).'","'.safe($niveau).'",
@@ -549,8 +590,7 @@ VALUES ("", "'.safe($civilite_req).'", "'.safe($titre_req).'", "'.safe($name).'"
     "2", "'.safe($last_connexion).'", "'.safe($CVdateMAJ).'")';
 //echo $sql_candidat."</br>";
   $insertion = mysql_query($sql_candidat);
-  //echo $insertion;
-
+  //echo $insertion;*/
   
                                                                                                                                                    
  $succes3='ok';
@@ -564,15 +604,24 @@ VALUES ("", "'.safe($civilite_req).'", "'.safe($titre_req).'", "'.safe($name).'"
             // echo $cvname."</br>";
 
 
+         $insertion_cv = getDB()->create('cv_importe', [
+          'candidats_id' => intval($id_max),
+          'id_role' => intval($type_candidatur),
+          'mail' => $email1_req,
+          'description_stage' => $type_p1,
+          'description_offre' => $type_p3,
+          'description_cvrecu' => $type_p4
+         ]);
 
 
-  $insertion_cv1 = 'INSERT INTO `cv_importe`(`id_import`, `candidats_id`, `id_role`, `mail`, `description_stage`, `description_offre`, `description_cvrecu`)  VALUES ("","'.safe($id_max).'","'.safe($type_candidatur).'",
+
+  /*$insertion_cv1 = 'INSERT INTO `cv_importe`(`candidats_id`, `id_role`, `mail`, `description_stage`, `description_offre`, `description_cvrecu`)  VALUES ("'.safe($id_max).'","'.safe($type_candidatur).'",
   "'.safe($email1_req).'","'.safe($type_p1).'",
   "'.safe($type_p3).'","'.safe($type_p4).'")';
 
-
+echo $insertion_cv1;exit;
 //echo $insertion_cv1."</br>";
-$insertion_cv = mysql_query($insertion_cv1);
+$insertion_cv = mysql_query($insertion_cv1);*/
 
 
 
@@ -598,32 +647,63 @@ $insertion_cv = mysql_query($insertion_cv1);
 										  // $file = 'assets/cv.pdf';
 										   //$newfile = 'assets/cv-copy.pdf';
 
-
-										   copy($_SESSION['f_name'], $cv);
+										   copy(site_base('apps/upload/backend/cv_import_uploads/'. basename($_SESSION['f_name'])), site_base('apps/upload/frontend/cv/'. $cvname));
 	
 								   
        
          if($ext_cv!="")
-          $insertion3 = mysql_query("INSERT into cv values('','".safe($id_max)."','".safe($cvname)."','".safe($cvname)."','1','1')");
+          $insertion3 = getDB()->create('cv', [
+            'candidats_id' => $id_max,
+            'titre_cv' => $cvname,
+            'lien_cv' => $cvname,
+            'principal' => 1,
+            'actif' => 1
+          ]);
+
+
+          // $insertion3 = mysql_query("INSERT into cv values('','".safe($id_max)."','".safe($cvname)."','".safe($cvname)."','1','1')");
           
           //echo  $insertion3."</br>";
           }
             //echo $cv."cv<br/>";
 										   //echo $folder_cv."source";
        
+        $insertion_formation1 = getDB()->create('formations', [
+          'candidats_id' => intval($id_max),
+          'id_ecol' => intval($etablissement),
+          'date_debut' => $dd_formation,
+          'date_fin' => $df_formation,
+          'diplome' => $diplome,
+          'description' => $desc_form,
+          'nivformation' => $nivformation,
+          'ecole' => $nom_etablissement
+        ]);
  
- $insertion_formation1 = mysql_query('INSERT INTO formations VALUES ("","'.safe($id_max).'","'.safe($etablissement).'","'.safe($dd_formation).'",
-  "'.safe($df_formation).'","'.safe($diplome).'","'.safe($desc_form).'","'.safe($nivformation).'","'.safe($nom_etablissement).'" )');
+ /*$insertion_formation1 = mysql_query('INSERT INTO formations VALUES ("","'.safe($id_max).'","'.safe($etablissement).'","'.safe($dd_formation).'",
+  "'.safe($df_formation).'","'.safe($diplome).'","'.safe($desc_form).'","'.safe($nivformation).'","'.safe($nom_etablissement).'" )');*/
    //echo $insertion_formation1."</br>";
     
     
     
     
-    
+    $insertion_exp1 = getDB()->create('experience_pro', [
+      'candidats_id' => intval($id_max),
+      'id_sect' => intval($secteur),
+      'id_fonc' => intval($fonction_exp),
+      'id_tpost' => intval($type_poste),
+      'id_pays' => intval($pays_exp),
+      'date_debut' => $dd_exp,
+      'date_fin' => $df_exp,
+      'poste' => $poste,
+      'entreprise' => $entreprise,
+      'ville' => $ville_exp,
+      'description' => $desc_exp,
+      'salair_pecu' => intval($salair_pecu)
+    ]);
    
- $insertion_exp1 = mysql_query('INSERT INTO experience_pro VALUES ("","'.safe($id_max).'","'.safe($secteur).'",
+ /*$insertion_exp1 = mysql_query('INSERT INTO experience_pro VALUES ("","'.safe($id_max).'","'.safe($secteur).'",
   "'.safe($fonction_exp).'","'.safe($type_poste).'","'.safe($pays_exp).'",
-  "'.safe($dd_exp).'","'.safe($df_exp).'","'.safe($poste).'","'.safe($entreprise).'","'.safe($ville_exp).'","'.safe($desc_exp).'","'.safe($salair_pecu).'")');
+  "'.safe($dd_exp).'","'.safe($df_exp).'","'.safe($poste).'","'.safe($entreprise).'","'.safe($ville_exp).'","'.safe($desc_exp).'","'.safe($salair_pecu).'")')*/;
 //echo insertion_exp1."</br>";
      
 

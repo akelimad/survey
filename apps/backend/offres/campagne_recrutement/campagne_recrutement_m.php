@@ -36,7 +36,14 @@ $titre_compagne  =  $_POST['titre_compagne'];
 
 $filiale  =   $_SESSION['ref_filiale_role'];
 
-$sql= " insert into campagne_recrutement Values ('','". safe($titre_compagne)."' ,'". safe($filiale)."'  ) ";
+
+if(getDB()->create('campagne_recrutement', ['titre_compagne' => $titre_compagne, 'ref_filiale' => $filiale])) {
+  array_push($messagesDossier,"<span class='success'> entrée ajouté avec succes</span>");
+} else {
+  array_push($messagesDossier,"<span class='erreur'> erreur lors de l'enregistrement</span>");
+}
+
+/*$sql= " insert into campagne_recrutement Values ('','". safe($titre_compagne)."' ,'". safe($filiale)."'  ) ";
 
  
 
@@ -46,7 +53,7 @@ array_push($messagesDossier,"<span class='success'> entrée ajouté avec succes<
 
 else
 
-array_push($messagesDossier,"<span class='erreur'> erreur lors de l'enregistrement</span>");
+array_push($messagesDossier,"<span class='erreur'> erreur lors de l'enregistrement</span>");*/
 
 
 
@@ -103,8 +110,15 @@ $id  =  $_POST['id'];
 $titre_compagne  =  $_POST['titre_compagne'];
 
 
+if(getDB()->update('campagne_recrutement', 'id_compagne', $id, ['titre_compagne' => $titre_compagne])) {
+  array_push($messagesDossier,"<span class='success'> entrée ajouté avec succes</span>");
+  redirect('backend/offres/campagne_recrutement/');
+} else {
+  array_push($messagesDossier,"<span class='erreur'> erreur lors de l'enregistrement</span>");
+}
 
-$sql= " UPDATE campagne_recrutement SET  titre_compagne='".safe($titre_compagne)."'  WHERE id_compagne='".safe($id)."' ";
+
+/*$sql= " UPDATE campagne_recrutement SET  titre_compagne='".safe($titre_compagne)."'  WHERE id_compagne='".safe($id)."' ";
 
 if(mysql_query($sql)) {
 array_push($messagesDossier,"<span class='success'> entrée ajouté avec succes</span>");
@@ -114,7 +128,7 @@ redirect('backend/offres/campagne_recrutement/');
 } else {
 array_push($messagesDossier,"<span class='erreur'> erreur lors de l'enregistrement</span>");
   
-}
+}*/
 
 
 

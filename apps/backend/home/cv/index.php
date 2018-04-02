@@ -592,9 +592,14 @@ elseif (strpos($_SESSION['page_courant '],'backend') !== false) {
 
 						$rep = mysql_fetch_array($req); 
 
-								           $photo_cand      = (!empty($reponse['photo']) OR $reponse['photo']!="")      ? $reponse['photo']      : "";   
 
-			echo '<img src="'.$url_photo_candidat.$photo_cand.'" alt="Image not found" onError="this.onerror=null;this.src=\''.$url_photo_candidat.'default/photo.gif\';"   width="100" height="120"  />'	?></li>
+						$photo = (isset($reponse['photo']) && $reponse['photo'] == '') ? $reponse['photo'] : 'no-photo.png';
+						echo '<img class="img-responsive pull-left mb-xs-10" src="'. get_photo_url($photo) .'">';
+						?>
+
+
+
+		</li>
 
 						
 

@@ -43,24 +43,27 @@ class StatusController
     ]);
 
   	// Save agenda record
-  	$date = $data['status']['date'].' '.$data['status']['time'].':00';
-  	$agendaData = array(
-  		'candidats_id' => $candidature->candidats_id,
-      'id_candidature' => $candidature->id_candidature,
-      'action' => $prm_statut->statut,
-      'obs' => $data['status']['comments'],
-      'lieu' => '',
-      'start' => $date,
-      'end' => $date,
-      'confirmation_statu' => (isset($data['status']['agenda']['confirmation_statu'])) ? $data['status']['agenda']['confirmation_statu'] : 0,
-    );
-  	$agenda = $db->findOne('agenda', 'id_candidature', $candidature->id_candidature);
-  	if( isset($agenda->id_agend) ) {
-  		$db->update('agenda', 'id_agend', $agenda->id_agend, $agendaData);
-      $id_agend = $agenda->id_agend;
-  	} else {
-  		$id_agend = $db->create('agenda', $agendaData);
-  	}
+    $id_agend = 0;
+    $agenda = $db->findOne('agenda', 'id_candidature', $candidature->id_candidature);
+    if (isLogged('candidat') || (isBackend() && in_array($data['status']['id'], [32, 39]))) {
+    	$date = $data['status']['date'].' '.$data['status']['time'].':00';
+    	$agendaData = array(
+    		'candidats_id' => $candidature->candidats_id,
+        'id_candidature' => $candidature->id_candidature,
+        'action' => $prm_statut->statut,
+        'obs' => $data['status']['comments'],
+        'lieu' => '',
+        'start' => $date,
+        'end' => $date,
+        'confirmation_statu' => (isset($data['status']['agenda']['confirmation_statu'])) ? $data['status']['agenda']['confirmation_statu'] : 0,
+      );
+    	if( isset($agenda->id_agend) ) {
+    		$db->update('agenda', 'id_agend', $agenda->id_agend, $agendaData);
+        $id_agend = $agenda->id_agend;
+    	} else {
+    		$id_agend = $db->create('agenda', $agendaData);
+    	}
+    }
 
     // Fire event after saving new sattus
     $data['candidature'] = $candidature;

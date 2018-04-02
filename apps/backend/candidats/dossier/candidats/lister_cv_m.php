@@ -226,7 +226,7 @@ if(isset($_POST["situation"]) and $_POST["situation"]!='')  $_SESSION["lcv_situa
 
                                            <tr>
 
-<td colspan="2" >Rechercher par mot clé<label>
+<td colspan="2" ><label>Rechercher par mot clé</label>
 
 <input  type="text" name="motcle" style="width:185px" value="<?php if (!empty($_SESSION["lcv_motcle"])) echo $_SESSION["lcv_motcle"]; ?>"/>
 

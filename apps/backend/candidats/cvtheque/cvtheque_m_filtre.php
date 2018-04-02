@@ -562,4 +562,4 @@ $ville = $ville['ville'];
 
 <input  title="Historique des requêtes" class="espace_candidat" value="Historique des requêtes "
 
-onclick="location.href='./historique/' ">
+onclick="location.href='<?= site_url('backend/candidats/cvtheque/historique/'); ?>'">

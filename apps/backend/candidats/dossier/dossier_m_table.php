@@ -104,7 +104,7 @@ if ($dossier_existe)
 
 ?>
 
-<a href="./candidats/?in_d=<?php echo $reponse['id_dossier']; ?>" title="La liste des candidats">
+<a href="<?= site_url('backend/candidats/?in_d='. $reponse['id_dossier']); ?>" title="La liste des candidats">
 
 <b><?php echo $reponse['nom_dossier']; ?></b>
 
@@ -138,7 +138,7 @@ if ($dossier_existe)
 
 {
 
-    echo '<a href="./candidats/?in_d='.$reponse['id_dossier'].'" 
+    echo '<a href="'. site_url('backend/candidats/?in_d='.$reponse['id_dossier']) .'" 
 
 title="La liste des candidats"> 
 
@@ -162,7 +162,7 @@ else
 
 <td style="border:1px solid #FFFFFF;" align="center">
 
-<a href="./?action=modifier&id=<?php echo $reponse['id_dossier'] ?>&nom_dossier=<?php echo $reponse['nom_dossier'] ?>" >
+<a href="<?= site_url('backend/candidats/dossier/?action=modifier&id='. $reponse['id_dossier'] .'&nom_dossier='. $reponse['nom_dossier']); ?>" >
 
 <i class="fa fa-pencil-square-o fa-fw fa-lg"></i>
 

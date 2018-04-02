@@ -16,7 +16,7 @@ $count_nbr = mysql_fetch_array($select_nbr);?>
 
 <div style=" float: right; padding: 2px 5px 0px 0px;">
 
-   <a href="../" style=" border-bottom: none; ">
+   <a href="javascript:void(0)" onclick="window.history.go(-1); return false;" style=" border-bottom: none; ">
 
       <img src="<?php echo $imgurl ?>/arrow_ltr.png" title="Retour"><strong style="color:#fff">Retour</strong>
 
