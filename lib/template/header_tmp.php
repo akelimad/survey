@@ -24,7 +24,7 @@
 
 	<!--<meta name="google-translate-customization" content="dcdec7d3bdf8824-84d339c17e4b01aa-g3e20345d42c258b8-11"></meta>-->
 
-	<link href="<?php echo $cssurl ?>/font-awesome-4.3.0/css/font-awesome.min.css  " rel="stylesheet" media="all" type="text/css"/>  
+	<link href="<?= site_url('assets/vendors/font-awesome/css/font-awesome.min.css'); ?>" rel="stylesheet" media="all" type="text/css"/>  
 
 
 

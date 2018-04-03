@@ -19,8 +19,7 @@
 <link href="<?php echo $cssurl ?>/styles/menuprincipal.php" type="text/css" rel="stylesheet" media="all">
 
 <!--    --> 
-
-<link href="<?php echo $cssurl ?>/font-awesome-4.3.0/css/font-awesome.min.css  " rel="stylesheet" media="all" type="text/css"/>  
+<link href="<?= site_url('assets/vendors/font-awesome/css/font-awesome.min.css'); ?>" rel="stylesheet" media="all" type="text/css"/>
 
 
 
