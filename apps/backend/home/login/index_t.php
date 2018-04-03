@@ -44,7 +44,7 @@ $msg_alert ='';
 
         $pass = md5($_POST['pass']); 
 
-        $sql = mysql_query(" SELECT id_role,ref_filiale,id_type_role from root_roles where login = '".safe($login)."' and mdp = '".safe($pass)."' limit 0,1  ");
+        $sql = mysql_query("SELECT id_role,ref_filiale,id_type_role from root_roles where (login = '". safe($login) ."' OR email = '". safe($login) ."') AND mdp = '". safe($pass) ."' limit 0,1");
 
 		$role = mysql_fetch_assoc($sql);
 
