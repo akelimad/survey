@@ -112,5 +112,8 @@ function get_motivation_letter_url($name) {
  * @author Mhamed Chanchaf
  */
 function get_photo_url($name) {
+	if ($name == 'no-photo.png') {
+		return site_url('apps/upload/frontend/photo_candidats/'. $name);
+	}
 	return site_url('uploads/candidat/photo/'. $name);
 }
