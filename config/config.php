@@ -209,29 +209,3 @@ if(isset($_SESSION['abb_login_candidat']) and $_SESSION['abb_login_candidat']!='
 		$_SESSION['timestamp'] = time();
 	}
 }
-
-// Candidat auth    
-/*$compte_desactive = false;
-if (isset($_POST['login']) && isset($_POST['pass'])) {
-	$login = $_POST['login']; 
-	$pass = md5($_POST['pass']);
-	$requet_c = mysql_query("select * from candidats WHERE  email = '".safe($login)."' AND mdp = '".safe($pass)."' AND status=2");  
-	$reponse = mysql_fetch_array($requet_c);   
-
-	if(is_array($reponse)) {
-		$status_t = $reponse['status'];
-		if($status_t=='2') {
-			$_SESSION['compte_non_confirm'] = '1';	
-			$_SESSION['id_compte_non_confirm'] = $reponse['candidats_id'];
-			header("Location: ".$site." ") ; 	 
-		}
-		if($status_t=='0') {
-			$prenom = ucfirst($reponse['prenom']);
-			$nom = strtoupper($reponse['nom']); 
-			$_SESSION['login_candidat_desactive'] = $login ;
-			$_SESSION['nom_desactive'] = $prenom.'&nbsp;'.$nom;
-			$_SESSION['id_candidat_desactive'] = $reponse['candidats_id'];
-			$compte_desactive = true;
-		}
-	}
-}*/
