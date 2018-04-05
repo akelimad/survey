@@ -1,4 +1,5 @@
 .phpintel
+export_git_diff.bat
 /_front/node_modules
 /apps/upload
 /messages
