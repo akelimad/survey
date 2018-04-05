@@ -49,7 +49,7 @@
                 <?php
                 // Show left sidebar ad banner
                 $left_sidebar_ad = get_setting('front_show_sidebar_ad_block');
-                if (!empty($left_sidebar_ad) && is_file($left_sidebar_ad)) : ?>
+                if (!empty($left_sidebar_ad)) : ?>
                     <img src="<?= $left_sidebar_ad ?>" class="img-responsive">
                 <?php endif; ?>
             </div>
