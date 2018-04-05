@@ -165,9 +165,13 @@ ul#menu_site_carriere li a,
 ul#menu_site_carriere li a:hover, 
 ul#menu_site_carriere li a:focus {
   padding: 5px;
+  padding-left: 20px;
   height: auto;
 }
 
+ul#menu_site_carriere li a i {
+  margin-left: -15px;  
+}
 
 /* Popup pièces jointes */
 #attachmentsTable>thead>tr>th,
