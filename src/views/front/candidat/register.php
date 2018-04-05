@@ -555,7 +555,9 @@ $max_file_size = get_setting('max_file_size', 400);
 	</div>
 	<div class="row">
 		<div class="col-sm-12">
-			<p><strong>Conformément à la loi 09-08, vous disposer d'un droit d'accès, de rectification et d'opposition au traitement de vos données personnelles, ce traitement a été autorisé par la CNDP sous le N°277 du 12 avril 2013.</strong></p>
+			<?php if ($numero_cndp_rh = get_setting('register_numero_cndp_rh', false)) : ?>
+				<p><strong>Conformément à la loi 09-08, vous disposer d'un droit d'accès, de rectification et d'opposition au traitement de vos données personnelles, ce traitement a été autorisé par la CNDP sous le N°: <?= $numero_cndp_rh ?> du <?= get_setting('register_date_cndp_rh', '12 avril 2013') ?>.</strong></p>
+			<?php endif; ?>
 			<label for="accepte">
 				<input id="accepte" type="checkbox" title="J'accepte" style="width:20px;border:none" required>J'ai lu et j'accepte <a href="javascript:void(0)" onclick="return window.chmModal.show({url:site_url('candidat/terms'), type:'GET'}, {width: 870})"><strong>les conditions générales d'utilisation</strong></a>, notamment la mention relative à la protection des données personnelles.
 			</label>
