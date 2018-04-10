@@ -1,7 +1,7 @@
 <input type="hidden" name="id" value="<?= (isset($exp->id_exp)) ? $exp->id_exp : 0 ?>">
 <div class="row">
   <div class="col-sm-4 required">
-    <label for="exp_date_debut">Date de début</label>
+    <label for="exp_date_debut"><?php trans_e("Date de début"); ?></label>
     <?php
     $date_debut = '';
     if (isset($exp->date_debut) && $exp->date_debut != '') {
@@ -12,7 +12,7 @@
     <input type="date" max="<?= date('Y-m-d'); ?>" value="<?= $date_debut ?>" class="form-control" id="exp_date_debut" name="date_debut" required>
   </div>
   <div class="col-sm-8 pl-0 pl-xs-15 required">
-    <label for="exp_date_fin">Date de fin</label>
+    <label for="exp_date_fin"><?php trans_e("Date de fin"); ?></label>
     <?php
     $date_fin = '';
     if (isset($exp->date_fin) && $exp->date_fin != '') {
@@ -22,23 +22,23 @@
     ?>
     <input type="date" max="<?= date('Y-m-d'); ?>" value="<?= $date_fin ?>" class="form-control" id="exp_date_fin" name="date_fin" style="max-width: 186px;float: left;margin-right: 10px;<?= (isset($exp->date_fin) && $exp->date_fin == '') ? 'display: none;"' : '" required' ?>>
     <label for="exp_today" style="margin-top: 10px;" class="pointer">
-      <input type="checkbox" value="1" class="date_fin_today" id="exp_today"<?= (isset($exp->date_fin) && $exp->date_fin == '') ? ' checked' : '' ?>>&nbsp;Jusqu'à aujourd'hui
+      <input type="checkbox" value="1" class="date_fin_today" id="exp_today"<?= (isset($exp->date_fin) && $exp->date_fin == '') ? ' checked' : '' ?>>&nbsp;<?php trans_e("Jusqu'à aujourd'hui"); ?>
     </label>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-sm-4">
-    <label for="entreprise">Entreprise</label>
-    <input type="text" class="form-control" id="entreprise" name="entreprise" value="<?= (isset($exp->entreprise)) ? $exp->entreprise : '' ?>">
+  <div class="col-sm-4 required">
+    <label for="entreprise"><?php trans_e("Entreprise"); ?></label>
+    <input type="text" class="form-control" id="entreprise" name="entreprise" value="<?= (isset($exp->entreprise)) ? $exp->entreprise : '' ?>" required>
   </div>
-  <div class="col-sm-4 pl-0 pl-xs-15">
-    <label for="poste">Intitulé du poste</label>
-    <input type="text" class="form-control" id="poste" name="poste" value="<?= (isset($exp->poste)) ? $exp->poste : '' ?>">
+  <div class="col-sm-4 pl-0 pl-xs-15 required">
+    <label for="poste"><?php trans_e("Intitulé du poste"); ?></label>
+    <input type="text" class="form-control" id="poste" name="poste" value="<?= (isset($exp->poste)) ? $exp->poste : '' ?>" required>
   </div>
-  <div class="col-sm-4 pl-0 pl-xs-15">
-    <label for="exp_sector">Secteur d'activité</label>
-    <select id="exp_sector" name="id_sect" class="form-control">
+  <div class="col-sm-4 pl-0 pl-xs-15 required">
+    <label for="exp_sector"><?php trans_e("Secteur d'activité"); ?></label>
+    <select id="exp_sector" name="id_sect" class="form-control" required>
       <option value=""></option>
       <?php foreach ($sectors as $key => $value) : 
       $selected = (isset($exp->id_sect) && $exp->id_sect == $value->id_sect) ? 'selected' : '';
@@ -49,9 +49,9 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-sm-4">
-    <label for="exp_fonction">Fonction</label>
-    <select id="exp_fonction" name="id_fonc" class="form-control">
+  <div class="col-sm-4 required">
+    <label for="exp_fonction"><?php trans_e("Fonction"); ?></label>
+    <select id="exp_fonction" name="id_fonc" class="form-control" required>
       <option value=""></option>
       <?php foreach (getDB()->read('prm_fonctions') as $key => $value) : 
       $selected = (isset($exp->id_fonc) && $exp->id_fonc == $value->id_fonc) ? 'selected' : '';
@@ -60,9 +60,9 @@
       <?php endforeach; ?>
         </select>
   </div>
-  <div class="col-sm-4 pl-0 pl-xs-15">
-    <label for="exp_tpost">Type de contrat</label>
-    <select id="exp_tpost" name="id_tpost" class="form-control">
+  <div class="col-sm-4 pl-0 pl-xs-15 required">
+    <label for="exp_tpost"><?php trans_e("Type de contrat"); ?></label>
+    <select id="exp_tpost" name="id_tpost" class="form-control" required>
       <option value=""></option>
       <?php foreach (getDB()->read('prm_type_poste') as $key => $value) : 
       $selected = (isset($exp->id_tpost) && $exp->id_tpost == $value->id_tpost) ? 'selected' : '';
@@ -71,15 +71,15 @@
       <?php endforeach; ?>
         </select>
   </div>
-  <div class="col-sm-4 col-xs-12 pl-0 pl-xs-15">
-    <label for="salair_pecu">Dernier salaire perçu</label>
-    <input type="number" min="0" step="0.1" name="salair_pecu" value="<?= (isset($exp->salair_pecu)) ? $exp->salair_pecu : '0' ?>" class="form-control" id="salair_pecu">
+  <div class="col-sm-4 col-xs-12 pl-0 pl-xs-15 required">
+    <label for="salair_pecu"><?php trans_e("Dernier salaire perçu"); ?></label>
+    <input type="number" min="0" step="0.1" name="salair_pecu" value="<?= (isset($exp->salair_pecu)) ? $exp->salair_pecu : '0' ?>" class="form-control" id="salair_pecu" required>
   </div>
 </div>
 <div class="row">
-  <div class="col-sm-4">
-    <label for="exp_pays">Pays</label>
-    <select id="exp_pays" name="id_pays" class="form-control">
+  <div class="col-sm-4 required">
+    <label for="exp_pays"><?php trans_e("Pays"); ?></label>
+    <select id="exp_pays" name="id_pays" class="form-control" required>
       <option value="" data-code=""></option>
       <?php foreach ($pays as $key => $value) : 
       $selected = (isset($exp->id_pays) && $exp->id_pays == $value->id_pays) ? 'selected' : '';
@@ -88,9 +88,9 @@
       <?php endforeach; ?>
         </select>
   </div>
-  <div class="col-sm-4 pl-0 pl-xs-15">
-    <label for="exp_ville">Ville</label>
-    <select id="exp_ville" name="ville" class="form-control">
+  <div class="col-sm-4 pl-0 pl-xs-15 required">
+    <label for="exp_ville"><?php trans_e("Ville"); ?></label>
+    <select id="exp_ville" name="ville" class="form-control" required>
       <option value=""></option>
       <?php foreach ($villes as $key => $value) : 
       $selected = (isset($exp->ville) && $exp->ville == $value->ville) ? 'selected' : '';
@@ -99,8 +99,8 @@
       <?php endforeach; ?>
         </select>
   </div>
-  <div class="col-sm-4 mb-10 pl-0 pl-xs-15">
-    <label for="copie_attestation">Copie de l’attestation</label>
+  <div class="col-sm-4 mb-10 pl-0 pl-xs-15 ">
+    <label for="copie_attestation"><?php trans_e("Copie de l’attestation"); ?></label>
     <div class="input-group file-upload<?= (isset($exp->copie_attestation) && $exp->copie_attestation != '') ? ' hidden' : '' ?>">
         <input type="text" class="form-control" readonly>
         <label class="input-group-btn">
@@ -111,15 +111,15 @@
         </label>
     </div>
     <?php if (isset($exp->copie_attestation) && $exp->copie_attestation != '') : ?>
-      <a href="<?= site_url('apps/upload/frontend/candidat/copie_attestation/'. $exp->copie_attestation); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download"></i>&nbsp;Télécharger</a>
-      <button class="btn btn-danger btn-xs" type="button" onclick="return chmModal.confirm('', '', 'Êtes-vous sûr de vouloir supprimer la copie de l’attestation ?', 'chmExperience.deleteCertificate', {'id': <?= $exp->id_exp; ?>, cd: '<?= $exp->copie_attestation; ?>'}, {width: 431})"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
+      <a href="<?= site_url('apps/upload/frontend/candidat/copie_attestation/'. $exp->copie_attestation); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
+      <button class="btn btn-danger btn-xs" type="button" onclick="return chmModal.confirm('', '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer la copie de l’attestation ?"); ?>', 'chmExperience.deleteCertificate', {'id': <?= $exp->id_exp; ?>, cd: '<?= $exp->copie_attestation; ?>'}, {width: 431})"><i class="fa fa-trash"></i>&nbsp;<?php trans_e("Supprimer"); ?></button>
     <?php endif; ?>
   </div>
 </div>
 
 <div class="row mt-10">
   <div class="col-sm-12 required">
-    <label for="exp_description">Description du poste</label>
+    <label for="exp_description"><?php trans_e("Description du poste"); ?></label>
     <textarea name="description" class="form-control ckeditor" id="exp_description" required><?= (isset($exp->description)) ? $exp->description : '' ?></textarea>
   </div>
 </div>

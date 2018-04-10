@@ -91,14 +91,14 @@ class AuthController extends Controller
 
 		// check if account exist
 		if(!isset($candidat->candidats_id)) {
-			return $this->jsonResponse('error', 'Email et/ou votre mot de passe est incorrect !');
+			return $this->jsonResponse('error', trans("Email et/ou votre mot de passe est incorrect !"));
 		}
 
 		switch ($candidat->status) {
 			case '0':
 			return $this->jsonResponse(
 				'confirm_activation', 
-				'Votre compte a été désactivé, voulez vous le reactiver ?', [
+				trans("Votre compte a été désactivé, voulez vous le reactiver ?"), [
 					"candidat_id" => $candidat->candidats_id
 				]);
 			break;
@@ -108,7 +108,7 @@ class AuthController extends Controller
 			case '2':
 				return $this->jsonResponse(
 				'resent_email', 
-				'Vous n\'avez pas encore activer votre compte, <strong>voulez vous reenvoyer un email d\'activation ?</strong>', [
+				trans("Vous n'avez pas encore activer votre compte, <strong>voulez vous reenvoyer un email d'activation ?</strong>"), [
 					'candidat_id' => $candidat->candidats_id
 				]);
 			break;
@@ -171,7 +171,7 @@ class AuthController extends Controller
 			$fullname = $this->getCandidatFullname($candidat->id_civi, $candidat->nom, $candidat->prenom);
 			$this->sendVerificationEmail($candidat->candidats_id, $fullname, $candidat->email);
 				
-			return $this->jsonResponse('success', ['Un e-mail vous a été envoyé avec des instructions détaillées sur la façon de l\'activer.']);
+			return $this->jsonResponse('success', [trans("Un e-mail vous a été envoyé avec des instructions détaillées sur la façon de l'activer.")]);
     }
 	}
 
@@ -184,7 +184,7 @@ class AuthController extends Controller
 				switch ($candidat->status) {
 					case '0':
 						$data['status'] = 'confirm_activation';
-						$data['message'] = 'Votre compte a été désactivé, voulez vous le reactiver ?';
+						$data['message'] = trans("Votre compte a été désactivé, voulez vous le reactiver ?");
 						$data['candidat_id'] = $candidat->candidats_id;
 					break;
 					case '1':
@@ -199,24 +199,24 @@ class AuthController extends Controller
             $send = $this->resetPasswordEmail($candidat, $password);
             $data['status'] = $send['response'];
             if($send['response'] == 'success') {
-            	$data['message'] = 'Un nouveau mot de passe vient de vous être envoyé à l\'adresse indiqué. Verifier votre boite email d\'ici quelque minutes.';
+            	$data['message'] = trans("Un nouveau mot de passe vient de vous être envoyé à l'adresse indiqué. Verifier votre boite email d'ici quelque minutes.");
 				    } else {
 				      $data['message'] = $send['message'];
 				    }
 					break;
 					case '2':
 						$data['status'] = 'resent_email';
-						$data['message'] = 'Vous n\'avez pas encore activer votre compte, <strong>voulez vous reenvoyer un email d\'activation ?</strong>';
+						$data['message'] = trans("Vous n'avez pas encore activer votre compte, <strong>voulez vous reenvoyer un email d'activation ?</strong>");
 						$data['candidat_id'] = $candidat->candidats_id;
 					break;
 				}
 			} else {
 				$data['status'] = 'error';
-				$data['message'] = 'Ce compte n\'existe pas.';
+				$data['message'] = trans("Ce compte n'existe pas.");
 			}
 			unset($data['email']);
 		}
-		return Ajax::renderAjaxView('Réinitialiser le mot de passe', 'front/candidat/reset-password', $data);
+		return Ajax::renderAjaxView(trans("Réinitialiser le mot de passe"), 'front/candidat/reset-password', $data);
 	}
 
 
@@ -254,7 +254,7 @@ class AuthController extends Controller
 		$this->data['sectors'] = getDB()->read('prm_sectors');
 		$this->data['niv_formation'] = getDB()->read('prm_niv_formation');
 		$this->data['layout'] = 'front';
-		$this->data['breadcrumbs'] = ['Accueil', 'Candidat', 'Inscrivez-vous'];
+		$this->data['breadcrumbs'] = [trans("Accueil"), trans("Candidat"), trans("Inscrivez-vous")];
 		return get_page('front/candidat/register', $this->data);
 	}
 
@@ -263,7 +263,7 @@ class AuthController extends Controller
 	{
 		// Verify google recaptcha
 		if(!isset($params['g-recaptcha-response']) || !$this->verifyGoogleRecaptcha($params['g-recaptcha-response'])) {
-			return $this->jsonResponse('error', 'Merci de cocher la case "Je ne suis pas un robot"');
+			return $this->jsonResponse('error', trans("Merci de cocher la case 'Je ne suis pas un robot'"));
 		}
 
 		// Validate form data
@@ -275,14 +275,14 @@ class AuthController extends Controller
 
 			// Check unique email
 			if($this->checkEmailExists($params['candidat']['email'])) {
-				return $this->jsonResponse('error', 'Cette email est déja utilisé avec une autre compte.');
+				return $this->jsonResponse('error', trans("Cette email est déja utilisé avec une autre compte."));
 			}
 
 			// Check password strength
 			if( $params['candidat']['mdp'] != $params['candidat']['mdp_confirm'] ) {
-				return $this->jsonResponse('error', 'Les deux mot de passe ne sont pas identique.');
+				return $this->jsonResponse('error', trans("Les deux mot de passe ne sont pas identique."));
 			} elseif (!Candidat::isStrongPassword($params['candidat']['mdp'])) {
-				return $this->jsonResponse('error', 'Le mot de passe doit contenir les chiffres et des lettres.');
+				return $this->jsonResponse('error', trans("Le mot de passe doit contenir les chiffres et des lettres."));
 			}
 			
 			// Validate and upload attachements
@@ -343,7 +343,7 @@ class AuthController extends Controller
 			$fullname = $this->getCandidatFullname($cdata['id_civi'], $cdata['nom'], $cdata['prenom']);
 			$this->sendVerificationEmail($id_candidat, $fullname, $cdata['email']);
 			
-			return $this->jsonResponse('success', ['Votre compte à été créé avec succès.', 'Un e-mail vous a été envoyé avec des instructions détaillées sur la façon de l\'activer.'], ['dismissible' => false]);
+			return $this->jsonResponse('success', [trans("Votre compte à été créé avec succès."), trans("Un e-mail vous a été envoyé avec des instructions détaillées sur la façon de l'activer.")], ['dismissible' => false]);
 		} else {
 			return $this->jsonResponse('error', $is_valid);
 		}
@@ -352,7 +352,7 @@ class AuthController extends Controller
 
 	public function terms()
 	{
-		return Ajax::renderAjaxView("LES CONDITIONS D'UTILISATION ET LES RÈGLES DE CONFIDENTIALITÉ.", "front/candidat/terms");
+		return Ajax::renderAjaxView(trans("LES CONDITIONS D'UTILISATION ET LES RÈGLES DE CONFIDENTIALITÉ."), "front/candidat/terms");
 	}
 	
 	
@@ -441,7 +441,7 @@ class AuthController extends Controller
 	private function getRules()
 	{
 		return array_map(function($rule) {
-			return $rule[0];
+			return trans($rule[0]);
 		}, $this->rules);
 	}
 
@@ -449,7 +449,7 @@ class AuthController extends Controller
 	private function setFieldNames()
 	{
 		Validator::set_field_names(array_map(function($rule) {
-			return $rule[1];
+			return trans($rule[1]);
 		}, $this->rules));
 	}
 
@@ -459,37 +459,37 @@ class AuthController extends Controller
 		$return = [];
 		$rules = [
 			'photo' => [
-				'name' => 'Photo',
+				'name' => trans("Photo"),
 				'path' => 'apps/upload/frontend/photo_candidats/',
 				'required' => false,
 				'extensions' => ['png', 'jpg', 'jpeg', 'gif'],
 			],
 			'cv' => [
-				'name' => 'CV',
+				'name' => trans("CV"),
 				'path' => 'apps/upload/frontend/cv/',
 				'required' => true,
 				'extensions' => ['doc', 'docx', 'pdf'],
 			],
 			'lm' => [
-				'name' => 'Lettre de motivation',
+				'name' => trans("Lettre de motivation"),
 				'path' => 'apps/upload/frontend/lmotivation/',
 				'required' => false,
 				'extensions' => ['doc', 'docx', 'pdf'],
 			],
 			'copie_diplome' => [
-				'name' => 'Copie du diplôme',
+				'name' => trans("Copie du diplôme"),
 				'path' => 'apps/upload/frontend/candidat/copie_attestation/',
 				'required' => false,
 				'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
 			],
 			'copie_attestation' => [
-				'name' => 'Copie de l’attestation',
+				'name' => trans("Copie de l’attestation"),
 				'path' => 'apps/upload/frontend/candidat/copie_diplome/',
 				'required' => false,
 				'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
 			],
 			'bulletin_paie' => [
-				'name' => 'Bulletin de paie',
+				'name' => trans("Bulletin de paie"),
 				'path' => 'apps/upload/frontend/candidat/bulletin_paie/',
 				'required' => false,
 				'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
@@ -504,15 +504,15 @@ class AuthController extends Controller
 		foreach ($rules as $key => $rule) {
 			$valid = true;
 			if($rule['required'] && $_FILES[$key]['size'] < 1) {
-				$return['errors'][] = "Le champs <strong>{$rule['name']}</strong> est obligatoire.";
+				$return['errors'][] = trans("Le champs") ." <strong>{$rule['name']}</strong> ". trans("est obligatoire.");
 				$valid = false;
 			}
 			$extension = strtolower(pathinfo($_FILES[$key]['name'], PATHINFO_EXTENSION));
 			if ($_FILES[$key]['size'] > 0) {
 				if(!in_array($extension, $rule['extensions'])) {
-					$return['errors'][] = "Le champ <strong>{$rule['name']}</strong> doit avoir les extensions suivantes (.". implode(', .', $rule['extensions']) .")";
+					$return['errors'][] = trans("Le champ") ." <strong>{$rule['name']}</strong> ". trans("doit avoir les extensions suivantes") ." (.". implode(', .', $rule['extensions']) .")";
 				} elseif ($_FILES[$key]['size'] > $this->koToOctet($max_file_size)) {
-          $return['errors'][] = "Vous avez depassé la taille maximal <strong>({$max_file_size}ko)</strong> pour le champ <strong>{$rule['name']}</strong>";
+          $return['errors'][] = trans("Vous avez depassé la taille maximal") ." <strong>({$max_file_size}ko)</strong> ". trans("pour le champ"). " <strong>{$rule['name']}</strong>";
         } else if($valid) {
 					$upload = Media::upload($_FILES[$key], [
 						'extensions' => $rule['extensions'],

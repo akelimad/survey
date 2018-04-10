@@ -19,15 +19,15 @@ table th{
     <td width="40%" rowspan="3" align="center">
     	<img src="<?= module_url(__FILE__, 'assets/img/header-logo.png') ?>">
     </td>
-    <th width="25%">Référence</th>
+    <th width="25%"><?php trans_e("Référence"); ?></th>
     <td width="35%"><?= $fiche->reference; ?></td>
   </tr>
   <tr>
-    <th>Date</th>
+    <th><?php trans_e("Date"); ?></th>
     <td><?= english_to_french_datetime($fc->created_at); ?></td>
   </tr>
   <tr>
-    <th>Évaluateur</th>
+    <th><?php trans_e("Évaluateur"); ?></th>
     <td><?= $evaluator->nom ?></td>
   </tr>
   <tr>
@@ -38,14 +38,14 @@ table th{
 
 <table style="width:800px;margin:0px auto 30px;" border="1" cellspacing="0" cellpadding="5">
   <tr>
-    <th colspan="2" style="text-align: center;"><h2 style="margin: 0px;">IDENTITE</h2></th>
+    <th colspan="2" style="text-align: center;"><h2 style="margin: 0px;"><?php trans_e("IDENTITE"); ?></h2></th>
   </tr>
   <tr>
-    <td width="200">Nom et prénom du candidat</td>
+    <td width="200"><?php trans_e("Nom et prénom du candidat"); ?></td>
     <td><?= $result->displayName; ?></td>
   </tr>
   <tr>
-    <td width="200">Candidature pour le poste</td>
+    <td width="200"><?php trans_e("Candidature pour le poste"); ?></td>
     <td><?= $result->offreName; ?></td>
   </tr>
 </table>
@@ -61,10 +61,10 @@ $hasItems = true;
 	<tr>
     <th style="padding: 3px 5px;background-color: #003E78;color: #fff;"><?= $block->name; ?></th>
     <th width="120" align="center" style="padding: 3px 5px;background-color: #003E78;color: #fff;">
-      <?php if( in_array($block->fields_type, ['select', 'number']) ) : ?>Note (1 à 4)<?php endif; ?>
+      <?php if( in_array($block->fields_type, ['select', 'number']) ) : ?><?php trans_e("Note (1 à 4)"); ?><?php endif; ?>
     </th>
     <?php if( $block->show_observations == '1' ) : ?>
-      <th style="padding: 3px 5px;background-color: #003E78;color: #fff;">Observations</th>
+      <th style="padding: 3px 5px;background-color: #003E78;color: #fff;"><?php trans_e("Observations"); ?></th>
     <?php endif; ?>
   </tr>
 
@@ -82,7 +82,7 @@ $hasItems = true;
       </td>
       <td width="120" align="center" style="padding: 5px;">
         <?php if( $block->fields_type == 'checkbox' ) : ?>
-         <?= (isset($blockItem->value) && $blockItem->value=='1') ? '<span class="label label-success">Oui</span>' : '<span class="label label-danger">Non</span>';?>
+         <?= (isset($blockItem->value) && $blockItem->value=='1') ? '<span class="label label-success">'. trans("Oui") .'</span>' : '<span class="label label-danger">'. trans("Non") .'</span>';?>
        <?php elseif( in_array($block->fields_type, ['select', 'number']) ) : ?>
         <span style="padding:0px 5px;"><?= (isset($blockItem->value)) ? $blockItem->value : 0; ?></span>
       <?php endif; ?>
@@ -100,8 +100,8 @@ $hasItems = true;
 <?php if($fiche->fiche_type == 1) : ?>
 <table style="width:800px;margin:0px auto 15px;" border="1" cellspacing="0" cellpadding="5">
   <tr>
-    <th align="left">Note générale</th>
-    <th width="120" style="text-align: center;"><?= number_format(($noteGenerale/$countItems), 2); ?></th>
+    <th align="left"><?php trans_e("Note générale"); ?></th>
+    <th width="120" style="text-align: center;"><?= number_format(($noteGenerale / $countItems), 2); ?></th>
     <?php if( $block->show_observations == '1' ) : ?>
       <th width="120"></th>
     <?php endif; ?>
@@ -114,9 +114,9 @@ $hasItems = true;
 <?php if($fiche->fiche_type == 1) : ?>
 	<table style="width:800px;margin:0px auto;" border="0" cellspacing="0" cellpadding="5">
    <tr>
-     <th width="70%">Avis final de l’évaluateur</th>
+     <th width="70%"><?php trans_e("Avis final de l’évaluateur"); ?></th>
      <td width="10"></td>
-     <th>Signature</th>
+     <th><?php trans_e("Signature"); ?></th>
    </tr>
    <tr>
      <td height="100" style="vertical-align:top;border: 2px solid #000;"><?= $fc->comments; ?></td>
@@ -131,22 +131,22 @@ $hasItems = true;
 <?php if($fiche->fiche_type == 0) : ?>
   <table style="width:800px;margin:0px auto 30px;" border="1" cellspacing="0" cellpadding="5">
     <tr>
-      <th width="190" height="100">Décision</th>
-      <td><label><input type="checkbox">Eliminé</label></td>
-      <td><label><input type="checkbox">Retenu</label></td>
+      <th width="190" height="100"><?php trans_e("Décision"); ?></th>
+      <td><label><input type="checkbox"><?php trans_e("Eliminé"); ?></label></td>
+      <td><label><input type="checkbox"><?php trans_e("Retenu"); ?></label></td>
     </tr>
   </table>
 
   <table style="width:800px;margin:0px auto 30px;" border="1" cellspacing="0" cellpadding="5">
     <tr>
-      <th width="190" height="100">Commentaire(s)</th>
+      <th width="190" height="100"><?php trans_e("Commentaire(s)"); ?></th>
       <td><?= $fc->comments; ?></td>
     </tr>
   </table>
 
   <table style="width:800px;margin:0px auto;" border="1" cellspacing="0" cellpadding="5">
     <tr>
-      <th rowspan="2" width="180">Signatures des Directeurs concernés (minimum, deux signatures / 4)</th>
+      <th rowspan="2" width="180"><?php trans_e("Signatures des Directeurs concernés (minimum, deux signatures / 4)"); ?></th>
       <?php for ($i=0; $i < count($evaluators); $i++) : ?>
        <th><?= $evaluators[$i]->nom; ?></th>
      <?php endfor; ?>

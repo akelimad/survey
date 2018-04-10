@@ -21,21 +21,21 @@ class ExperienceController extends Controller
   public function index()
   {
     $this->data['layout'] = 'front';
-    $this->data['breadcrumbs'] = ['Accueil', 'Candidat', 'Mon CV', 'Experiences'];
+    $this->data['breadcrumbs'] = [trans("Accueil"), trans("Candidat"), trans("Mon CV"), trans("Experiences")];
     return get_page('front/candidat/cv/experiences/index', $this->data);
   }
 
   public function getForm($data)
   {
     $experience = new \stdClass;
-    $title = 'Créer une experience';
+    $title = trans("Créer une experience");
     if (intval($data['id']) > 0) {
       $experience = getDB()->prepare("SELECT * FROM experience_pro WHERE candidats_id=? AND id_exp=?", [
         get_candidat_id(),
         $data['id']
       ], true);
       if (!isset($experience->id_exp)) return;
-      $title = 'Modifier l\'experience';
+      $title = trans("Modifier l'experience");
     }
     $data['exp'] = $experience;
     $data['villes'] = getDB()->read('prm_villes');
@@ -47,17 +47,17 @@ class ExperienceController extends Controller
 
   public function store($data) {
     Validator::set_field_names([
-      'id_sect' => 'Secteur d\'activité',
-      'id_fonc' => 'Fonction',
-      'id_tpost' => 'Type de contrat',
-      'id_pays' => 'Pays',
-      'date_debut' => 'Date de début',
-      'date_fin' => 'Date de fin',
-      'poste' => 'Intitulé du poste',
-      'entreprise' => 'Entreprise',
-      'ville' => 'Ville',
-      'description' => 'Description du poste',
-      'salair_pecu' => 'Dernier salaire perçu'
+      'id_sect' => trans("Secteur d'activité"),
+      'id_fonc' => trans("Fonction"),
+      'id_tpost' => trans("Type de contrat"),
+      'id_pays' => trans("Pays"),
+      'date_debut' => trans("Date de début"),
+      'date_fin' => trans("Date de fin"),
+      'poste' => trans("Intitulé du poste"),
+      'entreprise' => trans("Entreprise"),
+      'ville' => trans("Ville"),
+      'description' => trans("Description du poste"),
+      'salair_pecu' => trans("Dernier salaire perçu")
     ]);
 
     $is_valid = Validator::is_valid($data, [
@@ -98,13 +98,13 @@ class ExperienceController extends Controller
     }
     if (intval($id_exp) > 0) {
       if (getDB()->update('experience_pro', 'id_exp', $id_exp, $data, false)) {
-        return $this->jsonResponse('success', 'L\'experience a été bien mis à jour.');
+        return $this->jsonResponse('success', trans("L'experience a été bien mis à jour."));
       }
     } else {
       $data['candidats_id'] = get_candidat_id();
       if (getDB()->create('experience_pro', $data, false)) {
         $action = (str_replace(site_url(), '', $_SERVER['HTTP_REFERER']) == 'candidat/cv') ? 'reload' : 'refresh';
-        return $this->jsonResponse('success', 'L\'experience a été bien créer.', ['action' => $action]);
+        return $this->jsonResponse('success', trans("L'experience a été bien créer."), ['action' => $action]);
       }
     }
   }
@@ -117,14 +117,14 @@ class ExperienceController extends Controller
     ], true);
 
     if (!isset($experience->id_exp)) {
-      return $this->jsonResponse('error', 'Impossible de supprimer l\'experience.');
+      return $this->jsonResponse('error', trans("Impossible de supprimer l'experience."));
     }
 
     if ($experience->copie_attestation != '') {
       unlinkFile(site_base('apps/upload/frontend/candidat/copie_attestation/'.$experience->copie_attestation));
     }
     getDB()->delete('experience_pro', 'id_exp', $data['id']);
-    return $this->jsonResponse('success', 'L\'experience a été bien supprimé.');
+    return $this->jsonResponse('success', trans("L'experience a été bien supprimé."));
   }
 
   public function deleteCertificate($data)
@@ -135,7 +135,7 @@ class ExperienceController extends Controller
     ], true);
 
     if (!isset($experience->id_exp)) {
-      return $this->jsonResponse('error', 'Impossible de supprimer la copie de l’attestation.');
+      return $this->jsonResponse('error', trans("Impossible de supprimer la copie de l’attestation."));
     }
 
     if ($experience->copie_attestation != '') {
@@ -144,7 +144,7 @@ class ExperienceController extends Controller
 
     getDB()->update('experience_pro', 'id_exp', $data['id'], ['copie_attestation' => null]);
 
-    return $this->jsonResponse('success', 'La copie de l’attestation a été bien supprimé.');
+    return $this->jsonResponse('success', trans("La copie de l’attestation a été bien supprimé."));
   }
 
 	

@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-sm-6">
     <div class="form-group">
-      <label for="school" class="form-label mt-0">Nom de l'école&nbsp;<span style="color: red">*</span></label>
+      <label for="school" class="form-label mt-0"><?php trans_e("Nom de l'école"); ?>&nbsp;<span style="color: red">*</span></label>
       <select name="school" class="form-control mb-0" id="school" required>
         <option value=""></option>
         <?php
@@ -20,7 +20,7 @@
   </div>
   <div class="col-sm-6">
     <div class="form-group">
-      <label for="stage_type" class="form-label mt-0">Type de stage&nbsp;<span style="color: red">*</span></label>
+      <label for="stage_type" class="form-label mt-0"><?php trans_e("Type de stage"); ?>&nbsp;<span style="color: red">*</span></label>
       <select id="stage_type" name="stage_type" class="form-control" required>
         <option value=""></option>
         <?php foreach (getDB()->read('prm_type_stage') as $key => $value) : ?>
@@ -34,7 +34,7 @@
 <div class="row">
   <div class="col-sm-6">
     <div class="form-group">
-      <label for="direction" class="form-label mt-0">Direction demandée&nbsp;<span style="color: red">*</span></label>
+      <label for="direction" class="form-label mt-0"><?php trans_e("Direction demandée"); ?>&nbsp;<span style="color: red">*</span></label>
       <select id="direction" name="direction" class="form-control" required>
         <option value=""></option>
         <?php foreach (getDB()->read('prm_direction_stage') as $key => $value) : ?>
@@ -45,7 +45,7 @@
   </div>
   <div class="col-sm-6">
     <div class="form-group">
-      <label for="duree" class="form-label mt-0">Durée du stage&nbsp;<span style="color: red">*</span></label>
+      <label for="duree" class="form-label mt-0"><?php trans_e("Durée du stage"); ?>&nbsp;<span style="color: red">*</span></label>
       <select id="duree" name="duree" class="form-control" required>
         <option value=""></option>
         <?php foreach (getDB()->read('prm_duree_stage') as $key => $value) : ?>
@@ -57,17 +57,17 @@
 </div>
 
 <div class="form-group">
-  <label for="stage_subject" class="form-label mt-0">Objet du stage&nbsp;<span style="color: red">*</span></label>
+  <label for="stage_subject" class="form-label mt-0"><?php trans_e("Objet du stage"); ?>&nbsp;<span style="color: red">*</span></label>
   <textarea name="stage_subject" class="ckeditor form-control" id="stage_subject" required></textarea>
 </div>
 
 <div class="form-group">
-  <label for="motivation" class="form-label mt-0">Vos motivations&nbsp;<span style="color: red">*</span></label>
+  <label for="motivation" class="form-label mt-0"><?php trans_e("Vos motivations"); ?>&nbsp;<span style="color: red">*</span></label>
   <textarea name="motivation" class="ckeditor form-control" id="motivation" required></textarea>
 </div>
 
 <div class="mt-10">
-  <?php get_alert('warning', 'P.S: les champs marqu&eacute;s par (*) sont obligatoires', false) ?>
+  <?php get_alert('warning', trans("P.S: les champs marqu&eacute;s par (*) sont obligatoires"), false) ?>
 </div>
 
 <script>

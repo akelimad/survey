@@ -792,7 +792,10 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
     <?php endif; ?><br></td>
   </tr>
 
-  <?php \App\Event::trigger('after_offre_fields', ['id_offre' => $_POST['id']]); ?>
+  <?php 
+  $id_offre = (isset($_POST['id'])) ? $_POST['id'] : 0;
+  \App\Event::trigger('after_offre_fields', ['id_offre' => $id_offre]);
+  ?>
         
 
 		  	

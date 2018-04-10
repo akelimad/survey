@@ -91,4 +91,31 @@ class Controller
 	}
 
 
+	/**
+	 * Get files recursively inside a directory
+	 *
+	 * @param string $directory
+	 *
+	 * @return array $files
+	 */
+	function getDirectoryFiles($directory)
+	{
+	  $files = [];
+		if ($h = opendir($directory)) {
+		  while (($item = readdir($h)) !== false) {
+	      $f = $directory . '/' . $item;
+	      if (is_file($f))  {
+	        $files[] = $f;
+	      }
+	      else
+	      if (is_dir($f) && !preg_match("/^[\.]{1,2}$/uis", $item)) {
+	        $files = array_merge($files, $this->getDirectoryFiles($f));
+	      }
+		  }
+		  closedir($h);
+		}
+		return $files;
+	}
+
+
 } // END Class

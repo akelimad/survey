@@ -23,7 +23,7 @@ class WorkflowController extends Controller
   public function actionIndex()
   {
     return get_page('admin/index', [
-      'breadcrumbs' => ['Workflows', 'Historique']
+      'breadcrumbs' => ['Workflows', trans("Historique")]
     ], __FILE__);
   }
 
@@ -96,7 +96,7 @@ class WorkflowController extends Controller
             ]);            
           }
 
-          set_flash_message('success', 'Le statut a été bien changé.');
+          set_flash_message('success', trans("Le statut a été bien changé."));
         }
       // } else {
       //   set_flash_message('danger', 'Vous n\'avez pas le droit de changer le statut.');
@@ -120,7 +120,7 @@ class WorkflowController extends Controller
       'history' => $history,
       'status' => $status,
       'canChangeStatus' => $canChangeStatus,
-      'breadcrumbs' => ['Workflows', 'Détails']
+      'breadcrumbs' => [trans("Workflows"), trans("Détails")]
     ], __FILE__);
   }
 
@@ -163,12 +163,12 @@ class WorkflowController extends Controller
           Workflow::sendEmail($id_offre);
         }
 
-        set_flash_message('success', 'Les modifications ont été bien sauvegarder.');
+        set_flash_message('success', trans("Les modifications ont été bien sauvegarder."));
         redirect('backend/module/workflows/workflow');
 
       } else {
         $takers = $_POST['dep_takers'];
-        set_flash_message('danger', 'Vous devez choisir au moin un Preneurs par département.');
+        set_flash_message('danger', trans("Vous devez choisir au moin un Preneurs par département."));
       }
     }
 
@@ -176,7 +176,7 @@ class WorkflowController extends Controller
     return get_page('admin/takers', [
       'takers' => $takers,
       'wf_deps' => $wf_deps,
-      'breadcrumbs' => ["Workflows", "Preneurs de workflow pour l'offre <b>({$offre->Name})</b>"]
+      'breadcrumbs' => ["Workflows", trans("Preneurs de workflow pour l'offre:") ." <b>({$offre->Name})</b>"]
     ], __FILE__);
   }
 

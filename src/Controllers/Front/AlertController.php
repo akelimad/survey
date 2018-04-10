@@ -16,6 +16,7 @@ use App\Ajax;
 class AlertController extends Controller
 {
 
+  protected $data = [];
 
 	public function form($data)
   {
@@ -24,9 +25,9 @@ class AlertController extends Controller
       if ($id > 0) {
         if ($this->isOwner($data['id'])) {
           getDB()->update('alert', 'id_alert', $data['id'], ['titre' => $data['titre']]);
-          return $this->jsonResponse('success', 'L\'alerte a été mis à jour.');
+          return $this->jsonResponse('success', trans("L'alerte a été mis à jour."));
         } else {
-          return $this->jsonResponse('error', 'Vous n\'avez pas les permissions pour modifier cette alerte.');
+          return $this->jsonResponse('error', trans("Vous n'avez pas les permissions pour modifier cette alerte."));
         }
       } else {
         getDB()->create('alert', [
@@ -35,12 +36,12 @@ class AlertController extends Controller
           'date' => date('d/m/Y', time()),
           'activate' => 'true'
         ]);
-        return $this->jsonResponse('success', 'L\'alerte a été bien créé.');
+        return $this->jsonResponse('success', trans("L'alerte a été bien créé."));
       }
     } else {
-      $title = 'Créer une alerte';
+      $title = trans("Créer une alerte");
       if ($id > 0) {
-        $title = 'Modifier une alerte';
+        $title = trans("Modifier une alerte");
         $this->data['alert'] = getDB()->findOne('alert', 'id_alert', $id);
       }
       return Ajax::renderAjaxView($title, 'front/candidat/alert/form', $this->data);
@@ -53,9 +54,9 @@ class AlertController extends Controller
     if ($this->isOwner($data['id'])) {
       $status = ($data['curStatus'] == 'true') ? 'false' : 'true';
       getDB()->update('alert', 'id_alert', $data['id'], ['activate' => $status]);
-      return $this->jsonResponse('success', 'Le status a été mis à jour.');
+      return $this->jsonResponse('success', trans("Le status a été mis à jour."));
     } else {
-      return $this->jsonResponse('error', 'Vous n\'avez pas les permissions de mettre à jour le status.');
+      return $this->jsonResponse('error', trans("Vous n'avez pas les permissions de mettre à jour le status."));
     }
   }
 
@@ -64,9 +65,9 @@ class AlertController extends Controller
   {
     if ($this->isOwner($data['id'])) {
       getDB()->delete('alert', 'id_alert', $data['id']);
-      return $this->jsonResponse('success', 'L\'alerte a été supprimé.');
+      return $this->jsonResponse('success', trans("L'alerte a été supprimé."));
     } else {
-      return $this->jsonResponse('error', 'Vous n\'avez pas les permissions de supprimer cette alerte.');
+      return $this->jsonResponse('error', trans("Vous n'avez pas les permissions de supprimer cette alerte."));
     }
   }
 

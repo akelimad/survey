@@ -59,7 +59,7 @@ function is_ajax() {
 function get_breadcrumbs($page_title, $args=[]) {
 	$class = (!empty($args['buttons'])) ? 'col-md-9' : 'col-md-12';
 	$breadcrumbs = '<section id="titlebar2"><div class="container"><div class="row mb-0"><div class="'. $class .'">
-        <h2 id="cim_page_title">'. $page_title .'</h2><nav id="breadcrumbs"><ul><li>Vous êtes ici :</li><li><a href="'. site_url() .'">Accueil</a></li>';
+        <h2 id="cim_page_title">'. $page_title .'</h2><nav id="breadcrumbs"><ul><li>'. trans("Vous êtes ici:") .'</li><li><a href="'. site_url() .'">'. trans("Accueil") .'</a></li>';
 
 		if( !empty($args['items']) ) : foreach ($args['items'] as $key => $item) :
 			$breadcrumbs .= '<li><a href="'. $item['url'] .'">'. $item['name'] .'</a></li>';
@@ -71,7 +71,7 @@ function get_breadcrumbs($page_title, $args=[]) {
    		$breadcrumbs .= '<div class="col-md-3">';
    		foreach ($args['buttons'] as $key => $btnArgs) :
    			$btnDefaultArgs = array(
-		        'text'  => 'Sans titre',
+		        'text'  => trans("Sans titre"),
 		        'href'  => '#',
 		        'class' => 'btn btn-default',
 		        'icon'  => ''

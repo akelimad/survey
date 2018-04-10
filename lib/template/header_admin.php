@@ -4,8 +4,8 @@
       <nav class="navbar navbar-default" id="top-navbar">
         <div class="container-fluid pl-5 pl-xs-15">
           <ul class="nav navbar-nav navbar-right pr-5">
-            <li><a href="<?= get_site('site_url'); ?>" target="_blank" style="color:#ffffff;" title="Accès au site de l'institution - Nouvelle fenêtre">Accès au site de l'institution</a></li>
-            <li><a href="<?= site_url('infos/contact/') ?>" title="Contactez-nous">Contactez-nous</a></li>
+            <li><a href="<?= get_site('site_url'); ?>" target="_blank" style="color:#ffffff;" title="Accès au site de l'institution - Nouvelle fenêtre"><?php trans_e("Accès au site de l'institution"); ?></a></li>
+            <li><a href="<?= site_url('infos/contact/') ?>" title="Contactez-nous"><?php trans_e("Contactez-nous"); ?></a></li>
           </ul>
         </div>
       </nav>
@@ -16,12 +16,12 @@
   </div>
   <div class="row" id="breadcrumbs">
     <div class="col-md-6 col-xs-12">
-      Vous êtes ici&nbsp;:&nbsp;<strong><?= $ariane; ?></strong>
+      <?php trans_e("Vous êtes ici"); ?>&nbsp;:&nbsp;<strong><?= $ariane; ?></strong>
     </div>
     <div class="col-md-6 col-xs-12">
       <?php if(isset($_SESSION['abb_admin'])) : ?>
         <div class="pull-right">
-          Connecté en tant que: <b><?= $_SESSION['abb_admin']; ?></b> | <a href="<?= site_url('backend/logout') ?>">Déconnexion</a>
+          <?php trans_e("Connecté en tant que:"); ?> <b><?= $_SESSION['abb_admin']; ?></b> | <a href="<?= site_url('backend/logout') ?>"><?php trans_e("Déconnexion"); ?></a>
         </div>
       <?php endif; ?>
     </div>

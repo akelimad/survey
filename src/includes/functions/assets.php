@@ -94,23 +94,25 @@ if(file_exists($assetsPath) && is_readable($assetsPath)) {
 	$devEnv = (defined('ETA_ENV') && ETA_ENV == 'dev');
 	$assets = json_decode(file_get_contents($assetsPath), true);
 	foreach ($assets as $key => $asset) {
-		$cssUrl = ($devEnv) ? 'http://localhost:3003/public/assets/dynamic/'. $key .'.css' : $asset['css'];
-		$jsUrl = ($devEnv) ? 'http://localhost:3003/public/assets/dynamic/'. $key .'.js' : $asset['js'];
-		add_js('app', ['src'=> $jsUrl, 'admin' => true, 'in_footer' => false]);
+		if (isset($asset['js'])) {
+			$jsUrl = ($devEnv) ? 'http://localhost:3003/public/assets/dynamic/'. $key .'.js' : $asset['js'];
+			add_js($key, ['src'=> $jsUrl, 'admin' => true, 'in_footer' => false]);
+		}
 		if(!$devEnv) {
-			add_css('app', ['src'=> $cssUrl, 'admin' => true]);
+			if (!isset($asset['css'])) continue;
+			add_css($key, ['src'=> $asset['css'], 'admin' => true]);
 		}
 	}
 }
 
 add_js('jquery-ui-js', [
-	'src' => SITE_URL .'assets/vendors/jquery-ui/jquery-ui.min.js', 
+	'src' => SITE_URL .'assets/vendors/jquery/ui/1.12.1/jquery-ui.min.js',
 	'admin' => true,
 	'in_footer' => false
 ]);
 
 add_css('jquery-ui-css', [
-	'src'=> SITE_URL .'assets/vendors/jquery-ui/jquery-ui.min.css', 
+	'src'=> SITE_URL .'assets/vendors/jquery/ui/1.12.1/jquery-ui.min.css',
 	'admin' => true
 ]);
 

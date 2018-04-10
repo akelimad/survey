@@ -59,6 +59,11 @@ class Route
 	}
 
 
+  public static function getRoutes()
+  {
+    return self::$routes;
+  }
+
   public static function getRoute()
   {
     $route = strtok($_SERVER['REQUEST_URI'], '?');

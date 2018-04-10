@@ -1,7 +1,7 @@
 <div class="row">	
 	<div class="col-md-12">
 		<div class="subscription mb-0" style="height: 23px;">
-			<h1>Liste des pièces jointes</h1>
+			<h1><?php trans_e("Liste des pièces jointes"); ?></h1>
 		</div>
 		<?= $table->render(); ?>
 	</div>	
@@ -10,7 +10,7 @@
 <div class="row">	
 	<div class="col-md-12">
 		<div class="subscription mt-15" style="height: 23px;">
-			<h1>Ajouter des pièces jointes</h1>
+			<h1><?php trans_e("Ajouter des pièces jointes"); ?></h1>
 		</div>
 		<form action="" method="post" enctype="multipart/form-data" id="candidatureAttachmentsForm">
 			<input type="hidden" name="id_candidature" id="attach_id_candidature" value="<?= $id_candidature ?>">
@@ -28,8 +28,8 @@
 			
 			<div class="ligneBleu mt-5" style="width: 100%;"></div>
 			<div class="form-group mt-5 mb-0">
-				<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-hidden="true">Fermer</button>
-			    <button type="submit" class="btn btn-primary btn-sm pull-right">Attacher les fichiers</button>
+				<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-hidden="true"><?php trans_e("Fermer"); ?></button>
+			    <button type="submit" class="btn btn-primary btn-sm pull-right"><?php trans_e("Attacher les fichiers"); ?></button>
 			</div>
 		</form>
 	</div>	

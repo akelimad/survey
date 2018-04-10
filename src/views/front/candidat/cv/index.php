@@ -19,59 +19,59 @@ use App\Models\TypeFormation;
 <div id="cv-container">
   <div class="row">
     <div class="col-sm-12">
-      <h1 class="pull-left">Mon CV</h1>
+      <h1 class="pull-left"><?php trans_e("Mon CV"); ?></h1>
       <div class="cv-print-btn">
-        <a href="javascript:void(0)" chm-print="#cv-container" chm-print-title="Mon CV" class="btn btn-primary btn-xs pull-right hidden-xs" id="cv-print" style="margin-top: 3px;"><i class="fa fa-print"></i>&nbsp;Imprimer</a>
+        <a href="javascript:void(0)" chm-print="#cv-container" chm-print-title="<?php trans_e("Mon CV"); ?>" class="btn btn-primary btn-xs pull-right hidden-xs" id="cv-print" style="margin-top: 3px;"><i class="fa fa-print"></i>&nbsp;<?php trans_e("Imprimer"); ?></a>
       </div>
     </div>
   </div>
 
   <div id="progress-container">
-    <p class="mt-10 mb-5">Complété à <?= $progress; ?>%</p>
+    <p class="mt-10 mb-5"><?php trans_e("Complété à"); ?> <?= $progress; ?>%</p>
     <div class="progress mb-10" style="height: 16px;">
       <div class="progress-bar progress-bar-xs progress-bar-default progress-bar-striped" role="progressbar" aria-valuenow="<?= $progress; ?>" aria-valuemin="0" aria-valuemax="100" style="background-color:#<?= $progress_color; ?>;width: <?= $progress; ?>%">
-        <span class="sr-only">Complété à <?= $progress; ?>%</span>
+        <span class="sr-only"><?php trans_e("Complété à"); ?> <?= $progress; ?>%</span>
       </div>
     </div>
   </div>
 
   <div class="cv-alert">
   <?php get_alert('warning', [
-    '<strong style="font-size: 12px;">Afin d\'avoir une meilleure visibilité de votre candidature:</strong>', 
-    'Ajouter d\'autres formations, <a href="javascript:void(0)" onclick="return chmFormation.getForm()">cliquer içi</a>', 
-    'Ajouter d\'autres expériences professionnelles, <a href="javascript:void(0)" onclick="return chmExperience.getForm()">cliquer içi</a>'
+    '<strong style="font-size: 12px;">'. trans("Afin d'avoir une meilleure visibilité de votre candidature:") .'</strong>', 
+    trans("Ajouter d'autres formations,") .' <a href="javascript:void(0)" onclick="return chmFormation.getForm()">'. trans("cliquer içi") .'</a>', 
+    trans("Ajouter d'autres expériences professionnelles,") .' <a href="javascript:void(0)" onclick="return chmExperience.getForm()">'. trans("cliquer içi") .'</a>'
     ], false) ?>
   </div>
 
   <div class="styled-title mt-10 mb-10">
-    <h3>Mes informations</h3>
+    <h3><?php trans_e("Mes informations"); ?></h3>
   </div>
 
   <div class="row">
     <div class="col-sm-6">
       <table class="cvTable">
         <tr>
-          <th width="130"><i class="fa fa-file-text-o"></i>&nbsp;Titre du CV</th>
+          <th width="130"><i class="fa fa-file-text-o"></i>&nbsp;<?php trans_e("Titre du CV"); ?></th>
           <td>:&nbsp;<?= get_candidat('titre'); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-pencil"></i>&nbsp;Date de création</th>
+          <th><i class="fa fa-pencil"></i>&nbsp;<?php trans_e("Date de création"); ?></th>
           <td>:&nbsp;<?= eta_date(get_candidat('date_inscription')); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-clock-o"></i>&nbsp;Date de modification</th>
+          <th><i class="fa fa-clock-o"></i>&nbsp;<?php trans_e("Date de modification"); ?></th>
           <td>:&nbsp;<?= eta_date(get_candidat('dateMAJ')); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-hourglass-start"></i>&nbsp;Situation actuelle</th>
+          <th><i class="fa fa-hourglass-start"></i>&nbsp;<?php trans_e("Situation actuelle"); ?></th>
           <td>:&nbsp;<?= Situation::getNameById(get_candidat('id_situ')); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-anchor"></i>&nbsp;Disponibilité</th>
+          <th><i class="fa fa-anchor"></i>&nbsp;<?php trans_e("Disponibilité"); ?></th>
           <td>:&nbsp;<?= Availability::getNameById(get_candidat('id_situ')); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-plane"></i>&nbsp;Mobilite</th>
+          <th><i class="fa fa-plane"></i>&nbsp;<?php trans_e("Mobilite"); ?></th>
           <td>:&nbsp;<?= ucfirst(get_candidat('mobilite', 'non')); ?>
             <?php
             $level = Mobilite::getLevelNameById(get_candidat('niveau_mobilite'));
@@ -86,27 +86,27 @@ use App\Models\TypeFormation;
     <div class="col-sm-6">
       <table class="cvTable">
         <tr>
-          <th width="125"><i class="fa fa-money"></i>&nbsp;Salaire souhaité</th>
+          <th width="125"><i class="fa fa-money"></i>&nbsp;<?php trans_e("Salaire souhaité"); ?></th>
           <td>:&nbsp;<?= Salary::getNameById(get_candidat('id_salr')); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-cogs"></i>&nbsp;Fonction souhaitée</th>
+          <th><i class="fa fa-cogs"></i>&nbsp;<?php trans_e("Fonction souhaitée"); ?></th>
           <td>:&nbsp;<?= Fonction::getNameById(get_candidat('id_fonc')); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-binoculars"></i>&nbsp;Secteur souhaité</th>
+          <th><i class="fa fa-binoculars"></i>&nbsp;<?php trans_e("Secteur souhaité"); ?></th>
           <td>:&nbsp;<?= Sector::getNameById(get_candidat('id_sect')); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-briefcase"></i>&nbsp;Durée d'expérience</th>
+          <th><i class="fa fa-briefcase"></i>&nbsp;<?php trans_e("Durée d'expérience"); ?></th>
           <td>:&nbsp;<?= Experience::getNameById(get_candidat('id_expe')); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-graduation-cap"></i>&nbsp;Type de formation</th>
+          <th><i class="fa fa-graduation-cap"></i>&nbsp;<?php trans_e("Type de formation"); ?></th>
           <td>:&nbsp;<?= TypeFormation::getNameById(get_candidat('id_tfor')); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-signal"></i>&nbsp;Niveau de formation</th>
+          <th><i class="fa fa-signal"></i>&nbsp;<?php trans_e("Niveau de formation"); ?></th>
           <td>:&nbsp;<?= FormationLevel::getNameById(get_candidat('id_nfor')); ?></td>
         </tr>
       </table>
@@ -114,7 +114,7 @@ use App\Models\TypeFormation;
   </div>
 
   <div class="styled-title mt-10 mb-10">
-    <h3>MON CV</h3>
+    <h3><?php trans_e("MON CV"); ?></h3>
   </div>
 
   <div class="row">
@@ -124,31 +124,31 @@ use App\Models\TypeFormation;
           <th colspan="2"><i class="fa fa-user"></i>&nbsp;<?= Candidat::getDisplayName(); ?></th>
         </tr>
         <tr>
-          <th width="120"><i class="fa fa-envelope"></i>&nbsp;E-mail</th>
+          <th width="120"><i class="fa fa-envelope"></i>&nbsp;<?php trans_e("E-mail"); ?></th>
           <td>:&nbsp;<?= get_candidat('email'); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-phone"></i>&nbsp;Télephone</th>
+          <th><i class="fa fa-phone"></i>&nbsp;<?php trans_e("Télephone"); ?></th>
           <td>:&nbsp;<?= get_candidat('tel1'); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-map-marker"></i>&nbsp;Adresse</th>
+          <th><i class="fa fa-map-marker"></i>&nbsp;<?php trans_e("Adresse"); ?></th>
           <td>:&nbsp;<?= get_candidat('adresse'); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-street-view"></i>&nbsp;Ville</th>
+          <th><i class="fa fa-street-view"></i>&nbsp;<?php trans_e("Ville"); ?></th>
           <td>:&nbsp;<?= get_candidat('ville'); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-map"></i>&nbsp;Pays de résidance</th>
+          <th><i class="fa fa-map"></i>&nbsp;<?php trans_e("Pays de résidance"); ?></th>
           <td>:&nbsp;<?= Country::getNameById(get_candidat('id_pays')); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-address-card-o"></i>&nbsp;Nationalité</th>
+          <th><i class="fa fa-address-card-o"></i>&nbsp;<?php trans_e("Nationalité"); ?></th>
           <td>:&nbsp;<?= get_candidat('nationalite'); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-calendar"></i>&nbsp;Date de naissance</th>
+          <th><i class="fa fa-calendar"></i>&nbsp;<?php trans_e("Date de naissance"); ?></th>
           <td>:&nbsp;<?= eta_date(get_candidat('date_n')); ?></td>
         </tr>
       </table>
@@ -160,13 +160,13 @@ use App\Models\TypeFormation;
 
 
   <div class="styled-title mt-10 mb-10">
-    <h3>Formations</h3>
+    <h3><?php trans_e("Formations"); ?></h3>
   </div>
   <?php if (!empty($formations)) : ?>
   <?php foreach ($formations as $key => $formation) : ?>
     <div class="row mb-10">
       <div class="col-sm-3 mb-5">
-        <strong><?= eta_date($formation->date_debut, '%b %Y', true); ?>&nbsp;-&nbsp;<?= ($formation->date_fin != '') ? eta_date($formation->date_fin, '%b %Y', true) : 'Aujourd\'hui'; ?></strong>
+        <strong><?= eta_date($formation->date_debut, '%b %Y', true); ?>&nbsp;-&nbsp;<?= ($formation->date_fin != '') ? eta_date($formation->date_fin, '%b %Y', true) : trans("Aujourd'hui"); ?></strong>
       </div>
       <div class="col-sm-9 pl-0 pl-xs-15">
         <?php 
@@ -186,18 +186,18 @@ use App\Models\TypeFormation;
     </div>
     <?php endforeach; ?>
   <?php else : ?>
-    <strong>Aucune formation trouvée.</strong>
+    <strong><?php trans_e("Aucune formation trouvée."); ?></strong>
   <?php endif; ?>
 
 
   <div class="styled-title mt-10 mb-10">
-    <h3>Experiences</h3>
+    <h3><?php trans_e("Experiences"); ?></h3>
   </div>
   <?php if (!empty($experiences)) : ?>
   <?php foreach ($experiences as $key => $experience) : ?>
     <div class="row mb-10">
       <div class="col-sm-3 mb-5">
-        <strong><?= eta_date($experience->date_debut, '%b %Y', true); ?>&nbsp;-&nbsp;<?= ($experience->date_fin != '') ? eta_date($experience->date_fin, '%b %Y', true) : 'Aujourd\'hui'; ?></strong>
+        <strong><?= eta_date($experience->date_debut, '%b %Y', true); ?>&nbsp;-&nbsp;<?= ($experience->date_fin != '') ? eta_date($experience->date_fin, '%b %Y', true) : trans("Aujourd'hui"); ?></strong>
       </div>
       <div class="col-sm-9 pl-0 pl-xs-15">
         <?php
@@ -225,27 +225,27 @@ use App\Models\TypeFormation;
     </div>
     <?php endforeach; ?>
   <?php else : ?>
-    <strong>Aucune expérience trouvée.</strong>
+    <strong><?php trans_e("Aucune expérience trouvée."); ?></strong>
   <?php endif; ?>
 
   <div class="styled-title mt-10 mb-10">
-    <h3>Langues</h3>
+    <h3><?php trans_e("Langues"); ?></h3>
   </div>
 
   <div class="row" id="cv-languages">
     <?php if (get_candidat('arabic') != '') : ?>
     <div class="col-sm-4 mb-10">
-      <span>Arabe&nbsp;<strong>(<?= get_candidat('arabic'); ?>)</strong></span>
+      <span><?php trans_e("Arabe"); ?>&nbsp;<strong>(<?= get_candidat('arabic'); ?>)</strong></span>
     </div>
     <?php endif; ?>
     <?php if (get_candidat('french') != '') : ?>
     <div class="col-sm-4 mb-10">
-      <span>Français&nbsp;<strong>(<?= get_candidat('french'); ?>)</strong></span>
+      <span><?php trans_e("Français"); ?>&nbsp;<strong>(<?= get_candidat('french'); ?>)</strong></span>
     </div>
     <?php endif; ?>
     <?php if (get_candidat('english') != '') : ?>
     <div class="col-sm-4 mb-10">
-      <span>Français&nbsp;<strong>(<?= get_candidat('english'); ?>)</strong></span>
+      <span><?php trans_e("Anglais"); ?>&nbsp;<strong>(<?= get_candidat('english'); ?>)</strong></span>
     </div>
     <?php endif; ?>
     <?php if (get_candidat('autre') != '') : ?>
@@ -266,17 +266,17 @@ use App\Models\TypeFormation;
   </div>
 
   <div class="styled-title mb-10">
-    <h3>Fichiers joints</h3>
+    <h3><?php trans_e("Fichiers joints"); ?></h3>
   </div>
 
   <div class="row">
     <?php if (!empty($cvs)) : ?>
     <div class="col-sm-6">
-    <strong>CVs</strong>
+    <strong><?php trans_e("CVs"); ?></strong>
     <ul class="mt-10">
     <?php foreach ($cvs as $key => $cv) : ?>
       <li class="mb-5">
-        <a target="_blank" href="<?= get_resume_url($cv->lien_cv); ?>" title="Télécharger"><i class="fa fa-download"></i></a>
+        <a target="_blank" href="<?= get_resume_url($cv->lien_cv); ?>" title="<?php trans_e("Télécharger"); ?>"><i class="fa fa-download"></i></a>
         <?= $cv->titre_cv; ?>
       </li>
     <?php endforeach; ?>
@@ -286,11 +286,11 @@ use App\Models\TypeFormation;
 
     <?php if (!empty($cvs)) : ?>
     <div class="col-sm-6">
-    <strong>Lettres de motivation</strong>
+    <strong><?php trans_e("Lettres de motivation"); ?></strong>
     <ul class="mt-10">
     <?php foreach ($lms as $key => $lm) : ?>
       <li class="mb-5">
-        <a target="_blank" href="<?= get_motivation_letter_url($lm->lettre); ?>" title="Télécharger"><i class="fa fa-download"></i></a>
+        <a target="_blank" href="<?= get_motivation_letter_url($lm->lettre); ?>" title="<?php trans_e("Télécharger"); ?>"><i class="fa fa-download"></i></a>
         <?= $lm->titre; ?>
       </li>
     <?php endforeach; ?>

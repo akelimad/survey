@@ -31,12 +31,12 @@ class AlertTableController extends Controller
       return eta_date($row->date, get_setting('date_format'));
     }, ['attributes' => ['width' => 70]]);
 
-    $table->addColumn('titre', 'Description de l\'alerte', function($row) {
+    $table->addColumn('titre', trans("Description de l'alerte"), function($row) {
       return $row->titre;
     });
 
     $table->setAction('activate',  [
-      'label' => 'Activer l\'alerte',
+      'label' => trans("Activer l'alerte"),
       'patern' => '#',
       'icon' => 'fa fa-power-off',
       'bulk_action' => false,
@@ -50,7 +50,7 @@ class AlertTableController extends Controller
     ]);
 
     $table->setAction('deactivate',  [
-      'label' => 'Désactiver l\'alerte',
+      'label' => trans("Désactiver l'alerte"),
       'patern' => '#',
       'icon' => 'fa fa-times',
       'bulk_action' => false,
@@ -64,7 +64,7 @@ class AlertTableController extends Controller
     ]);
 
     $table->setAction('search',  [
-      'label' => 'Executer la recherche',
+      'label' => trans("Executer la recherche"),
       'patern' => site_url('offres?s={titre}'),
       'icon' => 'fa fa-search',
       'bulk_action' => false,
@@ -76,7 +76,7 @@ class AlertTableController extends Controller
 
     $table->setAction('edit', [
       'patern' => '#',
-      'label' => 'Editer cette alerte',
+      'label' => trans("Editer cette alerte"),
       'attributes' => [
         'class' => 'btn btn-primary btn-xs mb-0',
         'onclick' => "return chmJobAlerts.form({id_alert})",
@@ -85,10 +85,10 @@ class AlertTableController extends Controller
 
     $table->setAction('delete', [
       'patern' => '#',
-      'label' => 'Supprimer cette alerte',
+      'label' => trans("Supprimer cette alerte"),
       'attributes' => [
         'class' => 'btn btn-danger btn-xs mb-0',
-        'onclick' => "return chmModal.confirm('', '', 'Êtes-vous sûr de vouloir supprimer cette alerte ?', 'chmJobAlerts.delete', &#123;'id': {id_alert}&#125;, {width: 335})",
+        'onclick' => "return chmModal.confirm('', '', '". trans("Êtes-vous sûr de vouloir supprimer cette alerte ?") ."', 'chmJobAlerts.delete', &#123;'id': {id_alert}&#125;, {width: 335})",
       ]
     ]);
 

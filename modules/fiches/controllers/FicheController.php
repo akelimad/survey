@@ -37,7 +37,7 @@ class FicheController extends \App\Controllers\Controller
     return get_page('admin/fiche/index', [
       'table' => $table,
       'data' => $this->data,
-      'breadcrumbs' => ['Fiches', 'Fiches de présélection / evaluation']
+      'breadcrumbs' => [trans("Fiches"), trans("Fiches de présélection / evaluation")]
     ], __FILE__);
   }
 
@@ -54,7 +54,7 @@ class FicheController extends \App\Controllers\Controller
 
     return get_page('admin/fiche/form', [
       'data' => $this->data,
-      'breadcrumbs' => ['Fiches', 'Créer une fiche']
+      'breadcrumbs' => [trans("Fiches"), trans("Créer une fiche")]
     ], __FILE__);
   }
 
@@ -69,7 +69,7 @@ class FicheController extends \App\Controllers\Controller
     
     $fiche = getDB()->findOne('fiches', 'id_fiche', $id_fiche);
     if( !isset($fiche->id_fiche) ) {
-      Session::setFlash('danger', "Impossible de trouver cette fiche.");
+      Session::setFlash('danger', trans("Impossible de trouver cette fiche."));
       redirect('backend/module/fiches/fiche');
     }
     $this->data = (object) array_replace_recursive((array)$this->data, (array)$fiche);
@@ -79,7 +79,7 @@ class FicheController extends \App\Controllers\Controller
 
     return get_page('admin/fiche/form', [
       'data' => $this->data,
-      'breadcrumbs' => ['Fiches', 'Modifier une fiche']
+      'breadcrumbs' => [trans("Fiches"), trans("Modifier une fiche")]
     ], __FILE__);
   }
 
@@ -93,19 +93,19 @@ class FicheController extends \App\Controllers\Controller
     $db = getDB();
     $fiche = $db->findOne('fiches', 'id_fiche', $id_fiche);
     if( !isset($fiche->id_fiche) ) {
-      Session::setFlash('danger', "Impossible de trouver cette fiche.");
+      Session::setFlash('danger', trans("Impossible de trouver cette fiche."));
     }
     
     $ficheUsed = $db->exists('fiche_offre', 'id_fiche', $id_fiche);
     if( $ficheUsed ) {
-      Session::setFlash('danger', "Impossible de supprimer une fiche déja lié à un offre.");
+      Session::setFlash('danger', trans("Impossible de supprimer une fiche déja lié à un offre."));
     }
 
     // delete fiche
     $db->delete('fiches', 'id_fiche', $id_fiche);
     $db->delete('fiche_items', 'id_fiche', $id_fiche);
     
-    Session::setFlash('success', "La fiche a été bien supprimer.");
+    Session::setFlash('success', trans("La fiche a été bien supprimer."));
     
     redirect('backend/module/fiches/fiche');
   }
@@ -128,7 +128,7 @@ class FicheController extends \App\Controllers\Controller
   {
     if( form_submited() ) {
       if( $this->saveFiche() ) {
-        Session::setFlash('success', "La fiche a été bien sauvegardé.");
+        Session::setFlash('success', trans("La fiche a été bien sauvegardé."));
         redirect('backend/module/fiches/fiche');
       }
     }
@@ -155,14 +155,14 @@ class FicheController extends \App\Controllers\Controller
     }
       
     if( !$this->data->id_fiche ) {
-      Session::setFlash('danger', "Une erreur est survenu lors de sauvegarde de la fiche.");
+      Session::setFlash('danger', trans("Une erreur est survenu lors de sauvegarde de la fiche."));
       return false;
     }
     
     $saveItems = $this->saveItems($this->data->block_items, $this->data->id_fiche);
 
     if( !$saveItems ) {
-      Session::setFlash('danger', "Une erreur est survenu lors de sauvegarde des criteres de l’annonce.");
+      Session::setFlash('danger', trans("Une erreur est survenu lors de sauvegarde des criteres de l’annonce."));
       redirect('backend/module/fiches/fiche/edit/'.$this->data->id_fiche);
     }
 

@@ -49,7 +49,7 @@ class Candidatures {
 	}
 
 
-	public function countByStatus($status_id)
+	public static function countByStatus($status_id)
 	{
 		$query  = "SELECT COUNT(*) AS count FROM candidature c JOIN offre o ON o.id_offre = c.id_offre";
 		if( !isAdmin() ) $query .= ' JOIN role_candidature rc ON rc.id_candidature = c.id_candidature';

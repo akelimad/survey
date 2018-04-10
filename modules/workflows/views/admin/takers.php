@@ -6,8 +6,8 @@
 
 <div class="row">
 	<div class="col-md-6">
-		<a href="<?= site_url('backend/module/workflows/workflow/builder') ?>" class="btn btn-primary btn-sm mb-20"><i class="fa fa-code-fork"></i>&nbsp;Gérer les workflows</a>
-		<a href="<?= site_url('backend/module/workflows/workflow') ?>" class="btn btn-default btn-sm mb-20"><i class="fa fa-history"></i>&nbsp;Historique des workflows</a>
+		<a href="<?= site_url('backend/module/workflows/workflow/builder') ?>" class="btn btn-primary btn-sm mb-20"><i class="fa fa-code-fork"></i>&nbsp;<?php trans_e("Gérer les workflows"); ?></a>
+		<a href="<?= site_url('backend/module/workflows/workflow') ?>" class="btn btn-default btn-sm mb-20"><i class="fa fa-history"></i>&nbsp;<?php trans_e("Historique des workflows"); ?></a>
 	</div>
 </div>
 
@@ -15,7 +15,7 @@
 	<?php get_flash_message() ?>
 	<div class="panel panel-default mt-20" id="dep-takers">
 		<div class="panel-body">
-			<h5 style="margin: 0px;"><strong>Preneurs par département</strong></h5><hr>
+			<h5 style="margin: 0px;"><strong><?php trans_e("Preneurs par département"); ?></strong></h5><hr>
 			<ul class="list-group" style="margin-bottom: 0px;">
 				<?php foreach ($wf_deps as $id_dep => $dep): ?>
 				<li class="list-group-item list-group-item-info mt-10 mb-10"><?= $dep['name'] ?></li>
@@ -33,7 +33,7 @@
 				<?php endforeach; ?>
 			</ul>
 			<div class="ligneBleu mt-10"></div>
-			<?php $label = (empty($takers)) ? 'Déclencher le workflow' : 'Mettre à jour'; ?>
+			<?php $label = (empty($takers)) ? trans("Déclencher le workflow") : trans("Mettre à jour"); ?>
 			<button type="submit" class="btn btn-primary btn-sm mt-5"><i class="fa fa-save"></i>&nbsp;<?= $label; ?></button>
 		</div>
 	</div>

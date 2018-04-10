@@ -48,10 +48,15 @@ class EventController
 
 	public function afterOffreFields($data)
 	{
+		$fiche = new \stdClass;
+		if (isset($data['id_offre'])) {
+			// TODO - Get fiche by offer ID
+			// $fiche = Fiche::getOffreFicheByType($data['id_offre'], '');
+		}
 		return View::get('admin/offre/fields', [
 			'fiche' 	 => $fiche,
 			'ficheTypes' => $this->ficheTypes,
-			'id_offre'   => $data['id_offre'] ?: null
+			'id_offre'   => (isset($data['id_offre'])) ? $data['id_offre'] : null
 		], __FILE__);
 	}
 
@@ -146,9 +151,9 @@ class EventController
 			// update note orale
 			if(isset($data['fiche']['type']) && $data['fiche']['type'] == 1) $this->updateNoteOrale($id_candidature);
 
-			Session::setFlash('success', 'La fiche a été bien sauvegarder.');
+			Session::setFlash('success', trans("La fiche a été bien sauvegarder."));
 		else :
-			Session::setFlash('danger', 'Impossible de sauvegarder la fiche.');
+			Session::setFlash('danger', trans("Impossible de sauvegarder la fiche."));
 		endif;
 	}
 

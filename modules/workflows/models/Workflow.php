@@ -181,7 +181,7 @@ class Workflow extends Model
    */
   public static function getStatusLabelByName($name)
   {
-    return (isset(self::$status[$name])) ? self::$status[$name]['label'] : $name;
+    return (isset(self::$status[$name])) ? trans(self::$status[$name]['label']) : $name;
   }
 
 

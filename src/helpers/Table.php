@@ -270,8 +270,8 @@ class Table extends Pagination {
         $this->_query = $query;
         $this->primary_key = $primary_key;
         $this->_options = array_merge($this->_options, $options);
-        $this->_options['text_prev'] = '<i class="fa fa-angle-double-left"></i>&nbsp;Précédent';
-        $this->_options['text_next'] = 'Suivant&nbsp;<i class="fa fa-angle-double-right"></i>';
+        $this->_options['text_prev'] = '<i class="fa fa-angle-double-left"></i>&nbsp;'. trans("Précédent");
+        $this->_options['text_next'] = trans("Suivant"). '&nbsp;<i class="fa fa-angle-double-right"></i>';
 
         // Set url
         if( !isset($options['url']) ) {
@@ -444,14 +444,17 @@ class Table extends Pagination {
                 foreach ($this->headers as $key => $header) {
 
                     $colAttrs = '';
+                    if (!isset($this->columnOptions[$key]['attributes']['class']))
+                        $this->columnOptions[$key]['attributes']['class'] = '';
+
                     $this->columnOptions[$key]['attributes']['class'] .= ' '.$key;
 
                     if( !empty($this->sortables) && in_array($key, $this->sortables) ) {
                         if (isset($this->columnOptions[$key]['attributes']['title'])) {
                             $title = $this->columnOptions[$key]['attributes']['title'];
-                            $this->columnOptions[$key]['attributes']['title'] = 'Trier par:&nbsp;'.$title;
+                            $this->columnOptions[$key]['attributes']['title'] = trans("Trier par:") .'&nbsp;'.$title;
                         } else {
-                            $this->columnOptions[$key]['attributes']['title'] = 'Trier par:&nbsp;'.$header;
+                            $this->columnOptions[$key]['attributes']['title'] = trans("Trier par:") .'&nbsp;'.$header;
                         }
                     }
 
@@ -477,7 +480,7 @@ class Table extends Pagination {
                 }
                 if( $this->_options['actions'] ) :
                     $width = (!is_null($this->_options['head_actions_width'])) ? $this->_options['head_actions_width'] : count($this->_actions) * 35;
-                    $thead .= '<th width="'. $width .'px" class="actions">Actions</th>';
+                    $thead .= '<th width="'. $width .'px" class="actions">'. trans("Actions") .'</th>';
                     $rowspan += 1;
                 endif;
                 $html .= $thead . '</tr></thead>';
@@ -511,13 +514,13 @@ class Table extends Pagination {
 
                     // Get actions links
                 if( $this->_options['actions'] ) :
-                    $html .= '<td class="actions">'. $this->getActionsLinks($columns, $row) .'</td>';
+                    $html .= '<td width="105" class="actions">'. $this->getActionsLinks($columns, $row) .'</td>';
                 endif;
 
                 $html .= '</tr>';
             endforeach; else :
 
-            $html .= '<tr><td class="empty" colspan="'. $rowspan .'" style="text-align: center; border-top: 3px solid #e32b2b !important; border-bottom: 3px solid #e32b2b !important;">Aucune donnée à afficher.</td></tr>';
+            $html .= '<tr><td class="empty" colspan="'. $rowspan .'" style="text-align: center; border-top: 3px solid #e32b2b !important; border-bottom: 3px solid #e32b2b !important;">'. trans("Aucune donnée à afficher.") .'</td></tr>';
 
                 endif; // END Table
                 $html .= '</tbody>';
@@ -536,7 +539,7 @@ class Table extends Pagination {
                 if( $this->_options['bulk_actions'] && $this->hasBulkActions() ) :
                     $html .= '<div class="col-md-5" id="bulk-wrap">';
                     $html .= '<select name="'. $this->table_id .'_action" required>';
-                    $html .= '<option value="">Actions groupées</option>';
+                    $html .= '<option value="">'. trans("Actions groupées") .'</option>';
                     foreach ($this->_actions as $key => $action)
                     {
                         if( $key == 'edit' || !$action['bulk_action'] ) continue;
@@ -545,7 +548,7 @@ class Table extends Pagination {
                         $html .= '<option value="'. $key .'" '.$callable.'>'. $bulk_label .'</option>';
                     }
                     $html .= '</select>&nbsp;';
-                    $html .= '<input type="submit" class="espace_candidat" value="Appliquer" style="padding: 0px 8px;border: 0px;margin-right: 5px;">';
+                    $html .= '<input type="submit" class="espace_candidat" value="'. trans("Appliquer") .'" style="padding: 0px 8px;border: 0px;margin-right: 5px;">';
                     $html .= '<div class="form-group">';
                     $html .= '<select id="'.$this->table_id.'_perpage" class="etaTable_perpage">';
                     foreach ($this->perpages as $key => $value) {
@@ -609,7 +612,7 @@ class Table extends Pagination {
             if( $permission !== true ) continue;
 
             // permission
-            $label = ($action['icon']!='') ? '<i class="'.$action['icon'].'"></i>' : $action['label'];
+            $label = ($action['icon']!='') ? '<i class="'.$action['icon'].'"></i>' : trans($action['label']);
 
             $columns['primary_key'] = $columns[$this->primary_key];
             // $patern = str_replace('primary_key', $this->primary_key, $action['patern']);
@@ -643,9 +646,10 @@ class Table extends Pagination {
                 $confirm = (!is_null($action['callback']) && $action['callback']!='') ? 'onclick="return '. $action['callback'] .'(event, ['. $columns[$this->primary_key] .']);"' : '';
             }
 
-            $html .= '<a title="'. $action['label'] .'" href="'. $actionLink .'" '. $attrs .' '. $confirm .'>'. $label .'&nbsp;</a>';
+            $html .= '<a style="width:24px;" title="'. trans($action['label']) .'" href="'. $actionLink .'" '. $attrs .' '. $confirm .'>'. $label .'&nbsp;</a>';
 
-            if($i < count($this->_actions)) $html .= '&nbsp;';
+            // if($i < count($this->_actions)) $html .= '&nbsp;';
+            if($i%3 != 0) $html .= '&nbsp;';
         }
         return $html;
     }
@@ -918,7 +922,7 @@ class Table extends Pagination {
         } else {
             $default = array(
                 'name' => $name,
-                'label' => 'Sans titre',
+                'label' => trans("Sans titre"),
                 'patern' => '#',
                 'icon' => '',
                 'permission' => true,

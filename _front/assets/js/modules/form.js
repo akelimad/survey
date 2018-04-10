@@ -39,7 +39,7 @@ export default class chmForm {
     if (loadingAttr !== undefined) {
       loadingLabel = loadingAttr
     }
-    btn.html('<i class="fa fa-circle-o-notch"></i>&nbsp;' + loadingLabel)
+    btn.html('<i class="fa fa-circle-o-notch fa-spin"></i>&nbsp;' + loadingLabel)
     btn.prop('disabled', true)
 
     $('.chm-response-messages').empty()

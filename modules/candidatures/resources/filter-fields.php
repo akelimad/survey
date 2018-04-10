@@ -7,14 +7,14 @@ return array(
 		'name' => 'motcle',
 		'type' => 'text',
 		'value' => '',
-		'label' => 'Rechercher par mot clé',
+		'label' => trans("Rechercher par mot clé"),
 		'sortOrder' => 10,
 	],
 	[
 		'name' => 'tfor',
 		'type' => 'select',
 		'value' => '',
-		'label' => 'Par type de formation',
+		'label' => trans("Par type de formation"),
 		'sortOrder' => 20,
 		'options' => getDB()->prepare("SELECT id_tfor AS value, formation AS text FROM prm_type_formation")
 	],
@@ -22,20 +22,20 @@ return array(
 		'name' => 'fraicheur',
 		'type' => 'select',
 		'value' => '',
-		'label' => 'Par fraicheur du CV',
+		'label' => trans("Par fraicheur du CV"),
 		'sortOrder' => 30,
 		'options' => array(
-			30  => '1 mois',
-			90  => '3 mois',
-			180 => '6 mois',
-			360 => '12 mois'
+			30  => trans("1 mois"),
+			90  => trans("3 mois"),
+			180 => trans("6 mois"),
+			360 => trans("12 mois")
 		)
 	],
 	[
 		'name' => 'sect',
 		'type' => 'select',
 		'value' => '',
-		'label' => 'Par secteur d\'activité',
+		'label' => trans("Par secteur d'activité"),
 		'sortOrder' => 40,
 		'options' => getDB()->prepare("SELECT id_sect AS value, FR AS text FROM prm_sectors")
 	],
@@ -43,7 +43,7 @@ return array(
 		'name' => 'id_salr',
     'type' => 'select',
     'value' => '',
-    'label' => 'Salaire souhaité',
+    'label' => trans("Salaire souhaité"),
     'sortOrder' => 42,
     'options' => getDB()->prepare("SELECT id_salr AS value, salaire AS text FROM prm_salaires")
 	],
@@ -51,7 +51,7 @@ return array(
 		'name' => 'fonc',
 		'type' => 'select',
 		'value' => '',
-		'label' => 'Fonction',
+		'label' => trans("Fonction"),
 		'sortOrder' => 45,
 		'options' => getDB()->prepare("SELECT id_fonc AS value, fonction AS text FROM prm_fonctions")
 	],
@@ -59,7 +59,7 @@ return array(
 		'name' => 'ref_offre',
 		'type' => 'select',
 		'value' => '',
-		'label' => 'Par ref de l\'offre',
+		'label' => trans("Par ref de l'offre"),
 		'sortOrder' => 60,
 		'options' => getDB()->prepare("SELECT id_offre AS value, CONCAT(id_offre, ' | ', Name) AS text FROM offre WHERE status='". $offreStatus ."' ORDER BY id_offre DESC")
 	],	
@@ -67,7 +67,7 @@ return array(
 		'name' => 'exp',
 		'type' => 'select',
 		'value' => '',
-		'label' => 'Par année d\'expérience',
+		'label' => trans("Par année d'expérience"),
 		'sortOrder' => 70,
 		'options' => getDB()->prepare("SELECT id_expe AS value, intitule AS text FROM prm_experience")
 	],
@@ -75,7 +75,7 @@ return array(
 		'name' => 'ecole',
 		'type' => 'select',
 		'value' => '',
-		'label' => 'Par école ou établissement',
+		'label' => trans("Par école ou établissement"),
 		'sortOrder' => 80,
 		'options' => getDB()->prepare("SELECT id_ecole AS value, nom_ecole AS text FROM prm_ecoles")
 	],
@@ -83,7 +83,7 @@ return array(
 		'name' => 'pays',
 		'type' => 'select',
 		'value' => '',
-		'label' => 'Par pays de résidence',
+		'label' => trans("Par pays de résidence"),
 		'sortOrder' => 85,
 		'options' => getDB()->prepare("SELECT id_pays AS value, pays AS text FROM prm_pays")
 	],
@@ -91,7 +91,7 @@ return array(
 		'name' => 'ville',
 		'type' => 'select',
 		'value' => '',
-		'label' => 'Par ville',
+		'label' => trans("Par ville"),
 		'sortOrder' => 90,
 		'options' => getDB()->prepare("SELECT ville AS value, ville AS text FROM prm_villes")
 	],
@@ -99,7 +99,7 @@ return array(
 		'name' => 'nfor',
 		'type' => 'select',
 		'value' => '',
-		'label' => 'Par niveau d\'étude',
+		'label' => trans("Par niveau d'étude"),
 		'sortOrder' => 100,
 		'options' => getDB()->prepare("SELECT id_nfor AS value, formation AS text FROM prm_niv_formation")
 	],
@@ -107,7 +107,7 @@ return array(
 		'name' => 'situ',
 		'type' => 'select',
 		'value' => '',
-		'label' => 'Par situation actuelle',
+		'label' => trans("Par situation actuelle"),
 		'sortOrder' => 110,
 		'options' => getDB()->prepare("SELECT id_situ AS value, situation AS text FROM prm_situation")
 	],
@@ -115,7 +115,7 @@ return array(
 		'name' => 'campagne',
 		'type' => 'select',
 		'value' => '',
-		'label' => 'Par campagne de recrutement',
+		'label' => trans("Par campagne de recrutement"),
 		'sortOrder' => 120,
 		'options' => getDB()->prepare("SELECT id_compagne AS value, titre_compagne AS text FROM compagne_recrutement")
 	],*/
@@ -123,19 +123,19 @@ return array(
 		'name' => 'pertinence',
 		'type' => 'select',
 		'value' => '',
-		'label' => 'Par pertinence',
+		'label' => trans("Par pertinence"),
 		'sortOrder' => 130,
 		'options' => [
-			100 => 'Bonne',
-			60 => 'Moyenne',
-			30 => 'Faible',
+			100 => trans("Bonne"),
+			60 => trans("Moyenne"),
+			30 => trans("Faible"),
 		]
 	],
 	[
 		'name' => 'dfor',
 		'type' => 'select',
 		'value' => '',
-		'label' => 'Domaine de formation',
+		'label' => trans("Domaine de formation"),
 		'sortOrder' => 140,
 		'options' => getDB()->prepare("SELECT domaine_id AS value, name AS text FROM prm_domaines_formation")
 	],

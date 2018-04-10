@@ -27,7 +27,7 @@ class Menu {
   public static function draw($items) {
     $route = Route::getRoute();
     $default = [
-      "label" => "Sans titre",
+      "label" => trans("Sans titre"),
       "route" => "/",
       "icon" => "fa fa-dot-circle-o",
       "isVisible" => true,      

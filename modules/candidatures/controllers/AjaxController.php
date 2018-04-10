@@ -97,7 +97,7 @@ class AjaxController
     if( empty($candidatures) ) return [];
 
     return $this->renderAjaxView(
-      'Envoyer e-mail au candidat', 
+      trans("Envoyer e-mail au candidat"), 
       'admin/candidature/popup/send-mail', [
         'candidatures' => $candidatures
     ]);
@@ -122,17 +122,17 @@ class AjaxController
       ", [$data['candidatures'][0]], true);
     if( empty($candidature) ) return [
       'status' => 'error',
-      'message' => 'Impossible de trouver cette candidature.'
+      'message' => trans("Impossible de trouver cette candidature.")
     ];
 
     $cv = Resume::getByID($candidature->id_cv);
     if( !isset($cv->lien_cv) ) return [
       'status' => 'error',
-      'message' => 'Impossible de trouver le CV de ce candidat.'
+      'message' => trans("Impossible de trouver le CV de ce candidat.")
     ];
 
     return $this->renderAjaxView(
-      'Transfère le cv par email', 
+      trans("Transfère le cv par email"), 
       'admin/candidature/popup/send-mail', [
         'candidatures' => [$candidature],
         'cv_name' => $cv->titre_cv,
@@ -153,7 +153,7 @@ class AjaxController
     $options['currentPage'] = (isset($data['page']) && is_valid_int($data['page'])) ? $data['page'] : 1;
     $table = (new AttachmentController())->getTable($id_candidature, $options);
 
-    return $this->renderAjaxView('Pièces jointes', 'admin/candidature/popup/attachments', [
+    return $this->renderAjaxView(trans("Pièces jointes"), 'admin/candidature/popup/attachments', [
       'id_candidature' => $id_candidature,
       'table' => $table,
       'currentPage' => $options['currentPage']
@@ -180,7 +180,7 @@ class AjaxController
     if( empty($candidature) ) return [];
 
     return $this->renderAjaxView(
-      'Formulaire d\'édition de statut de la candidature', 
+      trans("Formulaire d'édition de statut de la candidature"), 
       'admin/candidature/popup/change-status', [
         'candidature' => $candidature,
         'id_statut' => $data['id_statut']
@@ -202,7 +202,7 @@ class AjaxController
     if( !isset($candidature->id_candidature) ) return [];
 
     return $this->renderAjaxView(
-      'Changer la note écrit', 
+      trans("Changer la note écrit"), 
       'admin/candidature/popup/update-note-ecrit', [
         'id_candidature' => $data['id_candidature'],
         'note_ecrit' => $candidature->note_ecrit
@@ -230,7 +230,7 @@ class AjaxController
     if (!is_array($table_actions)) $table_actions = [];
 
     return $this->renderAjaxView(
-      'Partager les candidatures', 
+      trans("Partager les candidatures"), 
       'admin/candidature/popup/share-candidatures', [
         'candidatures' => $data['candidatures'],
         'table_actions' => $table_actions
@@ -248,7 +248,7 @@ class AjaxController
     if( !isset($data['id_candidature']) || !isset($data['id_offre'])) return [];
 
     return $this->renderAjaxView(
-      'Changer l\'offre de candidature', 
+      trans("Changer l'offre de candidature"), 
       'admin/candidature/popup/change-offre', [
         'id_candidature' => $data['id_candidature'],
         'id_offre' => $data['id_offre'],
@@ -313,7 +313,7 @@ class AjaxController
   {
     if( $_FILES['attachments']['size'][0] <= 0 || !isset($data['id_candidature']) ) return [
       'status' => 'error',
-      'message' => 'Aucun fichier choisi.',
+      'message' => trans("Aucun fichier choisi."),
     ];
 
     $id_candidature = $data['id_candidature'];
@@ -340,7 +340,7 @@ class AjaxController
     
     return [
       'status' => 'success',
-      'message' => 'Les fichiers ont été bien attaché.',
+      'message' => trans("Les fichiers ont été bien attaché."),
     ];
   }
 
@@ -357,7 +357,7 @@ class AjaxController
       (!isset($data['title']) || $data['title'] == '')
     ) return [
       'status' => 'error',
-      'message' => 'Le titre ne peut pas être vide.'
+      'message' => trans("Le titre ne peut pas être vide.")
     ];
 
     // update attachement
@@ -370,7 +370,7 @@ class AjaxController
 
     return [
       'status' => 'success',
-      'message' => 'Le titre a été bien mise à jour.',
+      'message' => trans("Le titre a été bien mise à jour."),
       'updated_at' => date ("d.m.Y H:i", strtotime($updated_at))
     ];
   }
@@ -385,7 +385,7 @@ class AjaxController
   {
     if(!isset($data['id_attachement']) || $data['id_attachement'] == '') return [
       'status' => 'error',
-      'message' => 'Impossible de supprimer cette pièce joint.'
+      'message' => trans("Impossible de supprimer cette pièce joint.")
     ];
 
     $db = getDB();
@@ -396,7 +396,7 @@ class AjaxController
     if( !isset($attachment->id_attachment) ) {
       return [
         'status' => 'error',
-        'message' => 'Impossible de trouver cette pièce joint.'
+        'message' => trans("Impossible de trouver cette pièce joint.")
       ];
     }
 
@@ -407,7 +407,7 @@ class AjaxController
     
     return [
       'status' => 'success',
-      'message' => 'La pièce joint a été supprimé.'
+      'message' => trans("La pièce joint a été supprimé.")
     ];
   }
 
@@ -446,7 +446,7 @@ class AjaxController
         'date_statu' => $date_statut,
         'lieu_statut' => $c->lieu,
         'lieu_statu' => $c->lieu,
-        'lien_confirmation' => '<a href="'. site_url('confirmation/?i='.$c->id_agend) .'"> <b>Confirmer</b></a>'
+        'lien_confirmation' => '<a href="'. site_url('confirmation/?i='.$c->id_agend) .'"> <b>'. trans("Confirmer") .'</b></a>'
       );
 
       return preg_replace_callback('#{{([^}]+)}}#', function($m) use ($message, $variables){

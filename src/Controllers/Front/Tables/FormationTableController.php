@@ -31,11 +31,11 @@ class FormationTableController extends Controller
     $table->setOrder('DESC');
     $table->setPage($_GET['page']);
 
-    $table->addColumn('diplome', 'Diplôme', function($row) {
+    $table->addColumn('diplome', trans("Diplôme"), function($row) {
       return Formation::getDiplomeName($row->diplome);
     });
 
-    $table->addColumn('id_ecol', 'École ou établissement', function($row) {
+    $table->addColumn('id_ecol', trans("École ou établissement"), function($row) {
       if ($row->ecole != '') {
         return $row->ecole;
       } else {
@@ -43,20 +43,20 @@ class FormationTableController extends Controller
       }
     });
 
-    $table->addColumn('date_debut', 'Date de début', function($row) {
+    $table->addColumn('date_debut', trans("Date de début"), function($row) {
       if (strlen($row->date_debut) == 7) $row->date_debut = '01/'. $row->date_debut;
       return \french_to_english_date($row->date_debut, 'd.m.Y');
     }, ['attributes' => ['width' => '100']]);
 
-    $table->addColumn('date_fin', 'Date de fin', function($row) {
-      if ($row->date_fin == '') return "Aujourd'hui";
+    $table->addColumn('date_fin', trans("Date de fin"), function($row) {
+      if ($row->date_fin == '') return trans("Aujourd'hui");
       
       if (strlen($row->date_fin) == 7) $row->date_fin = '01/'. $row->date_fin;
       return \french_to_english_date($row->date_fin, 'd.m.Y');
     }, ['attributes' => ['width' => '100']]);
 
     $table->setAction('copie_diplome',  [
-      'label' => 'Copie du diplôme',
+      'label' => trans("Copie du diplôme"),
       'patern' => site_url('apps/upload/frontend/candidat/copie_diplome/{copie_diplome}'),
       'icon' => 'fa fa-file-text-o',
       'bulk_action' => false,
@@ -79,7 +79,7 @@ class FormationTableController extends Controller
     $table->setAction('delete', [
       'patern' => '#',
       'attributes' => [
-        'onclick' => "return chmModal.confirm('', '', 'Êtes-vous sûr de vouloir supprimer cette formation ?', 'chmFormation.delete', &#123;'id': {id_formation}&#125;, {width: 380})",
+        'onclick' => "return chmModal.confirm('', '', '". trans("Êtes-vous sûr de vouloir supprimer cette formation ?") ."', 'chmFormation.delete', &#123;'id': {id_formation}&#125;, {width: 380})",
       ]
     ]);
 

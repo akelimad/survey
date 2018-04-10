@@ -1,5 +1,11 @@
+<style>
+	.chm-alerts ul {
+    padding-left: 55px !important;
+	}
+</style>
+
 <div id="progress-wrap" style="display: none;">
-	<strong>Envoi des emails en cours...(<span id="send-count">0</span>/<span id="total-count">0</span>)</strong>
+	<strong><?php trans_e("Envoi des emails en cours..."); ?>(<span id="send-count">0</span>/<span id="total-count">0</span>)</strong>
 	<div class="progress progress-striped active" style="margin-bottom: 10px;">
 		<div class="progress-bar progress-bar-success" style="width:0%"></div>
 	</div>
@@ -7,7 +13,7 @@
 
 <form action="" method="post" id="candidaturesContactForm" onkeypress="return event.keyCode != 13;">
 	<div class="form-group">
-		<label for="cp_type_mail" class="form-label">Type Email</label>
+		<label for="cp_type_mail" class="form-label"><?php trans_e("Type Email"); ?></label>
 		<select id="cp_type_mail" class="form-control">
 			<option value=""></option>
 			<?php foreach (getDB()->read('email_type') as $key => $value) : ?>
@@ -17,11 +23,11 @@
 	</div>
 	<div class="ligneBleu mb-15" style="width: 100%;"></div>
 	<div class="form-group">
-		<label for="cp_sender" class="form-label">Votre email&nbsp;<font style="color:red">*</font></label>
+		<label for="cp_sender" class="form-label"><?php trans_e("Votre email"); ?>&nbsp;<font style="color:red">*</font></label>
 		<input type="text" name="cp_sender" id="cp_sender" class="form-control" required>
 	</div>
 	<div class="form-group">
-		<label for="cp_receivers" class="form-label">Email du destinataire&nbsp;<font style="color:red">*</font></label>
+		<label for="cp_receivers" class="form-label"><?php trans_e("Email du destinataire"); ?>&nbsp;<font style="color:red">*</font></label>
 		<div>
 			<select name="cp_receivers" id="cp_receivers" class="form-control" multiple>
 				<?php foreach ($candidatures as $key => $c) : ?>
@@ -31,18 +37,18 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="cp_subject" class="form-label">Sujet&nbsp;<font style="color:red">*</font></label>
+		<label for="cp_subject" class="form-label"><?php trans_e("Sujet"); ?>&nbsp;<font style="color:red">*</font></label>
 		<input type="text" name="cp_subject" id="cp_subject" class="form-control" required>
 	</div>
 	<div class="form-group">
-		<label for="cp_message" class="form-label">Message&nbsp;<font style="color:red">*</font></label>
+		<label for="cp_message" class="form-label"><?php trans_e("Message"); ?>&nbsp;<font style="color:red">*</font></label>
 		<textarea name="cp_message" id="cp_message" class="form-control ckeditor" cols="30" rows="5" required></textarea>
 	</div>
 
 	<div class="form-group">
 		<input type="hidden" name="cv_path" id="cp_cv_path" value="<?= (isset($cv_path) && $cv_path != '') ? $cv_path : ''; ?>">
 		<?php if(isset($cv_name) && $cv_name != '') : ?>
-			<strong><i class="fa fa-paperclip"></i>&nbsp;Pièce joint:</strong>
+			<strong><i class="fa fa-paperclip"></i>&nbsp;<?php trans_e("Pièce joint:"); ?></strong>
 			<a href="<?= site_url($cv_path) ?>" target="_blank"><?= $cv_name; ?></a>
 		<?php endif; ?>
 	</div>
@@ -50,17 +56,17 @@
 	<div class="form-group">
 		<?php
 		$_variables = ['nom_candidat', 'nom', 'prenom', 'civilite', 'titre_offre', 'ref_offre', 'date_postulation', 'statut_candidature', 'date_statut', 'lieu_statut', 'lien_confirmation'];
-		$_variablesHtml .= '';
+		$_variablesHtml = '';
 		foreach ($_variables as $key => $v) {
 			$_variablesHtml .= '<code style="display: inline-block;">{{'.$v.'}}</code>';
 		}
-		get_alert('info', 'Vous pouvez utiliser les variables suivants dans votre email:<br>'.$_variablesHtml, false);
+		get_alert('info', trans("Vous pouvez utiliser les variables suivants dans votre email:") .'<br>'.$_variablesHtml, false);
 		?>
 	</div>
 	<div class="ligneBleu" style="width: 100%;"></div>
 	<div class="form-group mt-10 mb-0">
-		<button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Fermer</button>
-		<button type="submit" class="btn btn-primary pull-right">Envoyer</button>
+		<button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true"><?php trans_e("Fermer"); ?></button>
+		<button type="submit" class="btn btn-primary pull-right"><?php trans_e("Envoyer"); ?></button>
 	</div>
 </form>
 
@@ -139,7 +145,7 @@
 		var receivers = $('#cp_receivers').val()
 		var message = CKEDITOR.instances['cp_message'].getData()
 		if( $('#cp_receivers').val() == null || message == '' ) {
-			error_message("Merci de remplir tous les champs.");
+			error_message('<?php trans_e("Merci de remplir tous les champs."); ?>');
 			return;
 		}
 
@@ -173,7 +179,7 @@
 			if( data.index < data.count ) {
 				return sendEmailLoop(data)
 			} else {
-				$('#progress-wrap').empty().html('<div class="chm-alerts alert alert-info alert-white rounded"><div class="icon"><i class="fa fa-check"></i></div><ul><li>L\'envoi d\'emails est terminé.</li></ul></div>')
+				$('#progress-wrap').empty().html("<div class=\"chm-alerts alert alert-info alert-white rounded\"><div class=\"icon\"><i class=\"fa fa-check\"></i></div><ul><li><?php trans_e("L'envoi d'emails est terminé."); ?></li></ul></div>")
 			}
 		});
 	}

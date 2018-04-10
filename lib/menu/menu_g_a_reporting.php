@@ -52,7 +52,7 @@ if ($_SESSION['link']==3)
 
 			<a href="<?php  echo $urlad_repor  ?>/" id="ctl00_lnkAlerte">
 
-			<i class="fa fa-pie-chart " ></i> Statistiques</a>
+			<i class="fa fa-pie-chart " ></i> <?php trans_e("Statistiques"); ?></a>
 
 		</li>
 
@@ -60,7 +60,7 @@ if ($_SESSION['link']==3)
 
 			<a href="<?php  echo $urlad_repor  ?>/statistiques_offres/"  id="ctl00_lnkAlerte">
 
-			<i class="fa fa-pie-chart " ></i> Offres</a>
+			<i class="fa fa-pie-chart " ></i> <?php trans_e("Offres"); ?></a>
 
 		</li>
 
@@ -68,7 +68,7 @@ if ($_SESSION['link']==3)
 
 			<a href="<?php  echo $urlad_repor  ?>/statistiques_candidats/"  id="ctl00_lnkAlerte">
 
-			<i class="fa fa-pie-chart " ></i> Candidats</a>
+			<i class="fa fa-pie-chart " ></i> <?php trans_e("Candidats"); ?></a>
 
 		</li>
 
@@ -84,7 +84,7 @@ if ($_SESSION['link']==3)
 
 			<a href="<?php  echo $urlad_repor  ?>/statistiques_visiteurs/"  id="ctl00_lnkAlerte">
 
-			<i class="fa fa-pie-chart " ></i> Visiteurs</a>
+			<i class="fa fa-pie-chart " ></i> <?php trans_e("Visiteurs"); ?></a>
 
 		</li>
 
@@ -98,7 +98,7 @@ if ($_SESSION['link']==3)
 
 			<a href="<?php  echo $urlad_repor  ?>/requeteur/"  id="ctl00_lnkAlerte">
 
-			<i class="fa fa-pie-chart " ></i> Requêteur</a>
+			<i class="fa fa-pie-chart " ></i> <?php trans_e("Requêteur"); ?></a>
 
 		</li>
 

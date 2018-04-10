@@ -54,7 +54,7 @@ if (isBackend() && \App\Route::getRoute() != 'backend/login') {
 	if (!empty($ips)) {
 		$ips = explode(',', str_replace(' ', '', $ips));
 		if (!in_array(getRealIpAddr(), $ips)) {
-			set_flash_message('warning', 'Vous n\'avez pas les permissions pour accèder à cette page.');
+			set_flash_message('warning', trans("Vous n'avez pas les permissions pour accèder à cette page."));
 			$logout = (new \App\Controllers\Admin\AuthController())->logout([]);
 		}
 	} elseif (\App\Route::getRoute() == 'backend/logout' || !isLogged('admin')) {

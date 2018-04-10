@@ -22,29 +22,29 @@ class CandidatureController extends Controller
   {
     // Check if candiat logged
     if(!isLogged('candidat')) {
-      return json_encode(['status' => 'hide_form', 'title' => 'Connectez-vous !', 'content' => 'Vous devez <strong onclick="return chmAuth.loginModal()" style="cursor: pointer;">vous connecter</strong> pour répondre à cet l\'offre.']);
+      return json_encode(['status' => 'hide_form', 'title' => trans("Connectez-vous !"), 'content' => trans("Vous devez") .' <strong onclick="return chmAuth.loginModal()" style="cursor: pointer;">'. trans("vous connecter") .'</strong> '. trans("pour répondre à cet l'offre.")]);
     }
 
     // Check if candidat has resume
     if(!Candidat::hasResume()) {
-      return json_encode(['status' => 'hide_form', 'title' => 'Profile incomplète !', 'content' => 'Il faut avoir renseigné au moins un CV pour pouvoir envoyer la candidature.']);
+      return json_encode(['status' => 'hide_form', 'title' => trans("Profile incomplète!"), 'content' => trans("Il faut avoir renseigné au moins un CV pour pouvoir envoyer la candidature.")]);
     }
 
     // Check if candidat has formation
     if(!Candidat::hasFormation()) {
-      return json_encode(['status' => 'hide_form', 'title' => 'Profile incomplète !', 'content' => 'Il faut avoir renseigné au moins une formation pour pouvoir envoyer la candidature.']);
+      return json_encode(['status' => 'hide_form', 'title' => trans("Profile incomplète!"), 'content' => trans("Il faut avoir renseigné au moins une formation pour pouvoir envoyer la candidature.")]);
     }
 
     // Check if candidat already postuled
     if(Candidat::hasCandidatureSpontannee()) {
-      return json_encode(['status' => 'hide_form', 'title' => 'Vous avez déjà deposé une candidature spontanée.']);
+      return json_encode(['status' => 'hide_form', 'title' => trans("Vous avez déjà deposé une candidature spontanée.")]);
     }
 
     // Store candidature
     if (form_submited()) {
 
       if(!isset($data['motivation']) || $data['motivation'] == '') {
-        return $this->jsonResponse('error', 'Vous n\'avez pas précisé vos motivations pour cette candidature spontanée!');
+        return $this->jsonResponse('error', trans("Vous n'avez pas précisé vos motivations pour cette candidature spontanée!"));
       }
 
       // Save candidature
@@ -67,12 +67,12 @@ class CandidatureController extends Controller
             'titre' => $template->titre,
             'type_email' => 'Envoi automatique'
           ]);
-          return $this->jsonResponse('success', 'Votre candidature a bien été envoyée.');
+          return $this->jsonResponse('success', trans("Votre candidature a bien été envoyée."));
         }
       }
-      return $this->jsonResponse('error', 'Une erreur est survenue réessayer plus tard.');
+      return $this->jsonResponse('error', trans("Une erreur est survenue réessayer plus tard."));
     } else {
-      return Ajax::renderAjaxView('Déposer une candidature spontanée', 'front/candidature/spontanee', $data);
+      return Ajax::renderAjaxView(trans("Déposer une candidature spontanée"), 'front/candidature/spontanee', $data);
     }
   }
 
@@ -81,28 +81,28 @@ class CandidatureController extends Controller
   {
     // Check if candidat has resume
     if(!Candidat::hasResume()) {
-      return json_encode(['status' => 'hide_form', 'title' => 'Profile incomplète !', 'content' => 'Il faut avoir renseigné au moins un CV pour pouvoir envoyer la candidature.']);
+      return json_encode(['status' => 'hide_form', 'title' => trans("Profile incomplète!"), 'content' => trans("Il faut avoir renseigné au moins un CV pour pouvoir envoyer la candidature.")]);
     }
 
     // Check if candidat has formation
     if(!Candidat::hasFormation()) {
-      return json_encode(['status' => 'hide_form', 'title' => 'Profile incomplète !', 'content' => 'Il faut avoir renseigné au moins une formation pour pouvoir envoyer la candidature.']);
+      return json_encode(['status' => 'hide_form', 'title' => trans("Profile incomplète !"), 'content' => trans("Il faut avoir renseigné au moins une formation pour pouvoir envoyer la candidature.")]);
     }
 
     // Check if candidat already postuled
     if(Candidat::hasCandidatureStage()) {
-      return json_encode(['status' => 'hide_form', 'title' => 'Vous avez déjà deposé une candidature pour un stage.']);
+      return json_encode(['status' => 'hide_form', 'title' => trans("Vous avez déjà deposé une candidature pour un stage.")]);
     }
 
     // Store candidature
     if (form_submited()) {
 
       if(!isset($data['stage_subject']) || $data['stage_subject'] == '') {
-        return $this->jsonResponse('error', 'Le champs <b>Objet du stage</b> est obligatoire.');
+        return $this->jsonResponse('error', trans("Le champs") ." <b>". trans("Objet du stage") ."</b> ". trans("est obligatoire."));
       }
 
       if(!isset($data['motivation']) || $data['motivation'] == '') {
-        return $this->jsonResponse('error', 'Le champs <b>Vos motivations</b> est obligatoire.');
+        return $this->jsonResponse('error', trans("Le champs") ." <b>". trans("Vos motivations") ."</b> ". trans("est obligatoire."));
       }
 
       // Save candidature
@@ -129,12 +129,12 @@ class CandidatureController extends Controller
             'titre' => $template->titre,
             'type_email' => 'Envoi automatique'
           ]);
-          return $this->jsonResponse('success', 'Votre candidature a bien été envoyée.');
+          return $this->jsonResponse('success', trans("Votre candidature a bien été envoyée."));
         }
       }
-      return $this->jsonResponse('error', 'Une erreur est survenue réessayer plus tard.');
+      return $this->jsonResponse('error', trans("Une erreur est survenue réessayer plus tard."));
     } else {
-      return Ajax::renderAjaxView('Déposer une candidature pour un stage', 'front/candidature/stage', $data);
+      return Ajax::renderAjaxView(trans("Déposer une candidature pour un stage"), 'front/candidature/stage', $data);
     }
   }
 
@@ -147,12 +147,12 @@ class CandidatureController extends Controller
     ], true);
 
     if (!isset($candidature->id_candidature)) {
-      return $this->jsonResponse('error', 'Impossible de supprimer la candidature.');
+      return $this->jsonResponse('error', trans("Impossible de supprimer la candidature."));
     }
 
     getDB()->delete('candidature_spontanee', 'id_candidature', $data['id']);
 
-    return $this->jsonResponse('success', 'La candidature a été bien supprimé.');
+    return $this->jsonResponse('success', trans("La candidature a été bien supprimé."));
   }
 
 
@@ -164,12 +164,12 @@ class CandidatureController extends Controller
     ], true);
 
     if (!isset($candidature->id_candidature)) {
-      return $this->jsonResponse('error', 'Impossible de supprimer la candidature.');
+      return $this->jsonResponse('error', trans("Impossible de supprimer la candidature."));
     }
 
     getDB()->delete('candidature_stage', 'id_candidature', $data['id']);
 
-    return $this->jsonResponse('success', 'La candidature a été bien supprimé.');
+    return $this->jsonResponse('success', trans("La candidature a été bien supprimé."));
 	}
 
 	

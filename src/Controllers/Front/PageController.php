@@ -22,7 +22,7 @@ class PageController extends Controller
 	public function terms()
 	{
 		$this->data['layout'] = 'front';
-		$this->data['breadcrumbs'] = ['Accueil', 'Mentions légales'];
+		$this->data['breadcrumbs'] = [trans("Accueil"), trans("Mentions légales")];
 		$this->data['titre_site'] = $GLOBALS['etalent']->config['titre_site'];
 		$this->data['terms_site_title'] = get_setting('front_terms_site_title', 'E-talent');
     	return get_page('front/page/terms', $this->data);
@@ -32,7 +32,7 @@ class PageController extends Controller
 	public function conditions()
 	{
 		$this->data['layout'] = 'front';
-		$this->data['breadcrumbs'] = ['Accueil', 'Conditions générales d\'utilisation'];
+		$this->data['breadcrumbs'] = [trans("Accueil"), trans("Conditions générales d'utilisation")];
 		$this->data['titre_site'] = $GLOBALS['etalent']->config['titre_site'];
 		$this->data['terms_site_title'] = get_setting('front_terms_site_title', 'E-talent');
     	return get_page('front/page/conditions', $this->data);
@@ -42,7 +42,7 @@ class PageController extends Controller
 	public function sitemap()
 	{
 		$this->data['layout'] = 'front';
-		$this->data['breadcrumbs'] = ['Accueil', 'Plan du site'];
+		$this->data['breadcrumbs'] = [trans("Accueil"), trans("Plan du site")];
     	return get_page('front/page/sitemap', $this->data);
 	}
 
@@ -52,17 +52,17 @@ class PageController extends Controller
 		if (form_submited()) {
 			// Verify google recaptcha
 			if(!isset($data['g-recaptcha-response']) || !$this->verifyGoogleRecaptcha($data['g-recaptcha-response'])) {
-				return $this->jsonResponse('error', 'Merci de cocher la case "Je ne suis pas un robot"');
+				return $this->jsonResponse('error', trans("Merci de cocher la case 'Je ne suis pas un robot'"));
 			}
 
 			// Set form fields name
 			Validator::set_field_names([
-				'destination' => 'Destination',
-				'first_name' => 'Nom de famille',
-				'last_name' => 'Prénom',
-				'email' => 'Courriel',
-				'subject' => 'Sujet',
-				'message' => 'Message'
+				'destination' => trans("Destination"),
+				'first_name' => trans("Nom de famille"),
+				'last_name' => trans("Prénom"),
+				'email' => trans("Courriel"),
+				'subject' => trans("Sujet"),
+				'message' => trans("Message")
 			]);
 			// Validate form data
 			$is_valid = Validator::is_valid($data, [
@@ -77,18 +77,18 @@ class PageController extends Controller
 				return $this->jsonResponse('error', $is_valid);
 			}
 
-			$destination = (isset($data['destination']) && !empty($data['destination'])) ? $data['destination'] : 'DIRECTION DES RESSOURCES HUMAINES';
+			$destination = (isset($data['destination']) && !empty($data['destination'])) ? $data['destination'] : trans("DIRECTION DES RESSOURCES HUMAINES");
 
-			$message  = '<p><strong>Bonjour,</strong></p>';
-			$message .= '<p>Un message vous a été envoyé à partir de formulaire de contact sur le site: '. site_url() .'</p>';
+			$message  = '<p><strong>'. trans("Bonjour,") .'</strong></p>';
+			$message .= '<p>'. trans("Un message vous a été envoyé à partir de formulaire de contact sur le site:") . site_url() .'</p>';
 
 			$htmlTableRows = [
-				'Destination' => $destination,
-				'Nom de famille' => $data['first_name'],
-				'Prénom' => $data['last_name'],
-				'Courriel' => $data['email'],
-				'Sujet' => $data['subject'],
-				'Message' => $data['message']
+				trans("Destination") => $destination,
+				trans("Nom de famille") => $data['first_name'],
+				trans("Prénom") => $data['last_name'],
+				trans("Courriel") => $data['email'],
+				trans("Sujet") => $data['subject'],
+				trans("Message") => $data['message']
 			];
 
 			$message .= '<table>';
@@ -107,7 +107,7 @@ class PageController extends Controller
 			return $this->jsonResponse($send['response'], $send['message']);
 		} else {
 			$this->data['layout'] = 'front';
-			$this->data['breadcrumbs'] = ['Accueil', 'Contactez nous'];
+			$this->data['breadcrumbs'] = [trans("Accueil"), trans("Contactez nous")];
 	    	return get_page('front/page/contact', $this->data);
 		}
 	}
@@ -120,19 +120,20 @@ class PageController extends Controller
 
 			// Verify google recaptcha
 			if(!isset($data['g-recaptcha-response']) || !$this->verifyGoogleRecaptcha($data['g-recaptcha-response'])) {
-				return $this->jsonResponse('error', 'Merci de cocher la case "Je ne suis pas un robot"');
+				return $this->jsonResponse('error', trans("Merci de cocher la case 'Je ne suis pas un robot'"));
 			}
 
 			// Set form fields name
 			Validator::set_field_names([
-				'ticket_number' => 'N ° billet',
-				'first_name' => 'Nom de famille',
-				'last_name' => 'Prénom',
-				'email' => 'Courriel',
-				'phone' => 'Télephone',
-				'subject' => 'Sujet',
-				'message' => 'Message'
+				'ticket_number' => trans("N° billet"),
+				'first_name' => trans("Nom de famille"),
+				'last_name' => trans("Prénom"),
+				'email' => trans("Courriel"),
+				'phone' => trans("Télephone"),
+				'subject' => trans("Sujet"),
+				'message' => trans("Message")
 			]);
+
 			// Validate form data
 			$is_valid = Validator::is_valid($data, [
 				'ticket_number' => 'required',
@@ -160,14 +161,14 @@ class PageController extends Controller
 				$extension = pathinfo($_FILES['attachement']['name'], PATHINFO_EXTENSION);
 
 				if(!in_array(strtolower($extension), $extensions)) {
-					return $this->jsonResponse('error', "La Pièce à joindre doit avoir les extensions suivantes (.". implode(', .', $extensions) .")");
+					return $this->jsonResponse('error', trans("La Pièce à joindre doit avoir les extensions suivantes") ." (.". implode(', .', $extensions) .")");
 				}
 
 				$with_attachement = true;
 			}
 
 			// Save problem to database
-			$id_user = '';
+			$id_user = 0;
 			$type_user = 'Visiteur';
 			if (isLogged('candidat')) {
 				$id_user = get_candidat_id();
@@ -194,7 +195,7 @@ class PageController extends Controller
 			]);
 
 			if ($problem_id < 1) {
-				return $this->jsonResponse('error', 'Une erreur est survenu lors d\'envoi de problème.');
+				return $this->jsonResponse('error', trans("Une erreur est survenu lors d'envoi de problème."));
 			}
 
 			// Upload attachement
@@ -217,19 +218,19 @@ class PageController extends Controller
 				$email_args['attachements'][] = site_base($uploadDir . $upload['files'][0]);
 			}
 
-			$subject = "Signaler un probléme sur ". site_url() ." avec le ticket : ". $data['ticket_number'];
+			$subject = trans("Signaler un probléme sur") ." ". site_url() ." ". trans("avec le ticket:") ." ". $data['ticket_number'];
 
-			$message   = '<p><strong>Bonjour,</strong></p>';
-			$message  .= '<p>Signaler un probléme sur '. site_url() .' avec le ticket : <strong>'. $data['ticket_number'] .'</strong></p>';
+			$message   = '<p><strong>'. trans("Bonjour,") .'</strong></p>';
+			$message  .= '<p>'. trans("Signaler un probléme sur") .' '. site_url() .' '. trans("avec le ticket:") .' <strong>'. $data['ticket_number'] .'</strong></p>';
 
 			$htmlTableRows = [
-				'Date' => date('d.m.Y h:i:s'),
-				'Nom de famille' => $data['first_name'],
-				'Prénom' => $data['last_name'],
-				'Courriel' => $data['email'],
-				'Télephone' => $data['phone'],
-				'Sujet' => $data['subject'],
-				'Message' => $data['message']
+				trans("Date") => date('d.m.Y h:i:s'),
+				trans("Nom de famille") => $data['first_name'],
+				trans("Prénom") => $data['last_name'],
+				trans("Courriel") => $data['email'],
+				trans("Télephone") => $data['phone'],
+				trans("Sujet") => $data['subject'],
+				trans("Message") => $data['message']
 			];
 
 			$message .= '<table>';
@@ -239,7 +240,7 @@ class PageController extends Controller
 			}
 			$message .= '</tbody>';
 			$message .= '</table>';
-			$message .= '<p>Cordialement</p>';
+			$message .= '<p>'. trans("Cordialement") .'</p>';
 
 			$cc = explode(',', $conf_admin_email_s_prob);
 			if (is_array($cc) && !empty($cc)) {
@@ -250,11 +251,11 @@ class PageController extends Controller
 			$send = Mailer::send(get_setting('email_e'), $subject, $message, $email_args);
 			if ($send['response'] == 'success') {
 				// Send email to bug reporter
-				$subject = 'Votre requête sur '. site_url() .' : '. $data['ticket_number'];
-				$message   = '<p><strong>Bonjour,</strong></p>';
-				$message .= '<p>Vous avez soumet une requête sur '. site_url() .' avec le ticket : <b>'. $data['ticket_number'] .'</b></p>';
-				$message .= '<p>Votre message est :'. $data['message'] .'</p>';
-				$message .= '<p>Cordialement</p>';
+				$subject = trans("Votre requête sur") .' '. site_url() .' : '. $data['ticket_number'];
+				$message   = '<p><strong>'. trans("Bonjour,") .'</strong></p>';
+				$message .= '<p>'. trans("Vous avez soumet une requête sur") .' '. site_url() .' '. trans("avec le ticket:") .' <b>'. $data['ticket_number'] .'</b></p>';
+				$message .= '<p>'. trans("Votre message est:") .'<br>'. $data['message'] .'</p>';
+				$message .= '<p>'. trans("Cordialement") .'</p>';
 
 				Mailer::send($data['email'], $subject, $message);
 
@@ -264,7 +265,7 @@ class PageController extends Controller
 			}
 		} else {
 			$this->data['layout'] = 'front';
-			$this->data['breadcrumbs'] = ['Accueil', 'Signaler un probléme'];
+			$this->data['breadcrumbs'] = [trans("Accueil"), trans("Signaler un probléme")];
 			$this->data['ticket_number'] = $this->randomString(8);
 	    	return get_page('front/page/bug-report', $this->data);
 		}

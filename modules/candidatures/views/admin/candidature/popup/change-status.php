@@ -1,5 +1,5 @@
 <div class="row">	
-	<div class="col-md-4"><strong>Nom et prénom du candidat</strong></div>
+	<div class="col-md-4"><strong><?php trans_e("Nom et prénom du candidat"); ?></strong></div>
 	<div class="col-md-8">: <?= $candidature->displayName; ?></div>
 </div>
 
@@ -10,13 +10,13 @@
 	<div class="row">	
 		<div class="col-md-12">
 			<div class="subscription mt-15 mb-10" style="height: 23px;">
-				<h1>Modifier statut de la candidature</h1>
+				<h1><?php trans_e("Modifier statut de la candidature"); ?></h1>
 			</div>
 		</div>	
 	</div>
 
 	<div class="row">
-		<label for="status_id" class="col-md-4">Statut de la candidature&nbsp;<font style="color:red;">*</font></label>
+		<label for="status_id" class="col-md-4"><?php trans_e("Statut de la candidature"); ?>&nbsp;<font style="color:red;">*</font></label>
 		<div class="col-md-6">
 			<select name="status[id]" id="status_id" style="width: 100%;" required>
 				<option value=""></option>
@@ -28,7 +28,7 @@
 	</div>
 
 	<div class="row mb-5">
-		<label for="status_date" class="col-md-4">Date et Heure&nbsp;<font style="color:red;">*</font></label>
+		<label for="status_date" class="col-md-4"><?php trans_e("Date et Heure"); ?>&nbsp;<font style="color:red;">*</font></label>
 		<div class="col-md-8">
 			<input type="date" name="status[date]" id="status_date" value="<?= date("Y-m-d") ?>" style="width: 120px;" required>
 			<input type="time" name="status[time]" id="status_time" style="width: 70px;" value="<?= date("H:m") ?>" required>
@@ -36,7 +36,7 @@
 	</div>
 
 	<div class="row">
-		<label for="status_comments" class="col-md-4">Commentaire</label>
+		<label for="status_comments" class="col-md-4"><?php trans_e("Commentaire"); ?></label>
 		<div class="col-md-8">
 			<textarea name="status[comments]" style="width:100%;" rows="4"></textarea>
 		</div>
@@ -46,12 +46,12 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="subscription mt-15 mb-10" style="height: 23px;">
-					<h1>Email de convocation</h1>
+					<h1><?php trans_e("Email de convocation"); ?></h1>
 				</div>
 			</div>
 		</div>
 		<div class="row">
-			<label for="status_email_type" class="col-md-4">Type Email</label>
+			<label for="status_email_type" class="col-md-4"><?php trans_e("Type Email"); ?></label>
 			<div class="col-md-6">
 				<select id="status_email_type" name="status[mail][type]" style="width: 100%;">
 					<option value=""></option>
@@ -63,22 +63,22 @@
 		</div>
 		<div class="ligneBleu mb-10" style="width: 100%;"></div>
 		<div class="row mb-5">
-			<label for="status_mail_sender" class="col-md-4">Expéditeur</label>
+			<label for="status_mail_sender" class="col-md-4"><?php trans_e("Expéditeur"); ?></label>
 			<div class="col-md-5">
 				<input type="email" name="status[mail][sender]" id="status_mail_sender" style="width: 100%;">
 				<input type="hidden" name="status[mail][receiver]" value="<?= $candidature->candidat_email; ?>">
 			</div>
 		</div>
 		<div class="row mb-5">
-			<label for="status_mail_subject" class="col-md-4">Sujet</label>
+			<label for="status_mail_subject" class="col-md-4"><?php trans_e("Sujet"); ?></label>
 			<div class="col-md-8">
 				<input type="text" name="status[mail][subject]" id="status_mail_subject" style="width: 100%;">
 			</div>
 		</div>
 		<div class="row mb-5">
 			<div class="col-md-12">
-				<label for="status_mail_message">Messag</label>
-				<span style="vertical-align: top; font-size: 11px; display: inline-block;">Utiliser la variable <code style="display: inline-block;">{{lien_confirmation}}</code> pour afficher le lien de confirmation <font style="color:red;">(obligatoire)</font>.</span>
+				<label for="status_mail_message"><?php trans_e("Message"); ?></label>
+				<span style="vertical-align: top; font-size: 11px; display: inline-block;"><?php trans_e("Utiliser la variable"); ?> <code style="display: inline-block;">{{lien_confirmation}}</code> <?php trans_e("pour afficher le lien de confirmation"); ?> <font style="color:red;"><?php trans_e("(obligatoire)"); ?></font>.</span>
 			</div>
 			<div class="col-md-12">
 				<textarea name="status[mail][message]" id="status_mail_message" style="width: 100%;" class="ckeditor" cols="30" rows="5"></textarea>
@@ -90,8 +90,8 @@
 
 	<div class="ligneBleu" style="width: 100%;"></div>
 	<div class="form-group mt-10 mb-0">
-		<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-hidden="true">Fermer</button>
-	    <button type="submit" class="btn btn-primary btn-sm pull-right">Appliquer les changements</button>
+		<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-hidden="true"><?php trans_e("Fermer"); ?></button>
+	    <button type="submit" class="btn btn-primary btn-sm pull-right"><?php trans_e("Appliquer les changements"); ?></button>
 	</div>
 
 </form>
@@ -139,9 +139,9 @@ jQuery(document).ready(function($){
 	$('form').submit(function(event){
 		var message = CKEDITOR.instances['status_mail_message'].getData()
 		var $ref = $(this).find('option:selected').data('ref')
-		if( (message.indexOf("{{lien_confirmation}}") <= 0) && ($ref == 'N_2' || $ref == 'N_9') && $('#status_mail_sender').val() != '' ) {
+		if( (message.indexOf("{{lien_confirmation}}") <= 0) && ($ref == 'N3' || $ref == 'N10') && $('#status_mail_sender').val() != '' ) {
 			event.preventDefault()
-			error_message('Le message doit contenir la variable <code style="display: inline-block;">{{lien_confirmation}}</code>')
+			error_message('<?php trans_e("Le message doit contenir la variable"); ?> <code style="display: inline-block;">{{lien_confirmation}}</code>')
 		}
 	})
 
@@ -149,7 +149,7 @@ jQuery(document).ready(function($){
     	try {
 	        var $ref = $(this).find('option:selected').data('ref')
 	        var $requiredEmailFields = $('#status_mail_sender, #status_mail_subject, #status_mail_message')
-	        if( $ref == 'N_2' || $ref == 'N_9' ) {
+	        if( $ref == 'N3' || $ref == 'N10' ) {
 	        	// $requiredEmailFields.prop('required', true)
 	        	CKEDITOR.replace('status_mail_message');
 	            $('#email_convocation').show()

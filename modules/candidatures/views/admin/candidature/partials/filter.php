@@ -44,7 +44,7 @@
 			</div>
 		</div>
 	
-		<?php if($i%3==0 && $i<$countFields) : ?>
+		<?php if($i%3==0 && $i < $countFields) : ?>
 			</div><div class="row">
 		<?php endif; ?>
 
@@ -52,8 +52,8 @@
 	</div>
 	<div class="row mt-15">
 		<div class="col-md-12">
-			<button type="submit" class="espace_candidat">Filtrer</button>
-			<a href="<?= strtok($_SERVER['HTTP_REFERER'], '?'); ?>" type="button" class="espace_candidat">Actualiser</a>
+			<button type="submit" class="espace_candidat"><?php trans_e("Filtrer"); ?></button>
+			<a href="<?= strtok($_SERVER['HTTP_REFERER'], '?'); ?>" type="button" class="espace_candidat"><?php trans_e("Actualiser"); ?></a>
 			<div class="ligneBleu"></div>
 		</div>
 	</div>

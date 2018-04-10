@@ -70,7 +70,7 @@ if($c_stage>0){  $menu__1='ctl00_liSpontanee';	$menu__2='ctl00_liSpontanee'; $me
 
 		<a id="ctl00_lnkAlerte" class="<?php echo $menu__1; ?>" href="<?php echo $site ?>" >
 
-		<i class="fa fa-home fa-fw fa-lg"></i> Accueil </a> 
+		<i class="fa fa-home fa-fw fa-lg"></i> <?php trans_e("Accueil"); ?> </a> 
 
 		</li>
 
@@ -79,7 +79,7 @@ if($c_stage>0){  $menu__1='ctl00_liSpontanee';	$menu__2='ctl00_liSpontanee'; $me
 
 		<a  id="ctl00_lnkSpontanee" class="<?php echo $menu__1; ?>" href="<?php echo $urloffre ?>/candidature_spontannee/" >
 
-		<i class="fa fa-book fa-fw fa-lg"></i> Déposer une candidature spontanée </a> 
+		<i class="fa fa-book fa-fw fa-lg"></i> <?php trans_e("Déposer une candidature spontanée"); ?> </a> 
 
 		</li>		
 		<?php endif; ?>																																	
@@ -88,7 +88,7 @@ if($c_stage>0){  $menu__1='ctl00_liSpontanee';	$menu__2='ctl00_liSpontanee'; $me
 
 			<a id="ctl00_lnkSpontanee" class="<?php echo $menu__1; ?>" href="<?php echo $urloffre ?>/candidature_stage/" >
 
-			<i class="fa fa-book fa-fw fa-lg"></i> Déposer une candidature pour un stage
+			<i class="fa fa-book fa-fw fa-lg"></i> <?php trans_e("Déposer une candidature pour un stage"); ?>
 
 			</a>			
 
@@ -99,7 +99,7 @@ if($c_stage>0){  $menu__1='ctl00_liSpontanee';	$menu__2='ctl00_liSpontanee'; $me
 
 			<a id="ctl00_lnkAlerte" <?= ($route=='offres') ? 'class="active"' : '' ?> href="<?php echo $urloffre ?>/" >
 
-			<i class="fa fa-list fa-fw fa-lg"></i> Offres d'emploi
+			<i class="fa fa-list fa-fw fa-lg"></i> <?php trans_e("Offres d'emploi"); ?>
 
 			</a>
 
@@ -109,7 +109,7 @@ if($c_stage>0){  $menu__1='ctl00_liSpontanee';	$menu__2='ctl00_liSpontanee'; $me
 
 			<a id="ctl00_lnkAlerte" <?= ($route=='offres/stage') ? 'class="active"' : '' ?> href="<?php echo $urloffre ?>/stage/" >
 
-			<i class="fa fa-list fa-fw fa-lg"></i> Offres de stage
+			<i class="fa fa-list fa-fw fa-lg"></i> <?php trans_e("Offres de stage"); ?>
 
 			</a>
 

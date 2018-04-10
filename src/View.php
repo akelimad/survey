@@ -45,7 +45,7 @@ class View {
             extract($variables);
             require($viewBase);
         } else {
-            get_alert('warning', $path .' <strong>Not found.</strong>', false);
+            get_alert('warning', $path .' <strong>'. trans("Not found.") .'</strong>', false);
         }
     }
 

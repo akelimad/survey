@@ -40,27 +40,27 @@ class TableController extends Controller
 			return $row->object->getIncrement();
 		});
 
-		$table->addColumn('last_name', 'Nom', function($row) {
+		$table->addColumn('last_name', trans("Nom"), function($row) {
 			return ($row->last_name != '') ? $row->last_name : '---';
 		});
 
-		$table->addColumn('first_name', 'Prénom', function($row) {
+		$table->addColumn('first_name', trans("Prénom"), function($row) {
 			return ($row->first_name != '') ? $row->first_name : '---';
 		});
 
-		$table->addColumn('cin', 'CIN', function($row) {
+		$table->addColumn('cin', trans("CIN"), function($row) {
 			return($row->cin != '') ? $row->cin : '---';
 		});
 
-		$table->addColumn('mobile', 'Téléphone', function($row) {
+		$table->addColumn('mobile', trans("Téléphone"), function($row) {
 			return ($row->mobile != '') ? $row->mobile : '---';
 		});
 
-		$table->addColumn('created_at', 'Date de création', function($row) {
+		$table->addColumn('created_at', trans("Date de création"), function($row) {
 			return ($row->created_at != '') ? date('d.m.Y H:i', strtotime($row->created_at)) : '---';
 		});
 		
-		$table->addColumn('updated_at', 'Date de modification', function($row) {
+		$table->addColumn('updated_at', trans("Date de modification"), function($row) {
 			return ($row->updated_at != '') ? date('d.m.Y H:i', strtotime($row->updated_at)) : '---';
 		});
 
@@ -102,17 +102,17 @@ class TableController extends Controller
 			return $row->object->getIncrement();
 		});
 
-		$table->addColumn('reference', 'Référence', function($row) {
+		$table->addColumn('reference', trans("Référence"), function($row) {
 			return $row->reference;
 		});
 
-		$table->addColumn('name', 'Titre offre', function($row) {
+		$table->addColumn('name', trans("Titre offre"), function($row) {
 			return $row->Name;
 		});
 
-		$table->addColumn('status', 'Statut', function($row) {
+		$table->addColumn('status', trans("Statut"), function($row) {
 			$expired = ($row->status == 'En cours' && strtotime($row->date_expiration) < strtotime(date('Y-m-d', time())));
-			$status = ($expired) ? 'Expiré' :  $row->status;
+			$status = ($expired) ? trans("Expiré") : trans($row->status);
 			$bgColor = 'FF0000';
 			if($row->status == 'En cours') {
 				$bgColor = ($expired) ? 'FFA500' : '009900';
@@ -120,17 +120,17 @@ class TableController extends Controller
 			return '<span class="label label-default" style="background-color: #'. $bgColor .';color: #fff;font-size: 10px;vertical-align: sub;">'. $status .'</span>';
 		});
 
-		$table->addColumn('date_insertion', 'Date de création', function($row) {
+		$table->addColumn('date_insertion', trans("Date de création"), function($row) {
 			return ($row->date_insertion != '') ? date('d.m.Y', strtotime($row->date_insertion)) : '---';
 		});
 
-		$table->addColumn('date_expiration', 'Date d\'expiration', function($row) {
+		$table->addColumn('date_expiration', trans("Date d'expiration"), function($row) {
 			return ($row->date_expiration != '') ? date('d.m.Y', strtotime($row->date_expiration)) : '---';
 		});
 
 		$table->removeActions(['delete', 'edit']);
 		$table->setAction('show_entries', [
-			'label' => 'Afficher les éléments',
+			'label' => trans("Afficher les éléments"),
 			'patern' => site_url('backend/module/offer/partner/offer-entries/{id_role_offre}'),
       'icon' => 'fa fa-eye',
 			'attributes' => array(

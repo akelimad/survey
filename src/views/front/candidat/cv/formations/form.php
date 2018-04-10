@@ -1,7 +1,7 @@
 <input type="hidden" name="id" value="<?= (isset($formation->id_formation)) ? $formation->id_formation : 0 ?>">
 <div class="row">
   <div class="col-sm-4 required">
-    <label for="forma_date_debut">Date de début</label>
+    <label for="forma_date_debut"><?php trans_e("Date de début"); ?></label>
     <?php
     $date_debut = '';
     if (isset($formation->date_debut) && $formation->date_debut != '') {
@@ -12,7 +12,7 @@
     <input type="date" max="<?= date('Y-m-d'); ?>" value="<?= $date_debut ?>" class="form-control" id="forma_date_debut" name="date_debut" required>
   </div>
   <div class="col-sm-8 pl-0 pl-xs-15 required">
-    <label for="forma_date_fin">Date de fin</label>
+    <label for="forma_date_fin"><?php trans_e("Date de fin"); ?></label>
     <?php
     $date_fin = '';
     if (isset($formation->date_fin) && $formation->date_fin != '') {
@@ -22,13 +22,13 @@
     ?>
     <input type="date" max="<?= date('Y-m-d'); ?>" value="<?= $date_fin ?>" class="form-control" id="forma_date_fin" name="date_fin" style="max-width: 186px;float: left;margin-right: 10px;<?= (isset($formation->date_fin) && $formation->date_fin == '') ? 'display: none;"' : '" required' ?>>
     <label for="forma_today" style="margin-top: 10px;" class="pointer">
-      <input type="checkbox" value="1" class="date_fin_today" id="forma_today"<?= (isset($formation->date_fin) && $formation->date_fin == '') ? ' checked' : '' ?>>&nbsp;Jusqu'à aujourd'hui
+      <input type="checkbox" value="1" class="date_fin_today" id="forma_today"<?= (isset($formation->date_fin) && $formation->date_fin == '') ? ' checked' : '' ?>>&nbsp;<?php trans_e("Jusqu'à aujourd'hui"); ?>
     </label>
   </div>
 </div>
 <div class="row">
   <div class="col-sm-4 required">
-    <label for="forma_ecol">École ou établissement</label>
+    <label for="forma_ecol"><?php trans_e("École ou établissement"); ?></label>
     <select id="forma_ecol" name="id_ecol" class="form-control" required>
       <option value=""></option>
       <?php
@@ -47,7 +47,7 @@
     </select>
   </div>
   <div class="col-sm-4 pl-0 pl-xs-15 required">
-    <label for="forma_nfor">Nombre d’année de formation</label>
+    <label for="forma_nfor"><?php trans_e("Nombre d’année de formation"); ?></label>
     <select id="forma_nfor" name="nivformation" class="form-control" required>
       <option value=""></option>
       <?php foreach ($niv_formation as $key => $value) :
@@ -58,7 +58,7 @@
         </select>
   </div>
   <div class="col-sm-4 pl-0 pl-xs-15 required">
-    <label for="forma_diplome">Diplôme</label>
+    <label for="forma_diplome"><?php trans_e("Diplôme"); ?></label>
     <select id="forma_diplome" name="diplome" class="form-control" required>
       <option value=""></option>
       <?php foreach (getDB()->read('prm_filieres') as $key => $value) :
@@ -71,7 +71,7 @@
 </div>
 <div class="row mt-0">
   <div class="col-sm-4">
-    <label for="forma_copie_diplome">Copie du diplôme</label>
+    <label for="forma_copie_diplome"><?php trans_e("Copie du diplôme"); ?></label>
     <div class="input-group file-upload<?= (isset($formation->copie_diplome) && $formation->copie_diplome != '') ? ' hidden' : '' ?>">
         <input type="text" class="form-control" readonly>
         <label class="input-group-btn">
@@ -84,14 +84,14 @@
   </div>
   <div class="col-sm-12">
     <?php if (isset($formation->copie_diplome) && $formation->copie_diplome != '') : ?>
-      <a href="<?= site_url('apps/upload/frontend/candidat/copie_diplome/'. $formation->copie_diplome); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download"></i>&nbsp;Télécharger</a>
-      <button class="btn btn-danger btn-xs" type="button" onclick="return chmModal.confirm('', '', 'Êtes-vous sûr de vouloir supprimer la copie de diplôme ?', 'chmFormation.deleteDiplome', {'id': <?= $formation->id_formation; ?>, cd: '<?= $formation->copie_diplome; ?>'}, {width: 405})"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
+      <a href="<?= site_url('apps/upload/frontend/candidat/copie_diplome/'. $formation->copie_diplome); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
+      <button class="btn btn-danger btn-xs" type="button" onclick="return chmModal.confirm('', '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer la copie de diplôme ?"); ?>', 'chmFormation.deleteDiplome', {'id': <?= $formation->id_formation; ?>, cd: '<?= $formation->copie_diplome; ?>'}, {width: 405})"><i class="fa fa-trash"></i>&nbsp;<?php trans_e("Supprimer"); ?></button>
     <?php endif; ?>
   </div>
 </div>
 <div class="row mt-10">
   <div class="col-sm-12 required">
-    <label for="forma_description">Description de la formation</label>
+    <label for="forma_description"><?php trans_e("Description de la formation"); ?></label>
     <textarea name="description" class="form-control ckeditor" id="forma_description" required><?= (isset($formation->description)) ? $formation->description : '' ?></textarea>
   </div>
 </div>

@@ -112,7 +112,7 @@ class CandidatController extends Controller
       }
     } else {
       $this->data['layout'] = 'front';
-      $this->data['breadcrumbs'] = ['Accueil', 'Candidat', 'Confirmation du compte'];
+      $this->data['breadcrumbs'] = [trans("Accueil"), trans("Candidat"), trans("Confirmation du compte")];
       return get_page('front/candidat/account/confirm', $this->data);
     }
   }
@@ -121,7 +121,7 @@ class CandidatController extends Controller
   public function account()
   {
     $this->data['layout'] = 'front';
-    $this->data['breadcrumbs'] = ['Accueil', 'Candidat', 'Mon compte'];
+    $this->data['breadcrumbs'] = [trans("Accueil"), trans("Candidat"), trans("Mon compte")];
     $progress = $this->getAccountProgress();
     $this->data['progress'] = $progress;
     $this->data['progress_color'] = $this->percent2Color($progress, 180, 100);
@@ -133,7 +133,7 @@ class CandidatController extends Controller
   public function cv()
   {
     $this->data['layout'] = 'front';
-    $this->data['breadcrumbs'] = ['Accueil', 'Candidat', 'Mon CV'];
+    $this->data['breadcrumbs'] = [trans("Accueil"), trans("Candidat"), trans("Mon CV")];
     $progress = $this->getAccountProgress();
     $this->data['progress'] = $progress;
     $this->data['progress_color'] = $this->percent2Color($progress, 180, 100);
@@ -190,12 +190,12 @@ class CandidatController extends Controller
             'type_email' => 'Envoi automatique'
           ]);
         }
-        return $this->jsonResponse('deactivated', 'Votre compte candidat a été désactivé avec success, deconnexion en cours...');
+        return $this->jsonResponse('deactivated', trans("Votre compte candidat a été désactivé avec success, deconnexion en cours..."));
       }
-      return $this->jsonResponse('error', 'Impossible de désactiver le compte.');
+      return $this->jsonResponse('error', trans("Impossible de désactiver le compte."));
     } else {
       $this->data['layout'] = 'front';
-      $this->data['breadcrumbs'] = ['Accueil', 'Candidat', 'Désactiver mon compte'];
+      $this->data['breadcrumbs'] = [trans("Accueil"), trans("Candidat"), trans("Désactiver mon compte")];
       return get_page('front/candidat/account/deactivate', $this->data);
     }
   }
@@ -217,11 +217,11 @@ class CandidatController extends Controller
 
       getDB()->update('candidats', 'candidats_id', get_candidat_id(), $data, false);
 
-      return $this->jsonResponse('success', 'Vos informations personnalles ont été bien mis à jour.');
+      return $this->jsonResponse('success', trans("Vos informations personnalles ont été bien mis à jour."));
 
     } else {
       $this->data['layout'] = 'front';
-      $this->data['breadcrumbs'] = ['Accueil', 'Candidat', 'Mon CV', 'Informations personnalles'];
+      $this->data['breadcrumbs'] = [trans("Accueil"), trans("Candidat"), trans("Mon CV"), trans("Informations personnalles")];
 
       $this->data['villes'] = getDB()->read('prm_villes');
       $this->data['pays'] = getDB()->read('prm_pays');
@@ -239,15 +239,15 @@ class CandidatController extends Controller
       $variables = [];
 
       Validator::set_field_names([
-        'arabic' => 'Langue Arabe',
-        'french' => 'Langue Français',
-        'english' => 'Langue Anglais',
-        'autre' => 'Autres 1',
-        'autre_n' => 'Autres 1 niveau',
-        'autre1' => 'Autres 2',
-        'autre1_n' => 'Autres 2 niveau',
-        'autre2' => 'Autres 3',
-        'autre2_n' => 'Autres 3 niveau'
+        'arabic' => trans("Langue Arabe"),
+        'french' => trans("Langue Français"),
+        'english' => trans("Langue Anglais"),
+        'autre' => trans("Autres 1"),
+        'autre_n' => trans("Autres 1 niveau"),
+        'autre1' => trans("Autres 2"),
+        'autre1_n' => trans("Autres 2 niveau"),
+        'autre2' => trans("Autres 3"),
+        'autre2_n' => trans("Autres 3 niveau"),
       ]);
 
       $is_valid = Validator::is_valid($data['candidat'], [
@@ -297,14 +297,14 @@ class CandidatController extends Controller
           if (isset($upload['files']['photo'])) $data['candidat']['photo'] = $upload['files']['photo']['name'];
           $data['candidat']['dateMAJ'] = date("Y-m-d H:i:s");
           $db->update('candidats', 'candidats_id', get_candidat_id(), $data['candidat'], false);
-          set_flash_message('success', 'Vos informations ont été bien mis à jour.');
+          set_flash_message('success', trans("Vos informations ont été bien mis à jour."));
         }
       }
       redirect('candidat/cv/langues_pj');
     } else {
       // Render page
       $this->data['layout'] = 'front';
-      $this->data['breadcrumbs'] = ['Accueil', 'Candidat', 'Mon CV', 'Langues et piéces joints'];
+      $this->data['breadcrumbs'] = [trans("Accueil"), trans("Candidat"), trans("Mon CV"), trans("Langues et piéces joints")];
       $this->data['cvs'] = Resume::getByCandidatId();
       $this->data['lms'] = MotivationLetter::getByCandidatId();
       return get_page('front/candidat/cv/langues_pj/index', $this->data);
@@ -317,19 +317,19 @@ class CandidatController extends Controller
     $return = [];
     $rules = [
       'photo' => [
-        'name' => 'Photo',
+        'name' => trans("Photo"),
         'path' => 'apps/upload/frontend/photo_candidats/',
         'required' => false,
         'extensions' => ['png', 'jpg', 'jpeg', 'gif'],
       ],
       'cv' => [
-        'name' => 'CV',
+        'name' => trans("CV"),
         'path' => 'apps/upload/frontend/cv/',
         'required' => !Candidat::hasCV(get_candidat_id()),
         'extensions' => ['doc', 'docx', 'pdf'],
       ],
       'lm' => [
-        'name' => 'Lettre de motivation',
+        'name' => trans("Lettre de motivation"),
         'path' => 'apps/upload/frontend/lmotivation/',
         'required' => false,
         'extensions' => ['doc', 'docx', 'pdf'],
@@ -344,15 +344,15 @@ class CandidatController extends Controller
     foreach ($rules as $key => $rule) {
       $valid = true;
       if($rule['required'] && $_FILES[$key]['size'] < 1) {
-        $return['errors'][] = "Le champs <strong>{$rule['name']}</strong> est obligatoire.";
+        $return['errors'][] = trans("Le champs") ." <strong>{$rule['name']}</strong> ". trans("est obligatoire.");
         $valid = false;
       }
       $extension = strtolower(pathinfo($_FILES[$key]['name'], PATHINFO_EXTENSION));
       if ($_FILES[$key]['size'] > 0) {
         if(!in_array($extension, $rule['extensions'])) {
-          $return['errors'][] = "Le champ <strong>{$rule['name']}</strong> doit avoir les extensions suivantes (.". implode(', .', $rule['extensions']) .")";
+          $return['errors'][] = trans("Le champ") ." <strong>{$rule['name']}</strong> ". trans("doit avoir les extensions suivantes") ." (.". implode(', .', $rule['extensions']) .")";
         } elseif ($_FILES[$key]['size'] > $this->koToOctet($max_file_size)) {
-          $return['errors'][] = "Vous avez depassé la taille maximal <strong>({$max_file_size}ko)</strong> pour le champ <strong>{$rule['name']}</strong>";
+          $return['errors'][] = trans("Vous avez depassé la taille maximal") ." <strong>({$max_file_size}ko)</strong> ". trans("pour le champ") ." <strong>{$rule['name']}</strong>";
         } elseif ($valid) {
           $upload = Media::upload($_FILES[$key], [
             'extensions' => $rule['extensions'],
@@ -385,7 +385,7 @@ class CandidatController extends Controller
     unlinkFile(site_base('apps/upload/frontend/photo_candidats/'. $data['photo']));
     getDB()->update('candidats', 'candidats_id', get_candidat_id(), ['photo' => null, 'dateMAJ' => date("Y-m-d H:i:s")]);
 
-    return $this->jsonResponse('success', 'La photo a été bien supprimé.');
+    return $this->jsonResponse('success', trans("La photo a été bien supprimé."));
   }
 
 
@@ -394,9 +394,9 @@ class CandidatController extends Controller
     $cv = getDB()->prepare("SELECT * FROM cv WHERE id_cv=? AND candidats_id=?", [$data['id'], get_candidat_id()], true);
     if(isset($cv->id_cv) && getDB()->delete('cv', 'id_cv', $cv->id_cv)) {
       unlinkFile(site_base('apps/upload/frontend/cv/'. $cv->lien_cv));
-      return $this->jsonResponse('success', 'Le CV a été bien supprimé.');
+      return $this->jsonResponse('success', trans("Le CV a été bien supprimé."));
     }
-    return $this->jsonResponse('error', 'Impossible de supprimer le CV.');
+    return $this->jsonResponse('error', trans("Impossible de supprimer le CV."));
   }
 
 
@@ -405,9 +405,9 @@ class CandidatController extends Controller
     $lm = getDB()->prepare("SELECT * FROM lettres_motivation WHERE id_lettre=? AND candidats_id=?", [$data['id'], get_candidat_id()], true);
     if(isset($lm->id_lettre) && getDB()->delete('lettres_motivation', 'id_lettre', $lm->id_lettre)) {
       unlinkFile(site_base('apps/upload/frontend/lmotivation/'. $lm->lettre));
-      return $this->jsonResponse('success', 'La lettre de motivation a été bien supprimé.');
+      return $this->jsonResponse('success', trans("La lettre de motivation a été bien supprimé."));
     }
-    return $this->jsonResponse('error', 'Impossible de supprimer La lettre de motivation.');
+    return $this->jsonResponse('error', trans("Impossible de supprimer La lettre de motivation."));
   }
 
 
@@ -416,7 +416,7 @@ class CandidatController extends Controller
     $db = getDB();
     $db->update('cv', 'candidats_id', get_candidat_id(), ['principal' => 0]);
     $db->update('cv', 'id_cv', $data['id'], ['principal' => 1]);
-    return $this->jsonResponse('success', 'Le CV a été défini comme principal.');
+    return $this->jsonResponse('success', trans("Le CV a été défini comme principal."));
   }
 
 
@@ -425,7 +425,7 @@ class CandidatController extends Controller
     $db = getDB();
     $db->update('lettres_motivation', 'candidats_id', get_candidat_id(), ['principal' => 0]);
     $db->update('lettres_motivation', 'id_lettre', $data['id'], ['principal' => 1]);
-    return $this->jsonResponse('success', 'Le lettre de motivation a été défini comme principal.');
+    return $this->jsonResponse('success', trans("Le lettre de motivation a été défini comme principal."));
   }
 
 
@@ -435,9 +435,9 @@ class CandidatController extends Controller
 
       // Validate passwords
       Validator::set_field_names([
-        'current_password' => 'Mot de passe actuel',
-        'password' => 'Nouveau mot de passe',
-        'confirm_password' => 'Confirmer le nouveau mot de passe'
+        'current_password' => trans("Mot de passe actuel"),
+        'password' => trans("Nouveau mot de passe"),
+        'confirm_password' => trans("Confirmer le nouveau mot de passe")
       ]);
 
       $is_valid = Validator::is_valid($data, [
@@ -452,15 +452,15 @@ class CandidatController extends Controller
 
       // Check password strength
       if( $data['password'] != $data['confirm_password'] ) {
-        return $this->jsonResponse('error', 'Les deux mot de passe ne sont pas identique.');
+        return $this->jsonResponse('error', trans("Les deux mot de passe ne sont pas identique."));
       } elseif (!Candidat::isStrongPassword($data['password'])) {
-        return $this->jsonResponse('error', 'Le mot de passe doit contenir les chiffres et des lettres.');
+        return $this->jsonResponse('error', trans("Le mot de passe doit contenir des chiffres et des lettres."));
       }
 
       // Check current password
       $count = getDB()->prepare("SELECT COUNT(*) as nbr FROM candidats WHERE mdp=?", [md5($data['current_password'])], true);
       if(intval($count->nbr) == 0) {
-        return $this->jsonResponse('error', 'Le mot de passe actuel est incorrect.');
+        return $this->jsonResponse('error', trans("Le mot de passe actuel est incorrect."));
       }
 
       // Update password
@@ -470,10 +470,10 @@ class CandidatController extends Controller
         'dateMAJ' => date("Y-m-d H:i:s")
       ]);
 
-      return $this->jsonResponse('success', 'Votre mot de passe a été bien mis à jour.');
+      return $this->jsonResponse('success', trans("Votre mot de passe a été bien mis à jour."));
     }
     $this->data['layout'] = 'front';
-    $this->data['breadcrumbs'] = ['Accueil', 'Candidat', 'Mes identifiants'];
+    $this->data['breadcrumbs'] = [trans("Accueil"), trans("Candidat"), trans("Mes identifiants")];
     return get_page('front/candidat/change-password', $this->data);
   }
 

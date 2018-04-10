@@ -28,7 +28,7 @@ class OfferController extends \App\Controllers\Controller
       $db->create('role_offre', ['id_role' => $parts[0], 'id_offre' => $data['id_offer']]);
       echo $this->shareEmail($data);
     } else {
-      echo json_encode(['status' => 'info', 'message' => 'Cette offre est déjà partagée avec ce partenaire.']);
+      echo json_encode(['status' => 'info', 'message' => trans("Cette offre est déjà partagée avec ce partenaire.")]);
     }
   }
 
@@ -37,7 +37,7 @@ class OfferController extends \App\Controllers\Controller
   {
     global $email_e;
 
-    $data['message'] .= "<br><br><p>Vos identifiants de connexion sur notre site web : {{site}}<br>Votre email : {{email}}<br>Mot de passe : votre mot de passe actuel<br>Ces identifiants vous permettront de consulté des offres ciblé.</p>";
+    $data['message'] .= "<br><br><p>". trans("Vos identifiants de connexion sur notre site web:") ." {{site}}<br>". trans("Votre email:") ." {{email}}<br>". trans("Mot de passe: votre mot de passe actuel") ."<br>" . trans("Ces identifiants vous permettront de consulté des offres ciblé.") ."</p>";
 
     $login_url = site_url('backend/login');
     $message = Mailer::renderMessage($data['message'], [
@@ -46,14 +46,14 @@ class OfferController extends \App\Controllers\Controller
     ]);
 
     $sendEmail = Mailer::send($data['receiver'], $data['subject'], $message, [
-      'titre' => 'Partager un offre avec un partenaire',
+      'titre' => trans("Partager un offre avec un partenaire"),
       'Bcc' => [$email_e]
     ]);
   
     if( $sendEmail['response'] == 'success' ) {
-      return json_encode(['status' => 'success', 'message' => 'Le partage de l\'offre est effectué.']);
+      return json_encode(['status' => 'success', 'message' => trans("Le partage de l'offre est effectué.")]);
     } else {
-      return json_encode(['status' => 'danger', 'message' => 'L\'email n\'a pas pu envoyer.']);
+      return json_encode(['status' => 'danger', 'message' => trans("L'email n'a pas pu envoyer.")]);
     }
   }
 

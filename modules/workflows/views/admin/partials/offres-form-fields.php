@@ -38,14 +38,14 @@ endif;
 
 <?php if(!isset($workflow->id_workflow)) : ?>
 <tr>
-  <td width="169">Type de workflow</td>
+  <td width="169"><?php trans_e("Type de workflow"); ?></td>
   <td width="503">
     <div class="btn-group" data-toggle="buttons">
       <label class="btn btn-default btn-xs active">
-        <input type="radio" name="wf_type" value="default" autocomplete="off" checked> Pr&eacute;&eacute;tablie
+        <input type="radio" name="wf_type" value="default" autocomplete="off" checked> <?php trans_e("Préétablie"); ?>
       </label>
       <label class="btn btn-default btn-xs">
-        <input type="radio" name="wf_type" value="custom" autocomplete="off"> Personnalis&eacute;
+        <input type="radio" name="wf_type" value="custom" autocomplete="off"> <?php trans_e("Personnalisé"); ?>
       </label>
     </div>
   </td>
@@ -56,20 +56,20 @@ endif;
 <?php endif; ?>
 
 <tr class="type_custom" <?= ($custom == 0) ? 'style="display: none;"' : ''; ?>>
-  <td width="169">Recruteurs</td>
+  <td width="169"><?php trans_e("Recruteurs"); ?></td>
   <td width="503">
-    <input type="text" name="wf_recruteurs" id="wf_recruteurs" value="<?= $recruteurs_json; ?>" class="search-users" placeholder="Rechercher..." style="width: 160px;">
+    <input type="text" name="wf_recruteurs" id="wf_recruteurs" value="<?= $recruteurs_json; ?>" class="search-users" placeholder="<?php trans_e("Rechercher..."); ?>" style="width: 160px;">
   </td>
 </tr>
 <tr class="type_custom" <?= ($custom == 0) ? 'style="display: none;"' : ''; ?>>
-  <td width="169">Validateurs</td>
+  <td width="169"><?php trans_e("Validateurs"); ?></td>
   <td width="503">
-    <input type="text" name="wf_validateurs" id="wf_validateurs" value="<?= $validateurs_json; ?>" class="search-users" placeholder="Rechercher..." style="width: 160px;">
+    <input type="text" name="wf_validateurs" id="wf_validateurs" value="<?= $validateurs_json; ?>" class="search-users" placeholder="<?php trans_e("Rechercher..."); ?>" style="width: 160px;">
   </td>
 </tr> 
 
 <tr class="type_default" <?= ($custom == 1) ? 'style="display: none;"' : ''; ?>>
-  <td width="169">Workflow &#224; appliquer</td>
+  <td width="169"><?php trans_e("Workflow à appliquer"); ?></td>
   <td width="503">
     <?php if(isset($workflow->id_workflow)) : ?>
       <select id="id_workflow" style="width: 512px;" disabled>

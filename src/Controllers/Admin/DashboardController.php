@@ -21,7 +21,7 @@ class DashboardController extends Controller
   {
     $db = getDB();
     $this->data['layout'] = 'admin';
-    $this->data['breadcrumbs'] = ['Accueil', 'Statistiques'];
+    $this->data['breadcrumbs'] = [trans("Accueil"), trans("Statistiques")];
         
     return get_page('admin/dashboard/statistics', $this->data);
   }

@@ -131,13 +131,16 @@ class Mailer
 					'ref_filiale' => (isset($args['ref_filiale'])) ? $args['ref_filiale'] : ''
 				]);
 				
-				return array("response" => "success", "message" => "L'email a été bien envoyé.");
+				return array("response" => "success", "message" => trans("L'email a été bien envoyé."));
 			} else {
-				return array("response" => "error", "message" => "Une erreur est survenu lors d'envoi de l'email.");
+				return array("response" => "error", "message" => trans("Une erreur est survenu lors d'envoi de l'email."));
 			}
 
 		} catch (Exception $e) {
-			return array("response" => "error", "message" => "Le message n'a pas pu être envoyé. Erreur: {$mail->ErrorInfo}");
+			return array(
+				"response" => "error",
+				"message" => trans("Le message n'a pas pu être envoyé. Erreur:") ." {$mail->ErrorInfo}" 
+			);
 		}
 	}
 

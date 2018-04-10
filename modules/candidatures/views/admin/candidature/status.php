@@ -1,5 +1,6 @@
 <?php use Modules\Candidatures\Models\Candidatures; ?>
-<h1 class="page-title">ETAT DES CANDIDATURES</h1>
+
+<h1 class="page-title"><?php trans_e("ETAT DES CANDIDATURES"); ?></h1>
 <div class="list-group">
 	<?php foreach (Candidatures::getStatus() as $key => $status) : 
 		$count = Candidatures::countByStatus($status->id_prm_statut_c);

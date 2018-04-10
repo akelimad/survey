@@ -21,7 +21,7 @@ class PartnerController extends \App\Controllers\Controller
   public function actionOffers()
   {
     $this->data['table'] = (new TableController())->getOffersTable();
-    $this->data['breadcrumbs'] = ['Accueil', 'Offres partagés avec moi'];
+    $this->data['breadcrumbs'] = [trans("Accueil"), trans("Offres partagés avec moi")];
     return get_page('admin/partner/offer/index', $this->data, __FILE__);
   }
 
@@ -31,7 +31,7 @@ class PartnerController extends \App\Controllers\Controller
     $offre = getDB()->prepare("SELECT o.Name FROM offre o JOIN role_offre rf ON rf.id_offre=o.id_offre WHERE rf.id_role=? AND rf.id_role_offre=?", [$id_role, $_GET['id']], true);
    
     $this->data['table'] = (new TableController())->getEntriesTable();
-    $this->data['breadcrumbs'] = ['Accueil', 'Offre', $offre->Name];
+    $this->data['breadcrumbs'] = [trans("Accueil"), trans("Offre"), $offre->Name];
     return get_page('admin/partner/offer/entries', $this->data, __FILE__);
   }
 
@@ -40,9 +40,9 @@ class PartnerController extends \App\Controllers\Controller
   {
     $id_entry = (isset($_POST['id_entry'])) ? $_POST['id_entry'] : 0;
     $entry = new \stdClass();
-    $title = "Création d'un nouveau dossier candidat";
+    $title = trans("Création d'un nouveau dossier candidat");
     if ($id_entry > 0) {
-      $title = "Mettre à jour de dossier candidat";
+      $title = trans("Mettre à jour de dossier candidat");
       $entry = getDB()->findOne('role_offre_entry', 'id_entry', $id_entry);
     }
     
@@ -62,7 +62,7 @@ class PartnerController extends \App\Controllers\Controller
     $id_entry = isset($_POST['id_entry']) ? $_POST['id_entry'] : 0;
     
     if ($id_entry == 0 && $_FILES['attachments']['size'][0] <= 0 ) {
-      die(json_encode(['status' => 'error', 'message' => 'Vous devez envoyer au moin une pièce jointe.']));
+      die(json_encode(['status' => 'error', 'message' => trans("Vous devez envoyer au moin une pièce jointe.")]));
     }
 
     $entryData = [
@@ -80,7 +80,7 @@ class PartnerController extends \App\Controllers\Controller
     } else {
       $entry = $db->findOne('role_offre_entry', 'id_entry', $id_entry);
       if(!isset($entry->id_entry)) {
-        die(json_encode(['status' => 'error', 'message' => 'Impossible de trouver ce dossier.']));
+        die(json_encode(['status' => 'error', 'message' => trans("Impossible de trouver ce dossier.")]));
       }
       $entryData['updated_at'] = date("Y-m-d H:i:s");
       $db->update('role_offre_entry', 'id_entry', $id_entry, $entryData);
@@ -112,13 +112,13 @@ class PartnerController extends \App\Controllers\Controller
         ]);
       }
     }
-    die(json_encode(['status' => 'success', 'message' => 'Le dossier de candidat a été bien enregistré.']));
+    die(json_encode(['status' => 'success', 'message' => trans("Le dossier de candidat a été bien enregistré.")]));
   }
 
-
+  // TODO - run this action
   public function actionDeleteEntryAttachement()
   {
-    // dump($_POST);
+
   }
   
 

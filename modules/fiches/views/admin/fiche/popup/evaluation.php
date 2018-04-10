@@ -4,7 +4,7 @@ $hasItems = false;
 ?>
 
 <div class="row mb-15">   
-    <div class="col-md-4"><strong>Nom et prénom du candidat</strong></div>
+    <div class="col-md-4"><strong><?php trans_e("Nom et prénom du candidat"); ?></strong></div>
     <div class="col-md-8">: <?= $candidature->displayName; ?></div>
 </div>
 
@@ -34,10 +34,10 @@ $hasItems = false;
                             <tr>
                                 <th style="padding: 3px 5px;background-color: #636e79ba !important;"><?= $block->name; ?></th>
                                 <th style="padding: 3px 5px;background-color: #636e79ba !important;">
-                                    <?php if( $block->fields_type == 'number' ) : ?>Note (1 à 4)<?php endif; ?>
+                                    <?php if( $block->fields_type == 'number' ) : ?><?php trans_e("Note (1 à 4)"); ?><?php endif; ?>
                                 </th>
                                 <?php if( $block->show_observations == '1' ) : ?>
-                                    <th style="padding: 3px 5px;background-color: #636e79ba !important;">Observations</th>
+                                    <th style="padding: 3px 5px;background-color: #636e79ba !important;"><?php trans_e("Observations"); ?></th>
                                 <?php endif; ?>
                             </tr>
                         </thead>
@@ -84,7 +84,7 @@ $hasItems = false;
         <tr id="ficheCandidatureCommentsRow">
             <td>
                 <div class="subscription" style="height:23px;margin: 10px 0 5px;">
-                    <h1><label for="fiche_comments">Commentaire(s)</label></h1>
+                    <h1><label for="fiche_comments"><?php trans_e("Commentaire(s)"); ?></label></h1>
                 </div>
                 <textarea name="fiche[comments]" id="fiche_comments" style="width:100%;" rows="6"><?= (isset($fiche_candidature->comments)) ? $fiche_candidature->comments : ''; ?></textarea>
             </td>
@@ -95,10 +95,10 @@ $hasItems = false;
     <?php if( $hasItems ) : ?>
     <div class="ligneBleu" style="width: 100%;"></div>
     <div class="form-group mt-10 mb-0">
-        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-hidden="true">Fermer</button>
-        <button type="submit" class="btn btn-primary btn-sm pull-right">Valider la fiche</button>
+        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-hidden="true"><?php trans_e("Fermer"); ?></button>
+        <button type="submit" class="btn btn-primary btn-sm pull-right"><?php trans_e("Valider la fiche"); ?></button>
     </div>
     <?php else : ?>
-        <?php get_alert('info', 'Cette fiche n\'a aucune élément.', false) ?>
+        <?php get_alert('info', trans("Cette fiche n'a aucune élément."), false) ?>
     <?php endif; ?>
 </form>

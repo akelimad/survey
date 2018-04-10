@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Workflow builder</title>
+  <title><?php trans_e("Workflow builder"); ?></title>
   <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.css" />
   <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap-theme.css" />
   <link rel="stylesheet" href="<?php echo site_url('modules/workflows/assets/css/jquery.contextMenu.css'); ?>">
@@ -70,7 +70,7 @@
 
 				</div>
 			</div>                    
-			<button type="button" class="btn btn-danger delete" data-bind="click: deleteStep.bind($data, $parent, 'a', 'b')">&times; <span class="sr-only">Supprimer</span></button>                     
+			<button type="button" class="btn btn-danger delete" data-bind="click: deleteStep.bind($data, $parent, 'a', 'b')">&times; <span class="sr-only"><?php trans_e("Supprimer"); ?></span></button>                     
 		</div>
 	</div>        
 
@@ -79,17 +79,17 @@
 <div class="key">
 	<a href="javascript:void(0)" class="help"><i class="glyphicon glyphicon-question-sign"></i></a>
 	<div class="content">
-		<h2>Instructions <button class="close" data-dismiss="key">&times;</button></h2>
-		<p>Cliquez avec le bouton droit sur le fond de la grille pour ajouter une nouvelle étape.</p>
-		<p>Cliquez ou Double-cliquez (voir la clé) sur les détails pour chaque étape pour l'éditer.</p>
-		<h2>Clé</h2>
+		<h2><?php trans_e("Instructions"); ?> <button class="close" data-dismiss="key">&times;</button></h2>
+		<p><?php trans_e("Cliquez avec le bouton droit sur le fond de la grille pour ajouter une nouvelle étape."); ?></p>
+		<p><?php trans_e("Cliquez ou Double-cliquez (voir la clé) sur les détails pour chaque étape pour l'éditer."); ?></p>
+		<h2><?php trans_e("Clé"); ?></h2>
 		<label>
 			<svg xmlns="http://www.w3.org/2000/svg" version="1.1" position="absolute" pointer-events="all" 
 			height="18" width="18">
 			<circle stroke-width="3" stroke="#7AB02C" fill="transparent" style="" 
 			xmlns="http://www.w3.org/2000/svg" version="1.1" r="6" cy="9" cx="9"></circle>
 		</svg>
-		Point de sortie
+		<?php trans_e("Point de sortie"); ?>
 	</label>
 	<label>
 		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" position="absolute" pointer-events="all" 
@@ -97,15 +97,15 @@
 		<circle stroke-width="3" stroke="#7AB02C" fill="#7AB02C" style="" 
 		xmlns="http://www.w3.org/2000/svg" version="1.1" r="6" cy="9" cx="9"></circle>
 	</svg>
-	Point d'entrée
+	<?php trans_e("Point d'entrée"); ?>
 </label>
 <label>
 	<img src="<?php echo site_url('modules/workflows') ?>/assets/img/pointer.png" />
-	Sélectionner
+	<?php trans_e("Sélectionner"); ?>
 </label>
 <label>
 	<img src="<?php echo site_url('modules/workflows') ?>/assets/img/move.svg" width="20px" />
-	Déplacer
+	<?php trans_e("Déplacer"); ?>
 </label>
 </div>
 </div>
@@ -141,11 +141,11 @@
 </aside>
 
 <footer data-bind="css: dirtyState()">
-	<button onclick="location.href='<?php echo site_url('backend/module/workflows/workflow'); ?>'" class="btn btn-success"><i class="glyphicon glyphicon-arrow-left"></i> Historique des workflows</button>
-	<button type="button" class="btn btn-primary" id="save"  data-bind="click: saveData, enable: steps().length>0">Enregistrer le Workflow</button>
-	<button type="button" class="btn btn-default" id="new"  data-bind="click: newWorkflow">Nouveau Workflow</button>
+	<button onclick="location.href='<?php echo site_url('backend/module/workflows/workflow'); ?>'" class="btn btn-success"><i class="glyphicon glyphicon-arrow-left"></i> <?php trans_e("Historique des workflows"); ?></button>
+	<button type="button" class="btn btn-primary" id="save"  data-bind="click: saveData, enable: steps().length>0"><?php trans_e("Enregistrer le Workflow"); ?></button>
+	<button type="button" class="btn btn-default" id="new"  data-bind="click: newWorkflow"><?php trans_e("Nouveau Workflow"); ?></button>
 	<button id="workflowBtn" type="button" class="btn btn-default pull-right" data-bind="enable: workflows().length>0">
-		<span class="badge" data-bind="text: workflows().length"></span> Workflows enregistré
+		<span class="badge" data-bind="text: workflows().length"></span> <?php trans_e("Workflows enregistré"); ?>
 	</button>
 </footer>
 

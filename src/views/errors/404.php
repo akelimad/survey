@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>        
-	<title><?= SITE_NAME;?> | Page introuvable</title>    
+	<title><?= SITE_NAME;?> | <?php trans_e("Page introuvable"); ?></title>    
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,8 +9,7 @@
 	<style>
 	body{
 	background: #334454;
-	    font-family: arial;
-
+	  font-family: arial;
 	}
 	.page-container {
 	  width: 100%;
@@ -110,19 +109,19 @@
 			<div class="block-error">
 				
 				<div class="error-num">404</div>
-				<div class="error-text">PAGE NON TROUVÉE</div>
+				<div class="error-text"><?php trans_e("PAGE NON TROUVÉE"); ?></div>
 				
-				<div class="error-description">Malheureusement, nous avons du mal à charger la page que vous recherchez. Veuillez attendre un instant et réessayer ou utiliser les actions ci-dessous.</div>
+				<div class="error-description"><?php trans_e("Malheureusement, nous avons du mal à charger la page que vous recherchez. Veuillez attendre un instant et réessayer ou utiliser les actions ci-dessous."); ?></div>
 				<div class="row" style="margin-bottom: 20px;">
 					<div class="col-md-6">
-						<a href="#" class="button btn-block text-center" onclick="window.history.go(-1); return false;">Page précédente</a>
+						<a href="#" class="button btn-block text-center" onclick="window.history.go(-1); return false;"><?php trans_e("Page précédente"); ?></a>
 					</div>
 					<div class="col-md-6" style="padding-left: 0px;">
-						<a href="<?php echo site_url('contact'); ?>" class="button orange btn-block text-center">Contactez-nous</a>
+						<a href="<?php echo site_url('contact'); ?>" class="button orange btn-block text-center"><?php trans_e("Contactez-nous"); ?></a>
 					</div>
 				</div>
 				<div class="copy">
-					&copy; <?php echo date('Y') ?> <?= SITE_NAME;?> | Tous les droits sont réservés
+					&copy; <?php echo date('Y') ?> <?= SITE_NAME;?> | <?php trans_e("Tous les droits sont réservés"); ?>
 				</div>
 			</div>
 			

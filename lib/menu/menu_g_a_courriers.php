@@ -60,17 +60,17 @@ if ($_SESSION['link']==5)
 
 			<li id="ctl00_liAlerte" class="<?php echo $s_cls6; ?>">
 				<a id="ctl00_lnkAlerte" href="<?php  echo $urlad_coresp  ?>/correspondances/" >
-				<i class="fa fa-bolt " ></i> Historique des correspondances</a>
+				<i class="fa fa-bolt " ></i> <?php trans_e("Historique des correspondances"); ?></a>
 			</li>
 
 			<li id="ctl00_liAlerte" class="<?php echo $s_cls7; ?>">
 				<a href="<?php  echo $urlad_coresp  ?>/courriers_type/">
-				<i class="fa fa-at " ></i> Courriers type</a>
+				<i class="fa fa-at " ></i> <?php trans_e("Courriers type"); ?></a>
 			</li>
 			<li id="ctl00_liAlerte" class="<?php echo $s_cls5; ?>">
 
 				<a href="<?php  echo $urlad_coresp  ?>/mailing/">
-				<i class="fa fa-envelope-o " ></i> E-Mailing</a>					
+				<i class="fa fa-envelope-o " ></i> <?php trans_e("E-Mailing"); ?></a>					
 
 			</li>
 	

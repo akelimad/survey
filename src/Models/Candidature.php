@@ -35,8 +35,8 @@ class Candidature {
    */
   public static function findAllByCandidatId($candidat_id = null)
   {
-    if (is_null($candidats_id)) $candidats_id = get_candidat_id();
-    return getDB()->prepare("SELECT *, c.status as c_status FROM candidature c JOIN offre o ON c.id_offre=o.id_offre WHERE c.candidats_id=?", [$candidats_id]);
+    if (is_null($candidat_id)) $candidat_id = get_candidat_id();
+    return getDB()->prepare("SELECT *, c.status as c_status FROM candidature c JOIN offre o ON c.id_offre=o.id_offre WHERE c.candidats_id=?", [$candidat_id]);
   }
 
 

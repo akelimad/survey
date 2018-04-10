@@ -1,7 +1,7 @@
 <div id="chm-offer-search" data-total-offers="<?= $pagi->total_results ?>"></div>
 
 <div class="styled-title mt-0 mb-10">
-  <h3>Offres d'emploi</h3>
+  <h3><?php trans_e("Offres d'emploi"); ?></h3>
 </div>
 <?php if(!empty($offers)) : ?>
 
@@ -26,5 +26,5 @@
   </div>
 
 <?php else : ?>
-  <strong>Aucun offre trouvé.</strong>
+  <strong><?php trans_e("Aucune offre trouvée."); ?></strong>
 <?php endif; ?>

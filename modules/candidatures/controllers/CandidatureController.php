@@ -32,7 +32,7 @@ class CandidatureController extends Controller
     $this->data['table'] = $tableCtrl->getTable();
     $this->data['params'] = $tableCtrl->params;
     $this->data['template'] = 'two-columns-left';
-    $this->data['breadcrumbs'] = ['Candidatures', 'Nouvelle candidatures'];
+    $this->data['breadcrumbs'] = [trans("Candidatures"), trans("Nouvelle candidatures")];
 
     $this->data['table_actions'] = array_map(function($action) {
       return $action['label'];
@@ -52,14 +52,14 @@ class CandidatureController extends Controller
   {
     $this->addAssets();
     $this->data['template'] = 'two-columns-left';
-    $this->data['breadcrumbs'] = ['Candidatures', 'Etat des candidatures'];
+    $this->data['breadcrumbs'] = [trans("Candidatures"), trans("Etat des candidatures")];
     return get_page('admin/candidature/status', $this->data, __FILE__);  
   }
 
-
+  // TODO - Make this action work
   public function actionHistorique()
   {
-    echo '<h1>En maintenance...</h1>';    
+    echo '<h1>En construction...</h1>';    
   }
 
 

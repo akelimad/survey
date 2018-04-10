@@ -29,7 +29,7 @@ class PdfController extends Controller
     $db = getDB();
 
     $fc = $db->prepare("SELECT * FROM fiche_candidature WHERE id_fiche_candidature=?", [$id], true);
-    if( !isset($fc->id_fiche) ) die('Impossible de trouver cette fiche.');
+    if( !isset($fc->id_fiche) ) die(trans("Impossible de trouver cette fiche."));
 
     $result = $db->prepare("
       SELECT concat(c.nom, ' ', c.prenom) AS displayName, o.Name as offreName

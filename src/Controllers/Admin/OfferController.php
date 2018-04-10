@@ -19,7 +19,7 @@ class OfferController extends Controller
   public function getForm($data)
   {
     $this->data['layout'] = 'admin';
-    $this->data['breadcrumbs'] = ['Offres', 'Créer une offre'];
+    $this->data['breadcrumbs'] = [trans("Offres"), trans("Créer une offre")];
     
     return get_page('admin/offer/form', $this->data);
   }

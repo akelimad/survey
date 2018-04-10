@@ -19,7 +19,7 @@
 <div class="row">
   <div class="col-md-6">
     <div class="panel panel-default">
-      <div class="panel-heading">Nombre des candidats par secteurs d'activités</div>
+      <div class="panel-heading"><?php trans_e("Nombre des candidats par secteurs d'activités"); ?></div>
       <div class="panel-body">
         <div id="sector-chart" class="shart_wrap">
           <img src="<?= site_url('modules/candidatures/assets/img/loading.gif'); ?>" class="dual-gear-loading">
@@ -29,7 +29,7 @@
   </div>
   <div class="col-md-6">
     <div class="panel panel-default">
-      <div class="panel-heading">Nombre des candidats par pays de résidence</div>
+      <div class="panel-heading"><?php trans_e("Nombre des candidats par pays de résidence"); ?></div>
       <div class="panel-body">
         <div id="residence-country-chart" class="shart_wrap">
           <img src="<?= site_url('modules/candidatures/assets/img/loading.gif'); ?>" class="dual-gear-loading">
@@ -42,7 +42,7 @@
 <div class="row">
   <div class="col-md-6">
     <div class="panel panel-default">
-      <div class="panel-heading">Nombre des candidats par situation</div>
+      <div class="panel-heading"><?php trans_e("Nombre des candidats par situation"); ?></div>
       <div class="panel-body">
         <div id="situation-chart" class="shart_wrap">
           <img src="<?= site_url('modules/candidatures/assets/img/loading.gif'); ?>" class="dual-gear-loading">
@@ -52,7 +52,7 @@
   </div>
   <div class="col-md-6">
     <div class="panel panel-default">
-      <div class="panel-heading">Nombre des candidats par expérience</div>
+      <div class="panel-heading"><?php trans_e("Nombre des candidats par expérience"); ?></div>
       <div class="panel-body">
         <div id="experience-chart" class="shart_wrap">
           <img src="<?= site_url('modules/candidatures/assets/img/loading.gif'); ?>" class="dual-gear-loading">
@@ -65,7 +65,7 @@
 <div class="row">
   <div class="col-md-6">
     <div class="panel panel-default">
-      <div class="panel-heading">Nombre des Candidatures par statut</div>
+      <div class="panel-heading"><?php trans_e("Nombre des Candidatures par statut"); ?></div>
       <div class="panel-body">
         <div id="candidatures-status-chart" class="shart_wrap">
           <img src="<?= site_url('modules/candidatures/assets/img/loading.gif'); ?>" class="dual-gear-loading">
@@ -75,7 +75,7 @@
   </div>
   <div class="col-md-6">
     <div class="panel panel-default">
-      <div class="panel-heading">Nombre des Offres par statut</div>
+      <div class="panel-heading"><?php trans_e("Nombre des Offres par statut"); ?></div>
       <div class="panel-body">
         <div id="offers-status-chart" class="shart_wrap">
           <img src="<?= site_url('modules/candidatures/assets/img/loading.gif'); ?>" class="dual-gear-loading">

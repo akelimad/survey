@@ -32,7 +32,7 @@ class AttachmentController
 		$table->setOrder('DESC');
 
 		$table->setAction('save_title', [
-            'label' => 'Sauvegarder',
+            'label' => trans("Sauvegarder"),
             'patern' => '#',
             'callback' => 'saveAttachementTitle',
             'icon' => 'fa fa-save',
@@ -44,7 +44,7 @@ class AttachmentController
 		]);
 
 		$table->setAction('download', [
-            'label' => 'Télécharger',
+            'label' => trans("Télécharger"),
             'patern' => site_url('uploads/candidatures/{id_candidature}/attachments/{file_name}'),
             'icon' => 'fa fa-download',
             'sort_order' => 1,
@@ -65,15 +65,15 @@ class AttachmentController
             'sort_order' => 3
 		]);
 
-		$table->addColumn('title', 'Titre', function($row) {
-			return '<input type="hidden" class="title_input" value="'.$row->title.'"><strong class="title" data-toggle="tooltip" data-placement="right" title="Cliquer pour télécharger"><a href="'.site_url('uploads/candidatures/'.$row->id_candidature.'/attachments/'.$row->file_name).'" target="_blank">'.$row->title.'</a></strong>';
+		$table->addColumn('title', trans("Titre"), function($row) {
+			return '<input type="hidden" class="title_input" value="'.$row->title.'"><strong class="title" data-toggle="tooltip" data-placement="right" title="'. trans("Cliquer pour télécharger") .'"><a href="'.site_url('uploads/candidatures/'.$row->id_candidature.'/attachments/'.$row->file_name).'" target="_blank">'.$row->title.'</a></strong>';
 		});
 
-		$table->addColumn('created_at', 'Date de création', function($row){
+		$table->addColumn('created_at', trans("Date de création"), function($row){
 			return date("d.m.Y H:i", strtotime($row->created_at));
 		});
 
-		$table->addColumn('updated_at', 'Date de modification', function($row){
+		$table->addColumn('updated_at', trans("Date de modification"), function($row){
 			return date("d.m.Y H:i", strtotime($row->updated_at));
 		});
 

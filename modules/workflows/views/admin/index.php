@@ -29,12 +29,12 @@ $table = new \App\Helpers\Table($query, 'id_offre');
 $table->setTableClass(['table', 'table-striped']);
 $table->setHeaders([
 	"id_history" => "#",
-	"nom_offre" => "Titre de l'offre",
-	"wf_name" => "Workflow",
-	"status" => "Statut",
-	"current_step" => "Étape",
-	"nom_validateur" => "Validateur",
-	"created_at" => "Date de validation",
+	"nom_offre" => trans("Titre de l'offre"),
+	"wf_name" => trans("Workflow"),
+	"status" => trans("Statut"),
+	"current_step" => trans("Étape"),
+	"nom_validateur" => trans("Validateur"),
+	"created_at" => trans("Date de validation"),
 ]);
 
 $table->setSortables(['nom_offre', 'nom_validateur', 'status', 'created_at']);
@@ -62,7 +62,7 @@ if($_SESSION['abb_admin'] == 'root') {
     'patern' => site_url('backend/module/workflows/workflow/delete/{id_offre}'),
     'attributes' => [
     	'class' => 'btn btn-danger btn-xs',
-    	'onclick' => "return confirm('Etes vous sur ?')"
+    	'onclick' => "return confirm('". trans_e("Etes vous sur ?") ."')"
     ]
   ]);
 } else {
@@ -70,7 +70,7 @@ if($_SESSION['abb_admin'] == 'root') {
 }
 
 $table->setAction('details', [
-'label' => 'Détails',
+'label' => trans("Détails"),
     'patern' => site_url('backend/module/workflows/workflow/details/{primary_key}'),
     'icon' => 'fa fa-eye',
     'attributes' => [
@@ -79,7 +79,7 @@ $table->setAction('details', [
     'show_label' => true
 ]);
 $table->setAction('takers', [
-'label' => 'Preneurs',
+'label' => trans("Preneurs"),
     'patern' => site_url('backend/module/workflows/workflow/takers/{primary_key}'),
     'icon' => 'fa fa-users',
     'attributes' => [
@@ -95,7 +95,7 @@ $table->setAction('takers', [
 $table->setOrderby('created_at');
 $table->setOrder('DESC');
 
-echo '<a href="'. site_url('backend/module/workflows/workflow/builder') .'" class="btn btn-primary btn-sm mb-15"><i class="fa fa-code-fork"></i>&nbsp;Gérer les workflows</a>';
+echo '<a href="'. site_url('backend/module/workflows/workflow/builder') .'" class="btn btn-primary btn-sm mb-15"><i class="fa fa-code-fork"></i>&nbsp;'. trans("Gérer les workflows") .'</a>';
 
 get_flash_message();
 

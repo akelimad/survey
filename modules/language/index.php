@@ -1,4 +1,8 @@
 <?php
+use App\Route;
+
+// Register routes
+Route::add('backend/language/strings', 'Modules\Language\Controllers\LanguageController@strings');
 
 /**
  * Get string translation

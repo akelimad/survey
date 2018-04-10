@@ -143,28 +143,28 @@ class Uploader {
             $ini = array(ini_get('file_uploads'),((int) ini_get('upload_max_filesize')),((int) ini_get('post_max_size')), ((int) ini_get('max_file_uploads')));
             
             if(!isset($field) || empty($field)) return false;
-            if(!$ini[0]) $errors[] = $this->error_messages['file_uploads'];
+            if(!$ini[0]) $errors[] = trans($this->error_messages['file_uploads']);
             
-            if($options['required'] && $field['length'] == 0) $errors[] = $this->error_messages['required_and_no_file'];
-            if(($options['limit'] && $field['length'] > $options['limit']) || ($field['length']) > $ini[3]) $errors[] = $this->error_messages['max_number_of_files'];
+            if($options['required'] && $field['length'] == 0) $errors[] = trans($this->error_messages['required_and_no_file']);
+            if(($options['limit'] && $field['length'] > $options['limit']) || ($field['length']) > $ini[3]) $errors[] = trans($this->error_messages['max_number_of_files']);
             if(!file_exists($options['uploadDir']) && !is_dir($options['uploadDir']) && mkdir($options['uploadDir'], 750, true)){
                 $this->data['hasWarnings'] = true;
-                $this->data['warnings'] = "A new directory was created in " . realpath($options['uploadDir']);
+                $this->data['warnings'] = trans("A new directory was created in") ." " . realpath($options['uploadDir']);
             }
             if(!is_writable($options['uploadDir'])) @chmod($options['uploadDir'], 750);
             
             if($field['Field_Type'] == "input"){
                 $total_size = 0; foreach($this->field['size'] as $key=>$value){ $total_size += $value; } $total_size = $total_size/1048576;
-                if($options['maxSize'] && $total_size > $options['maxSize']) $errors[] = $this->error_messages['max_file_size'];
+                if($options['maxSize'] && $total_size > $options['maxSize']) $errors[] = trans($this->error_messages['max_file_size']);
                 
-                if($total_size > $ini[1]) $errors[] = $this->error_messages[1];
-                if($total_size > $ini[2]) $errors[] = $this->error_messages['post_max_size'];
+                if($total_size > $ini[1]) $errors[] = trans($this->error_messages[1]);
+                if($total_size > $ini[2]) $errors[] = trans($this->error_messages['post_max_size']);
             }
         }else{
-            if(@$field['error'][$file['index']] > 0 && array_key_exists($field['error'][$file['index']], $this->error_messages)) $errors[] = $this->error_messages[$field['error'][$file['index']]];
-            if($options['extensions'] && !in_array($file['extension'], $options['extensions'])) $errors[] = $this->error_messages['accept_file_types'];
-            if($file['type'][0] == "image" && @!is_array(getimagesize($file['tmp']))) $errors[] = $this->error_messages['accept_file_types'];
-            if($options['maxSize'] && $file['size'][0] > $options['maxSize']) $errors[] = $this->error_messages['max_file_size'];
+            if(@$field['error'][$file['index']] > 0 && array_key_exists($field['error'][$file['index']], $this->error_messages)) $errors[] = trans($this->error_messages[$field['error'][$file['index']]]);
+            if($options['extensions'] && !in_array($file['extension'], $options['extensions'])) $errors[] = trans($this->error_messages['accept_file_types']);
+            if($file['type'][0] == "image" && @!is_array(getimagesize($file['tmp']))) $errors[] = trans($this->error_messages['accept_file_types']);
+            if($options['maxSize'] && $file['size'][0] > $options['maxSize']) $errors[] = trans($this->error_messages['max_file_size']);
             
             if($field['Field_Type'] == 'link' && empty($this->cache_download_content)) $errors[] = "";
         }

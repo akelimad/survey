@@ -38,15 +38,15 @@ function googleTranslateElementInit() {
 
 		  
 
-					<div class="socialButtons"  style="color:#ffffff;" >  Retrouvez-nous sur : 
+					<div class="socialButtons"  style="color:#ffffff;" >  <?php trans_e("Retrouvez-nous sur:"); ?> 
 
 					
 
           <?php if( $fb_url!=''   ){ ?>
 
-					 <a href="<?php echo $fb_url ?>" target="_blank" title="Retrouver nous sur Facebook - nouvelle fenêtre">
+					 <a href="<?php echo $fb_url ?>" target="_blank" title="<?php trans_e("Retrouver nous sur Facebook - nouvelle fenêtre"); ?>">
 
-           <img id="img_fb" src="<?php echo $imgurl ?>/icons/head-fb.png" alt="Retrouver La Poste recrute sur Facebook"></a>
+           <img id="img_fb" src="<?php echo $imgurl ?>/icons/head-fb.png" alt="<?php trans_e("Retrouver La Poste recrute sur Facebook"); ?>"></a>
 
           <?php } ?>
 
@@ -54,9 +54,9 @@ function googleTranslateElementInit() {
 
           <?php if(  $tw_url!=''   ){ ?>
 
-					 <a href="<?php echo $tw_url ?>" target="_blank" title="Retrouver nous sur Twitter - nouvelle fenêtre">
+					 <a href="<?php echo $tw_url ?>" target="_blank" title="<?php trans_e("Retrouver nous sur Twitter - nouvelle fenêtre"); ?>">
 
-           <img src="<?php echo $imgurl ?>/icons/head-twitter.png" alt="Retrouver La Poste recrute sur Twitter"></a>
+           <img src="<?php echo $imgurl ?>/icons/head-twitter.png" alt="<?php trans_e("Retrouver La Poste recrute sur Twitter"); ?>"></a>
 
           <?php } ?>
 
@@ -64,9 +64,9 @@ function googleTranslateElementInit() {
 
           <?php if(   $li_url!=''   ){ ?>
 
-					 <a href="<?php echo $li_url ?>" target="_blank" title="Retrouver nous sur LinkedIn - nouvelle fenêtre">
+					 <a href="<?php echo $li_url ?>" target="_blank" title="<?php trans_e("Retrouver nous sur LinkedIn - nouvelle fenêtre"); ?>">
 
-           <img id="img_li" src="<?php echo $imgurl ?>/icons/head-linkedin.png" alt="Retrouver La Poste recrute sur LinkedIn"></a>
+           <img id="img_li" src="<?php echo $imgurl ?>/icons/head-linkedin.png" alt="<?php trans_e("Retrouver La Poste recrute sur LinkedIn"); ?>"></a>
 
           <?php } ?>
 
@@ -74,9 +74,9 @@ function googleTranslateElementInit() {
 
           <?php if(   $via_url!='' ){ ?>
 
-					 <a href="<?php echo $via_url ?>" target="_blank" title="Retrouver nous sur Viadeo - nouvelle fenêtre">
+					 <a href="<?php echo $via_url ?>" target="_blank" title="<?php trans_e("Retrouver nous sur Viadeo - nouvelle fenêtre"); ?>">
 
-           <img id="img_vd" src="<?php echo $imgurl ?>/icons/head-viadeo.png" alt="Retrouver La Poste recrute sur Viadeo"></a>
+           <img id="img_vd" src="<?php echo $imgurl ?>/icons/head-viadeo.png" alt="<?php trans_e("Retrouver La Poste recrute sur Viadeo"); ?>"></a>
 
           <?php } ?>
 
@@ -122,11 +122,11 @@ function googleTranslateElementInit() {
 
                     <li class="acces"><a 
 
-                    style="color:#ffffff;" href="<?php echo $site_url ?>" target="_blank" title="Accès au site de l'institution - Nouvelle fenêtre">Accès au site de l'institution</a></li>
+                    style="color:#ffffff;" href="<?php echo $site_url ?>" target="_blank" title="Accès au site de l'institution - Nouvelle fenêtre"><?php trans_e("Accès au site de l'institution"); ?></a></li>
 
                     <li class="contactus"><a 
 
-                    style="color:#ffffff;" href="<?php echo $urlinfos ?>/contact/" title="Contactez-nous">Contactez-nous</a></li>
+                    style="color:#ffffff;" href="<?php echo $urlinfos ?>/contact/" title="<?php trans_e("Contactez-nous"); ?>"><?php trans_e("Contactez-nous"); ?></a></li>
 
                 </ul>   
 
@@ -276,7 +276,7 @@ margin-left: 820px;
 
 				<div id="menulangue">
 
-				Vous êtes ici :  <b><?php echo $ariane; ?></b>
+				<?php trans_e("Vous êtes ici"); ?> :  <b><?php echo $ariane; ?></b>
 
 				<div id="ctl00_cont_panier">
 

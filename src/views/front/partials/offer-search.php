@@ -6,13 +6,13 @@
       $route = str_replace(site_url(), '', strtok($_SERVER['HTTP_REFERER'], '?'));
       switch ($route) {
         case 'offres':
-          $label = 'offre(s) d\'emploi trouvé(s)';
+          $label = trans("offre(s) d'emploi trouvé(s)");
           break;
         case 'offres/stage':
-          $label = 'offre(s) de stage trouvé(s)';
+          $label = trans("offre(s) de stage trouvé(s)");
           break;
         default:
-          $label = 'offres en ligne';
+          $label = trans("offres en ligne");
           break;
       }
       ?>
@@ -20,7 +20,7 @@
 
         <div class="row">
           <div class="col-sm-5 mb-5 mb-xs-5">
-            <label for="keywords">Mots clés</label>
+            <label for="keywords"><?php trans_e("Mots clés"); ?></label>
             <input type="text" name="s" id="keywords" value="<?= (isset($s)) ? $s : ''; ?>" title="Saisissez vos mots clés (EX: Informatique, infographiste,...)">
           </div>
           <div class="col-sm-4 mb-5 mb-xs-5 pl-0 pl-xs-15">
@@ -33,7 +33,7 @@
             </select>
           </div>
           <div class="col-sm-3 mb-5 pl-0 pl-xs-15">
-            <label for="local">Lieu de travail</label>
+            <label for="local"><?php trans_e("Lieu de travail"); ?></label>
             <select name="l[]" id="local" multiple>
               <?php foreach (getDB()->read('prm_localisation') as $key => $value) : ?>
                 <?php $selected = (isset($l) && in_array($value->id_localisation, $l)) ? 'selected' : ''; ?>
@@ -46,7 +46,7 @@
       <div class="mb-5 chm-advanced-search" style="display:<?= (read_cookie('eta_of') == 1) ? 'block' : 'none' ?>;">
         <div class="row">
           <div class="col-sm-5 mb-5">
-            <label for="experience">Niveau d'expérience</label>
+            <label for="experience"><?php trans_e("Niveau d'expérience"); ?></label>
             <select name="e[]" id="experience" multiple>
               <?php foreach (getDB()->read('prm_experience') as $key => $value) : ?>
                 <?php $selected = (isset($e) && in_array($value->id_expe, $e)) ? 'selected' : ''; ?>
@@ -55,7 +55,7 @@
             </select>
           </div>
           <div class="col-sm-4 mb-5 mb-xs-5 pl-0 pl-xs-15">
-            <label for="nfor">Niveau d'étude</label>
+            <label for="nfor"><?php trans_e("Niveau d'étude"); ?></label>
             <select name="nf[]" id="nfor" multiple>
               <?php foreach (getDB()->read('prm_niv_formation') as $key => $value) : ?>
                 <?php $selected = (isset($nf) && in_array($value->id_nfor, $nf)) ? 'selected' : ''; ?>
@@ -64,7 +64,7 @@
             </select>
           </div>
           <div class="col-sm-3 mb-5 mb-xs-5 pl-0 pl-xs-15">
-            <label for="type_poste">Type de poste</label>
+            <label for="type_poste"><?php trans_e("Type de poste"); ?></label>
             <select name="tp[]" id="type_poste" multiple>
               <?php foreach (getDB()->read('prm_type_poste') as $key => $value) : ?>
                 <?php $selected = (isset($tp) && in_array($value->id_tpost, $tp)) ? 'selected' : ''; ?>
@@ -75,7 +75,7 @@
         </div>
         <div class="row">
           <div class="col-sm-5 mb-5">
-            <label for="sec">Secteur d'activité</label>
+            <label for="sec"><?php trans_e("Secteur d'activité"); ?></label>
             <select name="sec[]" id="sec" multiple>
               <?php foreach (getDB()->read('prm_sectors') as $key => $value) : ?>
                 <?php $selected = (isset($sec) && in_array($value->id_sect, $sec)) ? 'selected' : ''; ?>
@@ -84,7 +84,7 @@
             </select>
           </div>
           <div class="col-sm-4 mb-5 mb-xs-5 pl-0 pl-xs-15">
-            <label for="mobi">Mobilité</label>
+            <label for="mobi"><?php trans_e("Mobilité"); ?></label>
             <select name="m[]" id="mobi" multiple>
               <?php foreach (getDB()->read('prm_mobi_niv') as $key => $value) : ?>
                 <?php $selected = (isset($m) && in_array($value->id_mobi_niv, $m)) ? 'selected' : ''; ?>
@@ -95,17 +95,17 @@
         </div>
       </div>
 
-      <p class="mb-0">* <strong>Ctrl + Bouton gauche</strong> de la souris pour séléctionner multiples choix.</p>
+      <p class="mb-0"><?php trans_e("* <strong>Ctrl + Bouton gauche</strong> de la souris pour séléctionner multiples choix."); ?></p>
 
       <div class="row mt-5">
         <div class="col-sm-3 col-xs-6">
-          <a href="<?= site_url('offres'); ?>"><i class="fa fa-list-ul"></i>&nbsp;Voir toutes les offres</a>
+          <a href="<?= site_url('offres'); ?>"><i class="fa fa-list-ul"></i>&nbsp;<?php trans_e("Voir toutes les offres"); ?></a>
         </div>
         <div class="col-sm-3 col-sm-offset-4 col-xs-6">
-          <a href="javascript:void(0)" onclick="return chmOffer.showAdvancedSearch()" class="pull-right" style="margin-top: 4px;"><i class="fa fa-search-plus"></i>&nbsp;Recherche avancée</a>
+          <a href="javascript:void(0)" onclick="return chmOffer.showAdvancedSearch()" class="pull-right" style="margin-top: 4px;"><i class="fa fa-search-plus"></i>&nbsp;<?php trans_e("Recherche avancée"); ?></a>
         </div>
         <div class="col-sm-2 col-xs-12 mt-xs-10">
-          <button type="submit" class="btn btn-primary btn-xs pull-right"><i class="fa fa-search"></i>&nbsp;Rechercher</button>
+          <button type="submit" class="btn btn-primary btn-xs pull-right"><i class="fa fa-search"></i>&nbsp;<?php trans_e("Rechercher"); ?></button>
         </div>
       </div>
     </div>

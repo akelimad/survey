@@ -126,19 +126,20 @@ function timeAgo($date, $granularity = 2) {
 	$date = strtotime($date);
 	$difference = time() - $date;
 	$periods = array(
-		'decade' => 315360000,
-		'année'   => 31536000,
-		'mois'  => 2628000,
-		'semaine'   => 604800, 
-		'jour'    => 86400,
-		'heure'   => 3600,
-		'minute' => 60,
-		'seconde' => 1);
+		trans("decade") => 315360000,
+		trans("année")   => 31536000,
+		trans("mois")  => 2628000,
+		trans("semaine")   => 604800, 
+		trans("jour")    => 86400,
+		trans("heure")   => 3600,
+		trans("minute") => 60,
+		trans("seconde") => 1
+	);
 	
 	$retval = '';
 	if ($difference < 1)
 	{
-		$retval = "moins de 1 second";
+		$retval = trans("moins de 1 second");
 	}
 	else
 	{
@@ -149,7 +150,7 @@ function timeAgo($date, $granularity = 2) {
 				$time = floor($difference/$value);
 				$difference %= $value;
 				$retval .= ($retval ? ' ' : '').$time.' ';
-				$retval .= (($time > 1 && $key !='mois') ? $key.'s' : $key);
+				$retval .= (($time > 1 && $key != trans("mois")) ? $key.'s' : $key);
 				$granularity--;
 			}
 			if ($granularity == '0')

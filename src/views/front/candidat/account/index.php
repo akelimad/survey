@@ -16,28 +16,28 @@ use App\Models\Status;
 <div id="account-container">
   <div class="row">
     <div class="col-sm-12">
-      <h1 class="pull-left">Mon compte</h1>
-      <a href="javascript:void(0)" chm-print="#account-container" chm-print-title="Mon compte" class="btn btn-primary btn-xs pull-right hidden-xs" style="margin-top: 3px;"><i class="fa fa-print"></i>&nbsp;Imprimer</a>
+      <h1 class="pull-left"><?php trans_e("Mon compte"); ?></h1>
+      <a href="javascript:void(0)" chm-print="#account-container" chm-print-title="<?php trans_e("Mon compte"); ?>" class="btn btn-primary btn-xs pull-right hidden-xs" style="margin-top: 3px;"><i class="fa fa-print"></i>&nbsp;<?php trans_e("Imprimer"); ?></a>
     </div>
   </div>
 
-  <p class="mt-10 mb-5">Complété à <?= $progress; ?>%</p>
+  <p class="mt-10 mb-5"><?php trans_e("Complété à"); ?> <?= $progress; ?>%</p>
   <div class="progress mb-10" style="height: 16px;">
     <div class="progress-bar progress-bar-xs progress-bar-default progress-bar-striped" role="progressbar" aria-valuenow="<?= $progress; ?>" aria-valuemin="0" aria-valuemax="100" style="background-color:#<?= $progress_color; ?>;width: <?= $progress; ?>%">
-      <span class="sr-only">Complété à <?= $progress; ?>%</span>
+      <span class="sr-only"><?php trans_e("Complété à"); ?> <?= $progress; ?>%</span>
     </div>
   </div>
 
   <?php if (\Modules\Candidat\Models\Candidat::canUpdateAccount()) :
     get_alert('warning', [
-    '<strong style="font-size: 12px;">Afin d\'avoir une meilleure visibilité de votre candidature:</strong>', 
-    'Ajouter d\'autres formations, <a href="javascript:void(0)" onclick="return chmFormation.getForm()">cliquer içi</a>', 
-    'Ajouter d\'autres expériences professionnelles, <a href="javascript:void(0)" onclick="return chmExperience.getForm()">cliquer içi</a>'
+    '<strong style="font-size: 12px;">'. trans("Afin d'avoir une meilleure visibilité de votre candidature:") .'</strong>', 
+    trans("Ajouter d'autres formations,") .' <a href="javascript:void(0)" onclick="return chmFormation.getForm()">'. trans("cliquer içi") .'</a>', 
+    trans("Ajouter d'autres expériences professionnelles,") .' <a href="javascript:void(0)" onclick="return chmExperience.getForm()">'. trans("cliquer içi") .'</a>'
     ], false);
   endif; ?>
 
   <div class="styled-title mt-10 mb-10">
-    <h3>Mes informations</h3>
+    <h3><?php trans_e("Mes informations"); ?></h3>
   </div>
   <div class="row">
     <div class="col-sm-2 col-xs-12">
@@ -49,37 +49,37 @@ use App\Models\Status;
           <th colspan="2"><i class="fa fa-user"></i>&nbsp;<?= Candidat::getDisplayName(); ?></th>
         </tr>
         <tr>
-          <th width="110"><i class="fa fa-file-text-o"></i>&nbsp;Titre du CV</th>
+          <th width="110"><i class="fa fa-file-text-o"></i>&nbsp;<?php trans_e("Titre du CV"); ?></th>
           <td>:&nbsp;<?= get_candidat('titre'); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-envelope"></i>&nbsp;E-mail</th>
+          <th><i class="fa fa-envelope"></i>&nbsp;<?php trans_e("E-mail"); ?></th>
           <td>:&nbsp;<?= get_candidat('email'); ?></td>
         </tr>
         <tr>
-          <th><i class="fa fa-hourglass-start"></i>&nbsp;Situation actuelle</th>
+          <th><i class="fa fa-hourglass-start"></i>&nbsp;<?php trans_e("Situation actuelle"); ?></th>
           <td>:&nbsp;<?= Situation::getNameById(get_candidat('id_situ')); ?></td>
         </tr>
         <tr>
-          <td colspan="2"><i class="fa fa-eye"></i>&nbsp;Mon CV a été consulté <strong><?= get_candidat('vues'); ?></strong> fois.</td>
+          <td colspan="2"><i class="fa fa-eye"></i>&nbsp;<?php trans_e("Mon CV a été consulté"); ?>&nbsp;<strong><?= get_candidat('vues'); ?></strong>&nbsp;<?php trans_e("fois."); ?></td>
         </tr>
         <tr>
-          <td colspan="2"><i class="fa fa-clock-o"></i>&nbsp;Mon CV a été mis à jour la dernière fois le <strong><?= eta_date(get_candidat('dateMAJ')); ?></strong></td>
+          <td colspan="2"><i class="fa fa-clock-o"></i>&nbsp;<?php trans_e("Mon CV a été mis à jour la dernière fois le"); ?> <strong><?= eta_date(get_candidat('dateMAJ')); ?></strong></td>
         </tr>
       </table>
     </div>
   </div>
 
   <div class="styled-title mt-10 mb-5">
-    <h3>Offres correspondantes à votre profil</h3>
+    <h3><?php trans_e("Offres correspondantes à votre profil"); ?></h3>
   </div>
   <?php $matchedOffers = Candidat::getMatchedOffers(); ?>
   <table class="table accountTable">
   <?php if(!empty($matchedOffers)) : ?>
     <thead>
       <tr>
-        <th>Date</th>
-        <th>Intitulé du poste</th>
+        <th><?php trans_e("Date"); ?></th>
+        <th><?php trans_e("Intitulé du poste"); ?></th>
         <th width="10"></th>
       </tr>
     </thead>
@@ -88,31 +88,31 @@ use App\Models\Status;
       <td><?= eta_date($mo->date_insertion); ?></td>
       <td><?= $mo->Name; ?></td>
       <td>
-        <a target="_blank" href="<?= site_url('offre/'. $mo->id_offre); ?>" class="btn btn-primary btn-xs mb-0" title="Consulter l'offre"><i class="fa fa-link"></i></a>
+        <a target="_blank" href="<?= site_url('offre/'. $mo->id_offre); ?>" class="btn btn-primary btn-xs mb-0" title="<?php trans_e("Consulter l'offre"); ?>"><i class="fa fa-link"></i></a>
       </td>
     </tr>
   <?php endforeach; ?>
   <?php else : ?>
     <tr class="empty">
       <td colspan="3">
-         <strong>Aucune offre ne correspond à votre profil.</strong>
+         <strong><?php trans_e("Aucune offre ne correspond à votre profil."); ?></strong>
       </td>
     </tr>
   <?php endif; ?>
   </table>
 
   <div class="styled-title mt-10 mb-5">
-    <h3>Mes candidatures</h3>
+    <h3><?php trans_e("Mes candidatures"); ?></h3>
   </div>
   <?php $candidatures = Candidature::findAllByCandidatId(); ?>
   <table class="table accountTable">
   <?php if(!empty($candidatures)) : ?>
     <thead>
       <tr>
-        <th>Date</th>
-        <th>Intitulé du poste</th>
-        <th>Etat</th>
-        <th width="30">Action</th>
+        <th><?php trans_e("Date"); ?></th>
+        <th><?php trans_e("Intitulé du poste"); ?></th>
+        <th><?php trans_e("Etat"); ?></th>
+        <th width="30"><?php trans_e("Action"); ?></th>
       </tr>
     </thead>
     <?php foreach ($candidatures as $key => $ca) : ?>
@@ -121,7 +121,7 @@ use App\Models\Status;
       <td><a target="_blank" href="<?= site_url('offre/'. $ca->id_offre); ?>"><?= $ca->Name; ?></a></td>
       <td>
         <?php $history = Candidature::getHistoryStatus($ca->id_candidature); ?>
-        <?= ($history->status != 'En attente') ? '<span class="label label-success">En cours</span>' : '<span class="label label-warning">En attente</span>'; ?></td>
+        <?= ($history->status != 'En attente') ? '<span class="label label-success">'. trans("En cours") .'</span>' : '<span class="label label-warning">'. trans("En attente") .'</span>'; ?></td>
       <td>
         <?php
         // Check if candidature need confirmation
@@ -138,19 +138,19 @@ use App\Models\Status;
         // Prepare link attributes
         if ($confirmation_status == '0' && in_array($ca->c_status, [32, 39])) {
           $icon = 'fa fa-calendar-times-o';
-          $label = "Non confirmé, cliquer pour confirmer.";
+          $label = trans("Non confirmé, cliquer pour confirmer.");
           $cursor = 'pointer';
           $btnType = 'danger';
           $btnDisabled = '';
         } elseif ($confirmation_status == '1' && in_array($ca->c_status, [33, 40])) {
           $icon = 'fa fa-calendar-check-o';
-          $label ="Déja Confirmé";
+          $label = trans("Déja Confirmé");
           $cursor = 'default';
           $btnType = 'success';
           $btnDisabled = '';
         } else {
           $icon = 'fa fa-spinner';
-          $label = "En attente";
+          $label = trans("En attente");
           $cursor = 'default';
           $btnType = 'default';
           $btnDisabled = 'disabled';
@@ -163,7 +163,7 @@ use App\Models\Status;
   <?php else : ?>
     <tr class="empty">
       <td colspan="4">
-        <strong>Aucune candidature enregistrée.</strong>
+        <strong><?php trans_e("Aucune candidature enregistrée."); ?></strong>
       </td>
     </tr>
   <?php endif; ?>
@@ -172,33 +172,33 @@ use App\Models\Status;
 
   <?php if (get_setting('front_menu_offres_candidature_spontannee') == 1) : ?>
   <div class="styled-title mt-10 mb-5">
-    <h3>Mes candidatures spontanées</h3>
+    <h3><?php trans_e("Mes candidatures spontanées"); ?></h3>
   </div>
   <?php $csp = Candidature::getCandidaturesSpontanees(); ?>
   <table class="table accountTable" id="candidaturesSpontanees">
   <?php if(!empty($csp)) : ?>
     <thead>
       <tr>
-        <th width="70">Date</th>
-        <th>Intitulé du poste</th>
-        <th width="65">Etat</th>
-        <th width="30">Action</th>
+        <th width="70"><?php trans_e("Date"); ?></th>
+        <th><?php trans_e("Intitulé du poste"); ?></th>
+        <th width="65"><?php trans_e("Etat"); ?></th>
+        <th width="30"><?php trans_e("Action"); ?></th>
       </tr>
     </thead>
     <?php foreach ($csp as $key => $value) : ?>
     <tr id="csp_<?= $value->id_candidature; ?>">
       <td><?= eta_date($value->date_cs, get_setting('date_format')); ?></td>
-      <td>Candidature spontanée</td>
-      <td><span class="label label-success">En cours</span></td>
+      <td><?php trans_e("Candidature spontanée"); ?></td>
+      <td><span class="label label-success"><?php trans_e("En cours"); ?></span></td>
       <td>
-        <a href="javascript:void(0)" onclick="return chmModal.confirm('', '', 'Êtes-vous sûr de vouloir supprimer cette candidature ?', 'chmCandidature.deleteSpontanee', {'id': <?= $value->id_candidature; ?>}, {width: 375})" class="btn btn-danger btn-xs mb-0" title="Supprimer"><i class="fa fa-trash"></i></a>
+        <a href="javascript:void(0)" onclick="return chmModal.confirm('', '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer cette candidature ?"); ?>', 'chmCandidature.deleteSpontanee', {'id': <?= $value->id_candidature; ?>}, {width: 375})" class="btn btn-danger btn-xs mb-0" title="Supprimer"><i class="fa fa-trash"></i></a>
       </td>
     </tr>
     <?php endforeach; ?>
   <?php else : ?>
     <tr class="empty">
       <td colspan="4">
-        <strong>Aucune candidature enregistrée.</strong>
+        <strong><?php trans_e("Aucune candidature enregistrée."); ?></strong>
       </td>
     </tr>
   <?php endif; ?>
@@ -208,33 +208,33 @@ use App\Models\Status;
 
   <?php if (get_setting('front_menu_offres_candidature_stage') == 1) : ?>
   <div class="styled-title mt-10 mb-5">
-    <h3>Mes candidature pour stage</h3>
+    <h3><?php trans_e("Mes candidature pour stage"); ?></h3>
   </div>
   <?php $stages = Candidature::getCandidaturesStage(); ?>
   <table class="table accountTable" id="candidaturesStage">
   <?php if(!empty($stages)) : ?>
     <thead>
       <tr>
-        <th width="70">Date</th>
-        <th>Intitulé du poste</th>
-        <th width="65">Etat</th>
-        <th width="30">Action</th>
+        <th width="70"><?php trans_e("Date"); ?></th>
+        <th><?php trans_e("Intitulé du poste"); ?></th>
+        <th width="65"><?php trans_e("Etat"); ?></th>
+        <th width="30"><?php trans_e("Action"); ?></th>
       </tr>
     </thead>
     <?php foreach ($stages as $key => $stage) : ?>
     <tr id="stage_<?= $stage->id_candidature; ?>">
       <td><?= eta_date($stage->date, get_setting('date_format')); ?></td>
-      <td>Candidature pour stage</td>
-      <td><span class="label label-success">En cours</span></td>
+      <td><?php trans_e("Candidature pour stage"); ?></td>
+      <td><span class="label label-success"><?php trans_e("En cours"); ?></span></td>
       <td>
-        <a href="javascript:void(0)" onclick="return chmModal.confirm('', '', 'Êtes-vous sûr de vouloir supprimer cette candidature ?', 'chmCandidature.deleteStage', {'id': <?= $stage->id_candidature; ?>}, {width: 375})" class="btn btn-danger btn-xs mb-0" title="Supprimer"><i class="fa fa-trash"></i></a>
+        <a href="javascript:void(0)" onclick="return chmModal.confirm('', '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer cette candidature ?"); ?>', 'chmCandidature.deleteStage', {'id': <?= $stage->id_candidature; ?>}, {width: 375})" class="btn btn-danger btn-xs mb-0" title="<?php trans_e("Supprimer"); ?>"><i class="fa fa-trash"></i></a>
       </td>
     </tr>
     <?php endforeach; ?>
   <?php else : ?>
     <tr class="empty">
       <td colspan="4">
-        <strong>Aucune candidature enregistrée.</strong>
+        <strong><?php trans_e("Aucune candidature enregistrée."); ?></strong>
       </td>
     </tr>
   <?php endif; ?>
@@ -242,8 +242,8 @@ use App\Models\Status;
   <?php endif; ?>
 
   <div class="styled-title mt-10 mb-0">
-    <h3 class="pull-left">Mes alertes</h3>
-    <a href="javascript:void(0)" class="pull-right mr-10" onclick="return chmJobAlerts.form()" style="color: #fff;margin-top: -1px;"><i class="fa fa-plus"></i>&nbsp;Créer une nouvelle alerte candidat</a>
+    <h3 class="pull-left"><?php trans_e("Mes alertes"); ?></h3>
+    <a href="javascript:void(0)" class="pull-right mr-10" onclick="return chmJobAlerts.form()" style="color: #fff;margin-top: -1px;"><i class="fa fa-plus"></i>&nbsp;<?php trans_e("Créer une nouvelle alerte candidat"); ?></a>
   </div>
   <div chm-table="candidat/account/alert/table" id="alertsTable"></div>
 

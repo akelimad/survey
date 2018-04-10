@@ -75,7 +75,7 @@ if ($_SESSION['link']==4)
 		<li id="ctl00_liAlerte" class="<?php echo $s_cls6; ?>">
 
 			<a id="ctl00_lnkAlerte" href="<?php  echo $urlad_candatur  ?>/" >
-			<i class="fa fa-pie-chart " ></i> état des candidatures</a>
+			<i class="fa fa-pie-chart " ></i> <?php trans_e("état des candidatures"); ?></a>
 
 		</li>
 
@@ -85,7 +85,7 @@ if ($_SESSION['link']==4)
 		<li id="ctl00_liAlerte" class="<?php echo $s_cls0; ?>">
 
 			<a id="ctl00_lnkAlerte" href="<?php  echo $urlad_candatur  ?>/nouvelle_candidature/" >
-			<i class="fa fa-spinner " ></i> Nouvelles candidatures</a>
+			<i class="fa fa-spinner " ></i> <?php trans_e("Nouvelles candidatures"); ?></a>
 
 		</li>
 
@@ -95,7 +95,7 @@ if ($_SESSION['link']==4)
 		<li id="ctl00_liAlerte" class="<?php echo $s_cls1; ?>">
 
 			<a  id="ctl00_lnkSpontanee" href="<?php  echo $urlad_candatur  ?>/candidature_en_cours/" >
-			<i class="fa fa-list-ol " ></i> Candidatures en cours</a>
+			<i class="fa fa-list-ol " ></i> <?php trans_e("Candidatures en cours"); ?></a>
 
 		</li>
  	
@@ -105,7 +105,7 @@ if ($_SESSION['link']==4)
 		<li id="ctl00_liAlerte" class="<?php echo $s_cls2; ?>">
 
 			<a id="ctl00_lnkAlerte" href="<?php  echo $urlad_candatur  ?>/candidature_retenu/" >
-			<i class="fa fa-list-ol " ></i> Candidatures retenues</a>
+			<i class="fa fa-list-ol " ></i> <?php trans_e("Candidatures retenues"); ?></a>
 
 		</li>
 
@@ -115,7 +115,7 @@ if ($_SESSION['link']==4)
 		<li id="ctl00_liAlerte" class="<?php echo $s_cls7; ?>">
 
 			<a id="ctl00_lnkAlerte" href="<?php  echo $urlad_candatur  ?>/candidature_recruter/" >
-			<i class="fa fa-list-ol " ></i> Candidatures recruté</a>
+			<i class="fa fa-list-ol " ></i> <?php trans_e("Candidatures recruté"); ?></a>
 
 		</li>
  
@@ -125,7 +125,7 @@ if ($_SESSION['link']==4)
 		<li id="ctl00_liAlerte" class="<?php echo $s_cls9; ?>">
 
 			<a id="ctl00_lnkAlerte" href="<?php  echo $urlad_candatur  ?>/candidature_non_retenu/" >
-			<i class="fa fa-list-ol " ></i> Candidatures non retenu</a>
+			<i class="fa fa-list-ol " ></i> <?php trans_e("Candidatures non retenu"); ?></a>
 
 		</li>
 		
@@ -142,7 +142,7 @@ if ($_SESSION['link']==4)
 		<li id="ctl00_liAlerte" class="<?php echo $s_cls8; ?>">
 
 			<a id="ctl00_lnkAlerte" href="<?php  echo $urlad_candatur  ?>/historique_note/" >
-			<i class="fa fa-tasks " ></i> Historique des notes</a>
+			<i class="fa fa-tasks " ></i> <?php trans_e("Historique des notes"); ?></a>
 
 		</li>
 
@@ -159,7 +159,7 @@ if ($_SESSION['link']==4)
 		<li id="ctl00_liAlerte" class="<?php echo $s_cls3; ?>">
 
 			<a id="ctl00_lnkAlerte" href="<?php  echo $urlad_candatur  ?>/candidature_spontannee/" >
-			<i class="fa fa-book " ></i> Candidatures spontanées</a>
+			<i class="fa fa-book " ></i> <?php trans_e("Candidatures spontanées"); ?></a>
 
 		</li>
 
@@ -169,7 +169,7 @@ if ($_SESSION['link']==4)
 		<li id="ctl00_liAlerte" class="<?php echo $s_cls4; ?>">
 
 			<a id="ctl00_lnkAlerte" href="<?php  echo $urlad_candatur  ?>/candidature_stage/" >
-			<i class="fa fa-book " ></i> Candidatures pour stage</a>
+			<i class="fa fa-book " ></i> <?php trans_e("Candidatures pour stage"); ?></a>
 
 		</li>
 		

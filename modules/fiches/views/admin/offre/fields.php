@@ -1,4 +1,5 @@
 <?php use \Modules\Fiches\Models\Fiche; ?>
+
 <?php if(!empty($ficheTypes) ) : foreach ($ficheTypes as $fiche_type => $name) : ?>
     <tr>
         <td colspan="2">

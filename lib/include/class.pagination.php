@@ -23,8 +23,8 @@
 			
 			$precedent = $courante-1;
 			$suivant = $courante+1;
-			$textePrecedent = '&#171; Pr&eacute;c&eacute;dente';
-			$texteSuivant = ' Suivante &#187;';
+			$textePrecedent = '&#171; '. trans("Précédente");
+			$texteSuivant = ' '. trans("Suivante") .' &#187;';
 			
 			$html .= '<div class="pagination">';
 			

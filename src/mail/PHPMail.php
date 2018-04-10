@@ -29,8 +29,8 @@ class PHPMail
 			'sender_name'  => SITE_NAME,
 			'sender_email' => SITE_EMAIL,
 			'headers' => [
-			    "MIME-Version" => "1.0",
-			    "Content-type" => "text/html; charset=UTF-8"
+		    "MIME-Version" => "1.0",
+		    "Content-type" => "text/html; charset=UTF-8"
 			]
 		);
 		$params = array_merge_recursive($default, $args);
@@ -45,11 +45,11 @@ class PHPMail
 
 		// Send email
 		if ( function_exists( 'mail' ) && mail($receiver, $subject, $message, $headers) ) {
-			return array('response' => 'success', 'message' => 'L\'email a été bien envoyé.');
+			return array('response' => 'success', 'message' => trans("L'email a été bien envoyé."));
 		}
 
 		// Function mail() has been disabled or send error
-		return array('response' => 'error', 'message' => 'Une erreur est survenu lors d\'envoi de l\'email.');
+		return array('response' => 'error', 'message' => trans("Une erreur est survenu lors d'envoi de l'email."));
  	}
 
 
@@ -67,7 +67,7 @@ class PHPMail
 		$mailAuto = getDB()->_prepare("SELECT * FROM root_email_auto WHERE ref=?", [$templateRef], true);
 
 		if( !isset($mailAuto->id_email) ) {
-		  return array("response" => "error", "message" => "Cette email template n'exist pas.");
+		  return array("response" => "error", "message" => trans("Cette email template n'exist pas."));
 		}
 
 		// Set args
@@ -117,7 +117,7 @@ class PHPMail
 		}
 
 		// Function mail() has been disabled or send error
-		return array('response' => 'error', 'message' => 'Une erreur est survenu lors d\'envoi de l\'email.');
+		return array('response' => 'error', 'message' => trans("Une erreur est survenu lors d'envoi de l'email."));
  	}
 
  	
@@ -131,7 +131,7 @@ class PHPMail
 	 */
 	public static function send($data) {
 		if( !isset($data['email']) || !isset($data['subject']) || !isset($data['message']) ) {
-			return array('response' => 'error', 'message' => 'Une erreur est survenu lors d\'envoi de l\'email.');
+			return array('response' => 'error', 'message' => trans("Une erreur est survenu lors d'envoi de l'email."));
 		}
 		return self::sendEmail($data['email'], $data['subject'], $data['message']);
 	}

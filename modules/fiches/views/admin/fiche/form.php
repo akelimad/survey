@@ -14,21 +14,21 @@ input, select {
     <?php include ( site_base("lib/menu/menu_g_a_admin.php") ); ?>
     <div id="content_d" style="width: 735px;">
         <div class="mb-30">
-            <h1 style="display: inline;">CRÉATION D'UNE FICHE</h1>
-            <a href="<?= site_url('backend/module/fiches/fiche'); ?>" class="btn btn-primary btn-xs pull-right"><i class="fa fa-arrow-left"></i>&nbsp;Retour à la liste</a>
+            <h1 style="display: inline;"><?php trans_e("CRÉATION D'UNE FICHE"); ?></h1>
+            <a href="<?= site_url('backend/module/fiches/fiche'); ?>" class="btn btn-primary btn-xs pull-right"><i class="fa fa-arrow-left"></i>&nbsp;<?php trans_e("Retour à la liste"); ?></a>
         </div>
 
         <div class="mb-10"><?php \App\Session::getFlash(); ?></div>
 
         <form action="" method="POST">
             <div class="subscription" style="margin: 10px 0pt;">
-                <h1>DÉTAILS DE FICHE</h1>
+                <h1><?php trans_e("DÉTAILS DE FICHE"); ?></h1>
             </div>
 
             <table style="width: 100%;">
                 <tr> 
                     <td valign="top" width="180">
-                        <label for="reference">Référence</label>
+                        <label for="reference"><?php trans_e("Référence"); ?></label>
                     </td>
                     <td>
                         <input type="text" name="reference" id="reference" value="<?= (isset($data->reference)) ? $data->reference : ''; ?>" <?= (isset($data->id_fiche)) ? 'disabled' : 'required'; ?>>
@@ -39,7 +39,7 @@ input, select {
                 </tr>
                 <tr> 
                     <td valign="top" width="180">
-                        <label for="name">Titre</label>
+                        <label for="name"><?php trans_e("Titre"); ?></label>
                     </td>
                     <td>
                         <input type="text" name="name" id="name" value="<?= (isset($data->name)) ? $data->name : ''; ?>" required>
@@ -50,7 +50,7 @@ input, select {
                 </tr>
                 <tr> 
                     <td valign="top" width="180">
-                        <label for="type">Type</label>
+                        <label for="type"><?php trans_e("Type"); ?></label>
                     </td>
                     <td>
                         <select name="type" id="type" disabled>
@@ -67,7 +67,7 @@ input, select {
             </table>
 
             <div class="subscription" style="margin: 10px 0pt;">
-                <h1>CRITERES DE L’ANNONCE</h1>
+                <h1><?php trans_e("CRITERES DE L’ANNONCE"); ?></h1>
             </div>
 
             <?php foreach ($data->blocks as $key => $block) : ?>
@@ -103,7 +103,7 @@ input, select {
                 <?php endforeach; endif; ?>
                 </table>
 
-                <a href="javascript:void(0)" class="btn btn-default btn-xs addLine" data-table="<?= $block->id_block; ?>"><i class="fa fa-plus"></i>&nbsp;Ajouter une ligne</a>
+                <a href="javascript:void(0)" class="btn btn-default btn-xs addLine" data-table="<?= $block->id_block; ?>"><i class="fa fa-plus"></i>&nbsp;<?php trans_e("Ajouter une ligne"); ?></a>
                 
             <?php endforeach; ?>
 
@@ -111,8 +111,8 @@ input, select {
                 <tr>
                     <td colspan="8">
                         <div class="ligneBleu mt-20"></div>
-                        <a href="<?= site_url('backend/module/fiches/fiche'); ?>" class="btn btn-danger btn-sm">Fermer</a>
-                        <button class="btn btn-primary btn-sm pull-right">Enregistrer la fiche</button>
+                        <a href="<?= site_url('backend/module/fiches/fiche'); ?>" class="btn btn-danger btn-sm"><?php trans_e("Fermer"); ?></a>
+                        <button class="btn btn-primary btn-sm pull-right"><?php trans_e("Enregistrer la fiche"); ?></button>
                     </td>
                 </tr>
             </table>

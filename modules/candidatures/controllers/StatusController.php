@@ -74,7 +74,7 @@ class StatusController
     // Send email notification
     $this->sendNotif();  
 
-    Session::setFlash('success', 'Le statut a été bien changé.');
+    Session::setFlash('success', trans("Le statut a été bien changé."));
 
     return [
       'id_agend' => $id_agend,

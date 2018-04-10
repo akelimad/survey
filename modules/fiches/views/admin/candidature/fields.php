@@ -31,10 +31,10 @@ $hasItems = false;
                             <tr>
                                 <th style="padding: 3px 5px;background-color: #636e79ba !important;"><?= $block->name; ?></th>
                                 <th style="padding: 3px 5px;background-color: #636e79ba !important;">
-                                    <?php if( $block->fields_type == 'number' ) : ?>Note (1 à 4)<?php endif; ?>
+                                    <?php if( $block->fields_type == 'number' ) : ?><?php trans_e("Note (1 à 4)"); ?><?php endif; ?>
                                 </th>
                                 <?php if( $block->show_observations == '1' ) : ?>
-                                    <th style="padding: 3px 5px;background-color: #636e79ba !important;">Observations</th>
+                                    <th style="padding: 3px 5px;background-color: #636e79ba !important;"><?php trans_e("Observations"); ?></th>
                                 <?php endif; ?>
                             </tr>
                         </thead>
@@ -81,11 +81,11 @@ $hasItems = false;
         <td>
             <?php if( $hasItems ) : ?>
             <div class="subscription" style="height:23px;margin: 10px 0 5px;">
-                <h1><label for="fiche_comments">Commentaire(s)</label></h1>
+                <h1><label for="fiche_comments"><?php trans_e("Commentaire(s)"); ?></label></h1>
             </div>
             <textarea name="fiche[comments]" style="width:100%;" rows="6"></textarea>
             <?php else : ?>
-                <?php get_alert('info', 'Cette fiche n\'a aucune élément.', false) ?>
+                <?php get_alert('info', trans("Cette fiche n'a aucune élément."), false) ?>
             <?php endif; ?>
         </td>
     </tr>
@@ -97,7 +97,7 @@ jQuery(document).ready(function($){
     $('#status_id').change(function(){
         var $ref = $(this).find('option:selected').data('ref')
 
-        if( $ref == 'N_0' || $ref == 'N_1' ) {
+        if( $ref == 'N0' || $ref == 'N1' ) {
             $('.ficheType_0').show()
             $('.ficheType_1').hide()
             $('#ficheCandidatureCommentsRow').show()

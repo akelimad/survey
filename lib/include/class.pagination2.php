@@ -50,9 +50,9 @@ class Pagination{
 
    			$suivant = $courante+1;
 
-   			$textePrecedent = '&#171; Pr&eacute;c&eacute;dente';
+   			$textePrecedent = '&#171; '. trans("Précédente");
 
-   			$texteSuivant = ' Suivante &#187;';
+   			$texteSuivant = ' '. trans("Suivante") .' &#187;';
 
 
 

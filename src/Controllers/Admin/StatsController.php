@@ -61,7 +61,7 @@ class StatsController extends Controller
       ORDER BY nbr DESC
     ");
 
-    return $this->getChartData('Secteur', 'Nombre de Candidats', $results);
+    return $this->getChartData(trans("Secteur"), trans("Nombre de Candidats"), $results);
   }
 
 
@@ -83,7 +83,7 @@ class StatsController extends Controller
       ORDER BY nbr DESC
     ");
 
-    return $this->getChartData('Pays', 'Nombre de Candidats', $results);
+    return $this->getChartData(trans("Pays"), trans("Nombre de Candidats"), $results);
   }
 
 
@@ -98,7 +98,7 @@ class StatsController extends Controller
       ORDER BY nbr DESC
     ");
 
-    return $this->getChartData('Situation', 'Nombre de Candidats', $results);
+    return $this->getChartData(trans("Situation"), trans("Nombre de Candidats"), $results);
   }
 
 
@@ -113,7 +113,7 @@ class StatsController extends Controller
       ORDER BY nbr DESC
     ");
 
-    return $this->getChartData('Expérience', 'Nombre de Candidats', $results);
+    return $this->getChartData(trans("Expérience"), trans("Nombre de Candidats"), $results);
   }
 
 
@@ -129,7 +129,7 @@ class StatsController extends Controller
       ];
     endforeach; endif;
     
-    return $this->getChartData('Statut', 'Nombre des offres', $results);
+    return $this->getChartData(trans("Statut"), trans("Nombre des offres"), $results);
   }
 
 
@@ -143,7 +143,7 @@ class StatsController extends Controller
       ORDER BY nbr DESC
     ");
 
-    return $this->getChartData('Statut', 'Nombre de Candidatures', $results);
+    return $this->getChartData(trans("Statut"), trans("Nombre de Candidatures"), $results);
   }
 
 

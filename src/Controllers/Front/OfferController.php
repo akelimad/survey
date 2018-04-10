@@ -36,7 +36,7 @@ class OfferController extends Controller
   public function index($data)
   {
     $this->data['layout'] = 'front';
-    $this->data['breadcrumbs'] = ['Accueil', 'Offres d\'emploi'];
+    $this->data['breadcrumbs'] = [trans("Accueil"), trans("Offres d'emploi")];
     
     $perpage = 5;
     $currentPage = Table::getPage();
@@ -64,6 +64,7 @@ class OfferController extends Controller
     if(!isset($offer->id_offre)) {
       redirect(site_url());
     }
+
     $this->data['offer'] = $offer;
     $this->data['tpost'] = getDB()->findOne('prm_type_poste', 'id_tpost', $offer->id_tpost);
     $this->data['exp'] = getDB()->findOne('prm_experience', 'id_expe', $offer->id_expe);
@@ -74,7 +75,7 @@ class OfferController extends Controller
     $this->data['lieu'] = $this->getLocationById($offer->id_localisation);
 
     $this->data['layout'] = 'front';
-    $this->data['breadcrumbs'] = ['Accueil', 'Offres d\'emploi', $offer->Name];
+    $this->data['breadcrumbs'] = [trans("Accueil"), trans("Offres d'emploi"), $offer->Name];
 
     return get_page('front/offer/single', $this->data);
   }
@@ -117,19 +118,19 @@ class OfferController extends Controller
       $sender = getDB()->findOne('candidats', 'candidats_id', read_session('abb_id_candidat'));
 
       if(!isset($sender->candidats_id)) {
-        return $this->jsonResponse('error', 'Votre session est expiré, essaye de vous reconnecter.');
+        return $this->jsonResponse('error', trans("Votre session est expiré, essaye de vous reconnecter."));
       }
 
       $offerLink = site_url('offre/'.$data['id_offre']);
-      $subject  = "Je vous recommande cette offre d'emploi sur ". site_url();
-      $message  = "<b>Bonjour,</b><br><p>Je crois que cette offre pourrait vous interessez.</p>";
-      $message .= "<p>Pour la consulter, cliquer sur le lien suivant:<br><a href=".$offerLink.">".$offerLink."</a></p>";
-      $message .= "Cordialement.";
+      $subject  = trans("Je vous recommande cette offre d'emploi sur") ." ". site_url();
+      $message  = "<b>". trans("Bonjour,") ."</b><br><p>". trans("Je crois que cette offre pourrait vous interessez.") ."</p>";
+      $message .= "<p>". trans("Pour la consulter, cliquer sur le lien suivant:") ."<br><a href=".$offerLink.">".$offerLink."</a></p>";
+      $message .= trans("Cordialement.");
 
       $from_name = Candidat::getDisplayName($sender, false);
 
       $send = Mailer::send($data['email'], $subject, $message, [
-        'titre' => 'Envoyer l\'offre à un ami',
+        'titre' => trans("Envoyer l'offre à un ami"),
         'coresp_nom' => Candidat::getDisplayName($sender),
         'from' => [
           'name'  => $from_name,
@@ -145,7 +146,7 @@ class OfferController extends Controller
       return $this->jsonResponse($send['response'], $send['message']);
     }
 
-    return Ajax::renderAjaxView('Envoyer l\'offre à un ami', 'front/offer/send-to-friend', $data);
+    return Ajax::renderAjaxView(trans("Envoyer l'offre à un ami"), 'front/offer/send-to-friend', $data);
   }
 
 
@@ -153,7 +154,7 @@ class OfferController extends Controller
   {
     // Check if candiat logged
     if(!isLogged('candidat')) {
-      return json_encode(['status' => 'hide_form', 'title' => 'Connectez-vous !', 'content' => 'Vous devez <strong onclick="return chmAuth.loginModal()" style="cursor: pointer;">vous connecter</strong> pour répondre à cet l\'offre.']);
+      return json_encode(['status' => 'hide_form', 'title' => trans("Connectez-vous!"), 'content' => trans("Vous devez") .' <strong onclick="return chmAuth.loginModal()" style="cursor: pointer;">'. trans("vous connecter") .'</strong> '. trans("pour répondre à cet l'offre.")]);
     }
 
     $candidat_id = read_session('abb_id_candidat');
@@ -161,25 +162,25 @@ class OfferController extends Controller
 
     // Check if candidat has formation
     if(!Candidat::hasResume()) {
-      return json_encode(['status' => 'hide_form', 'title' => 'Profile incomplète !', 'content' => 'Il faut avoir renseigné au moins un CV pour pouvoir pour postuler à cet offre.']);
+      return json_encode(['status' => 'hide_form', 'title' => trans("Profile incomplète!"), 'content' => trans("Il faut avoir renseigné au moins un CV pour pouvoir pour postuler à cet offre.")]);
     }
 
     // Check if candidat has formation
     if(!Candidat::hasFormation()) {
-      return json_encode(['status' => 'hide_form', 'title' => 'Profile incomplète !', 'content' => 'Il faut avoir renseigné au moins une formation pour pouvoir pour postuler à cet offre.']);
+      return json_encode(['status' => 'hide_form', 'title' => trans("Profile incomplète!"), 'content' => trans("Il faut avoir renseigné au moins une formation pour pouvoir pour postuler à cet offre.")]);
     }
 
     // Check if candidat already applied to this offer
     $count = getDB()->prepare("SELECT COUNT(*) as nbr FROM candidature WHERE candidats_id=? AND id_offre=?", [$candidat_id, $id_offre], true);
 
     if(intval($count->nbr) > 0) {
-      return json_encode(['status' => 'hide_form', 'title' => 'Déja postulé !', 'content' => 'Vous avez déjà postulé à cette offre, vous ne pouvez postuler qu\'une seule fois.']);
+      return json_encode(['status' => 'hide_form', 'title' => trans("Déja postulé!"), 'content' => trans("Vous avez déjà postulé à cette offre, vous ne pouvez postuler qu'une seule fois.")]);
     }
 
     // Check if offer available
     $data['offer'] = getDB()->prepare("SELECT o.id_offre, o.Name, o.date_insertion, o.id_localisation FROM offre o WHERE o.id_offre=? AND o.status=? AND o.send_candidature=? AND DATE(o.date_expiration) >= CURDATE()", [$id_offre, 'En cours', 'true'], true);
     if(!isset($data['offer']->id_offre)) {
-      return json_encode(['status' => 'hide_form', 'title' => 'Offre introuvable !', 'content' => 'Impossible de postuler à cet offre pour le moment, soit qu\'il est expiré ou supprimé.']);
+      return json_encode(['status' => 'hide_form', 'title' => trans("Offre introuvable!"), 'content' => trans("Impossible de postuler à cet offre pour le moment, soit qu'il est expiré ou supprimé.")]);
     }
 
     // Get location
@@ -190,7 +191,7 @@ class OfferController extends Controller
 
     $data['domaines_formation'] = getDB()->prepare("SELECT * FROM prm_domaines_formation");
 
-    return Ajax::renderAjaxView('Répondre à l\'offre: <span class="font-weight-normal">'. $data['offer']->Name .'</span>', 'front/offer/postuler', $data);
+    return Ajax::renderAjaxView(trans("Répondre à l'offre:") .' <span class="font-weight-normal">'. $data['offer']->Name .'</span>', 'front/offer/postuler', $data);
   }
 
 
@@ -198,7 +199,7 @@ class OfferController extends Controller
   {
     // Check if candiat logged
     if(!isLogged('candidat')) {
-      return $this->jsonResponse('error', 'Vous devez vous connecter pour répondre à cet l\'offre.');
+      return $this->jsonResponse('error', trans("Vous devez vous connecter pour répondre à cet l'offre."));
     }
 
     $db = getDB();
@@ -210,23 +211,23 @@ class OfferController extends Controller
     $count = $db->prepare("SELECT COUNT(*) as nbr FROM candidature WHERE candidats_id=? AND id_offre=?", [$candidat_id, $id_offre], true);
 
     if(intval($count->nbr) > 0) {
-      return $this->jsonResponse('error', 'Vous avez déjà postulé à cette offre, vous ne pouvez postuler qu\'une seule fois.');
+      return $this->jsonResponse('error', trans("Vous avez déjà postulé à cette offre, vous ne pouvez postuler qu'une seule fois."));
     }
 
     if(!isset($data['candidature']['motivation']) || empty($data['candidature']['motivation'])) {
-      return $this->jsonResponse('error', 'Le message de motivation est obligatoire.');
+      return $this->jsonResponse('error', trans("Le message de motivation est obligatoire."));
     }
 
     // Check if candidat account exists
     $candidat = $db->findOne('candidats', 'candidats_id', $candidat_id);
     if(!isset($candidat->candidats_id)) {
-      return $this->jsonResponse('error', 'Votre session est expiré, essaye de vous reconnecter.');
+      return $this->jsonResponse('error', trans("Votre session est expiré, essaye de vous reconnecter."));
     }
 
     // Get offer
     $offer = $db->findOne('offre', 'id_offre', $id_offre);
     if(!isset($offer->id_offre)) {
-      return $this->jsonResponse('error', 'Impossible de trouver l\'offre oû vous voulez postuler.');
+      return $this->jsonResponse('error', trans("Impossible de trouver l'offre oû vous voulez postuler."));
     }
 
     $id_lettre = intval($data['candidature']['id_lettre']);
@@ -335,7 +336,7 @@ class OfferController extends Controller
       'notation'          => 0
     ]);
     if ($candidature_id < 1) {
-      return $this->jsonResponse('error', 'Une erreur est survenu lors d\'envoi de candidature.');
+      return $this->jsonResponse('error', trans("Une erreur est survenu lors d'envoi de candidature."));
     }
 
 
@@ -420,13 +421,8 @@ class OfferController extends Controller
     // Notify website RH about new candidature
     $this->sendCandidatureEmail($candidat, $offer->Name);
 
-    // Notify Admin
-    $notifMessage  = '<p>Une nouvelle candidature a été reçu sur l\'offre: '. $offer->Name;
-    $notifMessage .= '</p><p>Pour consulter les nouvelles candidatures <strong><a href="'.site_url('backend/module/candidatures/candidature/list/0').'">cliquez ici</a></strong></p>';
-    Mailer::send(get_setting('email_e'), 'Nouvelle candidature reçu', $notifMessage);
-
     // Return success message
-    return $this->jsonResponse('success', 'Votre candidature a bien été envoyée avec succès.');
+    return $this->jsonResponse('success', trans("Votre candidature a bien été envoyée avec succès."));
   }
 
 
@@ -450,13 +446,13 @@ class OfferController extends Controller
 
     // Notify RH team
     if($send['response'] == 'success') {
-      $message = '<p><strong>Bonjour,</strong></p>';
-      $message .= '<p>Une nouvelle candidature a été reçu sur l\'offre: <strong>'. $offerName .'</strong>';
-      $message .= '<br>Pour consulter les nouvelles candidatures <strong><a href="'. site_url('backend/module/candidatures/candidature/list/0') .'">cliquez ici</a></strong></p>';
-      $message .= '<p>Cordialement</p>';
+      $message = '<p><strong>'. trans("Bonjour,") .'</strong></p>';
+      $message .= '<p>'. trans("Une nouvelle candidature a été reçu sur l'offre:") .' <strong>'. $offerName .'</strong>';
+      $message .= '<br>'. trans("Pour consulter les nouvelles candidatures") .' <strong><a href="'. site_url('backend/module/candidatures/candidature/list/0') .'">'. trans("cliquez ici") .'</a></strong></p>';
+      $message .= '<p>'. trans("Cordialement") .'</p>';
       $receivers = [$email_e];
       if($email_e != $template->email) $receivers[] = $template->email;
-      Mailer::send($receivers, 'Nouvelle candidature reçu', $message, ['isHTML' => true]);
+      Mailer::send($receivers, trans("Nouvelle candidature reçu"), $message, ['isHTML' => true]);
     }
   }
 
@@ -464,11 +460,12 @@ class OfferController extends Controller
   // TODO - Check this logique with Mr Hamza
   public function getNoteDiplome($date_fin)
   {
+    $date_f_cl = 0;
     $note_diplome = 1;
     $date_f = explode("/", $date_fin);
     if(isset($date_f[2])) {
       $date_f_cl = (date("md", date("U", mktime(0, 0, 0, $date_f[0], $date_f[1], $date_f[2]))) > date("md") ? ((date("Y") - $date_f[2]) - 1) : (date("Y") - $date_f[2]));
-    } else {
+    } else if (isset($date_f[1])) {
       $date_f_cl = (date("m", date("U", mktime(0, $date_f[0] ))) > date("m") ? ((date("Y") - $date_f[1]) - 1) : (date("Y") - $date_f[1]));
     }
     if($date_f_cl < 2) {

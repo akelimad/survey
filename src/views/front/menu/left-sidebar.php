@@ -1,12 +1,12 @@
 <ul class="nav nav-pills nav-stacked mb-15" id="left-sidebar-menu">
 <?php echo \App\Models\Menu::draw([
 	[
-		"label" => "Accueil",
+		"label" => trans("Accueil"),
 		"route" => "/",
 		"icon" => "fa fa-home"
 	],
 	[
-		"label" => "Déposer une candidature spontanée",
+		"label" => trans("Déposer une candidature spontanée"),
 		"route" => "",
 		"icon" => "fa fa-handshake-o",
 		"isVisible" => (get_setting('front_menu_offres_candidature_spontannee') == 1),
@@ -15,7 +15,7 @@
 		]
 	],
 	[
-		"label" => "Déposer une candidature pour un stage",
+		"label" => trans("Déposer une candidature pour un stage"),
 		"route" => "",
 		"icon" => "fa fa-graduation-cap",
 		"isVisible" => (get_setting('front_menu_offres_candidature_stage') == 1),
@@ -24,12 +24,12 @@
 		]
 	],
 	[
-		"label" => "Offres d'emploi",
+		"label" => trans("Offres d'emploi"),
 		"route" => "offres",
 		"icon" => "fa fa-briefcase"
 	],
 	[
-		"label" => "Offres de stage",
+		"label" => trans("Offres de stage"),
 		"route" => "offres/stage",
 		"icon" => "fa fa-list"
 	],

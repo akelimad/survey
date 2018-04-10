@@ -22,7 +22,7 @@ class ShareController
   public function share($data)
   {
     if( $data['candidatures'] == '' || empty(json_decode($data['candidatures'], true)) ) {
-      Session::setFlash('warning', 'Cette offre ne contient aucun candidat.');
+      Session::setFlash('warning', trans("Cette offre ne contient aucun candidat."));
       return;
     }
 
@@ -30,7 +30,7 @@ class ShareController
     $candidatures = json_decode($data['candidatures'], true);
     $randPassword = $this->genPassword(8);
 
-    $data['message'] .= "<br><br><p>Vos identifiants de connexion sur notre site web : {{site}}<br>Votre email : {{email}}<br>Mot de passe : {{mot_passe}}<br>Ces identifiants vous permettront de consulté des candidatures ciblé.</p>";
+    $data['message'] .= "<br><br><p>". trans("Vos identifiants de connexion sur notre site web:") ." {{site}}<br>". trans("Votre email:") ." {{email}}<br>". trans("Mot de passe:") ." {{mot_passe}}<br>". trans("Ces identifiants vous permettront de consulté des candidatures ciblé.") ."</p>";
 
     $login_url = site_url('backend/login');
     $data['message'] = Mailer::renderMessage($data['message'], [
@@ -38,7 +38,7 @@ class ShareController
       'email' => $data['receiver'],
       'mot_passe' => $randPassword
     ]);
-    $data['type_email'] = 'Compte pour voir candidature';
+    $data['type_email'] = trans("Compte pour voir candidature");
 
     $sendEmail = (new AjaxController())->sendEmail($data, [
       'Bcc' => [$email_e]
@@ -90,9 +90,9 @@ class ShareController
           }
         }
 
-        Session::setFlash('success', 'Les candidatures ont été partagé.');
+        Session::setFlash('success', trans("Les candidatures ont été partagé."));
       } else {
-        Session::setFlash('error', 'Une erreur est survenu lors de la création d\'un compte temporaire.');
+        Session::setFlash('error', trans("Une erreur est survenu lors de la création d'un compte temporaire."));
       }
 
     } else {

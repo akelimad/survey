@@ -8,11 +8,11 @@
 
 
 function can_view_action($row) {
-  if (read_session('id_type_role') == 1)
-    return true;
-
   if ($row->table_action['name'] == 'fiche_evaluation' && (!isset($_GET['id']) || $_GET['id'] != 45))
     return false;
+
+  if (read_session('id_type_role') == 1)
+    return true;
 
   $permissions = getDB()->prepare("SELECT s.authorized_actions AS actions FROM role_candidature rc JOIN role_candidatures_share s ON s.id_share=rc.id_share WHERE rc.id_candidature=? AND rc.id_role=?", [$row->id_candidature, read_session('id_role')], true);
 

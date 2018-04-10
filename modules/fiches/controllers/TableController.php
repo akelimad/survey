@@ -34,7 +34,7 @@ class TableController extends Controller
 		$table->setOrder('DESC');
 
 		// Add table columns
-		$table->addColumn('reference', 'Référence', function($row) {
+		$table->addColumn('reference', trans("Référence"), function($row) {
 			return $row->reference;
 		});
 
@@ -43,18 +43,18 @@ class TableController extends Controller
 			return $types[$row->fiche_type] ?: $row->fiche_type;
 		});
 
-		$table->addColumn('name', 'Titre', function($row) {
+		$table->addColumn('name', trans("Titre"), function($row) {
 			return $row->name;
 		});
 
-		$table->addColumn('created_at', 'Date de création', function($row) {
+		$table->addColumn('created_at', trans("Date de création"), function($row) {
 			if( $row->created_at != '' ) {
 				return date('d.m.Y H:i', strtotime($row->created_at));
 			}
 			return null;
 		});
 
-		$table->addColumn('updated_at', 'Date de modification', function($row) {
+		$table->addColumn('updated_at', trans("Date de modification"), function($row) {
 			if( $row->updated_at != '' ) {
 				return date('d.m.Y H:i', strtotime($row->updated_at));
 			}
@@ -64,7 +64,7 @@ class TableController extends Controller
 		$table->setAction('delete', [
 			'attributes' => [
 				'class' => 'btn btn-danger btn-xs',
-				'onclick' => 'return confirm(\'Êtes vous sûr de vouloir supprimer cette fiche ?\')',
+				'onclick' => "return confirm('". trans("Êtes vous sûr de vouloir supprimer cette fiche ?") ."')",
 			]
 		]);
 
@@ -103,7 +103,7 @@ class TableController extends Controller
 		$table->removeActions(['edit', 'delete']);
 
     	$table->setAction('show_fiche_details', [
-			'label' => 'Détails',
+			'label' => trans("Détails"),
 			'patern' => '#',
 			'icon' => 'fa fa-eye',
 			'sort_order' => 6,
@@ -114,29 +114,29 @@ class TableController extends Controller
 			]
 		]);
 
-		$table->addColumn('nom', 'Évaluateur', function($row) {
+		$table->addColumn('nom', trans("Évaluateur"), function($row) {
 			return $row->nom;
 		});
 
-		$table->addColumn('created_at', 'Date de création', function($row) {
+		$table->addColumn('created_at', trans("Date de création"), function($row) {
 			if( $row->created_at != '' ) {
 				return date('d.m.Y H:i', strtotime($row->created_at));
 			}
 			return null;
 		});
 
-		$table->addColumn('updated_at', 'Date de modification', function($row) {
+		$table->addColumn('updated_at', trans("Date de modification"), function($row) {
 			if( $row->updated_at != '' ) {
 				return date('d.m.Y H:i', strtotime($row->updated_at));
 			}
 			return null;
 		});
 
-		$table->addColumn('comments', 'Commentaire(s)', function($row) {
+		$table->addColumn('comments', trans("Commentaire(s)"), function($row) {
 			return $row->comments;
 		});
 
-		$table->addColumn('note', 'Note', function($row) {
+		$table->addColumn('note', trans("Note"), function($row) {
 			$note_orale = number_format($row->total/$row->nbr, 2);
 			$color = $this->percent2Color($note_orale, 200, 4);
 			return '<span class="badge" style="background-color:#'.$color.';padding: 1px 5px 2px;">'.$note_orale.'</i>';

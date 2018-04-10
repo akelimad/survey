@@ -21,21 +21,21 @@ class FormationController extends Controller
   public function index()
   {
     $this->data['layout'] = 'front';
-    $this->data['breadcrumbs'] = ['Accueil', 'Candidat', 'Mon CV', 'Formations'];
+    $this->data['breadcrumbs'] = [trans("Accueil"), trans("Candidat"), trans("Mon CV"), trans("Formations")];
     return get_page('front/candidat/cv/formations/index', $this->data);
   }
 
   public function getForm($data)
   {
     $formation = new \stdClass;
-    $title = 'Créer une formation';
+    $title = trans("Créer une formation");
     if (intval($data['id']) > 0) {
       $formation = getDB()->prepare("SELECT * FROM formations WHERE candidats_id=? AND id_formation=?", [
         get_candidat_id(),
         $data['id']
       ], true);
       if (!isset($formation->id_formation)) return;
-      $title = 'Modifier la formation';
+      $title = trans("Modifier la formation");
     }
     $data['formation'] = $formation;
     $data['niv_formation'] = getDB()->read('prm_niv_formation');
@@ -45,12 +45,12 @@ class FormationController extends Controller
 
   public function store($data) {
     Validator::set_field_names([
-      'id_ecol' => 'École ou établissement',
-      'date_debut' => 'Date de début',
-      'date_fin' => 'Date de fin',
-      'diplome' => 'Diplôme',
-      'nivformation' => 'Nombre d’année de formation',
-      'description' => 'Description de la formation'
+      'id_ecol' => trans("École ou établissement"),
+      'date_debut' => trans("Date de début"),
+      'date_fin' => trans("Date de fin"),
+      'diplome' => trans("Diplôme"),
+      'nivformation' => trans("Nombre d’année de formation"),
+      'description' => trans("Description de la formation")
     ]);
 
     $is_valid = Validator::is_valid($data, [
@@ -86,13 +86,13 @@ class FormationController extends Controller
     }
     if (intval($id_formation) > 0) {
       if (getDB()->update('formations', 'id_formation', $id_formation, $data, false)) {
-        return $this->jsonResponse('success', 'La formation a été bien mis à jour.');
+        return $this->jsonResponse('success', trans("La formation a été bien mis à jour."));
       }
     } else { // Create formation
       $data['candidats_id'] = get_candidat_id();
       if (getDB()->create('formations', $data, false)) {
         $action = (str_replace(site_url(), '', $_SERVER['HTTP_REFERER']) == 'candidat/cv') ? 'reload' : 'refresh';
-        return $this->jsonResponse('success', 'La formation a été bien créer.', ['action' => $action]);
+        return $this->jsonResponse('success', trans("La formation a été bien créer."), ['action' => $action]);
       }
     }
   }
@@ -105,14 +105,14 @@ class FormationController extends Controller
     ], true);
 
     if (!isset($formation->id_formation)) {
-      return $this->jsonResponse('error', 'Impossible de supprimer la formation.');
+      return $this->jsonResponse('error', trans("Impossible de supprimer la formation."));
     }
 
     if ($formation->copie_diplome != '') {
       unlinkFile(site_base('apps/upload/frontend/candidat/copie_diplome/'.$formation->copie_diplome));
     }
     getDB()->delete('formations', 'id_formation', $data['id']);
-    return $this->jsonResponse('success', 'La formation a été bien supprimé.');
+    return $this->jsonResponse('success', trans("La formation a été bien supprimé."));
   }
 
   public function deleteDiplome($data)
@@ -123,7 +123,7 @@ class FormationController extends Controller
     ], true);
 
     if (!isset($formation->id_formation)) {
-      return $this->jsonResponse('error', 'Impossible de supprimer la copie de diplôme.');
+      return $this->jsonResponse('error', trans("Impossible de supprimer la copie de diplôme."));
     }
 
     if ($formation->copie_diplome != '') {
@@ -132,7 +132,7 @@ class FormationController extends Controller
 
     getDB()->update('formations', 'id_formation', $data['id'], ['copie_diplome' => null]);
 
-    return $this->jsonResponse('success', 'La copie du diplôme a été bien supprimé.');
+    return $this->jsonResponse('success', trans("La copie du diplôme a été bien supprimé."));
   }
 
 	

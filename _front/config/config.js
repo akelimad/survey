@@ -3,6 +3,9 @@ module.exports = {
     app: [
       './assets/sass/app.scss',
       './assets/js/app.js'
+    ],
+    modules: [
+      './assets/js/modules.js'
     ]
   },
   port: 3003,

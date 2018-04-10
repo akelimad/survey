@@ -3,7 +3,7 @@
 	<input type="hidden" name="id_offer" value="<?= $id_offer ?>">
 
 	<div class="row">
-		<label for="share_type" class="col-md-4">Type Email</label>
+		<label for="share_type" class="col-md-4"><?php trans_e("Type Email"); ?></label>
 		<div class="col-md-6">
 			<select id="share_type" name="type" style="width: 100%;">
 				<option value=""></option>
@@ -15,13 +15,13 @@
 	</div>
 	<div class="ligneBleu mb-10" style="width: 100%;"></div>
 	<div class="row mb-5">
-		<label for="share_sender" class="col-md-4">Expéditeur&nbsp;<font style="color:red;">*</font></label>
+		<label for="share_sender" class="col-md-4"><?php trans_e("Expéditeur"); ?>&nbsp;<font style="color:red;">*</font></label>
 		<div class="col-md-5">
 			<input type="email" name="sender" id="share_sender" style="width: 100%;" required>
 		</div>
 	</div>
 	<div class="row mb-5">
-		<label for="share_receiver" class="col-md-4">Partenaire&nbsp;<font style="color:red;">*</font></label>
+		<label for="share_receiver" class="col-md-4"><?php trans_e("Partenaire"); ?>&nbsp;<font style="color:red;">*</font></label>
 		<div class="col-md-5">
 			<select name="receiver" id="share_receiver" style="width: 100%;" required>
 				<option value=""></option>
@@ -32,14 +32,14 @@
 		</div>
 	</div>
 	<div class="row mb-5">
-		<label for="share_subject" class="col-md-4">Sujet&nbsp;<font style="color:red;">*</font></label>
+		<label for="share_subject" class="col-md-4"><?php trans_e("Sujet"); ?>&nbsp;<font style="color:red;">*</font></label>
 		<div class="col-md-8">
 			<input type="text" name="subject" id="share_subject" style="width: 100%;" required>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<label for="share_message">Message&nbsp;<font style="color:red;">*</font></label>
+			<label for="share_message"><?php trans_e("Message"); ?>&nbsp;<font style="color:red;">*</font></label>
 		</div>
 		<div class="col-md-12 mb-10">
 			<textarea name="message" id="share_message" class="ckeditor" cols="30" rows="5" style="width: 100%;" required></textarea>
@@ -47,15 +47,15 @@
 	</div>
 	<div class="row mb-5">
 		<div class="col-md-12">
-			<strong>Suite du message</strong>
-			<textarea class="mt-5" style="width: 100%;min-height:110px;padding: 20px;" disabled>Vos identifiants de connexion sur notre site web : {{site}}&#10;Votre email : {{email}}&#10;Mot de passe : votre mot de passe actuel&#10;Ces identifiants vous permettront de consulté des offres ciblé.</textarea>
+			<strong><?php trans_e("Suite du message"); ?></strong>
+			<textarea class="mt-5" style="width: 100%;min-height:110px;padding: 20px;" disabled><?php trans_e("Vos identifiants de connexion sur notre site web:"); ?> {{site}}&#10;<?php trans_e("Votre email:"); ?> {{email}}&#10;<?php trans_e("Mot de passe:"); ?> <strong><?php trans_e("votre mot de passe actuel."); ?></strong> <br><?php trans_e("Ces identifiants vous permettront de consulté des offres ciblé."); ?></textarea>
 		</div>
 	</div>
 
 	<div class="ligneBleu" style="width: 100%;"></div>
 	<div class="form-group mt-10 mb-0">
-		<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-hidden="true">Fermer</button>
-	    <button type="submit" class="btn btn-primary btn-sm pull-right">Envoyer</button>
+		<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-hidden="true"><?php trans_e("Fermer"); ?></button>
+	    <button type="submit" class="btn btn-primary btn-sm pull-right"><?php trans_e("Envoyer"); ?></button>
 	</div>
 </form>
 

@@ -61,14 +61,14 @@ class AjaxController
     // Check if offre has a fiche
     $fiche_offre = $db->prepare("SELECT f.name, f.id_fiche FROM fiche_offre fo JOIN fiches f ON f.id_fiche=fo.id_fiche WHERE f.fiche_type=? AND fo.id_offre=?", [1, $candidature->id_offre], true);
 
-    $fiche_candidature = $db->prepare("SELECT id_fiche_candidature, comments FROM fiche_candidature WHERE id_fiche=? AND id_candidature=? AND id_evaluator=?", [$fiche_offre->id_fiche, $candidature->cid, read_session('id_role')], true);
-
     if( !isset($fiche_offre->id_fiche) ) {
       return [
         'status' => 'error',
-        'title' => 'Aucune fiche n\'a été attaché à cette offre.'
+        'title' => trans("Aucune fiche n'a été attaché à cette offre.")
       ];
     }
+
+    $fiche_candidature = $db->prepare("SELECT id_fiche_candidature, comments FROM fiche_candidature WHERE id_fiche=? AND id_candidature=? AND id_evaluator=?", [$fiche_offre->id_fiche, $candidature->cid, read_session('id_role')], true);
 
     ob_start();
     get_view('admin/fiche/popup/evaluation', [
@@ -76,11 +76,11 @@ class AjaxController
       'fiche_candidature' => $fiche_candidature,
       'fiche_type' => 1,
       'id_fiche' => $fiche_offre->id_fiche,
-      'name' => 'Fiches d\'evaluation ('.$fiche_offre->name.')'
+      'name' => rans("Fiches d'evaluation:") .' ('.$fiche_offre->name.')'
     ], __FILE__);
     $content = ob_get_clean();
 
-    return ['content' => $content, 'title' => 'FICHES D\'EVALUATION'];
+    return ['content' => $content, 'title' => trans("FICHES D'EVALUATION")];
   }
   
 
@@ -103,7 +103,7 @@ class AjaxController
     $content  = '<input type="hidden" id="note_id_candidature" value="'.$candidature->id_candidature.'">' ;
     $content .= $table->render(false);
 
-    return ['content' => $content, 'title' => 'Historique de fiches d\'evaluation'];
+    return ['content' => $content, 'title' => trans("Historique de fiches d'evaluation")];
   }
   
 

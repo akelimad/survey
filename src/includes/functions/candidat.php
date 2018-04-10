@@ -27,7 +27,7 @@ function get_candidat_id() {
  * @author Mhamed Chanchaf
  */
 function get_candidat($name = null, $dafault = null) {
-	$candidat = $GLOBALS['etalent']->candidat;
+	$candidat = (isset($GLOBALS['etalent']->candidat)) ? $GLOBALS['etalent']->candidat : new \stdClass;
 	if( !isset($candidat->candidats_id) ) {
 		$candidat = getDB()->findOne('candidats', 'candidats_id', get_candidat_id());
 		if( !isset($candidat->candidats_id) ) return $dafault;

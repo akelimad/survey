@@ -115,7 +115,7 @@ class TableController extends Controller
       'permission' => 'can_view_action'
     ],
     'change_offre' => [
-      'label' => 'Changer l\'offre',
+      'label' => "Changer l'offre",
       'patern' => '#',
       'icon' => 'fa fa-retweet',
       'bulk_action' => false,
@@ -185,7 +185,7 @@ class TableController extends Controller
   	$table->removeActions(['edit', 'delete']);
   	$table->setTrigger('table_notes', [$this, 'getPertinenceNotice']);
 
-    if( $_GET['id'] == 35 ) {
+    if( isset($_GET['id']) && $_GET['id'] == 35 ) {
   	  $table->setOrderby('cand.note_ecrit'); 
     } else {
       $table->setOrderby('cand.date_candidature'); 
@@ -206,8 +206,8 @@ class TableController extends Controller
 		// });
 
 		// Add table columns
-  	$table->addColumn('sinfos', 'Informations', function($row){
-  		$html = '<a href="'. site_url('backend/cv/?candid='.$row->candidats_id) .'" target="_blank" class="cname" title="Voir le profile"><i class="fa fa-user"></i>&nbsp;'. $row->fullname .'</a>';
+  	$table->addColumn('sinfos', trans("Informations"), function($row){
+  		$html = '<a href="'. site_url('backend/cv/?candid='.$row->candidats_id) .'" target="_blank" class="cname" title="'. trans("Voir le profile") .'"><i class="fa fa-user"></i>&nbsp;'. $row->fullname .'</a>';
 
   		if( !is_null($row->date_n) ) {
   			if( $birthday = french_to_english_date($row->date_n) ) {
@@ -224,7 +224,7 @@ class TableController extends Controller
   	$table->addColumn('history', '', function($row){
   		$history = getDB()->prepare("SELECT id, date_modification, status, utilisateur FROM historique WHERE id_candidature=?", [$row->id_candidature]);
   		if ( empty($history) ) return;
-  		$html = '<i class="fa fa-history pull-right" data-toggle="popover" data-trigger="click" data-popover-content="#show_h_'. $row->candidats_id .'" title="Historique des actions effectuées"></i>';
+  		$html = '<i class="fa fa-history pull-right" data-toggle="popover" data-trigger="click" data-popover-content="#show_h_'. $row->candidats_id .'" title="'. trans("Historique des actions effectuées") .'"></i>';
   		$html .= '<div id="show_h_'. $row->candidats_id .'" class="hidden">';
   		$html .= '<table class="table table-history">';
   		foreach ($history as $key => $h) :
@@ -247,19 +247,19 @@ class TableController extends Controller
   		$html  = '<table>';
   		$html .= '<tbody>';
   		$html .= '<tr>';
-  		$html .= '<td width="88px">Expérience</td>';
+  		$html .= '<td width="88px">'. trans("Expérience") .'</td>';
   		$html .= '<td>'.Candidat::getExperienceNameByID($row->id_expe).'</td>';
   		$html .= '</tr>';
   		$html .= '<tr>';
-  		$html .= '<td>Salaire souhaité</td>';
+  		$html .= '<td>'. trans("Salaire souhaité") .'</td>';
   		$html .= '<td>'.Candidat::getSalaireNameByID($row->id_salr).'</td>';
   		$html .= '</tr>';
   		$html .= '<tr>';
-  		$html .= '<td>Fraicheur du cv</td>';
+  		$html .= '<td>'. trans("Fraicheur du cv") .'</td>';
   		$html .= '<td>'.timeAgo($row->dateMAJ).'</td>';
   		$html .= '</tr>';
   		$html .= '<tr>';
-  		$html .= '<td>Mobilité</td>';
+  		$html .= '<td>'. trans("Mobilité") .'</td>';
   		$html .= '<td><span class="label label-'.$mobiliteClass.'">'. $mobilite .'</span></td>';
   		$html .= '</tr>';
   		$html .= '</tbody>';
@@ -268,20 +268,20 @@ class TableController extends Controller
   		return $html;
   	}, ['attributes' => ['width'=> '180px']]);
 
-  	$table->addColumn('details', 'Détails', function($row){
+  	$table->addColumn('details', trans("Détails"), function($row){
   		$details = '';
   		if( intval($row->id_cv) > 0 ) {
   			$cv_ext = Resume::getExtension($row->id_cv);
   			if( !is_null($cv_ext) ) {
   				$icon = $this->getIconByExtention($cv_ext);
-  				$details .= '<a href="'. site_url('backend/module/candidatures/candidat/cv/'.$row->id_cv) .'" title="Télécharger le CV"><i class="'.$icon.'"></i></a>';
+  				$details .= '<a href="'. site_url('backend/module/candidatures/candidat/cv/'.$row->id_cv) .'" title="'. trans("Télécharger le CV") .'"><i class="'.$icon.'"></i></a>';
   			}
   		}
   		if( intval($row->id_lettre) > 0 ) {
   			$lettre_ext = MotivationLetter::getExtension($row->id_lettre);
   			if( !is_null($lettre_ext) ) {
   				$icon = $this->getIconByExtention($lettre_ext);
-  				$details .= '&nbsp;<a href="'. site_url('backend/module/candidatures/candidat/lettre/'.$row->id_lettre) .'" title="Télécharger la lettre de motivation"><i class="'.$icon.'"></i></a>';
+  				$details .= '&nbsp;<a href="'. site_url('backend/module/candidatures/candidat/lettre/'.$row->id_lettre) .'" title="'. trans("Télécharger la lettre de motivation") .'"><i class="'.$icon.'"></i></a>';
   			}
   		}
   		return $details;
@@ -290,7 +290,7 @@ class TableController extends Controller
   	$table->addColumn('pertinence', 'P', function($row){
   		$p = Candidat::getPertinance($row->candidats_id, $row->id_offre);
   		$total_p = (isset($p->total_p)) ? $p->total_p : 0;
-  		$html = '<i class="fa fa-circle" style="font-size: 1.3em;color:'. $this->getPertinanceColor($total_p) .'" data-toggle="popover"  title="Pertinence" data-trigger="click" data-popover-content="#show_p_'. $row->candidats_id .'"></i>';
+  		$html = '<i class="fa fa-circle" style="font-size: 1.3em;color:'. $this->getPertinanceColor($total_p) .'" data-toggle="popover"  title="'. trans("Pertinence") .'" data-trigger="click" data-popover-content="#show_p_'. $row->candidats_id .'"></i>';
   		$html .= '<div id="show_p_'. $row->candidats_id .'" class="hidden">';
   		if( isset($p->total_p) ) {
   			$html .= '<table class="table table-pertinance">';
@@ -298,14 +298,14 @@ class TableController extends Controller
   			foreach ($pscores as $key => $score) :
   				$html .= '<tr><td>'. $key .'</td><td>=</td><td>'. $score .'&nbsp;%</td></tr>';
   			endforeach;
-  			$html .= '<tr><td><strong>Pertinence total</strong></td><td>=</td><td><strong>'. $p->total_p .'&nbsp;%</strong></td></tr>';
+  			$html .= '<tr><td><strong>'. trans("Pertinence total") .'</strong></td><td>=</td><td><strong>'. $p->total_p .'&nbsp;%</strong></td></tr>';
   			$html .= '</table>';
   		} else {
-  			$html .= 'Aucun résultat.</div>';
+  			$html .= trans("Aucun résultat.") .'</div>';
   		}
   		$html .= '</div>';
   		return $html;
-  	}, ['attributes' => ['title' => 'Pertinence']]);
+  	}, ['attributes' => ['title' => trans("Pertinence")]]);
 
   	$table->addColumn('note_ecrit', 'NE', function($row){
   		if( is_valid_int($row->note_ecrit) ) {
@@ -316,14 +316,14 @@ class TableController extends Controller
   		} else {
   			$value = '<i class="fa fa-times" style="font-size: 10px;"></i>';
   			$style = '';
-  			$tooltip = 'data-toggle="tooltip" title="Non défini."';
+  			$tooltip = 'data-toggle="tooltip" title="'. trans("Non défini.") .'"';
   		}
       if(isset($_GET['id']) && $_GET['id'] != 53) {
         return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteEcritPopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
       } else {
   		  return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" '.$tooltip.'>'.$value.'</i>';
       }
-  	}, ['attributes' => ['title' => 'Note Écrit']]);
+  	}, ['attributes' => ['title' => trans("Note Écrit")]]);
 
 
     // FICHES D'EVALUATION 
@@ -336,7 +336,7 @@ class TableController extends Controller
       } else {
         $value = '<i class="fa fa-times" style="font-size: 10px;"></i>';
         $style = '';
-        $tooltip = 'data-toggle="tooltip" title="Non défini."';
+        $tooltip = 'data-toggle="tooltip" title="'. trans("Non défini.") .'"';
       }
       if(isset($_GET['id']) && $_GET['id'] != 53) {
         return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteOralePopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
@@ -344,15 +344,15 @@ class TableController extends Controller
         return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" '.$tooltip.'>'.$value.'</i>';
       }
 
-    }, ['attributes' => ['title' => 'Note Orale']]);
+    }, ['attributes' => ['title' => trans("Note Orale")]]);
 
 
-  	$table->addColumn('titre_offre', 'Titre du poste', function($row){
+  	$table->addColumn('titre_offre', trans("Titre du poste"), function($row){
       // $offre = Candidatures::getOfferById($row->id_offre);
   		return $row->offre_name;
   	}, ['attributes' => ['width'=> '120px']]);
 
-  	$table->addColumn('date_cand', 'Date', function($row){
+  	$table->addColumn('date_cand', trans("Date"), function($row){
   		return '<b>'. date ("d.m.Y", strtotime($row->date_cand)) .'</b>';
   	});
 
@@ -374,7 +374,7 @@ class TableController extends Controller
 	 */
   public function buildQuery()
   {
-    $status = (isset($_GET['id']) && $_GET['id'] == 53) ? 'Archivée' : 'En cours';
+    $status = (isset($_GET['id']) && $_GET['id'] == 53) ? trans("Archivée") : trans("En cours");
     $condition = " WHERE o.status='". $status ."'";
 
     if(isset($_GET['id']) && $_GET['id'] != 53) $condition .= " AND cand.status=".$_GET['id'];
@@ -500,7 +500,7 @@ class TableController extends Controller
 	 */
 	public function getPertinenceNotice() 
 	{
-		return '<b style="font-size: 11px;margin: 10px auto 5px;display: block;">* Le point en couleur montre la pertinence de la candidature (<span style="color:#79796A"><a style="color:#00B300">Vert</a>: pertinence bonne, <a style="color:#CC5500;">Orange</a>: pertinence moyenne,  <a style="color:#CC0000">Rouge</a>: pertinence faible  </span></b>';
+		return '<b style="font-size: 11px;margin: 10px auto 5px;display: block;">'. trans("* Le point en couleur montre la pertinence de la candidature") .' (<span style="color:#79796A"><a style="color:#00B300">'. trans("Vert") .'</a>: '. trans("pertinence bonne,") .' <a style="color:#CC5500;">'. trans("Orange") .'</a>: '. trans("pertinence moyenne,") .' <a style="color:#CC0000">'. trans("Rouge") .'</a>: '. trans("pertinence faible") .' </span></b>';
 	}
 
 
@@ -557,15 +557,15 @@ class TableController extends Controller
    */
   public function getPertinanceScores($cp) {
   	$scores = array();
-  	if( $this->pertinence->prm_titre == 1 )   $scores['Pertinence Titre']			= $cp->prm_titre;
-  	if( $this->pertinence->prm_expe == 1 )    $scores['Pertinence expérience']		= $cp->prm_expe;
-  	if( $this->pertinence->prm_local == 1 )   $scores['Pertinence Ville']			= $cp->prm_local;
-  	if( $this->pertinence->prm_tpost == 1 )   $scores['Pertinence Type de poste']  	= $cp->prm_tpost;
-  	if( $this->pertinence->prm_fonc == 1 )    $scores['Pertinence Fonction']		= $cp->prm_fonc;
-  	if( $this->pertinence->prm_nfor == 1 )    $scores['Pertinence Formation']		= $cp->prm_nfor;
-  	if( $this->pertinence->prm_mobil == 1 )   $scores['Pertinence Moblité']			= $cp->prm_mobil;
-  	if( $this->pertinence->prm_n_mobil == 1 ) $scores['Pertinence Niveau Mobilité'] = $cp->prm_n_mobil;
-  	if( $this->pertinence->prm_t_mobil == 1 ) $scores['Pertinence Taux Mobilité']   = $cp->prm_t_mobil;
+  	if( $this->pertinence->prm_titre == 1 )   $scores[trans("Pertinence Titre")]			= $cp->prm_titre;
+  	if( $this->pertinence->prm_expe == 1 )    $scores[trans("Pertinence expérience")]		= $cp->prm_expe;
+  	if( $this->pertinence->prm_local == 1 )   $scores[trans("Pertinence Ville")]			= $cp->prm_local;
+  	if( $this->pertinence->prm_tpost == 1 )   $scores[trans("Pertinence Type de poste")]  	= $cp->prm_tpost;
+  	if( $this->pertinence->prm_fonc == 1 )    $scores[trans("Pertinence Fonction")]		= $cp->prm_fonc;
+  	if( $this->pertinence->prm_nfor == 1 )    $scores[trans("Pertinence Formation")]		= $cp->prm_nfor;
+  	if( $this->pertinence->prm_mobil == 1 )   $scores[trans("Pertinence Moblité")]			= $cp->prm_mobil;
+  	if( $this->pertinence->prm_n_mobil == 1 ) $scores[trans("Pertinence Niveau Mobilité")] = $cp->prm_n_mobil;
+  	if( $this->pertinence->prm_t_mobil == 1 ) $scores[trans("Pertinence Taux Mobilité")]   = $cp->prm_t_mobil;
   	return $scores;
   }
 

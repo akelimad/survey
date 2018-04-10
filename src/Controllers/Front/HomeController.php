@@ -23,7 +23,7 @@ class HomeController extends Controller
 	public function index()
 	{
     $this->data['layout'] = 'front';
-    $this->data['breadcrumbs'] = ['Accueil'];
+    $this->data['breadcrumbs'] = [trans("Accueil")];
     $this->data['offers'] = getDB()->prepare("
       SELECT o.id_offre, o.reference, o.Name, o.date_expiration, o.Profil, f.fonction
       FROM offre o JOIN prm_fonctions f 

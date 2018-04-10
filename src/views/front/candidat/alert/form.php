@@ -1,5 +1,5 @@
 <input type="hidden" name="id" value="<?= (isset($alert->id_alert)) ? $alert->id_alert : 0; ?>">
-<label for="titre" class="form-label mt-0">Description de l'alerte</label>
+<label for="titre" class="form-label mt-0"><?php trans_e("Description de l'alerte"); ?></label>
 <input type="text" name="titre" value="<?= (isset($alert->titre)) ? $alert->titre : ''; ?>" id="titre" class="form-control mb-0" required>
 
 <script>

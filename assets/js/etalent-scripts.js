@@ -17,11 +17,11 @@ $('[eta-validate="date"]').change(function(){
 
 
 // Tooltip
-if ($('[data-toggle="tooltip"]').length > 0) {
+/*if ($('[data-toggle="tooltip"]').length > 0) {
 	$('[data-toggle="tooltip"]').tooltip({trigger: 'hover'}).on('click', function(event) {
 		event.preventDefault()
 	});
-}
+}*/
 
 // Popover
 if ($('[data-toggle="popover"]').length > 0) {

@@ -46,26 +46,26 @@ if ($_SESSION['link']==2)	{
  
 		<li id="ctl00_liAlerte" class="<?php echo $s_cls0; ?>">
 			<a  id="ctl00_lnkSpontanee" href="<?php  echo $urlad_cand  ?>/" >
-			<i class="fa fa-pie-chart " ></i> Etat des candidats</a>
+			<i class="fa fa-pie-chart " ></i> <?php trans_e("Etat des candidats"); ?></a>
 		</li>
 			
 		<li id="ctl00_liAlerte" class="<?php echo $s_cls4; ?>">
 			<a  id="ctl00_lnkSpontanee" href="<?php  echo $urlad_cand  ?>/cvtheque/" >
-			<i class="fa fa-users " ></i> CV theque</a>
+			<i class="fa fa-users " ></i> <?php trans_e("CV theque"); ?></a>
 		</li>
 		<li id="ctl00_liAlerte" class="<?php echo $s_cls10; ?>">
 			<a  id="ctl00_lnkSpontanee" href="<?php  echo $urlad_cand  ?>/cvimporter/" >
-			<i class="fa fa-users " ></i> CV Importer</a>
+			<i class="fa fa-users " ></i> <?php trans_e("CV Importer"); ?></a>
 		</li>
 		
 		<li id="ctl00_liAlerte" class="<?php echo $s_cls5; ?>">
 			<a id="ctl00_lnkAlerte" href="<?php  echo $urlad_cand  ?>/import_manuel_des_cv/" >
-			<i class="fa fa-book " ></i> Import manuel des cvs</a>
+			<i class="fa fa-book " ></i> <?php trans_e("Import manuel des cvs"); ?></a>
 		</li>
 
 		<li id="ctl00_liAlerte" class="<?php echo $s_cls6; ?>">
 			<a id="ctl00_lnkAlerte" href="<?php  echo $urlad_cand  ?>/dossier/" >
-			<i class="fa fa-file " ></i> Dossier</a>
+			<i class="fa fa-file " ></i> <?php trans_e("Dossier"); ?></a>
 		</li> 
 
 	</ul>
