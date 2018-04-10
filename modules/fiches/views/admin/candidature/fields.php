@@ -97,7 +97,7 @@ jQuery(document).ready(function($){
     $('#status_id').change(function(){
         var $ref = $(this).find('option:selected').data('ref')
 
-        if( $ref == 'N0' || $ref == 'N1' ) {
+        if( $ref == 'N1' || $ref == 'N2' ) {
             $('.ficheType_0').show()
             $('.ficheType_1').hide()
             $('#ficheCandidatureCommentsRow').show()
