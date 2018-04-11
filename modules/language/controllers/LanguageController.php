@@ -23,8 +23,8 @@ class LanguageController extends Controller
   {
     $this->data['layout'] = 'admin';
     $this->data['breadcrumbs'] = [
-      trans('Langues'), 
-      trans('Traductions des chaînes')
+      trans("Langues"), 
+      trans("Traductions des chaînes")
     ];
     return get_page('admin/language/strings', $this->data, __FILE__);
   }
