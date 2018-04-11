@@ -203,7 +203,7 @@ echo $message.'<br/>';
                                 <b> Type d'email :</b> <font style="color:red;">*</font>
                             </td>
                             <td  width="60%"> 
-                               <input type="text" name="titre"  value="<?php if(isset($_POST['titre'])){echo $_POST['titre'];}?>"  style="width: 400px;" maxlength="100"  <?php if(isset($_POST['ds'])){echo $_POST['ds'];}?> 
+                               <input type="text" name="titre"  value="<?php if(isset($_POST['titre'])){echo $_POST['titre'];}?>"  style="width: 400px;" <?php if(isset($_POST['ds'])){echo $_POST['ds'];}?> 
                                placeholder="Type d'email" title="Veuillez entrez le type d'email" required/>    
                             </td>
                         </tr> 
@@ -216,7 +216,7 @@ echo $message.'<br/>';
                             </td>
                             <td  width="60%">  
                                  <input type="text" name="expediteur"  
-                                 value="<?php if(isset($_POST['expediteur'])){echo $_POST['expediteur'];} else echo $info_contact; ?>"  style="width: 400px;" maxlength="100"  <?php if(isset($_POST['ds'])){echo $_POST['ds'];}?> 
+                                 value="<?php if(isset($_POST['expediteur'])){echo $_POST['expediteur'];} else echo $info_contact; ?>"  style="width: 400px;" <?php if(isset($_POST['ds'])){echo $_POST['ds'];}?> 
                                  title="Veuillez entrez l'email de l'expediteur" required/> 
                                 
                             </td>
@@ -229,7 +229,7 @@ echo $message.'<br/>';
                                 <b> Objet:</b> <font style="color:red;">*</font>
                             </td>
                             <td  width="60%"> 
-                                <input type="text" name="objet"  value="<?php if(isset($_POST['objet'])){echo $_POST['objet'];}?>"  style="width: 400px;" maxlength="100"  <?php if(isset($_POST['ds'])){echo $_POST['ds'];}?> 
+                                <input type="text" name="objet"  value="<?php if(isset($_POST['objet'])){echo $_POST['objet'];}?>"  style="width: 400px;" <?php if(isset($_POST['ds'])){echo $_POST['ds'];}?> 
                                 placeholder="Objet" title="Veuillez entrez l'Objet" required/><br/>
                             </td>
                         </tr>
