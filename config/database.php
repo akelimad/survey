@@ -1,7 +1,7 @@
 <?php
 // Defines
 define('DB_SERVER', 'localhost');
-define('DB_NAME', 'project_etalent_1.5.0');
+define('DB_NAME', 'project_etalent_v1.5.0');
 define('DB_USER', 'root');
 define('DB_PASS', '98k1TYZe49KeyWJT');
 
