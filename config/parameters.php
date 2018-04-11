@@ -10,4 +10,4 @@ define('SMTP_ssl', false);
 // define('ETA_ASSETS_VERSION', time());
 
 // ENV
-define('ETA_ENV', 'dev');
+// define('ETA_ENV', 'dev');

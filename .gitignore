@@ -1,6 +1,8 @@
 .phpintel
 export_git_diff.bat
 /_front/node_modules
+/config/parameters.php
+/config/database.php
 /apps/upload
 /messages
 /uploads
@@ -10,3 +12,4 @@ export_git_diff.bat
 /node_modules
 composer.lock
 error_log
+Thumbs.db
