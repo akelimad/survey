@@ -26,3 +26,7 @@ console.log(files) */
 // import Language from './../../../modules/language/assets/js/language.js'
 
 // console.log(Language.hello())
+
+import Language from './classes/language'
+
+window.Language = Language

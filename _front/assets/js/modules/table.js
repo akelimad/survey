@@ -14,7 +14,13 @@ export default class chmTable {
     var self = this
     var route = $(target).attr('chm-table')
     if (route === '') return
-    self.fill(target, '<i class="fa fa-circle-o-notch fa-spin fast-spin"></i>&nbsp;Chargement de la table en cours...', scrollTo)
+
+    if ($(target).find('table').length === 0) {
+      self.fill(target, '<i class="fa fa-circle-o-notch fa-spin fast-spin"></i>&nbsp;Chargement de la table en cours...', scrollTo)
+    } else {
+      $(target).css('opacity', '0.3')
+    }
+
     $.ajax({
       type: 'GET',
       url: route,
@@ -43,7 +49,7 @@ export default class chmTable {
   }
 
   static fill (target, content, scrollTo = false) {
-    $(target).empty().html(content)
+    $(target).empty().html(content).css('opacity', '1')
     if (scrollTo) {
       $('html, body').animate({
         scrollTop: $(target).offset().top
@@ -71,7 +77,7 @@ $(document).ready(function () {
     if (options.with_ajax) {
       $('body').on('click', '.pagination > li > a', function (event) {
         event.preventDefault()
-        if ($(this).attr('href') !== undefined) {
+        if ($(this).attr('href') !== undefined && !$(this).closest('li').hasClass('active')) {
           var pageNumber = $(this).attr('href').split('page=')[1]
           window.chmUrl.setParam('page', pageNumber)
           chmTable.render($(this).closest('[chm-table]'), pageNumber)

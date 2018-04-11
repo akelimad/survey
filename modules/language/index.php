@@ -3,6 +3,9 @@ use App\Route;
 
 // Register routes
 Route::add('backend/language/strings', 'Modules\Language\Controllers\LanguageController@strings');
+Route::add('backend/language/scan', 'Modules\Language\Controllers\LanguageController@scan');
+Route::add('backend/language/strings/store', 'Modules\Language\Controllers\LanguageController@store');
+Route::add('backend/language/strings/table', 'Modules\Language\Controllers\StringTableController@getTable');
 
 /**
  * Get string translation

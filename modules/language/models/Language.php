@@ -4,11 +4,13 @@
  *
  * @author mchanchaf
  *
- * @package modules.Llanguage.controllers
+ * @package modules.Language.controllers
  * @version 1.0
  * @since 1.5.0
  */
-namespace Modules\Language\Models; 
+namespace Modules\Language\Models;
+
+use App\Controllers\Controller;
 
 class Language {
 
@@ -24,6 +26,25 @@ class Language {
   ];
 
 
+  public static function findAll()
+  {
+    return getDB()->read('languages');
+  }
+
+
+  public static function getDefaultLanguage($key = null)
+  {
+    $lang = getDB()->findOne('languages', 'default_lang', 1);
+    if (!isset($lang->id)) return false;
+
+    if (!is_null($key) && isset($lang->$key)) {
+      return $lang->$key;
+    }
+
+    return $lang;
+  }
+
+
   /**
    * Scan code for strings
    *
@@ -32,7 +53,7 @@ class Language {
   public function getStringsFromCode()
   {
     foreach ($this->paths as $key => $path) {
-      $files = $this->getDirectoryFiles( site_base($path) );
+      $files = (new Controller())->getDirectoryFiles( site_base($path) );
       foreach($files as $v) {
         if ( preg_match("/\/.*?\.[a-z0-9]+$/uis", $v) ) {
           preg_match_all("/(?:\<\?.*?\?\>)|(?:\<\?.*?[^\?]+[^\>]+)/uis", file_get_contents($v), $p);

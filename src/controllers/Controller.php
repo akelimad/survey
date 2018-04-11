@@ -98,7 +98,7 @@ class Controller
 	 *
 	 * @return array $files
 	 */
-	function getDirectoryFiles($directory)
+	public function getDirectoryFiles($directory)
 	{
 	  $files = [];
 		if ($h = opendir($directory)) {
@@ -116,6 +116,26 @@ class Controller
 		}
 		return $files;
 	}
+
+	public function getUrlParms($url, $param = null, $default = null)
+	{
+		$parts = parse_url($url);
+		if (!isset($parts['query']))
+			return $default;
+
+		parse_str($parts['query'], $query);
+
+		if (is_null($param)) {
+			return $query;
+		}
+
+		if (isset($query[$param])) {
+			return $query[$param];
+		}
+
+		return $default;
+	}
+
 
 
 } // END Class

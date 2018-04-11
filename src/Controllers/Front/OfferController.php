@@ -434,12 +434,15 @@ class OfferController extends Controller
     $template = getDB()->findOne('root_email_auto', 'ref', 'i');
     if(!isset($template->id_email)) return;
 
-    $message = Mailer::renderMessage($template->message, [
+    $template_vars = [
       'nom_candidat' => Candidat::getDisplayName($candidat),
       'titre_offre' => $offerName
-    ]);
+    ];
 
-    $send = Mailer::send($candidat->email, $template->objet, $message, [
+    $subject = Mailer::renderMessage($template->objet, $template_vars);
+    $message = Mailer::renderMessage($template->message, $template_vars);
+
+    $send = Mailer::send($candidat->email, $subject, $message, [
       'titre' => $template->titre,
       'type_email' => 'Envoi automatique'
     ]);

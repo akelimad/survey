@@ -811,7 +811,7 @@ class Table extends Pagination {
      */
     public function setPerpage($perpage)
     {
-        $this->perpage = (in_array($perpage, $this->perpages)) ? $perpage : 10;
+        $this->perpage = (intval($perpage) < 500) ? intval($perpage) : 10;
     }
 
 
