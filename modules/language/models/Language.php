@@ -51,7 +51,7 @@ class Language {
   }
 
 
-  public static function getCurrentLanguage($key = null)
+  public static function getCurrentLanguage($key = null, $default = null)
   {
     $iso_code = read_cookie('eta_lang', self::getDefaultLanguage('iso_code', 'fr'));
     $language = (isset($GLOBALS['etalent']->language)) ? $GLOBALS['etalent']->language : [];
@@ -61,7 +61,7 @@ class Language {
     }
 
     if (!is_null($key)) {
-      return (isset($language->$key)) ? $language->$key : $key;
+      return (isset($language->$key)) ? $language->$key : $default;
     }
 
     return $language;
