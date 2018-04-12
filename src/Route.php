@@ -78,7 +78,8 @@ class Route
 
 	public static function getRouteParams()
 	{
-		$route = self::getRoute();
+		$route = preg_replace('!\.php$!', '', self::getRoute());
+    
 		foreach(self::$routes as $k => $v) {
       $patern = '!^'. $k .'$!';
       if (preg_match($patern, $route)) {
