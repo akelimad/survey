@@ -50,7 +50,8 @@ class FormationController extends Controller
       'date_fin' => trans("Date de fin"),
       'diplome' => trans("Diplôme"),
       'nivformation' => trans("Nombre d’année de formation"),
-      'description' => trans("Description de la formation")
+      'description' => trans("Description de la formation"),
+      'ecole' => trans("Autre école ou établissement")
     ]);
 
     $is_valid = Validator::is_valid($data, [
@@ -59,7 +60,8 @@ class FormationController extends Controller
       'date_fin' => 'date',
       'diplome' => 'required|numeric',
       'nivformation' => 'required|numeric',
-      'description' => 'required|eta_alpha_numeric'
+      'description' => 'required|eta_alpha_numeric',
+      'ecole' => 'eta_string'
     ]);
     
     if(is_array($is_valid)) {
