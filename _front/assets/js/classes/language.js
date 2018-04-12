@@ -14,7 +14,7 @@ export default class Language {
       message: '<i class="fa fa-circle-o-notch fa-spin"></i>&nbsp;' + this.trans('Recherche de nouveaux phrases en cours...'),
       width: 400,
       onSuccess: (response) => {
-        window.chmTable.refresh(document.querySelector('#stringsTable'), null, true)
+        window.chmTable.refresh(document.querySelector('#stringsTable'), {scrollTo: true})
       }
     })
   }
@@ -26,7 +26,7 @@ export default class Language {
     $.post(url, {sid: sid, isoCode: isoCode, value: value}).done(function (response, textStatus, jqXHR) {
       try {
         if (typeof response === 'string') response = $.parseJSON(response)
-        $('input[data-sid="' + sid + '"]').css('border', '1px solid #7d7b7b')
+        $('textarea[data-sid="' + sid + '"]').css('border', '1px solid #7d7b7b')
         window['chmAlert'][response.status](response.message)
       } catch (e) {
         window.chmAlert.warning(e.message)

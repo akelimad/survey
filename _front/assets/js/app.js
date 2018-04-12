@@ -18,6 +18,7 @@ import chmTable from './modules/table'
 import chmFilter from './modules/filter'
 import chmPrint from './modules/print'
 
+import trans from './classes/trans'
 import chmOffer from './classes/offer'
 import chmAuth from './classes/auth'
 import chmCandidat from './classes/candidat'
@@ -46,6 +47,8 @@ window.chmCandidature = chmCandidature
 window.chmFormation = chmFormation
 window.chmExperience = chmExperience
 window.chmJobAlerts = chmJobAlerts
+
+window.trans = trans
 
 // Standart jQuery script
 import './custom'
