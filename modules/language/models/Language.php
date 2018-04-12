@@ -28,7 +28,7 @@ class Language {
 
   public static function findAll()
   {
-    return getDB()->read('languages');
+    return getDB()->findByColumn('languages', 'active', 1);
   }
 
 
@@ -42,6 +42,23 @@ class Language {
     }
 
     return $lang;
+  }
+
+
+  public static function getCurrentLanguage($key = null)
+  {
+    $current = read_session('eta_lang', 'fr');
+    $language = (isset($GLOBALS['etalent']->language)) ? $GLOBALS['etalent']->language : [];
+    if (!isset($language->id)) {
+      $language = getDB()->findOne('languages', 'iso_code', $current);
+      $GLOBALS['etalent']->language = $language;
+    }
+
+    if (!is_null($key)) {
+      return (isset($language->$key)) ? $language->$key : $key;
+    }
+
+    return $language;
   }
 
 
@@ -59,7 +76,8 @@ class Language {
           preg_match_all("/(?:\<\?.*?\?\>)|(?:\<\?.*?[^\?]+[^\>]+)/uis", file_get_contents($v), $p);
           if (count($p[0])) {
             foreach ($p[0] as $pv) {
-              preg_match_all("/trans[_]?[_e][\s]*\([\s]*[\"](.*?)[\"].*?\)/uis", $pv, $m);
+              preg_match_all("/trans[_]?[_e]?[\s]*\([\s]*[\"](.*?)[\"].*?\)/uis", $pv, $m);
+              // preg_match_all('/trans[_]?[_e]?\([\'"](.*)[\'"]\)/uis', $pv, $m);
               if (count($m[0])) {
                 foreach ($m[1] as $mv) {
                   if (!in_array($mv, $this->strings)) {

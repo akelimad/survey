@@ -9,5 +9,5 @@ define('SMTP_ssl', false);
 // Assets version
 // define('ETA_ASSETS_VERSION', time());
 
-// ENV
+// ENABLE WEBPACK DEV EVNVIRENEMENT
 // define('ETA_ENV', 'dev');

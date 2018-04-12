@@ -1,5 +1,6 @@
 <?php
 use App\Route;
+use Modules\Language\Models\Language;
 
 // Register routes
 Route::add('backend/language/strings', 'Modules\Language\Controllers\LanguageController@strings');
@@ -14,12 +15,12 @@ Route::add('backend/language/strings/table', 'Modules\Language\Controllers\Strin
  * @return string $string_trans
  **/
 function trans($msgid) {
-  $lang_code = 'fr';
-  $file_path = site_base("messages/$lang_code.php");
+  $iso_code = Language::getCurrentLanguage('iso_code', 'fr');
+  $file_path = site_base("messages/$iso_code.php");
 
   if (!file_exists($file_path)) {
     // get all strings from database
-    $language = getDB()->prepare("SELECT s.name, t.value FROM language_strings s JOIN language_string_trans t ON t.language_string_id=s.id WHERE t.language=?", [$lang_code]);
+    $language = getDB()->prepare("SELECT s.name, t.value FROM language_strings s JOIN language_string_trans t ON t.language_string_id=s.id WHERE t.language=?", [$iso_code]);
 
     $strings = [];
     if (!empty($language)) : foreach ($language as $key => $lang) :

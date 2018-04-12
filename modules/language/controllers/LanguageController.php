@@ -21,9 +21,21 @@ class LanguageController extends Controller
 
   public function strings()
   {
+    // $trans = 'trans("Text")';
+    // $trans = 'trans_e(\'Text\'ee\')';
+    /*$trans = 'bla <?php trans_e(\'<strong>Text\'ee\'); ?> foo';
+
+    $pattern = '/trans[_]?[_e]?\([\'"](.*)[\'"]\)/uis';
+    $matches = preg_match($pattern, $trans, $res);
+
+  dump($res);*/
+
+
+
+
     $this->data['layout'] = 'admin';
     $this->data['breadcrumbs'] = [
-      trans("Langues"), 
+      trans("Langues"),
       trans("Traductions des chaînes")
     ];
     return get_page('admin/language/strings', $this->data, __FILE__);
