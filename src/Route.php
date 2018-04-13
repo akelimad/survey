@@ -16,13 +16,17 @@ class Route
 	private static $routes = [];
 
 
-	public static function add($url, $callback, $is_ajax = false, $can_access = true)
+	public static function add($urls, $callback, $is_ajax = false, $can_access = true)
 	{
-		self::$routes[$url] = [
-			'callback' => $callback,
-			'is_ajax' => $is_ajax,
-      'can_access' => $can_access
-		];
+    if (!is_array($urls)) $urls = [$urls];
+
+    foreach ($urls as $key => $url) {
+  		self::$routes[$url] = [
+  			'callback' => $callback,
+  			'is_ajax' => $is_ajax,
+        'can_access' => $can_access
+  		];
+    }
 	}
 
 
@@ -46,6 +50,17 @@ class Route
 		$controller = $callable[0];
 		$method = $callable[1];
 		$params = ($_SERVER['REQUEST_METHOD'] === 'POST') ? $_POST : $_GET;
+
+    // Extract url params
+    $uri = strtok(get_current_url(), '?');
+    $uri = str_replace(site_url(), '', $uri);
+    $patern = '!^'. str_replace('/', '\/', $route['name']) .'$!';
+    preg_match($patern, $uri, $matches);
+    if (count($matches) > 1) {
+      unset($matches[0]);
+      $params['params'] = $matches;
+    }
+    
 		if ( method_exists($controller, $method) && is_callable($callable)) {
 			if( is_ajax() ) {
 				header('HTTP/1.1 200 OK');
@@ -79,11 +94,10 @@ class Route
 	public static function getRouteParams()
 	{
 		$route = preg_replace('!\.php$!', '', self::getRoute());
-    
 		foreach(self::$routes as $k => $v) {
       $patern = '!^'. $k .'$!';
       if (preg_match($patern, $route)) {
-        return self::$routes[$k];
+        return ['name' => $k] + self::$routes[$k];
       }
     }
     return false;
