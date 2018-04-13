@@ -15,7 +15,7 @@ if( isset($_GET['module']) && file_exists(site_base('modules/'.$_GET['module'].'
 	if( isBackend() && !isLogged('admin') ) redirect( site_url('backend/login/') );
 
 	// Call module page
-	$controller  = "\Modules\\". ucfirst($_GET['module']) ."\Controllers\\". dashesToCamelCase($_GET['controller']) .'Controller';
+	$controller  = "\Modules\\". dashesToCamelCase($_GET['module']) ."\Controllers\\". dashesToCamelCase($_GET['controller']) .'Controller';
 	$action = "action". dashesToCamelCase(str_replace('.php', '', $_GET['action']));
 	if ( method_exists($controller, $action) && is_callable(array($controller, $action))) {
 		
