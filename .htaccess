@@ -54,6 +54,12 @@ RewriteRule ^backend/administration ./apps/backend/administration/index.php [L,Q
 RewriteRule ^backend/stages/(.*)$ ./apps/backend/stages/$1 [L,QSA]
 RewriteRule ^backend/stages ./apps/backend/stages/index.php [L,QSA]
 
+# survey module
+RewriteRule ^backend/survey/([0-9]+)/delete$ ./public/index.php?id=$1 [L,QSA]
+RewriteRule ^backend/survey/([0-9]+)/group/form$ ./public/index.php?sid=$1 [L,QSA]
+RewriteRule ^backend/survey/([0-9]+)/group/index ./public/index.php?sid=$1 [L,QSA]
+RewriteRule ^backend/survey/([0-9]+)/group/table ./public/index.php?sid=$1 [L,QSA]
+
 # Get module routes
 RewriteRule ^backend/module/([a-z-_]+)/([a-z-_]+)/([a-z-_(\.php)]+)$ ./modules/index.php?module=$1&controller=$2&action=$3 [L,QSA]
 RewriteRule ^backend/module/([a-z-_]+)/([a-z-_]+)/([a-z-_]+)/([0-9]+)$ ./modules/index.php?module=$1&controller=$2&action=$3&id=$4 [L,QSA]
