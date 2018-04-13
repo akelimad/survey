@@ -4,11 +4,11 @@
  *
  * @author mchanchaf
  *
- * @package modules.candidat.controllers
+ * @package modules.cronjob.controllers
  * @version 1.0
  * @since 1.5.0
  */
-namespace Modules\Candidat\Controllers;
+namespace Modules\CronJob\Controllers;
 
 use App\Route;
 
@@ -16,7 +16,7 @@ class RouteController
 {
 
   /**
-   * DB instance
+   * RouteController instance
    * @var instance $instance
    */
   private static $_instance = null;
@@ -26,8 +26,8 @@ class RouteController
   {
     // Register routes
     Route::add(
-      'cron/candidat/one-year-account-not-updated',
-      'Modules\Candidat\Controllers\CronController@oneYearAccountNotUpdated'
+      'cron-job/candidat/one-year-account-not-updated',
+      'Modules\CronJob\Controllers\CronController@oneYearAccountNotUpdated'
     );
   }
 

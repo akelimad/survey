@@ -16,7 +16,7 @@ class RouteController
 {
 
   /**
-   * DB instance
+   * RouteController instance
    * @var instance $instance
    */
   private static $_instance = null;
