@@ -15,6 +15,30 @@ use App\Mail\Mailer;
 class OfferController extends \App\Controllers\Controller
 {
 
+  public function index()
+  {
+    
+  }
+
+  public function getForm($data)
+  {
+    $offer = new \stdClass; 
+    if (isset($data['params'][1])) {
+      $offer = getDB()->findOne('offre', 'id_offre', $data['params'][1]);
+    }
+
+    $this->data['layout'] = 'admin';
+    $this->data['breadcrumbs'][] = trans("Offre");
+    if (isset($offer->id_offre)) {
+      $this->data['breadcrumbs'][] = trans("Modifier un offre");
+      $this->data['breadcrumbs'][] = $offer->Name;
+    } else {
+      $this->data['breadcrumbs'][] = trans("Créer un offre");
+    }
+
+    return get_page('admin/offer/form', $this->data, __FILE__);
+  }
+
 
   public function actionShare()
   {
