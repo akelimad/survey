@@ -28,8 +28,9 @@ class Form
    */
   public static function input($type, $name, $label = null, $default = null, $attrs = [])
   {
-    $html = '<div class="form-group">';
+    $html = '';
     if (!is_null($label)) {
+      $html .= '<div class="form-group">';
       $html .= '<label for="'. $name .'">'. $label .'</label>';
     }
 
@@ -38,10 +39,10 @@ class Form
       if (!isset($attrs['id'])) $attrs['id'] = $name;
     }
     $attrs['type'] = $type;
-    $attrs['value'] = (isset($_GET[$name])) ? $_GET[$name] : $default;
+    $attrs['value'] = (is_null($default) && isset($_GET[$name])) ? $_GET[$name] : $default;
     
     $html .= '<input '. self::getAttributes($attrs) .'>';
-    $html .= '</div>';
+    if (!is_null($label)) $html .= '</div>';
 
     return $html;
   }
@@ -62,8 +63,9 @@ class Form
    */
   public static function select($name, $label = null, $default = null, $options = [], $attrs = [])
   {
-    $html = '<div class="form-group">';
+    $html = '';
     if (!is_null($label)) {
+      $html .= '<div class="form-group">';
       $html .= '<label for="'. $name .'">'. $label .'</label>';
     }
 
@@ -73,14 +75,23 @@ class Form
     }
 
     $html .= '<select '. self::getAttributes($attrs) .'>';
-
     foreach ($options as $key => $option) :
-      $selected = (isset($_GET[$name]) && $_GET[$name] == $key || $default == $key) ? 'selected' : '';
-      $html .= '<option value="'. $key .'" '. $selected .'>'. $option .'</option>';
+      if (is_object($option)) {
+        $value = (isset($option->value)) ? $option->value : null;
+        $text  = (isset($option->text)) ? $option->text : null;
+      } else {
+        $value = $key;
+        $text  = $option;
+      }
+
+      $default = (is_null($default) && isset($_GET[$name])) ? $_GET[$name] : $default;
+      $selected = ($default == $value) ? 'selected' : '';
+
+      $html .= '<option value="'. $value .'" '. $selected .'>'. $text .'</option>';
     endforeach;
 
     $html .= '</select>';
-    $html .= '</div>';
+    if (!is_null($label)) $html .= '</div>';
 
     return $html;
   }
@@ -100,8 +111,9 @@ class Form
    */
   public static function textarea($name, $label = null, $default = null, $attrs = [])
   {
-    $html = '<div class="form-group">';
+    $html = '';
     if (!is_null($label)) {
+      $html .= '<div class="form-group">';
       $html .= '<label for="'. $name .'">'. $label .'</label>';
     }
 
@@ -110,9 +122,12 @@ class Form
       if (!isset($attrs['id'])) $attrs['id'] = $name;
     }
 
-    $value = (isset($_GET[$name])) ? $_GET[$name] : $default;
-    $html .= '<textarea '. self::getAttributes($attrs) .'>'. $value .'</textarea>';
-    $html .= '</div>';
+    if (is_null($default) && isset($_GET[$name])) {
+      $default = $_GET[$name];
+    }
+
+    $html .= '<textarea '. self::getAttributes($attrs) .'>'. $default .'</textarea>';
+    if (!is_null($label)) $html .= '</div>';
 
     return $html;
   }

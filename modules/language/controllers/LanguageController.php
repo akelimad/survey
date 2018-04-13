@@ -21,18 +21,6 @@ class LanguageController extends Controller
 
   public function strings()
   {
-    // $trans = 'trans("Text")';
-    // $trans = 'trans_e(\'Text\'ee\')';
-    /*$trans = 'bla <?php trans_e(\'<strong>Text\'ee\'); ?> foo';
-
-    $pattern = '/trans[_]?[_e]?\([\'"](.*)[\'"]\)/uis';
-    $matches = preg_match($pattern, $trans, $res);
-
-  dump($res);*/
-
-
-
-
     $this->data['layout'] = 'admin';
     $this->data['breadcrumbs'] = [
       trans("Langues"),
@@ -89,8 +77,15 @@ class LanguageController extends Controller
         'value' => $data['value']
       ]);
     } else {
-      $db->update('language_string_trans', 'id', $trans->id, ['value' => $data['value']]);
+      if (!empty($data['value'])) {
+        $db->update('language_string_trans', 'id', $trans->id, ['value' => $data['value']]);
+      } else {
+        $db->delete('language_string_trans', 'id', $trans->id);        
+      }
     }
+
+    // Delete cache
+    unlinkFile(site_base('messages/'. $data['isoCode'] .'.php'));
 
     return $this->jsonResponse('success', trans("La phrase a été mis à jour."));
   }

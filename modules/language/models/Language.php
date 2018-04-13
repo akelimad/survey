@@ -28,7 +28,13 @@ class Language {
 
   public static function findAll()
   {
-    return getDB()->findByColumn('languages', 'active', 1);
+    return getDB()->read('languages');
+  }
+
+
+  public static function getActiveLanguages()
+  {
+    return getDB()->prepare("SELECT iso_code as value, name as text FROM languages WHERE active=?", [1]);
   }
 
 
@@ -45,17 +51,17 @@ class Language {
   }
 
 
-  public static function getCurrentLanguage($key = null)
+  public static function getCurrentLanguage($key = null, $default = null)
   {
-    $current = read_session('eta_lang', 'fr');
+    $iso_code = read_cookie('eta_lang', self::getDefaultLanguage('iso_code', 'fr'));
     $language = (isset($GLOBALS['etalent']->language)) ? $GLOBALS['etalent']->language : [];
     if (!isset($language->id)) {
-      $language = getDB()->findOne('languages', 'iso_code', $current);
+      $language = getDB()->findOne('languages', 'iso_code', $iso_code);
       $GLOBALS['etalent']->language = $language;
     }
 
     if (!is_null($key)) {
-      return (isset($language->$key)) ? $language->$key : $key;
+      return (isset($language->$key)) ? $language->$key : $default;
     }
 
     return $language;
@@ -69,6 +75,7 @@ class Language {
    */
   public function getStringsFromCode()
   {
+    // TODO - add JS trans support
     foreach ($this->paths as $key => $path) {
       $files = (new Controller())->getDirectoryFiles( site_base($path) );
       foreach($files as $v) {
@@ -77,7 +84,6 @@ class Language {
           if (count($p[0])) {
             foreach ($p[0] as $pv) {
               preg_match_all("/trans[_]?[_e]?[\s]*\([\s]*[\"](.*?)[\"].*?\)/uis", $pv, $m);
-              // preg_match_all('/trans[_]?[_e]?\([\'"](.*)[\'"]\)/uis', $pv, $m);
               if (count($m[0])) {
                 foreach ($m[1] as $mv) {
                   if (!in_array($mv, $this->strings)) {

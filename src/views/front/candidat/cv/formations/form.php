@@ -1,3 +1,7 @@
+<?php
+use App\Form;
+?>
+
 <input type="hidden" name="id" value="<?= (isset($formation->id_formation)) ? $formation->id_formation : 0 ?>">
 <div class="row">
   <div class="col-sm-4 required">
@@ -45,6 +49,12 @@
       </optgroup‏>
       <?php endforeach; ?>
     </select>
+    <?php $forma_other = (isset($formation->ecole)) ? $formation->ecole : ''; ?>
+    <?= Form::input('text', 'ecole', null, $forma_other, [
+      'class' => 'form-control',
+      'style' => (empty($formation->ecole)) ? 'display:none;' : '',
+      'title' => trans("Autre école ou établissement")
+    ]); ?>
   </div>
   <div class="col-sm-4 pl-0 pl-xs-15 required">
     <label for="forma_nfor"><?php trans_e("Nombre d’année de formation"); ?></label>
@@ -114,6 +124,19 @@ jQuery(document).ready(function(){
         location.reload()
       }
     }
+  })
+
+  // Show other school field
+  $('#forma_ecol').change(function() {
+    var $forma_other = $('[name="ecole"]')
+    $($forma_other).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($forma_other).prop('required', true)
+      $($forma_other).show()
+    } else {
+      $($forma_other).prop('required', false)
+      $($forma_other).hide()
+    }   
   })
 
 })

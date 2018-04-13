@@ -30,23 +30,14 @@ use App\Form;
         </div>
       </div>
       <div class="col-md-3 pl-0 pl-xs-15">
-        <div class="form-group mb-0">
-          <label for="lang"><?php trans_e("Langues") ?></label>
-          <select id="lang" name="lang" style="width:100%; height: 23px;">
-            <?php foreach (Language::findAll() as $key => $lang) : 
-              $selected = '';
-              if (!isset($_GET['lang'])) {
-                if ($lang->default_lang == 1) {
-                  $selected = 'selected';
-                }
-              } else if ($_GET['lang'] == $lang->iso_code) {
-                $selected = 'selected';
-              }
-            ?>
-              <option value="<?= $lang->iso_code ?>" <?= $selected; ?>><?= $lang->name ?></option>
-            <?php endforeach; ?>
-          </select>
-        </div>
+        <?= \App\Form::select(
+          'lang', trans("Langues"), 
+          null,
+          Language::getActiveLanguages(),
+          [
+            'style' => 'width:100%; height: 23px;cursor: pointer;'
+          ]
+        ); ?>
       </div>
       <div class="col-md-2 pl-0 pl-xs-15">
         <?= Form::select('status', trans("Statut"), null, ['', 'Traduit', 'Non traduit'], ['style' => 'width:100%; height: 23px;', 'required']); ?>

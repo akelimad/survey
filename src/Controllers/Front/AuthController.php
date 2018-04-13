@@ -67,6 +67,7 @@ class AuthController extends Controller
 		'formation_diplome' => ['required|numeric', 'Diplôme'],
 		'formation_description' => ['required|eta_alpha_numeric', 'Description de la formation'],
 		'formation_nivformation' => ['required|numeric', 'Nombre d’année de formation'],
+		'formation_ecole' => ['required|eta_string', 'Autre école ou établissement'],
 		// Experience
 		'experience_id_sect' => ['numeric', 'Secteur d\'activité'],
 		'experience_id_fonc' => ['numeric', 'Fonction'],

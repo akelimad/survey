@@ -6,6 +6,11 @@ export default class Language {
     return msgid
   }
 
+  static change (isoCode) {
+    window.chmCookie.create('eta_lang', isoCode)
+    window.location.reload()
+  }
+
   static scan () {
     window.chmModal.show({
       type: 'GET',
