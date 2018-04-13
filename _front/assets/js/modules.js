@@ -28,5 +28,9 @@ console.log(files) */
 // console.log(Language.hello())
 
 import Language from './classes/language'
+import Survey from './classes/survey'
+import Group from './classes/group'
 
 window.Language = Language
+window.Survey = Survey
+window.Group = Group
