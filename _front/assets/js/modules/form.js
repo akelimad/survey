@@ -115,3 +115,19 @@ export default class chmForm {
   }
 
 }
+
+// Initialise forms
+$(document).ready(function () {
+  // Select all Forms occurences
+  var chmForms = document.querySelectorAll('[chm-form]')
+  if (chmForms.length === 0) return
+
+  // Loop for each Table
+  for (var i = 0; i < chmForms.length; ++i) {
+    // Add event listener
+    $(chmForms[i]).on('submit', function (event) {
+      event.preventDefault()
+      chmForm.submit(event, this)
+    })
+  }
+})
