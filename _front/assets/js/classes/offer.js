@@ -115,4 +115,11 @@ export default class chmOffer {
     })
   }
 
+  static manageFields () {
+    window.chmModal.show({
+      type: 'GET',
+      url: window.chmSite.url('backend/offer/manage-fields')
+    })
+  }
+
 }
