@@ -15,6 +15,10 @@ use App\Models\Model;
 class Offer extends Model
 {
 
+  const PUBLISHED_STATUS = 'En cours';
+  const ARCHIVED_STATUS  = 'Archivée';
+  
+
   public static function getSharedOffersUrls()
   {
     return [

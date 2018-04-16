@@ -13,13 +13,13 @@ namespace Modules\CronJob\Controllers;
 use App\Mail\Mailer;
 use App\Models\Candidat;
 
-class CronController
+class OneYearAccountNotUpdatedCronController
 {
 
   private $count = 0;
 
 
-  public function oneYearAccountNotUpdated()
+  public function run()
   {
     $candidats = getDB()->prepare("
       SELECT c.candidats_id, c.nom, c.prenom, c.id_civi, c.email
