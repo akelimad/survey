@@ -14,6 +14,25 @@ class CandidatController
 {
 
 
+  /**
+   * unsubscribe
+   *
+   * @author mchanchaf
+   */
+  public function unsubscribe($data) 
+  {
+    $md5 = $data['params'][1];
+
+    $this->data['layout'] = 'front';
+    $this->data['breadcrumbs'] = [
+      trans("Accueil"), 
+      trans("Se désabonner")
+    ];
+
+    getDB()->update('candidats', 'md5(email)', $md5, ['nl_emploi' => 0]);
+
+    return get_page('front/candidat/unsubscribe', $this->data, __FILE__);
+  }
   
   
 
