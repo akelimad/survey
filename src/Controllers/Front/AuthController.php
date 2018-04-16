@@ -381,7 +381,7 @@ class AuthController extends Controller
 			'pupille' => null,
 			'handicape' => null,
 			'note_diplome' => 0,
-			'nl_emploi' => '',
+			'nl_emploi' => 1,
 			'nl_partenaire' => $params['candidat']['mdp'],
 			'date_inscription' => date('Y-m-d'),
 			'status' => 2,
