@@ -489,8 +489,8 @@ class Table extends Pagination {
             $html .= '<tbody>';
             $headers = array_keys($this->headers);
             if( !empty($this->rows) ) : foreach ($this->rows as $key => $row) :
-                $html .= '<tr>';
                 $columns = array_merge(array_flip($headers), (array) $row);
+                $html .= '<tr data-pkv="'. $columns[$this->primary_key] .'">';
 
                 if( $this->_options['bulk_actions'] && $this->hasBulkActions() ) :
                     $html .= '<td class="bulk-cb"><input type="checkbox" name="'. $this->table_id .'_items[]" value="'. $columns[$this->primary_key] .'" class="'. $this->table_id .'_cb etaTable_cb"></td>';
@@ -548,7 +548,7 @@ class Table extends Pagination {
                         $html .= '<option value="'. $key .'" '.$callable.'>'. $bulk_label .'</option>';
                     }
                     $html .= '</select>&nbsp;';
-                    $html .= '<input type="submit" class="espace_candidat" value="'. trans("Appliquer") .'" style="padding: 0px 8px;border: 0px;margin-right: 5px;">';
+                    $html .= '<button type="submit" class="btn btn-primary btn-xs" style="padding: 0px 8px;border: 0px;margin-right: 5px;">'. trans("Appliquer") .'</button>';
                     $html .= '<div class="form-group">';
                     $html .= '<select id="'.$this->table_id.'_perpage" class="etaTable_perpage">';
                     foreach ($this->perpages as $key => $value) {

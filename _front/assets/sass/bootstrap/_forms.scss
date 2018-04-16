@@ -9,45 +9,46 @@
 		}
 	}
 	.form-control {
-	    height: 28px;
-	    padding: 0px 5px;
-	    font-size: 12px;
-	    border-radius: 0px;
-	    box-shadow: none;
-	    transition: none;
-	    color: #000;
-	    &[type="file"] {
-	    	padding: 4px;
-	    }
+		height: 28px;
+		padding: 0px 5px;
+		font-size: 12px;
+		border-radius: 0px;
+		box-shadow: none;
+		transition: none;
+		color: #000;
+		&[type="file"] {
+			padding: 4px;
+		}
 	}
 	.form-group {
-	    margin-bottom: 10px;
-	    display: table;
-	    width: 100%;
+		margin-bottom: 10px;
+		display: table;
+		width: 100%;
 	}
 	input[type="radio"], input[type="checkbox"] {
 		margin: 0;
-	    vertical-align: top;
-	    vertical-align: sub;
+		vertical-align: top;
+		vertical-align: sub;
 	}
 	.required>label:first-child:after {
 		content: "*";
-	    font-size: 16px;
-	    color: #ff0000;
-	    margin-left: 5px;
-	    position: absolute;
-	    top: 0;
+		font-size: 16px;
+		color: #ff0000;
+		margin-left: 5px;
+		position: absolute;
+		top: 0;
 	}
 
 	input, select, textarea {
-	    background: transparent !important;
-	    box-shadow: none !important;
-	    border-color: #ccc !important;
-	    margin-bottom: 10px;
+		background: transparent !important;
+		box-shadow: none !important;
+		border-color: #ccc !important;
+		margin-bottom: 10px;
 	}
 	.help-block {
-	    margin-top: -5px;
-	    font-size: 11px;
+		margin-bottom: 0px;
+		font-size: 11px;
+		line-height: 16px;
 	}
 }
 
@@ -58,7 +59,7 @@
 		display: none !important;
 	}
 	span {
-	    padding: 4px 12px;
+		padding: 4px 12px;
 	}
 }
 
@@ -66,14 +67,14 @@
 
 /* select 2 */
 .select2-container {
-  display: block !important;
-  width: 100% !important;
-  &.select2-container--open {
-  	span.select2-selection:after {
-  		content: "\f0de";
-  		top: 6px;
-  	}
-  }
+	display: block !important;
+	width: 100% !important;
+	&.select2-container--open {
+		span.select2-selection:after {
+			content: "\f0de";
+			top: 6px;
+		}
+	}
 	span.select2-selection {
 		border: 1px solid #ccc !important;
 		border-radius: 0px !important;
@@ -81,11 +82,11 @@
 		min-height: 22px !important;
 		&:after {
 			content: "\f0dd";
-	    font-family: FontAwesome;
-	    position: absolute;
-	    right: 5px;
-	    top: 1px;
-	    font-size: 11px;
+			font-family: FontAwesome;
+			position: absolute;
+			right: 5px;
+			top: 1px;
+			font-size: 11px;
 		}
 		ul {
 			display: none;

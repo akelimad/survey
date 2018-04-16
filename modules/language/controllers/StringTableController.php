@@ -26,12 +26,12 @@ class StringTableController extends Controller
     $params['lang'] = $lang;
 
     $table = new \App\Helpers\Table($this->buildQuery($params), 'id', [
-      'actions' => false,
+      'bulk_actions' => true,
       'show_footer' => true,
       'show_before_table_form' => false
     ]);
 
-    $table->setTableClass(['accountTable', 'table']);
+    $table->setTableClass(['table', 'table-striped']);
     $table->setTableId('stringsTable');
     $table->setOrderby('id');
     $table->setOrder('DESC');
@@ -66,9 +66,19 @@ class StringTableController extends Controller
       ]);
     });
 
-    $table->addColumn('save', '', function($row) {
-      return '<button type="button" class="btn btn-success btn-xs save_trans"><i class="fa fa-save"></i></button>';
-    }, ['attributes' => ['width' => '20px']]);
+    // Add actions
+    $table->removeActions(['edit', 'delete']);
+    $table->setAction('save', [
+      'label' => trans("Sauvegarder"),
+      'bulk_label' => trans("Sauvegarder"),
+      'bulk_action' => true,
+      'patern' => '#',
+      'icon' => 'fa fa-save',
+      'callback' => 'Language.store',
+      'attributes' => [
+        'class' => 'btn btn-success btn-xs',
+      ]
+    ]);
 
     // Run table and get results
     $table->_run();

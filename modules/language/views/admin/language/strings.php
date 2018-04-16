@@ -11,6 +11,10 @@ use App\Form;
 .form-group {
   margin-bottom: 0px;
 }
+th.actions, td.actions {
+  width: 20px !important;
+  text-align: center;
+}
 </style>
 
 <h1 style="display: inline;text-transform: uppercase;"><?php trans_e('Traductions des phrases'); ?></h1>
@@ -45,7 +49,7 @@ use App\Form;
       <div class="col-md-3 pl-0 pl-xs-15">
         <div style="margin-top: 22px;">
           <button type="submit" class="btn btn-primary btn-xs pull-left" style="margin-right: 5px;"><?php trans_e("Rechercher") ?></button>
-          <a href="<?= site_url('backend/language/strings') ?>" class="btn btn-danger btn-xs"><?php trans_e("Réinitialiser") ?></a>
+          <button type="reset" class="btn btn-danger btn-xs"><?php trans_e("Réinitialiser") ?></button>
         </div>
       </div>
     </form>
@@ -55,21 +59,44 @@ use App\Form;
 <div chm-table="backend/language/strings/table" chm-table-params="<?= htmlentities(json_encode($_GET)) ?>" id="stringsTable"></div>
 
 <script>
-$('body').on('click', '.save_trans', function (event) {
-  event.preventDefault()
-
-  var $field = $(this).closest('tr').find('.trans_value')
-  var sid = $field.data('sid')
-  var iso_code = $('[name="lang"]').val()
-  var value = $field.val()
-
-  Language.store(this, sid, iso_code, value)
-})
-
 $('body').on('change', '.trans_value', function (event) {
   if ($(this).val() != $(this).data('ov')) {
     $(this).css('border', '1px solid #F44336')
     $(this).data('ov', $(this).val())
   }
 })
+
+$('[name="lang"]').change(function () {
+  chmUrl.setParam('lang', $(this).val())
+  chmTable.refresh('#stringsTable', {lang: $(this).val()})
+})
+
+$('[type="reset"]').click(function () {
+  chmUrl.eraseAllParams()
+  $('form')[0].reset()
+  chmTable.refresh('#stringsTable', {
+    lang: chmUrl.getParam('lang', $('[name="lang"]').val())
+  })
+})
+
+$('form').submit(function (event) {
+  event.preventDefault()
+  filterForm()
+})
+
+var filterForm = function () {
+  var keywords = $('[name="s"]').val()
+  var lang     = $('[name="lang"]').val()
+  var status   = $('[name="status"]').val()
+
+  chmUrl.setParam('s', keywords)
+  chmUrl.setParam('lang', lang)
+  chmUrl.setParam('status', status)
+
+  chmTable.refresh('#stringsTable', {
+    s: keywords,
+    lang: lang,
+    status: status
+  })
+}
 </script>

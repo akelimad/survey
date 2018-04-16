@@ -63,8 +63,8 @@
   }
 }
 
-.accountTable {
-  margin-bottom: 0px;
+.accountTable, .etaTable {
+  margin-bottom: 5px;
   tr {
     &.empty {
       td {
@@ -79,6 +79,22 @@
     strong {
       font-size: 11px !important;
     }
+  }
+}
+
+#etalent-table-wraper {
+  #bulk-wrap {
+    select {
+      height: 24px;
+      outline: 0;
+    }
+    [type="submit"] {
+      padding: 3px 8px 4px !important;
+    }
+  }
+
+  .pagination-wrap {
+    margin-top: 0px;
   }
 }
 
