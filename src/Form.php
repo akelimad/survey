@@ -13,6 +13,42 @@ namespace App;
 class Form
 {
 
+  private static $attributes = [
+    'name' => null,
+    'label' => null,
+    'type' => null,
+    'value' => null,
+    'options' => [],
+    'help' => null,
+    'required' => true,
+    'show' => true,
+    'group_name' => null,
+    'columns' => 4,
+    'offset' => 0,
+    'attributes' => [
+      'class' => 'form-control mb-0'
+    ]
+  ];
+
+
+  private static $buttons = [
+    [
+      'label'   => 'Fermer',
+      'type'    => 'button',
+      'attributes' => [
+        'class' => 'btn btn-danger btn-sm'
+      ]
+    ],
+    [
+      'label'   => 'Enregistrer',
+      'type'    => 'submit',
+      'attributes' => [
+        'class' => 'btn btn-primary pull-right btn-sm'
+      ]
+    ]
+  ];
+
+
   /**
    * input
    *
@@ -139,7 +175,7 @@ class Form
    * @param array  $attrs
    * @param string $label
    *
-   * @return string $attribures
+   * @return string $attributes
    *
    * @author Mhamed Chanchaf
    */
@@ -155,6 +191,163 @@ class Form
     }
 
     return implode(' ', $attrs_arr);
+  }
+
+
+  /**
+   * Draw form elements
+   *
+   * @param array  $fields
+   *
+   * @return string $html
+   *
+   * @author mchanchaf
+   */
+  public static function draw($fields = [], $model = null)
+  {
+    $html = null;
+    $row_cols = 0;
+    $fields = self::sortFields($fields);
+
+    $groups = [];
+    foreach (array_keys($fields) as $key => $group_name) {
+      // Reset columns counter
+      $group[] = $group_name;
+      if (!in_array($group_name, $groups)) $row_cols = 0;
+
+      // Print fields group name
+      $html .= '<div class="styled-title mt-0 mb-10"><h3>'. $group_name .'</h3></div>';
+
+      // Generate fields
+      $html .= '<div class="row">';
+      foreach ($fields[$group_name] as $key => $field) {
+        // merge default field attributes with current one
+        $field = array_replace_recursive(self::$attributes, $field);
+
+        // Field apearance
+        if (!$field['show'] || $field['type'] == 'submit') continue;
+
+        // Add require attribute
+        $required_class = '';
+        if ($field['required']) {
+          $required_class = ' required';
+          if (
+            !isset($field['attributes']['required']) 
+            && !in_array('required', $field['attributes'])
+          ) $field['attributes'][] = 'required';
+        }
+
+        // Increment columns
+        $columns = intval($field['columns']);
+        $total_cols = ($row_cols + $columns);
+        $offset_class = ($field['offset'] > 0) ? ' col-md-offset-'. $field['offset'] : '';
+        $pl = ($row_cols > 0) ? ' pl-0' : '';
+
+        $html .= '<div class="col-md-'. $columns . $offset_class . $pl .'">';
+        $html .= '<div class="form-group'. $required_class .'">';
+
+        if (!empty($field['label'])) {
+          $html .= '<label for="'. $field['name'] .'">'. $field['label'] .'</label>';
+        }
+
+        // Set value from model
+        preg_match('/\[([a-zA-Z0-9_-]+)]/', $field['name'], $matches);
+        $table_col = (isset($matches[1])) ? $matches[1] : $field['name'];
+
+        if (isset($model->$table_col)) {
+          $column = $model->$table_col;
+        } else if (isset($_POST[$table_col])) {
+          $column = $_POST[$table_col];
+        }
+
+        if (isset($field['value']) && !empty($field['value'])) {
+          $field['value'] = self::getFieldValue($field['value'], $column);
+        } else {
+          $field['value'] = $column;
+        }
+
+        // Render field
+        switch ($field['type']) {
+          case 'text':
+            $html .= self::input(
+              'text',
+              $field['name'],
+              null,
+              $field['value'],
+              $field['attributes']
+            );
+            break;
+          case 'select':
+            $html .= self::select(
+              $field['name'],
+              null,
+              $field['value'],
+              (['' => ''] + $field['options']),
+              $field['attributes']
+            );
+            break;
+          case 'textarea':
+            $html .= self::textarea(
+              $field['name'],
+              null,
+              $field['value'],
+              $field['attributes']
+            );
+            break;
+        }
+
+        // Print help block
+        if (!empty($field['help'])) {
+          $html .= '<p class="help-block">'. $field['help'] .'</p>';
+        }
+
+        $html .= '</div></div>'; // .col-md-* / .form-group
+
+        // Close row
+        if ($total_cols >= 12) {
+          $html .= '</div><div class="row">';
+          $row_cols = 0;
+        } else {
+          $row_cols += $columns;
+        }
+      }
+      $html .= '</div>';
+    }
+
+    // Submit button
+    $html .= '<div class="row"><div class="col-md-12"><div class="ligneBleu mt-10"></div>';
+    foreach (self::$buttons as $key => $button) {
+      $html .= '<button type="'. $button['type'] .'" '. self::getAttributes($button['attributes']) .'>'. $button['label'] .'</button>';
+    }
+    $html .= '</div></div>';
+
+    return $html;
+  }
+
+
+  private static function sortFields($fields)
+  {
+    $sorted_fields = [];
+    foreach ($fields as $key => $field) {
+      if (isset($fields['buttons']) && $key == 'buttons') {
+        self::$buttons = array_replace_recursive(self::$buttons, $fields['buttons']);
+        continue;
+      }
+      $group_name = $field['group_name'];
+      unset($field['group_name']);
+      $sorted_fields[$group_name][] = $field;
+    }
+    return $sorted_fields;
+  }
+
+
+  private static function getFieldValue($value, $column)
+  {
+    if(is_callable($value)) {
+      return call_user_func($value, $column);
+    } else {
+      return $value;
+    }
   }
 
 
