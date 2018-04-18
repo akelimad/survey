@@ -169,6 +169,13 @@ add_js('eta-scripts', [
 	'version' => ETA_ASSETS_VERSION
 ]);
 
+/*-------- Saleh script notification --------*/
+add_js('eta-scripts', [
+	'src' => SITE_URL .'modules/message/assets/js/notifications.js', 
+	'admin' => true,
+	'version' => ETA_ASSETS_VERSION
+]);
+
 add_css('style_admin', [
 	'src'=> SITE_URL .'assets/css/style_admin.php', 
 	'admin' => true,

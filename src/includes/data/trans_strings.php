@@ -114,6 +114,7 @@ return array(
     trans("Partager les candidatures"),
     trans("Changer l'offre"),
     trans("Évaluer ce candidat"),
+    trans("Messagerie"),
 
     // Modules\Workflows\Models\Workflow
     trans("Crée"),

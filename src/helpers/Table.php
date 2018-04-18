@@ -282,6 +282,14 @@ class Table extends Pagination {
             $this->_options['db_handle'] = getDB()->pdo;
         }
 
+        if( isset($options['text_prev']) ) {
+            $this->_options['text_prev'] = $options['text_prev'];
+        }
+
+        if( isset($options['text_next']) ) {
+            $this->_options['text_next'] = $options['text_next'];
+        }
+
         if( isset($options['currentPage']) ) {
             self::$currentPage = $options['currentPage'];
         }
@@ -618,10 +626,14 @@ class Table extends Pagination {
             // $patern = str_replace('primary_key', $this->primary_key, $action['patern']);
 
             $actionLink = $this->parseTemplate($action['patern'], $columns);
+            
+            if ( substr($actionLink, 0, 1) === "/" ) {
+                $actionLink = site_url(ltrim($actionLink, '/'));
+            }
 
             $sep = ( strpos($actionLink, '?') === false ) ? '?' : '&'; 
 
-            if (strpos($action['patern'], 'http') === false && $action['patern'] != '#') {
+            if (strpos($actionLink, 'http') === false && $action['patern'] != '#') {
                 $actionLink = $sep . $actionLink;
             }
             

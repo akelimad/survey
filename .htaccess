@@ -27,6 +27,10 @@ RewriteRule ^offre/([0-9]+)/postuler/store$ ./public/index.php?id=$1 [L,QSA]
 RewriteRule ^offre/([0-9]+)/print$ ./public/index.php?id=$1 [L,QSA]
 RewriteRule ^offre/([0-9]+)/send-to-friend$ ./public/index.php?id=$1 [L,QSA]
 
+RewriteRule ^message/candidature/([0-9]+)/messages$ ./public/index.php?id=$1 [L,QSA]
+RewriteRule ^message/candidature/([0-9]+)/message/store$ ./public/index.php?id=$1 [L,QSA]
+RewriteRule ^backend/message/candidature/([0-9]+)/messages$ ./public/index.php?id=$1 [L,QSA]
+
 # RewriteRule ^backend/offres/creer_offre/$ ./public/index.php?id=$1 [L,QSA]
 RewriteRule ^backend/offres/(.*)$ ./apps/backend/offres/$1 [L,QSA]
 RewriteRule ^backend/offres ./apps/backend/offres/index.php [L,QSA]

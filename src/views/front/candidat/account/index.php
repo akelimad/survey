@@ -3,6 +3,7 @@ use App\Models\Candidat;
 use App\Models\Candidature;
 use App\Models\Situation;
 use App\Models\Status;
+use Modules\Message\Models\Message;
 ?>
 
 <script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -112,7 +113,7 @@ use App\Models\Status;
         <th><?php trans_e("Date"); ?></th>
         <th><?php trans_e("Intitulé du poste"); ?></th>
         <th><?php trans_e("Etat"); ?></th>
-        <th width="30"><?php trans_e("Action"); ?></th>
+        <th width="60"><?php trans_e("Action"); ?></th>
       </tr>
     </thead>
     <?php foreach ($candidatures as $key => $ca) : ?>
@@ -155,8 +156,20 @@ use App\Models\Status;
           $btnType = 'default';
           $btnDisabled = 'disabled';
         }
+        $label2 = trans("Discussion");
+        $icon2 = 'fa fa-comment-o';
+        $cursor2 = 'pointer';
+        $btnType2 = 'default';
+        if (Message::AdminIsStartingDiscussion($ca->id_candidature)) {
+          $btnDisabled2 = '';
+          $link = site_url('message/candidature/'. $ca->id_candidature .'/messages');
+        } else{
+          $btnDisabled2 = 'disabled';
+          $link = '';
+        }
         ?>
         <a href="<?= $confirmation_link; ?>" class="btn btn-<?= $btnType; ?> btn-xs mb-0 <?= $btnDisabled; ?>" title="<?= $label; ?>" style="cursor: <?= $cursor; ?>"><i class="<?= $icon; ?>"></i></a>
+        <a href="<?= $link ?>" class="btn btn-<?= $btnType2; ?> btn-xs mb-0 <?= $btnDisabled2; ?>" title="<?= $label2; ?>" style="cursor: <?= $cursor2; ?>"><i class="<?= $icon2; ?>"></i></a>
       </td>
     </tr>
     <?php endforeach; ?>

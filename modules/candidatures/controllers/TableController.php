@@ -136,6 +136,17 @@ class TableController extends Controller
         'class' => 'btn btn-default btn-xs',
       ],
       'permission' => 'can_view_action'
+    ],
+    'cand_messages' => [
+      'label' => 'Messagerie',
+      'patern' => '/backend/message/candidature/{id_candidature}/messages',
+      'icon' => 'fa fa-comments-o',
+      'sort_order' => 7,
+      'bulk_action' => false,
+      'attributes' => [
+        'class' => 'btn btn-default btn-xs',
+      ],
+      'permission' => 'can_view_action'
     ]
 	];
 
