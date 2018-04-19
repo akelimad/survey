@@ -40,7 +40,7 @@ class DeleteOneYearAccountNotUpdatedCronController
   private function getCandidats()
   {
     return getDB()->prepare("
-      SELECT c.candidats_id AS id
+      SELECT c.candidats_id AS id, c.email
       FROM candidats c
       WHERE NOT EXISTS (
         SELECT NULL
