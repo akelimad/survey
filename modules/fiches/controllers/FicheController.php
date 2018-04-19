@@ -98,14 +98,14 @@ class FicheController extends \App\Controllers\Controller
     
     $ficheUsed = $db->exists('fiche_offre', 'id_fiche', $id_fiche);
     if( $ficheUsed ) {
-      Session::setFlash('danger', trans("Impossible de supprimer une fiche déja lié à un offre."));
+      Session::setFlash('danger', trans("Impossible de supprimer une fiche déjà liée à une offre."));
     }
 
     // delete fiche
     $db->delete('fiches', 'id_fiche', $id_fiche);
     $db->delete('fiche_items', 'id_fiche', $id_fiche);
     
-    Session::setFlash('success', trans("La fiche a été bien supprimer."));
+    Session::setFlash('success', trans("La fiche a été bien supprimée."));
     
     redirect('backend/module/fiches/fiche');
   }

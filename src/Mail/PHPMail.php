@@ -49,7 +49,7 @@ class PHPMail
 		}
 
 		// Function mail() has been disabled or send error
-		return array('response' => 'error', 'message' => trans("Une erreur est survenu lors d'envoi de l'email."));
+		return array('response' => 'error', 'message' => trans("Une erreur est survenue lors d'envoi de l'email."));
  	}
 
 
@@ -117,7 +117,7 @@ class PHPMail
 		}
 
 		// Function mail() has been disabled or send error
-		return array('response' => 'error', 'message' => trans("Une erreur est survenu lors d'envoi de l'email."));
+		return array('response' => 'error', 'message' => trans("Une erreur est survenue lors d'envoi de l'email."));
  	}
 
  	
@@ -131,7 +131,7 @@ class PHPMail
 	 */
 	public static function send($data) {
 		if( !isset($data['email']) || !isset($data['subject']) || !isset($data['message']) ) {
-			return array('response' => 'error', 'message' => trans("Une erreur est survenu lors d'envoi de l'email."));
+			return array('response' => 'error', 'message' => trans("Une erreur est survenue lors d'envoi de l'email."));
 		}
 		return self::sendEmail($data['email'], $data['subject'], $data['message']);
 	}

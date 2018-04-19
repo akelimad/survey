@@ -48,7 +48,7 @@
 	<div class="form-group">
 		<input type="hidden" name="cv_path" id="cp_cv_path" value="<?= (isset($cv_path) && $cv_path != '') ? $cv_path : ''; ?>">
 		<?php if(isset($cv_name) && $cv_name != '') : ?>
-			<strong><i class="fa fa-paperclip"></i>&nbsp;<?php trans_e("Pièce joint:"); ?></strong>
+			<strong><i class="fa fa-paperclip"></i>&nbsp;<?php trans_e("Pièce jointe:"); ?></strong>
 			<a href="<?= site_url($cv_path) ?>" target="_blank"><?= $cv_name; ?></a>
 		<?php endif; ?>
 	</div>
@@ -60,7 +60,7 @@
 		foreach ($_variables as $key => $v) {
 			$_variablesHtml .= '<code style="display: inline-block;">{{'.$v.'}}</code>';
 		}
-		get_alert('info', trans("Vous pouvez utiliser les variables suivants dans votre email:") .'<br>'.$_variablesHtml, false);
+		get_alert('info', trans("Vous pouvez utiliser les variables suivantes dans votre email:") .'<br>'.$_variablesHtml, false);
 		?>
 	</div>
 	<div class="ligneBleu" style="width: 100%;"></div>

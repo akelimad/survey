@@ -3,7 +3,7 @@
 <?php if(\App\Session::get('id_type_role') == 2) : ?>
 <table width="100%" border="0">
 	<tr colspan="2"><div class="subscription" style="width:100%; margin: 10px 0pt;height: 22px;">
-		<h1>Offres partagés avec moi</h1>
+		<h1>Offres partagées avec moi</h1>
 	</tr>
 	<?php 
 	$sharedOffers = getDB()->prepare("SELECT o.id_offre, o.Name, ro.id_role_offre FROM role_offre ro JOIN offre o ON o.id_offre = ro.id_offre WHERE ro.id_role = ? LIMIT 5", [read_session('id_role')]); 

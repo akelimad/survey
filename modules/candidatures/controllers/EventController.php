@@ -50,7 +50,7 @@ class EventController
 				]);
 				$sendEmail = (new AjaxController())->sendEmail($data['status']['mail']);
 				if( $sendEmail['response'] == 'success' ) {
-					Session::setFlash('success', trans("Une convocation a été envoyé au candidat."));
+					Session::setFlash('success', trans("Une convocation a été envoyée au candidat."));
 				} else {
 					Session::setFlash('error', $sendEmail['message']);
 				}
@@ -71,7 +71,7 @@ class EventController
 			getDB()->update('candidature', 'id_candidature', $data['change_offre']['id_candidature'], [
 				'id_offre' => $data['change_offre']['id']
 			]);
-			Session::setFlash('success', trans("L'offre de candidature a été enregistré."));
+			Session::setFlash('success', trans("L'offre de candidature a été enregistrée."));
 		}
 	}
 

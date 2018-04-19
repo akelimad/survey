@@ -272,7 +272,7 @@
 
                         <tr>
 
-                            <td> <b> Supprimer pièce joint : </b> </td><td><input type="checkbox" name="pj" value="pj"> </td>
+                            <td> <b> Supprimer la pièce jointe : </b> </td><td><input type="checkbox" name="pj" value="pj"> </td>
 
                         </tr>
 

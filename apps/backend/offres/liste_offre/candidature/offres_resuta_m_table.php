@@ -1144,7 +1144,7 @@ if($counlettre)
 
 		  <div style="float: right; padding-right: 5px;" >     
 
-		  Pour la sélection :      <input   name="cv_mass_tt" class="espace_candidat" type="submit" value="Télécharger les CV en masse"      alt="Emails avec pièce joint" style="    width: 200px;"/>	       
+		  Pour la sélection :      <input   name="cv_mass_tt" class="espace_candidat" type="submit" value="Télécharger les CV en masse"      alt="Emails avec la pièce jointe" style="    width: 200px;"/>	       
 
 		  <!--
 

@@ -26,7 +26,7 @@ class ConfirmController
     $agenda = $db->findOne('agenda', 'id_agend', $id);
     if( $agenda->confirmation_statu == 1 ) {
       $type = 'info';
-      $message = trans("La convocation a été déja confirmé.");
+      $message = trans("La convocation a été déjà confirmée.");
     } else {
       // get current candidature status
       $candidature = $db->findOne('candidature', 'id_candidature', $agenda->id_candidature);

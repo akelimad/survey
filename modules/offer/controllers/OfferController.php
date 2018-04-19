@@ -82,7 +82,7 @@ class OfferController extends \App\Controllers\Controller
   {
     global $email_e;
 
-    $data['message'] .= "<br><br><p>". trans("Vos identifiants de connexion sur notre site web:") ." {{site}}<br>". trans("Votre email:") ." {{email}}<br>". trans("Mot de passe: votre mot de passe actuel") ."<br>" . trans("Ces identifiants vous permettront de consulté des offres ciblé.") ."</p>";
+    $data['message'] .= "<br><br><p>". trans("Vos identifiants de connexion sur notre site web:") ." {{site}}<br>". trans("Votre email:") ." {{email}}<br>". trans("Mot de passe: votre mot de passe actuel") ."<br>" . trans("Ces identifiants vous permettront de consulter des offres ciblées.") ."</p>";
 
     $login_url = site_url('backend/login');
     $message = Mailer::renderMessage($data['message'], [
@@ -91,7 +91,7 @@ class OfferController extends \App\Controllers\Controller
     ]);
 
     $sendEmail = Mailer::send($data['receiver'], $data['subject'], $message, [
-      'titre' => trans("Partager un offre avec un partenaire"),
+      'titre' => trans("Partager une offre avec un partenaire"),
       'Bcc' => [$email_e]
     ]);
   

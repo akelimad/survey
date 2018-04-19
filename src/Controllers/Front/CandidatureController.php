@@ -22,7 +22,7 @@ class CandidatureController extends Controller
   {
     // Check if candiat logged
     if(!isLogged('candidat')) {
-      return json_encode(['status' => 'hide_form', 'title' => trans("Connectez-vous !"), 'content' => trans("Vous devez") .' <strong onclick="return chmAuth.loginModal()" style="cursor: pointer;">'. trans("vous connecter") .'</strong> '. trans("pour répondre à cet l'offre.")]);
+      return json_encode(['status' => 'hide_form', 'title' => trans("Connectez-vous !"), 'content' => trans("Vous devez") .' <strong onclick="return chmAuth.loginModal()" style="cursor: pointer;">'. trans("vous connecter") .'</strong> '. trans("pour répondre à cette l'offre.")]);
     }
 
     // Check if candidat has resume

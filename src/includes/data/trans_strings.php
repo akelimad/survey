@@ -108,7 +108,7 @@ return array(
     trans("Transférer le CV"),
     trans("Transférer le CV"),
     trans("Envoyer un email au candidat"),
-    trans("Afficher la note écrit"),
+    trans("Afficher la note écrite"),
     trans("Ajouter des pièces jointes"),
     trans("Partager la candidature"),
     trans("Partager les candidatures"),

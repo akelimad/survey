@@ -2,7 +2,7 @@
 	<input type="hidden" name="change_offre[id_candidature]" value="<?= $id_candidature ?>">
 
 	<div class="row mb-15">
-		<label for="change_offre" class="col-md-3"><?php trans_e("Choisissez un offre"); ?>&nbsp;<font style="color:red;">*</font></label>
+		<label for="change_offre" class="col-md-3"><?php trans_e("Choisissez une offre"); ?>&nbsp;<font style="color:red;">*</font></label>
 		<div class="col-md-9">
 			<select name="change_offre[id]" id="change_offre" style="width: 100%;" required>
 				<?php foreach ($offres as $key => $offre) : ?>

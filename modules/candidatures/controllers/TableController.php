@@ -82,7 +82,7 @@ class TableController extends Controller
       'permission' => 'can_view_action'
     ],
     'note_ecrit' => [
-      'label' => 'Afficher la note écrit',
+      'label' => 'Afficher la note écrite',
       'patern' => '#',
       'icon' => 'fa fa-trophy',
       'bulk_action' => false,
@@ -323,7 +323,7 @@ class TableController extends Controller
       } else {
   		  return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" '.$tooltip.'>'.$value.'</i>';
       }
-  	}, ['attributes' => ['title' => trans("Note Écrit")]]);
+  	}, ['attributes' => ['title' => trans("Note écrite")]]);
 
 
     // FICHES D'EVALUATION 

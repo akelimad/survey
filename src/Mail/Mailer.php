@@ -133,7 +133,7 @@ class Mailer
 				
 				return array("response" => "success", "message" => trans("L'email a été bien envoyé."));
 			} else {
-				return array("response" => "error", "message" => trans("Une erreur est survenu lors d'envoi de l'email."));
+				return array("response" => "error", "message" => trans("Une erreur est survenue lors d'envoi de l'email."));
 			}
 
 		} catch (Exception $e) {

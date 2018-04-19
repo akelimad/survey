@@ -1034,7 +1034,7 @@ echo $r_prm_situation['situation'];
 
   Pour la sélection : 
 
-     <input   name="email_tt" class="espace_candidat" type="submit" value="Emails avec pièce joint" 
+     <input   name="email_tt" class="espace_candidat" type="submit" value="Emails avec la pièce jointe" 
 
      alt="Email envoyé aux candidats" style="    width: 175px;"/>
 
