@@ -42,6 +42,13 @@
     </tbody>
   </table>
 
+  <?php if ($description = get_setting('offer_company_description', false)) : ?>
+  <div class="styled-title mt-10 mb-10">
+    <h3><?php trans_e("Description de l'entreprise"); ?></h3>
+  </div>
+  <p align="justify"><?= $description ?></p>
+  <?php endif; ?>
+
   <div class="styled-title mt-10 mb-10">
     <h3><?php trans_e("Description du poste"); ?></h3>
   </div>
