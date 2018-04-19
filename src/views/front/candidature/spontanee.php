@@ -18,7 +18,7 @@
 <textarea name="motivation" class="ckeditor form-control" id="motivation" required></textarea>
 
 <div class="mt-10">
-  <?php get_alert('warning', trans("P.S: les champs marqu&eacute;s par (*) sont obligatoires"), false) ?>
+  <?php get_alert('warning', trans("P.S: les champs marqués par (*) sont obligatoires"), false) ?>
 </div>
 
 <script>
