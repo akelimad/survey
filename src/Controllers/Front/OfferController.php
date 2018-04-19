@@ -65,6 +65,12 @@ class OfferController extends Controller
       redirect(site_url());
     }
 
+    // Mark this offer as seen
+    // TODO - make it unique
+    getDB()->update('offre', 'id_offre', $offer->id_offre, [
+      'vue' => (intval($offer->vue) + 1)
+    ]);
+
     $this->data['offer'] = $offer;
     $this->data['tpost'] = getDB()->findOne('prm_type_poste', 'id_tpost', $offer->id_tpost);
     $this->data['exp'] = getDB()->findOne('prm_experience', 'id_expe', $offer->id_expe);
@@ -154,7 +160,7 @@ class OfferController extends Controller
   {
     // Check if candiat logged
     if(!isLogged('candidat')) {
-      return json_encode(['status' => 'hide_form', 'title' => trans("Connectez-vous!"), 'content' => trans("Vous devez") .' <strong onclick="return chmAuth.loginModal()" style="cursor: pointer;">'. trans("vous connecter") .'</strong> '. trans("pour répondre à cet l'offre.")]);
+      return json_encode(['status' => 'hide_form', 'title' => trans("Connectez-vous!"), 'content' => trans("Vous devez") .' <strong onclick="return chmAuth.loginModal()" style="cursor: pointer;">'. trans("vous connecter") .'</strong> '. trans("pour répondre à cette l'offre.")]);
     }
 
     $candidat_id = read_session('abb_id_candidat');
@@ -178,7 +184,7 @@ class OfferController extends Controller
     }
 
     // Check if offer available
-    $data['offer'] = getDB()->prepare("SELECT o.id_offre, o.Name, o.date_insertion, o.id_localisation FROM offre o WHERE o.id_offre=? AND o.status=? AND o.send_candidature=? AND DATE(o.date_expiration) >= CURDATE()", [$id_offre, 'En cours', 'true'], true);
+    $data['offer'] = getDB()->prepare("SELECT o.id_offre, o.Name, o.date_insertion, o.id_localisation FROM offre o WHERE o.id_offre=? AND o.status=? AND DATE(o.date_expiration) >= CURDATE()", [$id_offre, 'En cours'], true);
     if(!isset($data['offer']->id_offre)) {
       return json_encode(['status' => 'hide_form', 'title' => trans("Offre introuvable!"), 'content' => trans("Impossible de postuler à cet offre pour le moment, soit qu'il est expiré ou supprimé.")]);
     }
@@ -199,7 +205,7 @@ class OfferController extends Controller
   {
     // Check if candiat logged
     if(!isLogged('candidat')) {
-      return $this->jsonResponse('error', trans("Vous devez vous connecter pour répondre à cet l'offre."));
+      return $this->jsonResponse('error', trans("Vous devez vous connecter pour répondre à cette l'offre."));
     }
 
     $db = getDB();
