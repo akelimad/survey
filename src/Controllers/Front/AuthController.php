@@ -263,7 +263,11 @@ class AuthController extends Controller
 	public function store($params)
 	{
 		// Verify google recaptcha
-		if(!isset($params['g-recaptcha-response']) || !$this->verifyGoogleRecaptcha($params['g-recaptcha-response'])) {
+		if(
+			get_setting('google_recaptcha_enabled', false) &&
+			(!isset($params['g-recaptcha-response']) || 
+			!$this->verifyGoogleRecaptcha($params['g-recaptcha-response']))
+		) {
 			return $this->jsonResponse('error', trans("Merci de cocher la case 'Je ne suis pas un robot'"));
 		}
 

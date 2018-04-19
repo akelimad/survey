@@ -75,7 +75,7 @@
         foreach ($pays as $key => $value) : 
         $selected = '';
         if (get_candidat('id_pays') == $value->id_pays) {
-          $dial_code = $value->dial_code;
+          $dial_code = '(+'. $value->dial_code .')';
           $selected = 'selected';
         }
         ?>
@@ -95,12 +95,12 @@
     </div>
     <div class="col-sm-4 col-xs-12 pl-0 pl-xs-15 required">
       <label for="tel1"><?php trans_e("Téléphone"); ?></label>
-      <input type="text" class="form-control deal_code" placeholder="(+212)" value="(+<?= $dial_code ?>)" style="float: left;max-width: 55px;" disabled>
+      <input type="text" class="form-control deal_code" placeholder="(+212)" value="<?= $dial_code ?>" style="float: left;max-width: 55px;" disabled>
       <input type="text" class="form-control" id="tel1" name="tel1" value="<?= get_candidat('tel1') ?>" placeholder="0611223344" style="float: left;max-width: 165px;margin-left: 5px;" required>
     </div>
     <div class="col-sm-4 col-xs-12 pl-0 pl-xs-15">
       <label for="tel2"><?php trans_e("Téléphone secondaire"); ?></label>
-      <input type="text" class="form-control deal_code" placeholder="(+212)" value="(+<?= $dial_code ?>)" style="float: left;max-width: 55px;" disabled>
+      <input type="text" class="form-control deal_code" placeholder="(+212)" value="<?= $dial_code ?>" style="float: left;max-width: 55px;" disabled>
       <input type="text" class="form-control" id="tel2" name="tel2" value="<?= get_candidat('tel2') ?>" placeholder="0511223344" style="float: left;max-width: 165px;margin-left: 5px;">
     </div>
   </div>
