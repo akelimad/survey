@@ -144,7 +144,7 @@ if(isset($messages) and !empty($messages))  {
               'extensions' => ['doc', 'docx', 'pdf']
           ],
           'resultats_concours' => [
-              'errorMessage' => "Impossible d'envoyer les résultats des concour",
+              'errorMessage' => "Impossible d'envoyer le résultat du concour",
               'name' => '',
               'extensions' => ['doc', 'docx', 'pdf']
           ],

@@ -480,7 +480,7 @@ echo ': '.$niv['formation'];
 <?php endif; ?>
 
 <?php if(isset($offre['resultats_concours']) && $offre['resultats_concours'] != '') : ?>
-  <div class="subscription" style="margin: 10px 0pt;"><h1>Résultats des concours</h1></div>
+  <div class="subscription" style="margin: 10px 0pt;"><h1>Résultat du concour</h1></div>
   <a href="<?= site_url('apps/upload/frontend/offre/resultats_concours/'.$offre['resultats_concours']) ;?>"><i class="fa fa-download"> Télécharger</i></a>
 <?php endif; ?>
 <br><br>

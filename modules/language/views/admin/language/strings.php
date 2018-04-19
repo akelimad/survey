@@ -60,7 +60,7 @@ th.actions, td.actions {
   </div> 
 </div>
 
-<div chm-table="backend/language/strings/table" chm-table-params="<?= htmlentities(json_encode($_GET)) ?>" id="stringsTable"></div>
+<div chm-table="backend/language/strings/table" chm-table-params="<?= (!empty($_GET)) ? htmlentities(json_encode($_GET)) : '{}'; ?>" id="stringsTable"></div>
 
 <script>
 $(document).ready(function () {
@@ -88,12 +88,13 @@ $(document).ready(function () {
   })
 
   $('#stringsTable').on('chmTableSuccess', function (event) {
+    filterForm(false)
     canExportTrans(event.target)
   })
 })
 
 
-var filterForm = function () {
+var filterForm = function (refresh = true) {
   var keywords = $('[name="s"]').val()
   var lang     = $('[name="lang"] option:selected').val()
   var status   = $('[name="status"] option:selected').val()
@@ -111,7 +112,9 @@ var filterForm = function () {
   chmUrl.setParam('lang', lang)
   chmUrl.setParam('status', status)
 
-  chmTable.refresh('#stringsTable', tableParams)
+  if (refresh) {
+    chmTable.refresh('#stringsTable', tableParams)
+  }
 }
 
 var canExportTrans = function (target) {
