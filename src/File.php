@@ -54,7 +54,7 @@ class File
         return self::randomString() .'.'. $ext;
     }
 
-    public static function copyFile($source, $distination)
+    public static function copy($source, $distination)
     {
         if (file_exists($source) && is_file($source) && is_readable($source)) {
             try {
@@ -65,7 +65,7 @@ class File
         return false;
     }
 
-    public static function deleteFile($path)
+    public static function delete($path)
     {
         if( file_exists($path) ) {
             chown($path, 666);
@@ -73,6 +73,27 @@ class File
         }
         return false;
     }
+
+    public static function deleteDirectory($dirPath) {
+        if (!is_dir($dirPath)) {
+          throw new \InvalidArgumentException("$dirPath must be a directory");
+        }
+
+        if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+          $dirPath .= '/';
+        }
+
+        $files = glob($dirPath . '*', GLOB_MARK);
+        foreach ($files as $file) {
+          if (is_dir($file)) {
+            self::deleteDirectory($file);
+          } else {
+            unlink($file);
+          }
+        }
+        rmdir($dirPath);
+    }
+
 
     /**
      * Generate random string

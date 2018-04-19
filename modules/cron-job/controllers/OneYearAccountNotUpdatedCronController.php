@@ -1,6 +1,6 @@
 <?php
 /**
- * CronController
+ * OneYearAccountNotUpdatedCronController
  *
  * @author mchanchaf
  *
@@ -12,46 +12,51 @@ namespace Modules\CronJob\Controllers;
 
 use App\Mail\Mailer;
 use App\Models\Candidat;
+use Modules\CronJob\Models\CronJob;
 
 class OneYearAccountNotUpdatedCronController
 {
+
+  const CRON_NAME = 'one-year-account-not-updated';
+  const OBJECT_NAME = 'candidat';
 
   private $count = 0;
 
 
   public function run()
   {
-    $candidats = getDB()->prepare("
-      SELECT c.candidats_id, c.nom, c.prenom, c.id_civi, c.email
-      FROM candidats c
-      WHERE NOT EXISTS (
-        SELECT NULL
-        FROM cron_jobs cj
-        WHERE cj.object_name='candidat' 
-        AND cj.object_id=c.candidats_id 
-        AND cj.name='one-year-account-not-updated'
-      )
-      AND (c.dateMAJ <= DATE_SUB(NOW(), INTERVAL 1 YEAR) AND c.email != '')
-      LIMIT 10
-    ");
-
-    if (!empty($candidats)) : foreach ($candidats as $key => $candidat) :
+    foreach ($this->getCandidats() as $key => $candidat) :
       $subject = "Actualisation de votre compte sur ". get_setting('nom_site');
       $send = Mailer::send($candidat->email, $subject, $this->getMessage($candidat));
       if ($send['response'] == 'success') {
-        getDB()->create('cron_jobs', [
-          'object_id' => $candidat->candidats_id,
-          'object_name' => 'candidat',
-          'name' => 'one-year-account-not-updated',
-          'created_at' => date('Y-m-d H:i:s')
-        ]);
+        CronJob::log(
+          $candidat->id, 
+          self::OBJECT_NAME, 
+          self::CRON_NAME
+        );
         $this->count += 1;
       }
-    endforeach; endif;
+    endforeach;
 
     echo $this->count;
   }
 
+  private function getCandidats()
+  {
+    return getDB()->prepare("
+      SELECT c.candidats_id AS id, c.nom, c.prenom, c.id_civi, c.email
+      FROM candidats c
+      WHERE NOT EXISTS (
+        SELECT NULL
+        FROM cron_jobs cj
+        WHERE cj.object_id=c.candidats_id 
+        AND cj.object_name=? 
+        AND cj.name=?
+      )
+      AND (c.dateMAJ <= DATE_SUB(NOW(), INTERVAL 1 YEAR) AND c.email != '')
+      LIMIT 10
+    ", [self::OBJECT_NAME, self::CRON_NAME]) ?: [];
+  }
 
   private function getMessage($candidat)
   {

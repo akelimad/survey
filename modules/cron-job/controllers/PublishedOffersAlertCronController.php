@@ -13,6 +13,7 @@ namespace Modules\CronJob\Controllers;
 use App\Mail\Mailer;
 use App\Models\Candidat;
 use Modules\Offer\Models\Offer;
+use Modules\CronJob\Models\CronJob;
 
 class PublishedOffersAlertCronController
 {
@@ -25,9 +26,7 @@ class PublishedOffersAlertCronController
 
   public function run()
   {
-    $candidats = $this->getCandidats();
-
-    if (!empty($candidats)) : foreach ($candidats as $key => $candidat) :
+    foreach ($this->getCandidats() as $key => $candidat) :
       $offers = $this->getOffers($candidat->id);
       if (empty($offers)) continue;
 
@@ -46,11 +45,16 @@ class PublishedOffersAlertCronController
 
       if ($send['response'] == 'success') {
         foreach ($offers as $key => $offer) {
-          $this->createCronJob($candidat->id, $offer->id);
+          CronJob::log(
+            $offer->id, 
+            self::OBJECT_NAME, 
+            self::CRON_NAME, 
+            $candidat->id
+          );
         }
         $this->count += 1;
       }
-    endforeach; endif;
+    endforeach;
 
     echo $this->count;
   }
@@ -92,7 +96,7 @@ class PublishedOffersAlertCronController
       FROM candidats 
       WHERE email != '' AND nl_emploi = 1 
       LIMIT 10
-    ");
+    ") ?: [];
   }
 
   private function getOffers($candidat_id)
@@ -138,17 +142,6 @@ class PublishedOffersAlertCronController
       return 'AND ('. implode(' OR ', $andWhere_array) .')';
     }
     return '';
-  }
-
-  private function createCronJob($candidat_id, $offer_id)
-  {
-    return getDB()->create('cron_jobs', [
-      'object_id' => $offer_id,
-      'object_name' => self::OBJECT_NAME,
-      'name' => self::CRON_NAME,
-      'value' => $candidat_id,
-      'created_at' => date('Y-m-d H:i:s')
-    ]);
   }
 
   
