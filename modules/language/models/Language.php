@@ -99,6 +99,35 @@ class Language {
     return $this->strings;
   }
 
+  public static function buildQuery($params)
+  {
+    $where_array = [];
+    if (isset($params['s']) && !empty($params['s'])) {
+      $keywords = explode(" ", mysql_real_escape_string(htmlspecialchars($params['s'])));
+      $parts = array();
+      for ($i = 0; $i < count($keywords); $i++) {
+        $parts[] = "(s.name LIKE '%". $keywords[$i] ."%')";
+      }
+      $where_array[] = '('. implode(' AND ', $parts) .')';
+    }
 
+    if (isset($params['status']) && !empty($params['status'])) {
+      if ($params['status'] == 1) {
+        $where_array[] = 'st.value IS NOT NULL';
+      } else {
+        $where_array[] = 'st.value IS NULL';
+      }
+    }
+
+    $where = (!empty($where_array)) ? ' WHERE ('. implode(' AND ', $where_array) .')' : '';
+
+    return "
+      SELECT s.id, s.name, st.value 
+      FROM language_strings as s 
+      LEFT JOIN language_string_trans as st 
+      ON (st.language_string_id=s.id AND st.language='". $params['lang'] ."') 
+      {$where}
+    ";
+  }
 
 } // End Class

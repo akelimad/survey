@@ -137,5 +137,28 @@ class Controller
 	}
 
 
+	public function arrayToCSV($rows = [], $filename, $download = false)
+	{
+		if ($download) {
+			header('Content-Encoding: UTF-8');
+	    header("Content-Type: application/vnd.ms-excel");
+	    header("Content-Disposition: attachment; filename=\"{$filename}.csv\"");
+	 		header("Pragma: no-cache");
+	 		header("Expires: 0");
+		}
+
+		$csv = "\xEF\xBB\xBF"; // UTF-8 BOM
+		for ($i = 0; $i < count($rows); $i++) {
+			$row = array_map('trim', $rows[$i]);
+      $csv .= implode(';', array_values($row)) . "\n";
+		}
+
+    if ($download) {
+    	echo $csv;exit;
+    } else {
+    	return $scv;
+    }
+	}
+
 
 } // END Class

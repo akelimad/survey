@@ -520,7 +520,7 @@ class Table extends Pagination {
                 $html .= '</tr>';
             endforeach; else :
 
-            $html .= '<tr><td class="empty" colspan="'. $rowspan .'" style="text-align: center; border-top: 3px solid #e32b2b !important; border-bottom: 3px solid #e32b2b !important;">'. trans("Aucune donnée à afficher.") .'</td></tr>';
+            $html .= '<tr class="emptyRow"><td class="empty" colspan="'. $rowspan .'" style="text-align: center; border-top: 3px solid #e32b2b !important; border-bottom: 3px solid #e32b2b !important;">'. trans("Aucune donnée à afficher.") .'</td></tr>';
 
                 endif; // END Table
                 $html .= '</tbody>';

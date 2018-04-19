@@ -47,12 +47,16 @@ export default class chmTable {
         } else {
           self.fill(target, '<strong>' + trans("Une erreur est survenue lors de chargement de la table.") + '</strong>', params.scrollTo)
         }
+        $(target).trigger('chmTableSuccess', response)
       } catch (e) {
         // Show error message
         self.fill(target, '<strong>' + e.message + '</strong>', params.scrollTo)
+        $(target).trigger('chmTableError', e.message)
       }
     }).fail(function (jqXHR, textStatus, errorThrown) {
-      self.fill(target, '<strong>' + jqXHR.status + ' - ' + jqXHR.statusText + '</strong>', params.scrollTo)
+      var message = jqXHR.status + ' - ' + jqXHR.statusText
+      self.fill(target, '<strong>' + message + '</strong>', params.scrollTo)
+      $(target).trigger('chmTableError', message)
     })
   }
 
@@ -89,6 +93,10 @@ export default class chmTable {
     return params
   }
 
+  static setTableParams (target, params) {
+    $(target).attr('chm-table-params', JSON.stringify(params))
+  }
+
 }
 
 // Initialise tables
@@ -121,6 +129,7 @@ $(document).ready(function () {
       $('body').on('click', $paginationLink, function (event) {
         event.preventDefault()
         if ($(this).attr('href') !== undefined && !$(this).closest('li').hasClass('active')) {
+          var $tableContainer = $(this).closest('[chm-table]')
           // Get clicked url page number
           var pageNumber = window.chmUrl.getParam('page', 1, $(this).attr('href'))
 
@@ -128,10 +137,11 @@ $(document).ready(function () {
           window.chmUrl.setParam('page', pageNumber)
 
           // Update params page number
+          params = chmTable.getTableParams($tableContainer)
           params.page = pageNumber
 
           // Refresh Table content
-          chmTable.render($(this).closest('[chm-table]'), params)
+          chmTable.render($tableContainer, params)
         }
       })
     }

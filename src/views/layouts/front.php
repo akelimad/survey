@@ -39,7 +39,8 @@
                     \Modules\Language\Models\Language::getCurrentLanguage('iso_code', 'fr'),
                     \Modules\Language\Models\Language::getActiveLanguages(), [
                         'onchange' => 'Language.change(this.value)',
-                        'style' => 'outline:0;'
+                        'style' => 'outline:0;',
+                        'class' => ''
                     ]
                 ); ?>
             </div>

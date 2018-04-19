@@ -43,6 +43,16 @@ class RouteController
     );
 
     Route::add(
+      'backend/language/import',
+      'Modules\Language\Controllers\LanguageController@import'
+    );
+
+    Route::add(
+      'backend/language/export',
+      'Modules\Language\Controllers\LanguageController@export'
+    );
+
+    Route::add(
       'backend/language/strings/table',
       'Modules\Language\Controllers\StringTableController@getTable',
       true

@@ -13,7 +13,7 @@ namespace App;
 class Form
 {
 
-  private static $attributes = [
+  private static $field_attrs = [
     'name' => null,
     'label' => null,
     'type' => null,
@@ -25,9 +25,7 @@ class Form
     'group_name' => null,
     'columns' => 4,
     'offset' => 0,
-    'attributes' => [
-      'class' => 'form-control mb-0'
-    ]
+    'attributes' => []
   ];
 
 
@@ -65,10 +63,6 @@ class Form
   public static function input($type, $name, $label = null, $default = null, $attrs = [])
   {
     $html = '';
-    if (!is_null($label)) {
-      $html .= '<div class="form-group">';
-      $html .= '<label for="'. $name .'">'. $label .'</label>';
-    }
 
     if (!empty($name)) {
       $attrs['name'] = $name;
@@ -76,8 +70,40 @@ class Form
     }
     $attrs['type'] = $type;
     $attrs['value'] = (is_null($default) && isset($_GET[$name])) ? $_GET[$name] : $default;
+
+    $helpBlock = '';
+    if (isset($attrs['help']) && !empty($attrs['help'])) {
+      $helpBlock = self::getHelpBlock($attrs['help']);
+      unset($attrs['help']);
+    }
+
+    if (!is_null($label)) {
+      $required = (in_array('required', $attrs)) ? ' required' : '';
+      $html .= '<div class="form-group'. $required .'">';
+      if (in_array($type, ['checkbox', 'radio'])) {
+        $html .= '<label for="'. $name .'">';
+      } else {
+        $html .= '<label for="'. $name .'">'. $label .'</label>';
+      }
+    }
+
+    // Remove attr value for inout type file
+    if ($type == 'file') {
+      unset($attrs['value']);
+    }
+
+    // Remove default class
+    if (in_array($type, ['checkbox', 'radio']) && !isset($attrs['class'])) {
+      $attrs['class'] = '';
+    }
     
     $html .= '<input '. self::getAttributes($attrs) .'>';
+    if (in_array($type, ['checkbox', 'radio']) && !is_null($label)) {
+      $html .= '&nbsp;'. $label . '</label>';
+    }
+
+    $html .= $helpBlock;
+
     if (!is_null($label)) $html .= '</div>';
 
     return $html;
@@ -101,13 +127,20 @@ class Form
   {
     $html = '';
     if (!is_null($label)) {
-      $html .= '<div class="form-group">';
+      $required = (in_array('required', $attrs)) ? ' required' : '';
+      $html .= '<div class="form-group'. $required .'">';
       $html .= '<label for="'. $name .'">'. $label .'</label>';
     }
 
     if (!empty($name)) {
       $attrs['name'] = $name;
       if (!isset($attrs['id'])) $attrs['id'] = $name;
+    }
+
+    $helpBlock = '';
+    if (isset($attrs['help']) && !empty($attrs['help'])) {
+      $helpBlock = self::getHelpBlock($attrs['help']);
+      unset($attrs['help']);
     }
 
     $html .= '<select '. self::getAttributes($attrs) .'>';
@@ -126,7 +159,7 @@ class Form
       $html .= '<option value="'. $value .'" '. $selected .'>'. $text .'</option>';
     endforeach;
 
-    $html .= '</select>';
+    $html .= '</select>'. $helpBlock;
     if (!is_null($label)) $html .= '</div>';
 
     return $html;
@@ -149,7 +182,8 @@ class Form
   {
     $html = '';
     if (!is_null($label)) {
-      $html .= '<div class="form-group">';
+      $required = (in_array('required', $attrs)) ? ' required' : '';
+      $html .= '<div class="form-group'. $required .'">';
       $html .= '<label for="'. $name .'">'. $label .'</label>';
     }
 
@@ -162,7 +196,13 @@ class Form
       $default = $_GET[$name];
     }
 
-    $html .= '<textarea '. self::getAttributes($attrs) .'>'. $default .'</textarea>';
+    $helpBlock = '';
+    if (isset($attrs['help']) && !empty($attrs['help'])) {
+      $helpBlock = self::getHelpBlock($attrs['help']);
+      unset($attrs['help']);
+    }
+
+    $html .= '<textarea '. self::getAttributes($attrs) .'>'. $default .'</textarea>'. $helpBlock;
     if (!is_null($label)) $html .= '</div>';
 
     return $html;
@@ -184,13 +224,22 @@ class Form
     $attrs_arr = [];
     if (!is_null($label)) $attrs['title'] = $label;
 
+    // add form-group class
+    if (!isset($attrs['class'])) $attrs['class'] = 'form-control mb-0';
+
     foreach ($attrs as $k => $v) {
       $attrs_string = (is_numeric($k)) ? $v : $k;
-      if (!empty($v) && !is_numeric($k)) $attrs_string .= '="'. $v .'"';
+      if (!is_numeric($k)) $attrs_string .= '="'. $v .'"';
       $attrs_arr[] = $attrs_string;
     }
 
     return implode(' ', $attrs_arr);
+  }
+
+
+  private static function getHelpBlock($text)
+  {
+    return '<p class="help-block">'. $text .'</p>';
   }
 
 
@@ -222,7 +271,12 @@ class Form
       $html .= '<div class="row">';
       foreach ($fields[$group_name] as $key => $field) {
         // merge default field attributes with current one
-        $field = array_replace_recursive(self::$attributes, $field);
+        $field = array_replace_recursive(self::$field_attrs, $field);
+
+        // add form-group class
+        if (!isset($field['attributes']['class'])) {
+          $field['attributes']['class'] = 'form-control mb-0';
+        }
 
         // Field apearance
         if (!$field['show'] || $field['type'] == 'submit') continue;
@@ -298,7 +352,7 @@ class Form
 
         // Print help block
         if (!empty($field['help'])) {
-          $html .= '<p class="help-block">'. $field['help'] .'</p>';
+          $html .= self::getHelpBlock($field['help']);
         }
 
         $html .= '</div></div>'; // .col-md-* / .form-group

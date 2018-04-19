@@ -17,7 +17,6 @@ use App\Form;
 class StringTableController extends Controller
 {
 
-
 	public function getTable($data)
 	{
     $params = $_GET;
@@ -25,14 +24,13 @@ class StringTableController extends Controller
     $lang = (isset($params['lang'])) ? $params['lang'] : $defaultLang;
     $params['lang'] = $lang;
 
-    $table = new \App\Helpers\Table($this->buildQuery($params), 'id', [
+    $table = new \App\Helpers\Table(Language::buildQuery($params), 'id', [
       'bulk_actions' => true,
       'show_footer' => true,
       'show_before_table_form' => false
     ]);
 
     $table->setTableClass(['table', 'table-striped']);
-    $table->setTableId('stringsTable');
     $table->setOrderby('id');
     $table->setOrder('DESC');
     $page = (isset($_GET['page'])) ? $_GET['page'] : 1;
@@ -47,6 +45,8 @@ class StringTableController extends Controller
       return Form::textarea('', null, htmlentities($row->name), [
         'rows'     => 1,
         'cols'     => 75,
+        'readonly',
+        'class' => '',
         'style' => 'width:100%;outline:0;padding:2px 5px;border: 1px solid #7d7b7b;'. $style
       ]);
     }, ['attributes' => ['width' => '50%']]);
@@ -85,37 +85,5 @@ class StringTableController extends Controller
 
     return json_encode(['status' => 'success', 'content' => $table->render(false)]);
 	}
-
-  private function buildQuery($params)
-  {
-    $where_array = [];
-    if (isset($params['s']) && !empty($params['s'])) {
-      $keywords = explode(" ", mysql_real_escape_string(htmlspecialchars($params['s'])));
-      $parts = array();
-      for ($i = 0; $i < count($keywords); $i++) {
-        $parts[] = "(s.name LIKE '%". $keywords[$i] ."%')";
-      }
-      $where_array[] = '('. implode(' AND ', $parts) .')';
-    }
-
-    if (isset($params['status']) && !empty($params['status'])) {
-      if ($params['status'] == 1) {
-        $where_array[] = 'st.value IS NOT NULL';
-      } else {
-        $where_array[] = 'st.value IS NULL';
-      }
-    }
-
-    $where = (!empty($where_array)) ? ' WHERE ('. implode(' AND ', $where_array) .')' : '';
-
-    return "
-      SELECT s.id, s.name, st.value 
-      FROM language_strings as s 
-      LEFT JOIN language_string_trans as st 
-      ON (st.language_string_id=s.id AND st.language='". $params['lang'] ."') 
-      {$where}
-    ";
-  }
-
 	
 } // END Class

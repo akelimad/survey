@@ -1,4 +1,5 @@
 import $ from 'jquery'
+import trans from './trans'
 
 export default class Language {
 
@@ -59,6 +60,35 @@ export default class Language {
     }).fail(function (jqXHR, textStatus, errorThrown) {
       window.chmAlert.warning(jqXHR.status + ' - ' + jqXHR.statusText)
     })
+  }
+
+  static import () {
+    window.chmModal.show({
+      type: 'GET',
+      url: window.chmSite.url('backend/language/import')
+    }, {
+      form: {
+        action: window.chmSite.url('backend/language/import'),
+        callback: 'chmForm.submit',
+        class: 'chm-simple-form',
+        id: 'importTransForm'
+      },
+      footer: {
+        label: trans("Importer")
+      },
+      width: 400
+    })
+  }
+
+  static export () {
+    var s = $('[name="s"]').val()
+    var lang = $('[name="lang"]').val()
+    var status = $('[name="status"]').val()
+
+    var url = window.chmSite.url('backend/language/export')
+    url += '?s=' + s + '&lang=' + lang + '&status=' + status
+
+    window.open(url, '_blank')
   }
 
 }
