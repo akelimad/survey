@@ -131,7 +131,7 @@ jQuery(document).ready(function(){
   CKEDITOR.replace('exp_description', {height: 200});
 
   // Trigger success
-  $('form').on('chm_form_success', function(event, response) {
+  $('form').on('chmFormSuccess', function(event, response) {
     if(response.status === 'success') {
       chmModal.destroy()
       window['chmAlert'][response.status](response.message)

@@ -46,7 +46,7 @@
       }
     })
 
-    $('#unsubscribe').on('chm_form_success', function(event, response) {
+    $('#unsubscribe').on('chmFormSuccess', function(event, response) {
       $(this).replaceWith('<div class="chm-alerts alert alert-success alert-white rounded "><div class="icon"><i class="fa fa-check"></i></div><ul><li>'+ response.message +'</li></ul></div>')
     })
   })

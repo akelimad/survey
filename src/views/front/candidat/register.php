@@ -547,7 +547,7 @@ $max_file_size = get_setting('max_file_size', 400);
 		</div>
 	</div>
 
-
+	<?php if (get_setting('google_recaptcha_enabled', false)) : ?>
 	<div class="styled-title mt-0 mb-10">
 	  <h3><?php trans_e("Cocher la case suivant pour confirmer que vous n'êtes pas un robot."); ?></h3>
 	</div>
@@ -556,6 +556,7 @@ $max_file_size = get_setting('max_file_size', 400);
 			<div class="g-recaptcha" data-sitekey="<?= get_setting('google_recaptcha_sitekey') ?>"></div>
 		</div>
 	</div>
+	<?php endif; ?>
 
 	<div class="styled-title mt-10 mb-5">
 	  <h3><?php trans_e("Conditions d'utilisation"); ?></h3>
@@ -589,7 +590,7 @@ jQuery(document).ready(function(){
 	$('#candidat_titre').focus()
 
 	// Trigger success
-	$('form').on('chm_form_success', function(event, response) {
+	$('form').on('chmFormSuccess', function(event, response) {
 		if(response.status === 'success') {
 			$(this).hide()
 		}

@@ -65,7 +65,7 @@ export default class chmForm {
         if (typeof response === 'string') response = $.parseJSON(response)
 
         // Trigger callback
-        $(target).trigger('chm_form_success', response)
+        $(target).trigger('chmFormSuccess', response)
 
         if (response.message !== '' && ['success', 'info', 'warning', 'danger', 'error'].indexOf(response.status) !== -1) {
           if (typeof response.message === 'object') {
@@ -92,7 +92,7 @@ export default class chmForm {
         window.grecaptcha.reset()
       }
       // Trigger callback
-      $(target).trigger('chm_form_finished')
+      $(target).trigger('chmFormFinished')
     })
   }
 
