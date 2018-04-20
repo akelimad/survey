@@ -75,6 +75,7 @@ return array(
     trans("Adresse"),
     trans("Code postal"),
     trans("Ville"),
+    trans("Autre ville"),
     trans("Nationalité"),
     trans("CIN"),
     trans("Téléphone"),

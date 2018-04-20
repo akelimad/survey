@@ -60,15 +60,6 @@ $max_file_size = get_setting('max_file_size', 400);
 	</div>
 	<div class="row">
 		<div class="col-sm-4 required">
-			<label for="ville"><?php trans_e("Ville"); ?></label>
-			<select id="ville" name="candidat[ville]" class="form-control" required>
-				<option value=""></option>
-				<?php foreach ($villes as $key => $value) : ?>
-					<option value="<?= $value->ville ?>"><?= $value->ville ?></option>
-				<?php endforeach; ?>
-	        </select>
-		</div>
-		<div class="col-sm-4 pl-0 pl-xs-15 required">
 			<label for="candidat_pays"><?php trans_e("Pays de résidence"); ?></label>
 			<select id="candidat_pays" name="candidat[id_pays]" class="form-control" required>
 				<option value="" data-code=""></option>
@@ -76,6 +67,20 @@ $max_file_size = get_setting('max_file_size', 400);
 					<option value="<?= $value->id_pays ?>" data-code="<?= $value->dial_code ?>"><?= $value->pays ?></option>
 				<?php endforeach; ?>
 	        </select>
+		</div>
+		<div class="col-sm-4 pl-0 pl-xs-15 required">
+			<label for="ville"><?php trans_e("Ville"); ?></label>
+			<select id="ville" name="candidat[ville]" class="form-control" required>
+				<option value=""></option>
+				<?php foreach ($villes as $key => $value) : ?>
+					<option value="<?= $value->ville ?>"><?= $value->ville ?></option>
+				<?php endforeach; ?>
+	    </select>
+	    <?= Form::input('text', 'candidat[ville_other]', null, null, [
+	    	'class' => 'form-control',
+	    	'style' => 'display:none;',
+	    	'title' => trans("Autre ville")
+	    ]); ?>
 		</div>
 		<div class="col-sm-4 pl-0 pl-xs-15 col-xs-12 required">
 			<label for="nationalite"><?php trans_e("Nationalité"); ?></label>
@@ -396,7 +401,12 @@ $max_file_size = get_setting('max_file_size', 400);
 				<?php foreach ($villes as $key => $value) : ?>
 					<option value="<?= $value->ville ?>"><?= $value->ville ?></option>
 				<?php endforeach; ?>
-	        </select>
+	    </select>
+	    <?= Form::input('text', 'experience[ville_other]', null, null, [
+	    	'class' => 'form-control',
+	    	'style' => 'display:none;',
+	    	'title' => trans("Autre ville")
+	    ]); ?>
 		</div>
 		<div class="col-sm-4 mb-10 pl-0 pl-xs-15">
 			<label for="copie_attestation"><?php trans_e("Copie de l’attestation"); ?>&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="<?php trans_e("Vous pouvez joindre votre Copie de l’attestation format Word, PDF ou Image, la taille ne doit pas dépasser"); ?> <?= $max_file_size; ?>ko"></i></label>
@@ -598,16 +608,44 @@ jQuery(document).ready(function(){
 
 	// Show other school field
   $('#forma_ecol').change(function() {
-    var $forma_other = $('[name="formation[ecole]"]')
-    $($forma_other).val('')
+    var $other_input = $('#formation_ecole')
+    $($other_input).val('')
     if ($(this).find('option:selected').text().match("^Autre")) {
-      $($forma_other).prop('required', true)
-      $($forma_other).show()
+      $($other_input).prop('required', true)
+      $($other_input).show()
     } else {
-      $($forma_other).prop('required', false)
-      $($forma_other).hide()
+      $($other_input).prop('required', false)
+      $($other_input).hide()
     }   
   })
+
+  // Ville
+  $('#ville').change(function() {
+    var $other_input = $('#candidat_ville_other')
+    $($other_input).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($other_input).prop('required', true)
+      $($other_input).show()
+    } else {
+      $($other_input).prop('required', false)
+      $($other_input).hide()
+    }   
+  })
+
+  // Experience ville
+  $('#exp_ville').change(function() {
+    var $other_input = $('#experience_ville_other')
+    $($other_input).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($other_input).prop('required', true)
+      $($other_input).show()
+    } else {
+      $($other_input).prop('required', false)
+      $($other_input).hide()
+    }   
+  })
+
+  
 
 });
 </script>

@@ -1,3 +1,4 @@
+<?php use App\Form; ?>
 <input type="hidden" name="id" value="<?= (isset($exp->id_exp)) ? $exp->id_exp : 0 ?>">
 <div class="row">
   <div class="col-sm-4 required">
@@ -88,16 +89,35 @@
       <?php endforeach; ?>
         </select>
   </div>
+  <?php //var_dump($exp->ville) ?>
   <div class="col-sm-4 pl-0 pl-xs-15 required">
     <label for="exp_ville"><?php trans_e("Ville"); ?></label>
     <select id="exp_ville" name="ville" class="form-control" required>
       <option value=""></option>
-      <?php foreach ($villes as $key => $value) : 
-      $selected = (isset($exp->ville) && $exp->ville == $value->ville) ? 'selected' : '';
-      ?>
+      <?php
+      $is_selected = false;
+      $is_other = false;
+      foreach ($villes as $key => $value) :
+        $selected = '';
+        if (isset($exp->ville)) {
+          if ($exp->ville == $value->ville) {
+            $selected = 'selected';
+            $is_selected = true;
+          } elseif (count($villes) == ($key+1) && !$is_selected) {
+            $selected = 'selected';
+            $is_other = true;
+          }
+        }
+        ?>
         <option value="<?= $value->ville ?>" <?= $selected; ?>><?= $value->ville ?></option>
       <?php endforeach; ?>
-        </select>
+    </select>
+    <?php $ville_other = (isset($exp->ville) && $is_other) ? $exp->ville : ''; ?>
+    <?= Form::input('text', 'ville_other', null, $ville_other, [
+      'class' => 'form-control',
+      'style' => (!$is_other) ? 'display:none;' : '',
+      'title' => trans("Autre ville")
+    ]); ?>
   </div>
   <div class="col-sm-4 mb-10 pl-0 pl-xs-15 ">
     <label for="copie_attestation"><?php trans_e("Copie de l’attestation"); ?></label>
@@ -141,6 +161,19 @@ jQuery(document).ready(function(){
         location.reload()
       }
     }
+  })
+
+  // Experience ville
+  $('#exp_ville').change(function() {
+    var $other_input = $('#ville_other')
+    $($other_input).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($other_input).prop('required', true)
+      $($other_input).show()
+    } else {
+      $($other_input).prop('required', false)
+      $($other_input).hide()
+    }   
   })
 
 })

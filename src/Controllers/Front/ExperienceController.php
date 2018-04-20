@@ -56,6 +56,7 @@ class ExperienceController extends Controller
       'poste' => trans("Intitulé du poste"),
       'entreprise' => trans("Entreprise"),
       'ville' => trans("Ville"),
+      'ville_other' => trans("Autre ville"),
       'description' => trans("Description du poste"),
       'salair_pecu' => trans("Dernier salaire perçu")
     ]);
@@ -69,7 +70,8 @@ class ExperienceController extends Controller
       'date_fin' => 'date',
       'poste' => 'eta_alpha_numeric|max_len,255',
       'entreprise' => 'eta_alpha_numeric|max_len,255',
-      'ville' => 'alpha',
+      'ville' => 'eta_string',
+      'ville_other' => 'eta_string',
       'description' => 'eta_alpha_numeric',
       'salair_pecu' => 'numeric'
     ]);
@@ -90,6 +92,12 @@ class ExperienceController extends Controller
         return $this->jsonResponse('error', $upload['errors'][0]);
       }
     }
+    
+    if (isset($data['ville_other']) && !empty($data['ville_other'])) {
+      $data['ville'] = $data['ville_other'];
+    }
+    unset($data['ville_other']);
+
     $id_exp = $data['id'];
     unset($data['id']);
     $data['date_debut'] = english_to_french_date($data['date_debut']);

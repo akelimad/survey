@@ -41,7 +41,8 @@ class CandidatController extends Controller
     'date_n' => 'required|date|min_age,15',
     'adresse' => 'required|eta_alpha_numeric|max_len,255',
     'code' => 'numeric|max_len,5',
-    'ville' => 'required|eta_alpha_numeric',
+    'ville' => 'required|eta_string',
+    'ville_other' => 'required|eta_string',
     'nationalite' => 'required|eta_string|max_len,16',
     'cin' => 'required|alpha_numeric|max_len,8',
     'tel1' => 'required|phone_number|max_len,16',
@@ -70,6 +71,7 @@ class CandidatController extends Controller
     'adresse' => 'Adresse',
     'code' => 'Code postal',
     'ville' => 'Ville',
+    'ville_other' => 'Autre ville',
     'nationalite' => 'Nationalité',
     'cin' => 'CIN',
     'tel1' => 'Téléphone',
@@ -211,6 +213,11 @@ class CandidatController extends Controller
       if(is_array($is_valid)) {
         return $this->jsonResponse('error', $is_valid);
       }
+
+      if (isset($data['ville_other']) && !empty($data['ville_other'])) {
+        $data['ville'] = $data['ville_other'];
+      }
+      unset($data['ville_other']);
 
       $data['date_n'] = \english_to_french_date($data['date_n']);
       $data['dateMAJ'] = date("Y-m-d H:i:s");

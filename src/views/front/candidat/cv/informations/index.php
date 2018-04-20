@@ -1,5 +1,6 @@
-<h1><?php trans_e("Informations personnalles"); ?></h1>
+<?php use App\Form; ?>
 
+<h1><?php trans_e("Informations personnalles"); ?></h1>
 
 <form method="POST" action="<?= site_url('candidat/cv/informations'); ?>" class="chm-simple-form" onsubmit="return window.chmForm.submit(event)">
 
@@ -56,17 +57,6 @@
   </div>
   <div class="row">
     <div class="col-sm-4 required">
-      <label for="ville"><?php trans_e("Ville"); ?></label>
-      <select id="ville" name="ville" class="form-control" required>
-        <option value=""></option>
-        <?php foreach ($villes as $key => $value) : 
-        $selected = (get_candidat('ville') == $value->ville) ? 'selected' : '';
-        ?>
-          <option value="<?= $value->ville ?>" <?= $selected; ?>><?= $value->ville ?></option>
-        <?php endforeach; ?>
-          </select>
-    </div>
-    <div class="col-sm-4 pl-0 pl-xs-15 required">
       <label for="candidat_pays"><?php trans_e("Pays de résidence"); ?></label>
       <select id="candidat_pays" name="id_pays" class="form-control" required>
         <option value="" data-code=""></option>
@@ -82,6 +72,35 @@
           <option value="<?= $value->id_pays ?>" data-code="<?= $value->dial_code ?>" <?= $selected; ?>><?= $value->pays ?></option>
         <?php endforeach; ?>
           </select>
+    </div>
+    <div class="col-sm-4 pl-0 pl-xs-15 required">
+      <label for="ville"><?php trans_e("Ville"); ?></label>
+      <select id="ville" name="ville" class="form-control" required>
+        <option value=""></option>
+        <?php
+        $is_selected = false;
+        $is_other = false;
+        foreach ($villes as $key => $value) :
+          $selected = '';
+          if (!empty(get_candidat('ville'))) {
+            if (get_candidat('ville') == $value->ville) {
+              $selected = 'selected';
+              $is_selected = true;
+            } elseif (count($villes) == ($key+1) && !$is_selected) {
+              $selected = 'selected';
+              $is_other = true;
+            }
+          }
+        ?>
+          <option value="<?= $value->ville ?>" <?= $selected; ?>><?= $value->ville ?></option>
+        <?php endforeach; ?>
+      </select>
+      <?php $ville_other = ($is_other) ? get_candidat('ville') : ''; ?>
+      <?= Form::input('text', 'ville_other', null, $ville_other, [
+        'class' => 'form-control',
+        'style' => (!$is_other) ? 'display:none;' : '',
+        'title' => trans("Autre ville")
+      ]); ?>
     </div>
     <div class="col-sm-4 pl-0 pl-xs-15 col-xs-12 required">
       <label for="nationalite"><?php trans_e("Nationalité"); ?></label>
@@ -249,3 +268,22 @@
     </div>
   </div>
 </form>
+
+
+<script>
+jQuery(document).ready(function(){
+
+  $('#ville').change(function() {
+    var $other_input = $('#ville_other')
+    $($other_input).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($other_input).prop('required', true)
+      $($other_input).show()
+    } else {
+      $($other_input).prop('required', false)
+      $($other_input).hide()
+    }   
+  })
+
+})
+</script>

@@ -194,11 +194,11 @@ class Mailer
 		if (is_null($candidat) && is_null($offer) && is_null($candidature_id)) 
 			return $variables;
 
-		if (is_int($candidat)) {
+		if (is_numeric($candidat)) {
 			$candidat = getDB()->findOne('candidats', 'candidats_id', $candidat);
 		}
 
-		if (is_int($offer)) {
+		if (is_numeric($offer)) {
 			$offer = getDB()->findOne('offre', 'id_offre', $offer);
 		}
 

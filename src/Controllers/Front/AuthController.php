@@ -38,7 +38,8 @@ class AuthController extends Controller
 		'candidat_date_n' => ['required|date|min_age,15', 'Date de naissance'],
 		'candidat_adresse' => ['required|eta_alpha_numeric|max_len,255', 'Adresse'],
 		'candidat_code' => ['numeric|max_len,10', 'Code postal'],
-		'candidat_ville' => ['required|alpha', 'Ville'],
+		'candidat_ville' => ['required|eta_string', 'Ville'],
+		'candidat_ville_other' => ['eta_string', 'Autre ville'],
 		'candidat_nationalite' => ['required|eta_string|max_len,16', 'Nationalité'],
 		'candidat_cin' => ['required|alpha_numeric|max_len,8', 'CIN'],
 		'candidat_tel1_deal_code' => ['eta_alpha_numeric', 'Code du pays'], // not a field
@@ -78,6 +79,7 @@ class AuthController extends Controller
 		'experience_poste' => ['alpha_numeric|max_len,255', 'Intitulé du poste'],
 		'experience_entreprise' => ['alpha_numeric|max_len,255', 'Entreprise'],
 		'experience_ville' => ['alpha', 'Ville'],
+		'experience_ville_other' => ['alpha', 'Autre ville'],
 		'experience_description' => ['eta_alpha_numeric', 'Description du poste'],
 		'experience_salair_pecu' => ['numeric', 'Dernier salaire perçu'],
 	];
@@ -401,6 +403,12 @@ class AuthController extends Controller
 				$data[$key] = $value;
 			}
 		}
+
+		if (isset($data['ville_other']) && !empty($data['ville_other'])) {
+			$data['ville'] = $data['ville_other'];
+		}
+		unset($data['ville_other']);
+
 		$data['date_n'] = \english_to_french_date($data['date_n']);
 		$data['mdp'] = md5($data['mdp']);
 		return $data;
@@ -439,6 +447,12 @@ class AuthController extends Controller
 				$data[$key] = $value;
 			}
 		}
+		
+		if (isset($data['ville_other']) && !empty($data['ville_other'])) {
+			$data['ville'] = $data['ville_other'];
+		}
+		unset($data['ville_other']);
+
 		return $data;
 	}
 	
