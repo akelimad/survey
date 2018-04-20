@@ -16,6 +16,9 @@ use \PHPMailer\PHPMailer\PHPMailer;
 use \PHPMailer\PHPMailer\Exception;
 use \PHPMailer\PHPMailer\SMTP;
 use \App\emailTemplateParser;
+use App\Models\Candidat;
+use App\Models\Status;
+use App\Models\Civility;
 
 class Mailer
 {
@@ -158,6 +161,100 @@ class Mailer
 	}
 
 
+	public static function getVariables(
+		$candidat = null, 
+		$offer = null, 
+		$candidature_id = null, 
+		$message = null
+	) {
+
+		$variables = [
+			'nom_candidat' => null,
+			'nom' => null,
+			'prenom' => null,
+			'civilite' => null,
+			'email_candidat' => null,
+			'mot_passe' => null,
+			'nom_partenaire' => null,
+			'titre_offre' => null,
+			'nom_poste' => null,
+			'lien_offre' => null,
+			'date_postulation' => null,
+			'statu_candidature' => null,
+			'statut_candidature' => null,
+			'date_statu' => null,
+			'date_statut' => null,
+			'lieu_statu' => null,
+			'lieu_statut' => null,
+			'lien_confirmation' => null,
+			'message' => null,
+			'site' => site_url()
+		];
+
+		if (is_null($candidat) && is_null($offer) && is_null($candidature_id)) 
+			return $variables;
+
+		if (is_int($candidat)) {
+			$candidat = getDB()->findOne('candidats', 'candidats_id', $candidat);
+		}
+
+		if (is_int($offer)) {
+			$offer = getDB()->findOne('offre', 'id_offre', $offer);
+		}
+
+		if (intval($candidature_id) > 0) {
+			$cand = getDB()->prepare("
+				SELECT c.id_candidature, c.candidats_id, c.date_candidature, c.status, h.date_modification, h.lieu, o.Name AS titre_offre, o.reference AS ref_offre, a.id_agend 
+				FROM candidature AS c 
+				JOIN historique AS h ON h.id_candidature=c.id_candidature 
+				JOIN offre AS o ON o.id_offre=c.id_offre 
+				LEFT JOIN agenda AS a ON a.id_candidature=c.id_candidature 
+				WHERE c.id_candidature=? 
+				ORDER BY h.date_modification DESC
+			", [$candidature_id], true);
+
+			if (isset($cand->id_candidature) && !isset($candidat->candidats_id)) {
+				$candidat = getDB()->findOne('candidats', 'candidats_id', $cand->candidats_id);
+			}
+		}
+
+		if (isset($candidat->candidats_id)) {
+			$variables['nom_candidat'] = Candidat::getDisplayName($candidat);
+			$variables['nom'] = $candidat->nom;
+			$variables['prenom'] = $candidat->prenom;
+			$variables['civilite'] = Civility::getNameById($candidat->id_civi);
+
+			$variables['email_candidat'] = $candidat->email;
+			$variables['mot_passe'] = $candidat->nl_partenaire;
+			$variables['nom_partenaire'] = null;
+		}
+
+		if (isset($offer->id_offre)) {
+			$variables['titre_offre'] = $offer->Name;
+			$variables['nom_poste'] = $offer->Name;
+			$variables['ref_offre'] = $offer->reference;
+			$variables['lien_offre'] = site_url('offre/'. $offer->id_offre);
+		}
+
+		if (isset($cand->id_candidature)) {
+			$variables['date_postulation'] = eta_date($cand->date_candidature);
+			$status = Status::getNameById($cand->status);
+			$variables['statu_candidature'] = $status;
+			$variables['statut_candidature'] = $status;
+			$date_statu = eta_date($cand->date_modification, 'd.m.Y');
+			$variables['date_statu'] = $date_statu;
+			$variables['date_statut'] = $date_statu;
+			$variables['lieu_statu'] = $cand->lieu;
+			$variables['lieu_statut'] = $cand->lieu;
+			if (isset($cand->id_agend)) {
+				$link = site_url('candidature/confirm/'. md5($cand->id_agend));
+				$variables['lien_confirmation'] = '<a href="'. $link .'"><b>'. trans("Confirmer") .'</b></a>';
+
+			}
+		}
+
+		return $variables;
+	}
 
 
 

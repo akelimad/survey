@@ -130,7 +130,7 @@ use App\Models\Status;
         if (isset($calendar->id_agend)) {
           $confirmation_status = $calendar->confirmation_statu;
           if ($confirmation_status == 0) {
-            $confirmation_link = site_url('module/candidatures/confirm/calendar/'.$calendar->id_agend);
+            $confirmation_link = site_url('candidature/confirm/'. md5($calendar->id_agend));
           }
           $calendar_status = $calendar->action;
         }

@@ -446,7 +446,7 @@ class AjaxController
         'date_statu' => $date_statut,
         'lieu_statut' => $c->lieu,
         'lieu_statu' => $c->lieu,
-        'lien_confirmation' => '<a href="'. site_url('confirmation/?i='.$c->id_agend) .'"> <b>'. trans("Confirmer") .'</b></a>'
+        'lien_confirmation' => '<a href="'. site_url('candidature/confirm/'. md5($c->id_agend)) .'"><b>'. trans("Confirmer") .'</b></a>'
       );
 
       return preg_replace_callback('#{{([^}]+)}}#', function($m) use ($message, $variables){

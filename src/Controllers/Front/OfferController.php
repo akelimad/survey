@@ -425,14 +425,14 @@ class OfferController extends Controller
     $db->update('candidats', 'candidats_id', $candidat_id, ['can_update_account' => 0]);
 
     // Notify website RH about new candidature
-    $this->sendCandidatureEmail($candidat, $offer->Name);
+    $this->sendCandidatureEmail($candidat, $offer, $candidature_id);
 
     // Return success message
     return $this->jsonResponse('success', trans("Votre candidature a bien été envoyée avec succès."));
   }
 
 
-  private function sendCandidatureEmail($candidat, $offerName)
+  private function sendCandidatureEmail($candidat, $offer, $candidature_id)
   {
     global $email_e;
 
@@ -440,13 +440,9 @@ class OfferController extends Controller
     $template = getDB()->findOne('root_email_auto', 'ref', 'i');
     if(!isset($template->id_email)) return;
 
-    $template_vars = [
-      'nom_candidat' => Candidat::getDisplayName($candidat),
-      'titre_offre' => $offerName
-    ];
-
-    $subject = Mailer::renderMessage($template->objet, $template_vars);
-    $message = Mailer::renderMessage($template->message, $template_vars);
+    $variables = Mailer::getVariables($candidat, $offer, $candidature_id);
+    $subject = Mailer::renderMessage($template->objet, $variables);
+    $message = Mailer::renderMessage($template->message, $variables);
 
     $send = Mailer::send($candidat->email, $subject, $message, [
       'titre' => $template->titre,
@@ -456,7 +452,7 @@ class OfferController extends Controller
     // Notify RH team
     if($send['response'] == 'success') {
       $message = '<p><strong>'. trans("Bonjour,") .'</strong></p>';
-      $message .= '<p>'. trans("Une nouvelle candidature a été reçu sur l'offre:") .' <strong>'. $offerName .'</strong>';
+      $message .= '<p>'. trans("Une nouvelle candidature a été reçu sur l'offre:") .' <strong>'. $offer->Name .'</strong>';
       $message .= '<br>'. trans("Pour consulter les nouvelles candidatures") .' <strong><a href="'. site_url('backend/module/candidatures/candidature/list/0') .'">'. trans("cliquez ici") .'</a></strong></p>';
       $message .= '<p>'. trans("Cordialement") .'</p>';
       $receivers = [$email_e];

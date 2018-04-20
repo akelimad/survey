@@ -234,13 +234,13 @@ class AuthController extends Controller
 		$template = getDB()->findOne('root_email_auto', 'ref', 'h');
 		if(!isset($template->id_email)) return;
 
-		$message = Mailer::renderMessage($template->message, [
-			'nom_candidat' => $this->getCandidatFullname($candidat->id_civi, $candidat->nom, $candidat->prenom),
-      'email_candidat' => $candidat->email,
-      'mot_passe' => $password
-		]);
+		$variables = Mailer::getVariables($candidat);
+		$variables['mot_passe'] = $password;
 
-		return Mailer::send($candidat->email, $template->objet, $message, [
+		$subject = Mailer::renderMessage($template->objet, $variables);
+		$message = Mailer::renderMessage($template->message, $variables);
+
+		return Mailer::send($candidat->email, $subject, $message, [
 			'titre' => $template->titre,
 			'type_email' => 'Envoi automatique'
 		]);
@@ -569,16 +569,16 @@ class AuthController extends Controller
 		if(!isset($template->id_email)) return;
 
 		$lien = site_url("candidat/account/confirm/". md5($email.$id_candidat));
-		$message = Mailer::renderMessage($template->message, [
-			'nom_candidat' => $fullname,
-			'lieu_statu' => site_url(),
-			'lien_confirmation' => '<a href="'. $lien .'">'. $lien .'</a>'
-		]);
+		$variables = Mailer::getVariables($id_candidat);
+		$variables['lieu_statu'] =  site_url();
+		$variables['lien_confirmation'] = '<a href="'. $lien .'">'. $lien .'</a>';
+		$subject = Mailer::renderMessage($template->objet, $variables);
+		$message = Mailer::renderMessage($template->message, $variables);
 
 		$bcc = [$email_e];
 		if($email_e != $template->email) $bcc[] = $template->email;
 		
-		return Mailer::send($email, $template->objet, $message, [
+		return Mailer::send($email, $subject, $message, [
 			'titre' => $template->titre,
 			'coresp_nom' => $fullname,
 			'type_email' => 'Envoi automatique',

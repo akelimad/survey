@@ -60,10 +60,11 @@ class CandidatureController extends Controller
         // Send email
         $template = getDB()->findOne('root_email_auto', 'ref', 'd');
         if(isset($template->id_email)) {
-          $message = Mailer::renderMessage($template->message, [
-            'nom_candidat' => Candidat::getDisplayName()
-          ]);
-          Mailer::send(get_candidat('email'), $template->objet, $message, [
+          $variables = Mailer::getVariables(null, null, $candidature_id);
+          $subject = Mailer::renderMessage($template->objet, $variables);
+          $message = Mailer::renderMessage($template->message, $variables);
+
+          Mailer::send(get_candidat('email'), $subject, $message, [
             'titre' => $template->titre,
             'type_email' => 'Envoi automatique'
           ]);
@@ -122,10 +123,11 @@ class CandidatureController extends Controller
         // Send email
         $template = getDB()->findOne('root_email_auto', 'ref', 'a');
         if(isset($template->id_email)) {
-          $message = Mailer::renderMessage($template->message, [
-            'nom_candidat' => Candidat::getDisplayName()
-          ]);
-          Mailer::send(get_candidat('email'), $template->objet, $message, [
+          $variables = Mailer::getVariables(null, null, $candidature_id);
+          $subject = Mailer::renderMessage($template->objet, $variables);
+          $message = Mailer::renderMessage($template->message, $variables);
+
+          Mailer::send(get_candidat('email'), $subject, $message, [
             'titre' => $template->titre,
             'type_email' => 'Envoi automatique'
           ]);
