@@ -9,6 +9,8 @@ use Modules\Language\Models\Language;
  **/
 if (!function_exists('trans')) {
   function trans($msgid) {
+    if (isBackend()) return $msgid;
+    
     $iso_code = Language::getCurrentLanguage('iso_code', 'fr');
     $file_path = site_base("messages/{$iso_code}.php");
 
