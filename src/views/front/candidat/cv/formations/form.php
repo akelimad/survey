@@ -50,7 +50,7 @@ use App\Form;
       <?php endforeach; ?>
     </select>
     <?php $forma_other = (isset($formation->ecole)) ? $formation->ecole : ''; ?>
-    <?= Form::input('text', 'ecole', null, $forma_other, [
+    <?= Form::input('text', 'ecole', null, $forma_other, [], [
       'class' => 'form-control',
       'style' => (empty($formation->ecole)) ? 'display:none;' : '',
       'title' => trans("Autre école ou établissement")

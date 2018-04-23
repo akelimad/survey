@@ -28,9 +28,11 @@ class Fonction {
   }
 
 
-  public static function findAll()
+  public static function findAll($with_empty = true)
   {
-    return getDB()->prepare("SELECT id_fonc, fonction, id_fonc as value, fonction as text FROM prm_fonctions");
+    $items = getDB()->prepare("SELECT id_fonc, fonction, id_fonc as value, fonction as text FROM prm_fonctions");
+    if ($with_empty) $items = ['' => ''] + $items;
+    return $items;
   }
 
 

@@ -1,13 +1,23 @@
 .chm-simple-form {
-	label:not(.input-group-btn) {
-		font-size: 11px;
-		display: block;
-		margin-bottom: 5px;
-		font-weight: normal;
-		&.pointer {
-			cursor: pointer;
+	label {
+		&:not(.input-group-btn) {
+			font-size: 11px;
+			display: block;
+			margin-bottom: 5px;
+			font-weight: normal;
+			&.pointer {
+				cursor: pointer;
+			}
+		}
+		&.radio-inline, &.checkbox-inline {
+			display: inline-block;
+			padding-left: 15px;
+			input {
+				margin: 1px 0 0 -15px !important;
+			}
 		}
 	}
+
 	.form-control {
 		height: 28px;
 		padding: 0px 5px;
@@ -48,6 +58,22 @@
 		margin-bottom: 0px;
 		font-size: 11px;
 		line-height: 16px;
+	}
+
+	.select2-container span.select2-selection {
+    height: 28px !important;
+	}
+
+	.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    padding: 3px 6px !important;
+	}
+
+	.select2-container span.select2-selection:after {
+    right: 7px !important;
+    top: 4px !important;
+	}
+	.chm-simple-form .select2-container span.select2-selection:after {
+    top: 8px!important;
 	}
 }
 

@@ -96,7 +96,7 @@
         <?php endforeach; ?>
       </select>
       <?php $ville_other = ($is_other) ? get_candidat('ville') : ''; ?>
-      <?= Form::input('text', 'ville_other', null, $ville_other, [
+      <?= Form::input('text', 'ville_other', null, $ville_other, [], [
         'class' => 'form-control',
         'style' => (!$is_other) ? 'display:none;' : '',
         'title' => trans("Autre ville")

@@ -120,14 +120,33 @@ export default class chmForm {
 $(document).ready(function () {
   // Select all Forms occurences
   var chmForms = document.querySelectorAll('[chm-form]')
-  if (chmForms.length === 0) return
+  if (chmForms.length > 0) {
+    // Loop for each Table
+    for (var i = 0; i < chmForms.length; ++i) {
+      // Add event listener
+      $(chmForms[i]).on('submit', function (event) {
+        event.preventDefault()
+        chmForm.submit(event, this)
+      })
+    }
+  }
 
-  // Loop for each Table
-  for (var i = 0; i < chmForms.length; ++i) {
-    // Add event listener
-    $(chmForms[i]).on('submit', function (event) {
-      event.preventDefault()
-      chmForm.submit(event, this)
-    })
+  // Show hide other field
+  var chmFormOther = document.querySelectorAll('[chm-form-other]')
+  if (chmFormOther.length > 0) {
+    for (var o = 0; o < chmFormOther.length; ++o) {
+      var id = $(chmFormOther[o]).attr('chm-form-other')
+      $(chmFormOther[o]).closest('select').on('change', function (event) {
+        var $otherInput = $('input#' + id)
+        $($otherInput).val('')
+        if ($(this).val() === '_other') {
+          $($otherInput).prop('required', true)
+          $($otherInput).show()
+        } else {
+          $($otherInput).prop('required', false)
+          $($otherInput).hide()
+        }
+      })
+    }
   }
 })

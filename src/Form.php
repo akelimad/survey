@@ -20,7 +20,7 @@ class Form
     'value' => null,
     'options' => [],
     'help' => null,
-    'required' => true,
+    'required' => false,
     'show' => true,
     'group_name' => null,
     'columns' => 4,
@@ -60,14 +60,16 @@ class Form
    *
    * @author Mhamed Chanchaf
    */
-  public static function input($type, $name, $label = null, $default = null, $attrs = [])
+  public static function input($type, $name, $label = null, $default = null, $options = [], $attrs = [])
   {
     $html = '';
 
-    if (!empty($name)) {
-      $attrs['name'] = $name;
-      if (!isset($attrs['id'])) $attrs['id'] = $name;
+    if (!empty($name) && !isset($attrs['id'])) {
+      $id = str_replace('[', '_', $name);
+      $attrs['id'] = trim(str_replace(']', '', $id), '_');
     }
+
+    $attrs['name'] = $name;
     $attrs['type'] = $type;
     $attrs['value'] = (is_null($default) && isset($_GET[$name])) ? $_GET[$name] : $default;
 
@@ -81,9 +83,9 @@ class Form
       $required = (in_array('required', $attrs)) ? ' required' : '';
       $html .= '<div class="form-group'. $required .'">';
       if (in_array($type, ['checkbox', 'radio'])) {
-        $html .= '<label for="'. $name .'">';
+        $html .= '<label for="'. $attrs['id'] .'">';
       } else {
-        $html .= '<label for="'. $name .'">'. $label .'</label>';
+        $html .= '<label for="'. $attrs['id'] .'">'. $label .'</label>';
       }
     }
 
@@ -96,8 +98,20 @@ class Form
     if (in_array($type, ['checkbox', 'radio']) && !isset($attrs['class'])) {
       $attrs['class'] = '';
     }
+
+    if (in_array($type, ['checkbox', 'radio']) && !empty($options)) {
+      $html .= '<div class="mt-10">';
+      foreach ($options as $key => $option) {
+        $inline = (!isset($attrs['inline']) || $attrs['inline']) ? $type .'-inline' : '';
+        $html .= '<label class="'. $inline .'">';
+        $html .= '<input type="'. $type .'" name="'. $name .'" value="'. $key .'">&nbsp;'. $option;
+        $html .= '</label>';
+      }
+      $html .= '</div>';
+    } else {
+      $html .= '<input '. self::getAttributes($attrs) .'>';
+    }
     
-    $html .= '<input '. self::getAttributes($attrs) .'>';
     if (in_array($type, ['checkbox', 'radio']) && !is_null($label)) {
       $html .= '&nbsp;'. $label . '</label>';
     }
@@ -132,9 +146,10 @@ class Form
       $html .= '<label for="'. $name .'">'. $label .'</label>';
     }
 
-    if (!empty($name)) {
-      $attrs['name'] = $name;
-      if (!isset($attrs['id'])) $attrs['id'] = $name;
+    $attrs['name'] = $name;
+    if (!empty($name) && !isset($attrs['id'])) {
+      $id = str_replace('[', '_', $name);
+      $attrs['id'] = trim(str_replace(']', '', $id), '_');
     }
 
     $helpBlock = '';
@@ -142,8 +157,9 @@ class Form
       $helpBlock = self::getHelpBlock($attrs['help']);
       unset($attrs['help']);
     }
-
     $html .= '<select '. self::getAttributes($attrs) .'>';
+    $options = self::execute($options);
+    $otherOptionLabel = '';
     foreach ($options as $key => $option) :
       if (is_object($option)) {
         $value = (isset($option->value)) ? $option->value : null;
@@ -153,13 +169,30 @@ class Form
         $text  = $option;
       }
 
-      $default = (is_null($default) && isset($_GET[$name])) ? $_GET[$name] : $default;
-      $selected = ($default == $value) ? 'selected' : '';
+      if ($value === '_other') {
+        $otherOptionLabel = $text;
+        $dataOther = ' chm-form-other="'. $attrs['id'] .'_other"';
+      } else {
+        $dataOther = '';
+      }
 
-      $html .= '<option value="'. $value .'" '. $selected .'>'. $text .'</option>';
+      $default = (is_null($default) && isset($_GET[$name])) ? $_GET[$name] : $default;
+      $selected = ($default === $value) ? ' selected' : '';
+
+      $html .= '<option value="'. $value .'"'. $dataOther . $selected .'>'. $text .'</option>';
     endforeach;
 
     $html .= '</select>'. $helpBlock;
+
+    if ($otherOptionLabel != '') {
+      $html .= self::input('text', $attrs['id'] .'_other', null, null, [], [
+        'class' => 'form-control mt-10 mb-0',
+        'style' => 'display:none;',
+        'title' => $otherOptionLabel,
+        'placeholder' => $otherOptionLabel
+      ]);
+    }
+
     if (!is_null($label)) $html .= '</div>';
 
     return $html;
@@ -187,9 +220,10 @@ class Form
       $html .= '<label for="'. $name .'">'. $label .'</label>';
     }
 
-    if (!empty($name)) {
-      $attrs['name'] = $name;
-      if (!isset($attrs['id'])) $attrs['id'] = $name;
+    $attrs['name'] = $name;
+    if (!empty($name) && !isset($attrs['id'])) {
+      $id = str_replace('[', '_', $name);
+      $attrs['id'] = trim(str_replace(']', '', $id), '_');
     }
 
     if (is_null($default) && isset($_GET[$name])) {
@@ -246,30 +280,36 @@ class Form
   /**
    * Draw form elements
    *
-   * @param array  $fields
+   * @param array $array
    *
    * @return string $html
    *
    * @author mchanchaf
    */
-  public static function draw($fields = [], $model = null)
+  public static function draw($array = [], $model = null)
   {
-    $html = null;
-    $row_cols = 0;
-    $fields = self::sortFields($fields);
+    if (!isset($array['groups']) || empty($array['groups']))
+      return;
 
-    $groups = [];
-    foreach (array_keys($fields) as $key => $group_name) {
+    $html = null;
+    $sorted_fields = self::sortFields($array);
+
+    if (isset($array['buttons'])) {
+      self::$buttons = array_replace_recursive(self::$buttons, $array['buttons']);
+    }
+
+    foreach ($array['groups'] as $group_name => $group_label) {
       // Reset columns counter
-      $group[] = $group_name;
-      if (!in_array($group_name, $groups)) $row_cols = 0;
+      $row_cols = 0;
+
+      if (!isset($sorted_fields[$group_name])) continue;
 
       // Print fields group name
-      $html .= '<div class="styled-title mt-0 mb-10"><h3>'. $group_name .'</h3></div>';
+      $html .= '<div class="styled-title mt-0 mb-10"><h3>'. $group_label .'</h3></div>';
 
       // Generate fields
       $html .= '<div class="row">';
-      foreach ($fields[$group_name] as $key => $field) {
+      foreach ($sorted_fields[$group_name] as $key => $field) {
         // merge default field attributes with current one
         $field = array_replace_recursive(self::$field_attrs, $field);
 
@@ -278,24 +318,43 @@ class Form
           $field['attributes']['class'] = 'form-control mb-0';
         }
 
+        // Set value from model
+        preg_match('/\[([a-zA-Z0-9_-]+)]/', $field['name'], $matches);
+        $table_col = (isset($matches[1])) ? $matches[1] : $field['name'];
+
+        $column = null;
+        if (isset($model->$table_col)) {
+          $column = $model->$table_col;
+        } else if (isset($_POST[$table_col])) {
+          $column = $_POST[$table_col];
+        }
+
         // Field apearance
-        if (!$field['show'] || $field['type'] == 'submit') continue;
+        if (!self::execute($field['show'], ['value' => $column])) continue;
 
         // Add require attribute
         $required_class = '';
-        if ($field['required']) {
+        if (self::execute($field['required'], ['value' => $column])) {
           $required_class = ' required';
-          if (
-            !isset($field['attributes']['required']) 
-            && !in_array('required', $field['attributes'])
-          ) $field['attributes'][] = 'required';
+          if (!isset($field['attributes']['required']) && !in_array('required', $field['attributes'])) $field['attributes'][] = 'required';
         }
+
+        $value = (isset($field['value'])) ? $field['value'] : $column;
+        $value = self::execute($value, ['value' => $column]);
+        $field['value'] = $field['attributes']['value'] = $value;
 
         // Increment columns
         $columns = intval($field['columns']);
-        $total_cols = ($row_cols + $columns);
+        $offset = intval($field['offset']);
         $offset_class = ($field['offset'] > 0) ? ' col-md-offset-'. $field['offset'] : '';
         $pl = ($row_cols > 0) ? ' pl-0' : '';
+        $row_cols = ($row_cols + $columns + $offset);
+
+        // Close row
+        if ($row_cols > 12) {
+          $html .= '</div><div class="row">';
+          $row_cols = 0;
+        }
 
         $html .= '<div class="col-md-'. $columns . $offset_class . $pl .'">';
         $html .= '<div class="form-group'. $required_class .'">';
@@ -304,39 +363,14 @@ class Form
           $html .= '<label for="'. $field['name'] .'">'. $field['label'] .'</label>';
         }
 
-        // Set value from model
-        preg_match('/\[([a-zA-Z0-9_-]+)]/', $field['name'], $matches);
-        $table_col = (isset($matches[1])) ? $matches[1] : $field['name'];
-
-        if (isset($model->$table_col)) {
-          $column = $model->$table_col;
-        } else if (isset($_POST[$table_col])) {
-          $column = $_POST[$table_col];
-        }
-
-        if (isset($field['value']) && !empty($field['value'])) {
-          $field['value'] = self::getFieldValue($field['value'], $column);
-        } else {
-          $field['value'] = $column;
-        }
-
         // Render field
         switch ($field['type']) {
-          case 'text':
-            $html .= self::input(
-              'text',
-              $field['name'],
-              null,
-              $field['value'],
-              $field['attributes']
-            );
-            break;
           case 'select':
             $html .= self::select(
               $field['name'],
               null,
               $field['value'],
-              (['' => ''] + $field['options']),
+              $field['options'],
               $field['attributes']
             );
             break;
@@ -345,6 +379,16 @@ class Form
               $field['name'],
               null,
               $field['value'],
+              $field['attributes']
+            );
+            break;
+          case ('text' || 'number' || 'date' || 'radio' || 'checkbox'):
+            $html .= self::input(
+              $field['type'],
+              $field['name'],
+              null,
+              $field['value'],
+              $field['options'],
               $field['attributes']
             );
             break;
@@ -358,11 +402,9 @@ class Form
         $html .= '</div></div>'; // .col-md-* / .form-group
 
         // Close row
-        if ($total_cols >= 12) {
+        if ($row_cols >= 12) {
           $html .= '</div><div class="row">';
           $row_cols = 0;
-        } else {
-          $row_cols += $columns;
         }
       }
       $html .= '</div>';
@@ -379,15 +421,12 @@ class Form
   }
 
 
-  private static function sortFields($fields)
+  private static function sortFields($array)
   {
     $sorted_fields = [];
-    foreach ($fields as $key => $field) {
-      if (isset($fields['buttons']) && $key == 'buttons') {
-        self::$buttons = array_replace_recursive(self::$buttons, $fields['buttons']);
-        continue;
-      }
+    foreach ($array['fields'] as $key => $field) {
       $group_name = $field['group_name'];
+      if (!isset($array['groups'][$group_name])) continue;
       unset($field['group_name']);
       $sorted_fields[$group_name][] = $field;
     }
@@ -395,13 +434,21 @@ class Form
   }
 
 
-  private static function getFieldValue($value, $column)
+  private static function execute($value, $args = [])
   {
-    if(is_callable($value)) {
-      return call_user_func($value, $column);
-    } else {
-      return $value;
+    if (is_callable($value)) {
+      return call_user_func($value, $args);
+    } elseif (is_string($value) && strpos($value, '@') !== false) {
+      $callable = explode('@', $value);
+      if(isset($callable[1])) {
+        $controller = $callable[0];
+        $method = $callable[1];
+        if ( method_exists($controller, $method) && is_callable($callable)) {
+          return call_user_func_array([new $controller(), $method], $args);
+        }
+      }
     }
+    return $value;
   }
 
 

@@ -1,9 +1,3 @@
-<style>
-.chm-alerts ul {
-  margin: 15px 0 15px 55px !important;
-}  
-</style>
-
 <div class="row">
   <div class="col-sm-3 col-xs-12 custom pr-0 pr-xs-15">
     <?php get_view('admin/menu/offer') ?>
@@ -26,3 +20,11 @@
     </form>
   </div>
 </div>
+
+<link rel="stylesheet" type="text/css" href="<?= site_url('assets/vendors/select2/css/select2.min.css'); ?>">
+<script src="<?= site_url('assets/vendors/select2/js/select2.min.js'); ?>" type="text/javascript"></script>
+<script>
+$(document).ready(function() {
+  $('select[multiple]').select2()
+})
+</script>

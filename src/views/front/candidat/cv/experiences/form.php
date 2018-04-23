@@ -113,7 +113,7 @@
       <?php endforeach; ?>
     </select>
     <?php $ville_other = (isset($exp->ville) && $is_other) ? $exp->ville : ''; ?>
-    <?= Form::input('text', 'ville_other', null, $ville_other, [
+    <?= Form::input('text', 'ville_other', null, $ville_other, [], [
       'class' => 'form-control',
       'style' => (!$is_other) ? 'display:none;' : '',
       'title' => trans("Autre ville")
