@@ -598,8 +598,13 @@ $max_file_size = get_setting('max_file_size', 400);
 jQuery(document).ready(function(){
 
 	// Editors
+	<?php if (get_setting('register_show_last_formation', 1) != 0) : ?>
 	CKEDITOR.replace('forma_description', {height: 200});
+	<?php endif; ?>
+
+	<?php if (get_setting('register_show_last_experience', 1) != 0) : ?>
 	CKEDITOR.replace('exp_description', {height: 200});
+	<?php endif; ?>
 
 	$('#candidat_titre').focus()
 
