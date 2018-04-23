@@ -76,7 +76,7 @@ $max_file_size = get_setting('max_file_size', 400);
 					<option value="<?= $value->ville ?>"><?= $value->ville ?></option>
 				<?php endforeach; ?>
 	    </select>
-	    <?= Form::input('text', 'candidat[ville_other]', null, null, [
+	    <?= Form::input('text', 'candidat[ville_other]', null, null, [], [
 	    	'class' => 'form-control',
 	    	'style' => 'display:none;',
 	    	'title' => trans("Autre ville")
@@ -245,6 +245,7 @@ $max_file_size = get_setting('max_file_size', 400);
 	</div>
 
 
+	<?php if (get_setting('register_show_last_formation', 1) != 0) : ?>
 	<div class="styled-title mt-0 mb-10">
 	  <h3><?php trans_e("Dernière formation"); ?></h3>
 	</div>
@@ -278,7 +279,7 @@ $max_file_size = get_setting('max_file_size', 400);
 				</optgroup‏>
 				<?php endforeach; ?>
 	    </select>
-	    <?= Form::input('text', 'formation[ecole]', null, null, [
+	    <?= Form::input('text', 'formation[ecole]', null, null, [], [
 	    	'class' => 'form-control',
 	    	'style' => 'display:none;',
 	    	'title' => trans("Autre école ou établissement")
@@ -323,8 +324,10 @@ $max_file_size = get_setting('max_file_size', 400);
 			<textarea name="formation[description]" class="form-control" id="forma_description" required></textarea>
 		</div>
 	</div>
+	<?php endif; ?>
 
 	
+	<?php if (get_setting('register_show_last_experience', 1) != 0) : ?>
 	<div class="styled-title mt-10 mb-10">
 	  <h3><?php trans_e("Dernière expérience professionnelle"); ?></h3>
 	</div>
@@ -402,7 +405,7 @@ $max_file_size = get_setting('max_file_size', 400);
 					<option value="<?= $value->ville ?>"><?= $value->ville ?></option>
 				<?php endforeach; ?>
 	    </select>
-	    <?= Form::input('text', 'experience[ville_other]', null, null, [
+	    <?= Form::input('text', 'experience[ville_other]', null, null, [], [
 	    	'class' => 'form-control',
 	    	'style' => 'display:none;',
 	    	'title' => trans("Autre ville")
@@ -441,6 +444,7 @@ $max_file_size = get_setting('max_file_size', 400);
 			<textarea name="experience[description]" class="form-control" id="exp_description"></textarea>
 		</div>
 	</div>
+	<?php endif; ?>
 
 
 	<div class="styled-title mt-10 mb-10">

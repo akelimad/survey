@@ -135,7 +135,7 @@ class LanguageController extends Controller
         if (!isset($parts[1]) || empty($parts[1])) continue;
 
         // Check if string exists
-        $string = $db->findOne('language_strings', 'name', $parts[0]);
+        $string = $db->findOne('language_strings', 'name', trim($parts[0], '"'));
         if (isset($string->id)) {
           $string_trans = $db->prepare("SELECT id FROM language_string_trans WHERE language_string_id=? AND language=?", [
             $string->id, 
@@ -145,7 +145,7 @@ class LanguageController extends Controller
           if (isset($string_trans->id)) {
             if (isset($params['overwrite']) && $params['overwrite'] == 1) {
               $db->update('language_string_trans', 'id', $string_trans->id, [
-                'value' => $parts[1]
+                'value' => trim($parts[1], '"')
               ]);
               $overwrited += 1;
             }
@@ -153,7 +153,7 @@ class LanguageController extends Controller
             $db->create('language_string_trans', [
               'language_string_id' => $string->id,
               'language' => $params['lang'],
-              'value' => $parts[1]
+              'value' => trim($parts[1], '"')
             ]);
             $newTrans += 1;
           }

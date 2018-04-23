@@ -307,15 +307,20 @@ class AuthController extends Controller
 			$id_candidat = $db->create('candidats', $cdata, false);
 			
 			// Create formation
-			$fdata = $this->getFormationData($params);
-			$fdata['candidats_id'] = $id_candidat;
-			$fdata['date_debut'] = date('m/Y', strtotime($fdata['date_debut']));
-			$fdata['date_fin'] = date('m/Y', strtotime($fdata['date_fin']));
-			$fdata['copie_diplome'] = (isset($upload['files']['copie_diplome'])) ? $upload['files']['copie_diplome']['name'] : '';
-			$db->create('formations', $fdata, false);
+			if (get_setting('register_show_last_formation', 1) == 1) {
+				$fdata = $this->getFormationData($params);
+				$fdata['candidats_id'] = $id_candidat;
+				$fdata['date_debut'] = date('m/Y', strtotime($fdata['date_debut']));
+				$fdata['date_fin'] = date('m/Y', strtotime($fdata['date_fin']));
+				$fdata['copie_diplome'] = (isset($upload['files']['copie_diplome'])) ? $upload['files']['copie_diplome']['name'] : '';
+				$db->create('formations', $fdata, false);
+			}
 			
 			// Create experience
-			if($params['experience']['date_debut'] != '') {
+			if(
+				$params['experience']['date_debut'] != '' && 
+				get_setting('register_show_last_experience', 1) == 1
+			) {
 				$exp_date_fin = ($params['experience']['date_debut'] != '') ? date('d/m/Y', strtotime($params['experience']['date_fin'])) : '';
 				$expData = $this->getExperienceData($params);
 				$expData['candidats_id'] = $id_candidat;

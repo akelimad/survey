@@ -149,7 +149,7 @@ class Uploader {
             if(($options['limit'] && $field['length'] > $options['limit']) || ($field['length']) > $ini[3]) $errors[] = trans($this->error_messages['max_number_of_files']);
             if(!file_exists($options['uploadDir']) && !is_dir($options['uploadDir']) && mkdir($options['uploadDir'], 750, true)){
                 $this->data['hasWarnings'] = true;
-                $this->data['warnings'] = trans("A new directory was created in") ." " . realpath($options['uploadDir']);
+                $this->data['warnings'] = trans("Un nouveau répertoire a été créé dans") ." " . realpath($options['uploadDir']);
             }
             if(!is_writable($options['uploadDir'])) @chmod($options['uploadDir'], 750);
             

@@ -15,7 +15,9 @@ use Modules\Language\Models\Language;
   'number', 
   'lines_to_ignore', 
   trans("Nombres de lignes à ignorer"),
-  1, ['min' => 0, 'step' => 1, 'required']
+  1,
+  [],
+  ['min' => 0, 'step' => 1, 'required']
   );
 ?>
 
@@ -23,7 +25,9 @@ use Modules\Language\Models\Language;
   'file', 
   'file', 
   trans("Fichier de traductions"),
-  null, ['accept' => '.csv', 'required', 'help' => trans("Choisissez un fichier au format CSV")]
+  null,
+  [],
+  ['accept' => '.csv', 'required', 'help' => trans("Choisissez un fichier au format CSV")]
   );
 ?>
 
@@ -31,7 +35,9 @@ use Modules\Language\Models\Language;
   'checkbox', 
   'overwrite', 
   trans("Écraser les anciens traductions"),
-  1, ['required', 'checked']
+  1,
+  [],
+  ['required', 'checked']
   );
 ?>
 
