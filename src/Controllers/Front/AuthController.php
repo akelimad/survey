@@ -27,7 +27,7 @@ class AuthController extends Controller
 		'candidat_id_situ' => ['required|numeric', 'Situation actuelle'],
 		'candidat_id_sect' => ['required|numeric', 'Secteur actuel'],
 		'candidat_id_fonc' => ['required|numeric', 'Fonction'],
-		'candidat_id_salr' => ['required|numeric', 'Salaire souhaité'],
+		'candidat_id_salr' => ['numeric', 'Salaire souhaité'],
 		'candidat_id_nfor' => ['required|numeric', 'Niveau de formation'],
 		'candidat_id_tfor' => ['required|numeric', 'Type de formation'],
 		'candidat_id_dispo' => ['required|numeric', 'Disponibilité'],
@@ -41,7 +41,7 @@ class AuthController extends Controller
 		'candidat_ville' => ['required|eta_string', 'Ville'],
 		'candidat_ville_other' => ['eta_string', 'Autre ville'],
 		'candidat_nationalite' => ['required|eta_string|max_len,16', 'Nationalité'],
-		'candidat_cin' => ['required|alpha_numeric|max_len,8', 'CIN'],
+		'candidat_cin' => ['alpha_numeric|max_len,8', 'CIN'],
 		'candidat_tel1_deal_code' => ['eta_alpha_numeric', 'Code du pays'], // not a field
 		'candidat_tel1' => ['required|phone_number|max_len,16', 'Téléphone'],
 		'candidat_tel2_deal_code' => ['required', 'Code du pays'], // not a field

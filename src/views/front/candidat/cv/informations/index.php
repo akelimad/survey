@@ -42,7 +42,7 @@
     </div>
     <div class="col-sm-4 pl-0 pl-xs-15 required">
       <label for="candidat_date_n"><?php trans_e("Date de naissance"); ?></label>
-      <input type="date" min="<?= date('Y-m-d', strtotime('-63year')); ?>" max="<?= date('Y-m-d', strtotime('-16year')); ?>" class="form-control" id="candidat_date_n" name="date_n" value="<?= french_to_english_date(get_candidat('date_n')) ?>" required>
+      <input readonly type="text" class="form-control" id="candidat_date_n" name="date_n" value="<?= french_to_english_date(get_candidat('date_n')) ?>" required>
     </div>
   </div>
   <div class="row">
@@ -285,5 +285,11 @@ jQuery(document).ready(function(){
     }   
   })
 
+  cimDatepicker('#candidat_date_n', {
+    dateFormat: 'dd/mm/yy',
+    maxDate: '-17Y',
+    minDate: "-63Y",
+  })
+  
 })
 </script>

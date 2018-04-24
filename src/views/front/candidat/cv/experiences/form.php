@@ -10,7 +10,7 @@
       $date_debut = french_to_english_date($date_debut);
     }
     ?>
-    <input type="date" max="<?= date('Y-m-d'); ?>" value="<?= $date_debut ?>" class="form-control" id="exp_date_debut" name="date_debut" required>
+    <input readonly type="text" value="<?= $date_debut ?>" class="form-control" id="exp_date_debut" name="date_debut" required>
   </div>
   <div class="col-sm-8 pl-0 pl-xs-15 required">
     <label for="exp_date_fin"><?php trans_e("Date de fin"); ?></label>
@@ -21,7 +21,7 @@
       $date_fin = french_to_english_date($date_fin);
     }
     ?>
-    <input type="date" max="<?= date('Y-m-d'); ?>" value="<?= $date_fin ?>" class="form-control" id="exp_date_fin" name="date_fin" style="max-width: 186px;float: left;margin-right: 10px;<?= (isset($exp->date_fin) && $exp->date_fin == '') ? 'display: none;"' : '" required' ?>>
+    <input readonly type="text" value="<?= $date_fin ?>" class="form-control" id="exp_date_fin" name="date_fin" style="max-width: 186px;float: left;margin-right: 10px;<?= (isset($exp->date_fin) && $exp->date_fin == '') ? 'display: none;"' : '" required' ?>>
     <label for="exp_today" style="margin-top: 10px;" class="pointer">
       <input type="checkbox" value="1" class="date_fin_today" id="exp_today"<?= (isset($exp->date_fin) && $exp->date_fin == '') ? ' checked' : '' ?>>&nbsp;<?php trans_e("Jusqu'à aujourd'hui"); ?>
     </label>
@@ -176,5 +176,11 @@ jQuery(document).ready(function(){
     }   
   })
 
+  cimDatepicker('[id$="date_debut"], [id$="date_fin"]', {
+    dateFormat: 'dd/mm/yy',
+    maxDate: '-0day',
+    minDate: "-30Y",
+  })
+  
 })
 </script>

@@ -17,7 +17,11 @@ $(document).ready(function () {
   $('body').on('change', '[id$="date_debut"], [id$="date_fin"]', function () {
     var row = $(this).closest('.row')
     var dateDebut = row.find('[id$="date_debut"]').val()
+    var ddParts = dateDebut.split('/')
+    dateDebut = ddParts[2] + '-' + ddParts[1] + '-' + ddParts[0]
     var dateFin = row.find('[id$="date_fin"]').val()
+    var dfParts = dateFin.split('/')
+    dateFin = dfParts[2] + '-' + dfParts[1] + '-' + dfParts[0]
     if (!dateFin.startsWith(0) && dateFin !== '' && dateDebut !== '') {
       var dateD = new Date(dateDebut)
       var dateF = new Date(dateFin)
@@ -27,7 +31,9 @@ $(document).ready(function () {
       }
     } else if (!dateDebut.startsWith(0) && dateDebut !== '') {
       dateD = new Date(dateDebut)
-      var dateN = new Date($('#candidat_date_n').val())
+      var dateN = $('#candidat_date_n').val()
+      var dnParts = dateN.split('/')
+      dateN = new Date(dnParts[2] + '-' + dnParts[1] + '-' + dnParts[0])
       if (dateN > dateD) {
         row.find('[id$="date_debut"]').val('')
         window.chmAlert.danger('La date de fin doit être supérieur à date de naissance.')
@@ -54,7 +60,7 @@ $(document).ready(function () {
 
   // date_fin_today
   $('body').on('change', '.date_fin_today', function () {
-    var dateFin = $(this).closest('.col-sm-8').find('[type="date"]')
+    var dateFin = $(this).closest('.col-sm-8').find('[type="text"]')
     if ($(this).is(':checked')) {
       $(dateFin).hide()
       $(dateFin).val('')

@@ -45,7 +45,7 @@ $max_file_size = get_setting('max_file_size', 400);
 		</div>
 		<div class="col-sm-4 pl-0 pl-xs-15 required">
 			<label for="candidat_date_n"><?php trans_e("Date de naissance"); ?></label>
-			<input type="date" min="<?= date('Y-m-d', strtotime('-63year')); ?>" max="<?= date('Y-m-d', strtotime('-16year')); ?>" class="form-control" id="candidat_date_n" name="candidat[date_n]" required>
+			<input readonly type="text" class="form-control" id="candidat_date_n" name="candidat[date_n]" required>
 		</div>
 	</div>
 	<div class="row">
@@ -60,15 +60,6 @@ $max_file_size = get_setting('max_file_size', 400);
 	</div>
 	<div class="row">
 		<div class="col-sm-4 required">
-			<label for="candidat_pays"><?php trans_e("Pays de résidence"); ?></label>
-			<select id="candidat_pays" name="candidat[id_pays]" class="form-control" required>
-				<option value="" data-code=""></option>
-				<?php foreach ($pays as $key => $value) : ?>
-					<option value="<?= $value->id_pays ?>" data-code="<?= $value->dial_code ?>"><?= $value->pays ?></option>
-				<?php endforeach; ?>
-	        </select>
-		</div>
-		<div class="col-sm-4 pl-0 pl-xs-15 required">
 			<label for="ville"><?php trans_e("Ville"); ?></label>
 			<select id="ville" name="candidat[ville]" class="form-control" required>
 				<option value=""></option>
@@ -82,15 +73,24 @@ $max_file_size = get_setting('max_file_size', 400);
 	    	'title' => trans("Autre ville")
 	    ]); ?>
 		</div>
+		<div class="col-sm-4 pl-0 pl-xs-15 required">
+			<label for="candidat_pays"><?php trans_e("Pays de résidence"); ?></label>
+			<select id="candidat_pays" name="candidat[id_pays]" class="form-control" required>
+				<option value="" data-code=""></option>
+				<?php foreach ($pays as $key => $value) : ?>
+					<option value="<?= $value->id_pays ?>" data-code="<?= $value->dial_code ?>"><?= $value->pays ?></option>
+				<?php endforeach; ?>
+	        </select>
+		</div>
 		<div class="col-sm-4 pl-0 pl-xs-15 col-xs-12 required">
 			<label for="nationalite"><?php trans_e("Nationalité"); ?></label>
 			<input type="text" class="form-control" id="nationalite" name="candidat[nationalite]" required>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-4 col-xs-12 required">
+		<div class="col-sm-4 col-xs-12">
 			<label for="cin"><?php trans_e("CIN"); ?></label>
-			<input type="text" class="form-control" id="cin" name="candidat[cin]" required>
+			<input type="text" class="form-control" id="cin" name="candidat[cin]">
 		</div>
 		<div class="col-sm-4 col-xs-12 pl-0 pl-xs-15 required">
 			<label for="tel1"><?php trans_e("Téléphone"); ?></label>
@@ -157,9 +157,9 @@ $max_file_size = get_setting('max_file_size', 400);
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-4 required">
+		<div class="col-sm-4">
 			<label for="salaire"><?php trans_e("Salaire souhaité"); ?></label>
-			<select id="salaire" name="candidat[id_salr]" class="form-control" required>
+			<select id="salaire" name="candidat[id_salr]" class="form-control">
 				<option value=""></option>
 				<?php foreach (getDB()->read('prm_salaires') as $key => $value) : ?>
 					<option value="<?= $value->id_salr ?>"><?= $value->salaire ?></option>
@@ -252,11 +252,11 @@ $max_file_size = get_setting('max_file_size', 400);
 	<div class="row">
 		<div class="col-sm-4 required">
 			<label for="forma_date_debut"><?php trans_e("Date de début"); ?></label>
-			<input type="date" max="<?= date('Y-m-d'); ?>" class="form-control" id="forma_date_debut" name="formation[date_debut]" required>
+			<input readonly type="text" class="form-control" id="forma_date_debut" name="formation[date_debut]" required>
 		</div>
 		<div class="col-sm-8 pl-0 pl-xs-15 required">
 			<label for="forma_date_fin"><?php trans_e("Date de fin"); ?></label>
-			<input type="date" max="<?= date('Y-m-d'); ?>" class="form-control" id="forma_date_fin" name="formation[date_fin]" style="max-width: 226px;float: left;margin-right: 10px;" required>
+			<input readonly type="text" class="form-control" id="forma_date_fin" name="formation[date_fin]" style="max-width: 226px;float: left;margin-right: 10px;" required>
 			<label for="forma_today" style="margin-top: 7px;" class="pointer">
 				<input type="checkbox" name="formation[today]" value="1" class="date_fin_today" id="forma_today">&nbsp;<?php trans_e("Jusqu'à aujourd'hui"); ?>
 			</label>
@@ -334,11 +334,11 @@ $max_file_size = get_setting('max_file_size', 400);
 	<div class="row">
 		<div class="col-sm-4">
 			<label for="date_debut"><?php trans_e("Date de début"); ?></label>
-			<input type="date" max="<?= date('Y-m-d'); ?>" class="form-control" id="exp_date_debut" name="experience[date_debut]">
+			<input readonly type="text" class="form-control" id="exp_date_debut" name="experience[date_debut]">
 		</div>
 		<div class="col-sm-8 pl-0 pl-xs-15">
 			<label for="date_fin"><?php trans_e("Date de fin"); ?></label>
-			<input type="date" max="<?= date('Y-m-d'); ?>" class="form-control" id="exp_date_fin" name="experience[date_fin]" style="max-width: 226px;float: left;margin-right: 10px;">
+			<input readonly type="text" class="form-control" id="exp_date_fin" name="experience[date_fin]" style="max-width: 226px;float: left;margin-right: 10px;">
 			<label for="exp_today" style="margin-top: 7px;" class="pointer">
 				<input type="checkbox" name="experience[today]" value="1" class="date_fin_today" id="exp_today">&nbsp;<?php trans_e("Jusqu'à aujourd'hui"); ?>
 			</label>
@@ -654,7 +654,19 @@ jQuery(document).ready(function(){
     }   
   })
 
-  
+  cimDatepicker('#candidat_date_n', {
+  	dateFormat: 'dd/mm/yy',
+  	maxDate: '-17Y',
+    minDate: "-63Y",
+  })
+
+  <?php if (get_setting('register_show_last_formation', 1) != 0 || get_setting('register_show_last_experience', 1) != 0) : ?>
+  cimDatepicker('[id$="date_debut"], [id$="date_fin"]', {
+  	dateFormat: 'dd/mm/yy',
+  	maxDate: '-0day',
+    minDate: "-30Y",
+  })
+  <?php endif; ?>
 
 });
 </script>

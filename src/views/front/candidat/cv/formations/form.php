@@ -13,7 +13,7 @@ use App\Form;
       $date_debut = french_to_english_date($date_debut);
     }
     ?>
-    <input type="date" max="<?= date('Y-m-d'); ?>" value="<?= $date_debut ?>" class="form-control" id="forma_date_debut" name="date_debut" required>
+    <input type="text" readonly value="<?= $date_debut ?>" class="form-control" id="forma_date_debut" name="date_debut" required>
   </div>
   <div class="col-sm-8 pl-0 pl-xs-15 required">
     <label for="forma_date_fin"><?php trans_e("Date de fin"); ?></label>
@@ -24,7 +24,7 @@ use App\Form;
       $date_fin = french_to_english_date($date_fin);
     }
     ?>
-    <input type="date" max="<?= date('Y-m-d'); ?>" value="<?= $date_fin ?>" class="form-control" id="forma_date_fin" name="date_fin" style="max-width: 186px;float: left;margin-right: 10px;<?= (isset($formation->date_fin) && $formation->date_fin == '') ? 'display: none;"' : '" required' ?>>
+    <input type="text" readonly value="<?= $date_fin ?>" class="form-control" id="forma_date_fin" name="date_fin" style="max-width: 186px;float: left;margin-right: 10px;<?= (isset($formation->date_fin) && $formation->date_fin == '') ? 'display: none;"' : '" required' ?>>
     <label for="forma_today" style="margin-top: 10px;" class="pointer">
       <input type="checkbox" value="1" class="date_fin_today" id="forma_today"<?= (isset($formation->date_fin) && $formation->date_fin == '') ? ' checked' : '' ?>>&nbsp;<?php trans_e("Jusqu'à aujourd'hui"); ?>
     </label>
@@ -137,6 +137,12 @@ jQuery(document).ready(function(){
       $($forma_other).prop('required', false)
       $($forma_other).hide()
     }   
+  })
+
+  cimDatepicker('[id$="date_debut"], [id$="date_fin"]', {
+    dateFormat: 'dd/mm/yy',
+    maxDate: '-0day',
+    minDate: "-30Y",
   })
 
 })
