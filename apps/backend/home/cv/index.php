@@ -44,6 +44,13 @@ if (!isset($_SESSION["abb_admin"]) || $_SESSION["abb_admin"] == "") {
 
     $reponse = mysql_fetch_array($sql);
 
+    // Mark candidat profile as seen
+		if (isset($reponse['vues'])) {
+	    getDB()->update('candidats', 'candidats_id', $reponse['candidats_id'], [
+	    	'vues' => (intval($reponse['vues']) + 1)
+	    ]);
+		}
+
 	
 
 $a = mysql_num_rows($sql);
@@ -959,7 +966,7 @@ $expyear_df=(empty($experdate_df[2])) ? $experdate_df[1] : $experdate_df[2];
 
 }
 
-/*
+/**/
 
 $expdate_dd = explode('/', $resultat['date_debut']); 
 
@@ -979,7 +986,7 @@ $expemonth_dd=$expmonth_df='';
 
 }
 
-*/
+
 
 
 

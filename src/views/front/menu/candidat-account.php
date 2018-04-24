@@ -4,7 +4,7 @@
 	</div>
 	<div class="panel-body pt-5">
 		<div style="font-size: 12px;"><?php trans_e("Bienvenue"); ?>&nbsp;:&nbsp;<strong><?= App\Models\Candidat::getDisplayName(null, false) ?></strong></div>
-		<h3><i class="fa fa-lock"></i>&nbsp;<?php trans_e("Vous êtes connecté à votre espace"); ?></h3>
+		<h3><i class="fa fa-lock"></i>&nbsp;<?php trans_e("Vous êtes connectés à votre espace"); ?></h3>
 		
 		<ul class="account-nav">
 		<?php $canUpdateAccount = \Modules\Candidat\Models\Candidat::canUpdateAccount(); ?>

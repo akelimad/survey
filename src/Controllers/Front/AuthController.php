@@ -27,7 +27,7 @@ class AuthController extends Controller
 		'candidat_id_situ' => ['required|numeric', 'Situation actuelle'],
 		'candidat_id_sect' => ['required|numeric', 'Secteur actuel'],
 		'candidat_id_fonc' => ['required|numeric', 'Fonction'],
-		'candidat_id_salr' => ['required|numeric', 'Salaire souhaité'],
+		'candidat_id_salr' => ['numeric', 'Salaire souhaité'],
 		'candidat_id_nfor' => ['required|numeric', 'Niveau de formation'],
 		'candidat_id_tfor' => ['required|numeric', 'Type de formation'],
 		'candidat_id_dispo' => ['required|numeric', 'Disponibilité'],
@@ -38,9 +38,10 @@ class AuthController extends Controller
 		'candidat_date_n' => ['required|date|min_age,15', 'Date de naissance'],
 		'candidat_adresse' => ['required|eta_alpha_numeric|max_len,255', 'Adresse'],
 		'candidat_code' => ['numeric|max_len,10', 'Code postal'],
-		'candidat_ville' => ['required|alpha', 'Ville'],
+		'candidat_ville' => ['required|eta_string', 'Ville'],
+		'candidat_ville_other' => ['eta_string', 'Autre ville'],
 		'candidat_nationalite' => ['required|eta_string|max_len,16', 'Nationalité'],
-		'candidat_cin' => ['required|alpha_numeric|max_len,8', 'CIN'],
+		'candidat_cin' => ['alpha_numeric|max_len,8', 'CIN'],
 		'candidat_tel1_deal_code' => ['eta_alpha_numeric', 'Code du pays'], // not a field
 		'candidat_tel1' => ['required|phone_number|max_len,16', 'Téléphone'],
 		'candidat_tel2_deal_code' => ['required', 'Code du pays'], // not a field
@@ -67,6 +68,7 @@ class AuthController extends Controller
 		'formation_diplome' => ['required|numeric', 'Diplôme'],
 		'formation_description' => ['required|eta_alpha_numeric', 'Description de la formation'],
 		'formation_nivformation' => ['required|numeric', 'Nombre d’année de formation'],
+		'formation_ecole' => ['required|eta_string', 'Autre école ou établissement'],
 		// Experience
 		'experience_id_sect' => ['numeric', 'Secteur d\'activité'],
 		'experience_id_fonc' => ['numeric', 'Fonction'],
@@ -77,6 +79,7 @@ class AuthController extends Controller
 		'experience_poste' => ['alpha_numeric|max_len,255', 'Intitulé du poste'],
 		'experience_entreprise' => ['alpha_numeric|max_len,255', 'Entreprise'],
 		'experience_ville' => ['alpha', 'Ville'],
+		'experience_ville_other' => ['alpha', 'Autre ville'],
 		'experience_description' => ['eta_alpha_numeric', 'Description du poste'],
 		'experience_salair_pecu' => ['numeric', 'Dernier salaire perçu'],
 	];
@@ -233,13 +236,13 @@ class AuthController extends Controller
 		$template = getDB()->findOne('root_email_auto', 'ref', 'h');
 		if(!isset($template->id_email)) return;
 
-		$message = Mailer::renderMessage($template->message, [
-			'nom_candidat' => $this->getCandidatFullname($candidat->id_civi, $candidat->nom, $candidat->prenom),
-      'email_candidat' => $candidat->email,
-      'mot_passe' => $password
-		]);
+		$variables = Mailer::getVariables($candidat);
+		$variables['mot_passe'] = $password;
 
-		return Mailer::send($candidat->email, $template->objet, $message, [
+		$subject = Mailer::renderMessage($template->objet, $variables);
+		$message = Mailer::renderMessage($template->message, $variables);
+
+		return Mailer::send($candidat->email, $subject, $message, [
 			'titre' => $template->titre,
 			'type_email' => 'Envoi automatique'
 		]);
@@ -262,7 +265,11 @@ class AuthController extends Controller
 	public function store($params)
 	{
 		// Verify google recaptcha
-		if(!isset($params['g-recaptcha-response']) || !$this->verifyGoogleRecaptcha($params['g-recaptcha-response'])) {
+		if(
+			get_setting('google_recaptcha_enabled', false) &&
+			(!isset($params['g-recaptcha-response']) || 
+			!$this->verifyGoogleRecaptcha($params['g-recaptcha-response']))
+		) {
 			return $this->jsonResponse('error', trans("Merci de cocher la case 'Je ne suis pas un robot'"));
 		}
 
@@ -300,15 +307,20 @@ class AuthController extends Controller
 			$id_candidat = $db->create('candidats', $cdata, false);
 			
 			// Create formation
-			$fdata = $this->getFormationData($params);
-			$fdata['candidats_id'] = $id_candidat;
-			$fdata['date_debut'] = date('m/Y', strtotime($fdata['date_debut']));
-			$fdata['date_fin'] = date('m/Y', strtotime($fdata['date_fin']));
-			$fdata['copie_diplome'] = (isset($upload['files']['copie_diplome'])) ? $upload['files']['copie_diplome']['name'] : '';
-			$db->create('formations', $fdata, false);
+			if (get_setting('register_show_last_formation', 1) == 1) {
+				$fdata = $this->getFormationData($params);
+				$fdata['candidats_id'] = $id_candidat;
+				$fdata['date_debut'] = date('m/Y', strtotime($fdata['date_debut']));
+				$fdata['date_fin'] = date('m/Y', strtotime($fdata['date_fin']));
+				$fdata['copie_diplome'] = (isset($upload['files']['copie_diplome'])) ? $upload['files']['copie_diplome']['name'] : '';
+				$db->create('formations', $fdata, false);
+			}
 			
 			// Create experience
-			if($params['experience']['date_debut'] != '') {
+			if(
+				$params['experience']['date_debut'] != '' && 
+				get_setting('register_show_last_experience', 1) == 1
+			) {
 				$exp_date_fin = ($params['experience']['date_debut'] != '') ? date('d/m/Y', strtotime($params['experience']['date_fin'])) : '';
 				$expData = $this->getExperienceData($params);
 				$expData['candidats_id'] = $id_candidat;
@@ -380,7 +392,7 @@ class AuthController extends Controller
 			'pupille' => null,
 			'handicape' => null,
 			'note_diplome' => 0,
-			'nl_emploi' => '',
+			'nl_emploi' => 1,
 			'nl_partenaire' => $params['candidat']['mdp'],
 			'date_inscription' => date('Y-m-d'),
 			'status' => 2,
@@ -396,6 +408,12 @@ class AuthController extends Controller
 				$data[$key] = $value;
 			}
 		}
+
+		if (isset($data['ville_other']) && !empty($data['ville_other'])) {
+			$data['ville'] = $data['ville_other'];
+		}
+		unset($data['ville_other']);
+
 		$data['date_n'] = \english_to_french_date($data['date_n']);
 		$data['mdp'] = md5($data['mdp']);
 		return $data;
@@ -434,6 +452,12 @@ class AuthController extends Controller
 				$data[$key] = $value;
 			}
 		}
+		
+		if (isset($data['ville_other']) && !empty($data['ville_other'])) {
+			$data['ville'] = $data['ville_other'];
+		}
+		unset($data['ville_other']);
+
 		return $data;
 	}
 	
@@ -564,16 +588,16 @@ class AuthController extends Controller
 		if(!isset($template->id_email)) return;
 
 		$lien = site_url("candidat/account/confirm/". md5($email.$id_candidat));
-		$message = Mailer::renderMessage($template->message, [
-			'nom_candidat' => $fullname,
-			'lieu_statu' => site_url(),
-			'lien_confirmation' => '<a href="'. $lien .'">'. $lien .'</a>'
-		]);
+		$variables = Mailer::getVariables($id_candidat);
+		$variables['lieu_statu'] =  site_url();
+		$variables['lien_confirmation'] = '<a href="'. $lien .'">'. $lien .'</a>';
+		$subject = Mailer::renderMessage($template->objet, $variables);
+		$message = Mailer::renderMessage($template->message, $variables);
 
 		$bcc = [$email_e];
 		if($email_e != $template->email) $bcc[] = $template->email;
 		
-		return Mailer::send($email, $template->objet, $message, [
+		return Mailer::send($email, $subject, $message, [
 			'titre' => $template->titre,
 			'coresp_nom' => $fullname,
 			'type_email' => 'Envoi automatique',

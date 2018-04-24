@@ -30,7 +30,21 @@
         </a>
 
         <div id="welcome">
-            <h3><?= get_setting('front_welcome_message', trans("Bienvenue sur Etalent")); ?></h3>
+            <h3 class="pull-left"><?= get_setting('front_welcome_message', trans("Bienvenue sur Etalent")); ?></h3>
+            <?php if (isModuleEnabled('language')) : ?>
+            <div id="languageBlock" class="pull-right" style="margin-top: 5px;">
+                <i class="fa fa-globe"></i>
+                <?= \App\Form::select(
+                    null, null, 
+                    \Modules\Language\Models\Language::getCurrentLanguage('iso_code', 'fr'),
+                    \Modules\Language\Models\Language::getActiveLanguages(), [
+                        'onchange' => 'Language.change(this.value)',
+                        'style' => 'outline:0;',
+                        'class' => ''
+                    ]
+                ); ?>
+            </div>
+            <?php endif; ?>
         </div>
 
         <div id="breadcrumb"><?php trans_e("Vous êtes ici:"); ?> <strong><?php echo $ariane; ?></strong></div>

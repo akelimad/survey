@@ -54,7 +54,7 @@
           <td width="150" style="padding: 4px 2px;"><input type="text" value="<?= $attach_title; ?>" disabled></td>
           <td><a href="<?= site_url('uploads/partner/entries/'. $entry->id_entry .'/'.$value); ?>" target="_blank"><i class="fa fa-download"></i>&nbsp;<?php trans_e("Télécharger"); ?></a></td>
           <td>
-            <button type="button" class="btn btn-danger btn-xs" onclick="return window.chmModal.confirm(this, '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer cette pièce joint ?"); ?>', 'chmOffer.deleteEntryAttachement', {eid: '<?= $entry->id_entry; ?>', roid: '<?= $id_role_offre; ?>', 'title': '<?= $attach_title; ?>'}, {width:315})"><i class="fa fa-trash"></i></button>
+            <button type="button" class="btn btn-danger btn-xs" onclick="return window.chmModal.confirm(this, '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer cette pièce jointe ?"); ?>', 'chmOffer.deleteEntryAttachement', {eid: '<?= $entry->id_entry; ?>', roid: '<?= $id_role_offre; ?>', 'title': '<?= $attach_title; ?>'}, {width:315})"><i class="fa fa-trash"></i></button>
           </td>
         </tr>
         <?php endforeach; endif; ?>

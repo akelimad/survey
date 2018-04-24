@@ -24,11 +24,11 @@ class Module {
         $autoloader = require SITE_BASE . '/vendor/autoload.php';
         foreach(glob( site_base('modules/*/index.php'), GLOB_BRACE) as $moduleIndex) {
             $modulePath = str_replace('index.php', '', $moduleIndex);
-            $moduleName = basename($modulePath);
-            $autoloader->setPsr4('Modules\\'. ucfirst($moduleName) .'\\', $modulePath);
+            $moduleName = dashesToCamelCase(basename($modulePath));
+            $autoloader->setPsr4('Modules\\'. $moduleName .'\\', $modulePath);
 
-            $autoloader->setPsr4('Modules\\'. ucfirst($moduleName) .'\\Controllers\\', $modulePath.'controllers/');
-            $autoloader->setPsr4('Modules\\'. ucfirst($moduleName) .'\\Models\\', $modulePath.'models/');
+            $autoloader->setPsr4('Modules\\'. $moduleName .'\\Controllers\\', $modulePath.'controllers/');
+            $autoloader->setPsr4('Modules\\'. $moduleName .'\\Models\\', $modulePath.'models/');
 
             require_once($moduleIndex);
         }

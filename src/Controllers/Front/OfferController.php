@@ -65,6 +65,12 @@ class OfferController extends Controller
       redirect(site_url());
     }
 
+    // Mark this offer as seen
+    // TODO - make it unique
+    getDB()->update('offre', 'id_offre', $offer->id_offre, [
+      'vue' => (intval($offer->vue) + 1)
+    ]);
+
     $this->data['offer'] = $offer;
     $this->data['tpost'] = getDB()->findOne('prm_type_poste', 'id_tpost', $offer->id_tpost);
     $this->data['exp'] = getDB()->findOne('prm_experience', 'id_expe', $offer->id_expe);
@@ -154,7 +160,7 @@ class OfferController extends Controller
   {
     // Check if candiat logged
     if(!isLogged('candidat')) {
-      return json_encode(['status' => 'hide_form', 'title' => trans("Connectez-vous!"), 'content' => trans("Vous devez") .' <strong onclick="return chmAuth.loginModal()" style="cursor: pointer;">'. trans("vous connecter") .'</strong> '. trans("pour répondre à cet l'offre.")]);
+      return json_encode(['status' => 'hide_form', 'title' => trans("Connectez-vous!"), 'content' => trans("Vous devez") .' <strong onclick="return chmAuth.loginModal()" style="cursor: pointer;">'. trans("vous connecter") .'</strong> '. trans("pour répondre à cette l'offre.")]);
     }
 
     $candidat_id = read_session('abb_id_candidat');
@@ -178,7 +184,7 @@ class OfferController extends Controller
     }
 
     // Check if offer available
-    $data['offer'] = getDB()->prepare("SELECT o.id_offre, o.Name, o.date_insertion, o.id_localisation FROM offre o WHERE o.id_offre=? AND o.status=? AND o.send_candidature=? AND DATE(o.date_expiration) >= CURDATE()", [$id_offre, 'En cours', 'true'], true);
+    $data['offer'] = getDB()->prepare("SELECT o.id_offre, o.Name, o.date_insertion, o.id_localisation FROM offre o WHERE o.id_offre=? AND o.status=? AND DATE(o.date_expiration) >= CURDATE()", [$id_offre, 'En cours'], true);
     if(!isset($data['offer']->id_offre)) {
       return json_encode(['status' => 'hide_form', 'title' => trans("Offre introuvable!"), 'content' => trans("Impossible de postuler à cet offre pour le moment, soit qu'il est expiré ou supprimé.")]);
     }
@@ -199,7 +205,7 @@ class OfferController extends Controller
   {
     // Check if candiat logged
     if(!isLogged('candidat')) {
-      return $this->jsonResponse('error', trans("Vous devez vous connecter pour répondre à cet l'offre."));
+      return $this->jsonResponse('error', trans("Vous devez vous connecter pour répondre à cette l'offre."));
     }
 
     $db = getDB();
@@ -419,14 +425,14 @@ class OfferController extends Controller
     $db->update('candidats', 'candidats_id', $candidat_id, ['can_update_account' => 0]);
 
     // Notify website RH about new candidature
-    $this->sendCandidatureEmail($candidat, $offer->Name);
+    $this->sendCandidatureEmail($candidat, $offer, $candidature_id);
 
     // Return success message
     return $this->jsonResponse('success', trans("Votre candidature a bien été envoyée avec succès."));
   }
 
 
-  private function sendCandidatureEmail($candidat, $offerName)
+  private function sendCandidatureEmail($candidat, $offer, $candidature_id)
   {
     global $email_e;
 
@@ -434,13 +440,9 @@ class OfferController extends Controller
     $template = getDB()->findOne('root_email_auto', 'ref', 'i');
     if(!isset($template->id_email)) return;
 
-    $template_vars = [
-      'nom_candidat' => Candidat::getDisplayName($candidat),
-      'titre_offre' => $offerName
-    ];
-
-    $subject = Mailer::renderMessage($template->objet, $template_vars);
-    $message = Mailer::renderMessage($template->message, $template_vars);
+    $variables = Mailer::getVariables($candidat, $offer, $candidature_id);
+    $subject = Mailer::renderMessage($template->objet, $variables);
+    $message = Mailer::renderMessage($template->message, $variables);
 
     $send = Mailer::send($candidat->email, $subject, $message, [
       'titre' => $template->titre,
@@ -450,7 +452,7 @@ class OfferController extends Controller
     // Notify RH team
     if($send['response'] == 'success') {
       $message = '<p><strong>'. trans("Bonjour,") .'</strong></p>';
-      $message .= '<p>'. trans("Une nouvelle candidature a été reçu sur l'offre:") .' <strong>'. $offerName .'</strong>';
+      $message .= '<p>'. trans("Une nouvelle candidature a été reçu sur l'offre:") .' <strong>'. $offer->Name .'</strong>';
       $message .= '<br>'. trans("Pour consulter les nouvelles candidatures") .' <strong><a href="'. site_url('backend/module/candidatures/candidature/list/0') .'">'. trans("cliquez ici") .'</a></strong></p>';
       $message .= '<p>'. trans("Cordialement") .'</p>';
       $receivers = [$email_e];

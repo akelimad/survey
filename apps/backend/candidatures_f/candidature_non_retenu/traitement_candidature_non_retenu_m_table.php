@@ -1064,7 +1064,7 @@ $lien_candidats_ture =  ''.$urladmin.'/historique_candidats/candidature/?btn_a=m
 
   Pour la sélection : 
 
-     <input   name="email_tt" class="espace_candidat" type="submit" value="Emails avec pièce joint" 
+     <input   name="email_tt" class="espace_candidat" type="submit" value="Emails avec la pièce jointe" 
 
      alt="Email envoyé aux candidats" style="    width: 175px;"/>
 

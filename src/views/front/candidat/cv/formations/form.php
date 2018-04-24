@@ -1,3 +1,7 @@
+<?php
+use App\Form;
+?>
+
 <input type="hidden" name="id" value="<?= (isset($formation->id_formation)) ? $formation->id_formation : 0 ?>">
 <div class="row">
   <div class="col-sm-4 required">
@@ -9,7 +13,7 @@
       $date_debut = french_to_english_date($date_debut);
     }
     ?>
-    <input type="date" max="<?= date('Y-m-d'); ?>" value="<?= $date_debut ?>" class="form-control" id="forma_date_debut" name="date_debut" required>
+    <input type="text" readonly value="<?= $date_debut ?>" class="form-control" id="forma_date_debut" name="date_debut" required>
   </div>
   <div class="col-sm-8 pl-0 pl-xs-15 required">
     <label for="forma_date_fin"><?php trans_e("Date de fin"); ?></label>
@@ -20,7 +24,7 @@
       $date_fin = french_to_english_date($date_fin);
     }
     ?>
-    <input type="date" max="<?= date('Y-m-d'); ?>" value="<?= $date_fin ?>" class="form-control" id="forma_date_fin" name="date_fin" style="max-width: 186px;float: left;margin-right: 10px;<?= (isset($formation->date_fin) && $formation->date_fin == '') ? 'display: none;"' : '" required' ?>>
+    <input type="text" readonly value="<?= $date_fin ?>" class="form-control" id="forma_date_fin" name="date_fin" style="max-width: 186px;float: left;margin-right: 10px;<?= (isset($formation->date_fin) && $formation->date_fin == '') ? 'display: none;"' : '" required' ?>>
     <label for="forma_today" style="margin-top: 10px;" class="pointer">
       <input type="checkbox" value="1" class="date_fin_today" id="forma_today"<?= (isset($formation->date_fin) && $formation->date_fin == '') ? ' checked' : '' ?>>&nbsp;<?php trans_e("Jusqu'à aujourd'hui"); ?>
     </label>
@@ -45,6 +49,12 @@
       </optgroup‏>
       <?php endforeach; ?>
     </select>
+    <?php $forma_other = (isset($formation->ecole)) ? $formation->ecole : ''; ?>
+    <?= Form::input('text', 'ecole', null, $forma_other, [], [
+      'class' => 'form-control',
+      'style' => (empty($formation->ecole)) ? 'display:none;' : '',
+      'title' => trans("Autre école ou établissement")
+    ]); ?>
   </div>
   <div class="col-sm-4 pl-0 pl-xs-15 required">
     <label for="forma_nfor"><?php trans_e("Nombre d’année de formation"); ?></label>
@@ -103,7 +113,7 @@ jQuery(document).ready(function(){
   CKEDITOR.replace('forma_description', {height: 200});
 
   // Trigger success
-  $('form').on('chm_form_success', function(event, response) {
+  $('form').on('chmFormSuccess', function(event, response) {
     if(response.status === 'success') {
       chmModal.destroy()
       window['chmAlert'][response.status](response.message)
@@ -114,6 +124,25 @@ jQuery(document).ready(function(){
         location.reload()
       }
     }
+  })
+
+  // Show other school field
+  $('#forma_ecol').change(function() {
+    var $forma_other = $('[name="ecole"]')
+    $($forma_other).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($forma_other).prop('required', true)
+      $($forma_other).show()
+    } else {
+      $($forma_other).prop('required', false)
+      $($forma_other).hide()
+    }   
+  })
+
+  cimDatepicker('[id$="date_debut"], [id$="date_fin"]', {
+    dateFormat: 'dd/mm/yy',
+    maxDate: '-0day',
+    minDate: "-30Y",
   })
 
 })

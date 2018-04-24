@@ -281,7 +281,7 @@ class Faker
       'pupille' => null,
       'handicape' => null,
       'note_diplome' => 0,
-      'nl_emploi' => null,
+      'nl_emploi' => 1,
       'nl_partenaire' => '123azerty',
       'date_inscription' => $this->randomDate('2017-01-01', '2018-03-01', 'Y-m-d'),
       'status' => 1,

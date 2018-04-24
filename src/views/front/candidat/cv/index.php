@@ -284,7 +284,7 @@ use App\Models\TypeFormation;
     </div>
     <?php endif; ?>
 
-    <?php if (!empty($cvs)) : ?>
+    <?php if (!empty($lms)) : ?>
     <div class="col-sm-6">
     <strong><?php trans_e("Lettres de motivation"); ?></strong>
     <ul class="mt-10">

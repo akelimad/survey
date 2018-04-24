@@ -141,6 +141,12 @@ return array(
 		"isVisible" => (read_session('menu7', 0) == 1),
 		"childrens" => [
 			[
+				"label" => trans("Gestion de multilingue"),
+				"route" => "backend/language/strings",
+				"icon" => "fa fa-globe",
+				"isVisible" => (isModuleEnabled('language') && $isSuperAdmin)
+			],
+			[
 				"label" => trans("Gestion des workflows"),
 				"route" => "backend/module/workflows/workflow",
 				"icon" => "fa fa-code-fork",

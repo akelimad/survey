@@ -222,7 +222,6 @@ Route::add('offer/search-form', 'App\Controllers\Front\OfferController@searchFor
 
 
 // Backend
-Route::add('backend/offres/creer_offre', 'App\Controllers\Admin\OfferController@getForm');
 Route::add('backend/logout', 'App\Controllers\Admin\AuthController@logout');
 
 

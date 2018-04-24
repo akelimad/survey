@@ -19,7 +19,7 @@ class Uploader {
         'maxSize' => 10,
         'extensions' => null,
         'required' => false,
-        'uploadDir' => 'apps/upload/',
+        'uploadDir' => 'uploads/',
         'title' => array('auto', 10),
         'removeFiles' => true,
         'perms' => null,
@@ -32,20 +32,20 @@ class Uploader {
     );
     
     public $error_messages = array(
-        1 => "The uploaded file exceeds the upload_max_filesize directive in php.ini.",
-        2 => "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.",
-        3 => "The uploaded file was only partially uploaded.",
-        4 => "No file was uploaded.",
-        6 => "Missing a temporary folder.",
-        7 => "Failed to write file to disk.",
-        8 => "A PHP extension stopped the file upload.",
-        'accept_file_types' => "Filetype not allowed",
-        'file_uploads' => "File uploading option in disabled in php.ini",
-        'post_max_size' => "The uploaded file exceeds the post_max_size directive in php.ini",
-        'max_file_size' => "File is too big",
-        'max_number_of_files' => "Maximum number of files exceeded",
-        'required_and_no_file' => "No file was choosed. Please select one.",
-        'no_download_content' => "File could't be download."
+        1 => "Le fichier téléchargé dépasse la directive upload_max_filesize dans php.ini.",
+        2 => "Le fichier téléchargé dépasse la directive MAX_FILE_SIZE spécifiée dans le formulaire HTML.",
+        3 => "Le fichier téléchargé n'a été que partiellement téléchargé.",
+        4 => "Aucun fichier n'a été téléchargé.",
+        6 => "Absence d'un dossier temporaire.",
+        7 => "Impossible d'écrire le fichier sur le disque",
+        8 => "Une extension PHP a arrêté le téléchargement du fichier.",
+        'accept_file_types' => "Type de fichier non autorisé",
+        'file_uploads' => "L'option de téléchargement de fichier est désactivée dans php.ini",
+        'post_max_size' => "Le fichier téléchargé dépasse la directive post_max_size dans php.ini",
+        'max_file_size' => "Le fichier est trop grand",
+        'max_number_of_files' => "Nombre maximal de fichiers dépassé",
+        'required_and_no_file' => "Aucun fichier n'a été choisi. S'il vous plait sélectionner en un",
+        'no_download_content' => "Impossible de télécharger le fichier."
     );
     
     private $field = null;
@@ -149,7 +149,7 @@ class Uploader {
             if(($options['limit'] && $field['length'] > $options['limit']) || ($field['length']) > $ini[3]) $errors[] = trans($this->error_messages['max_number_of_files']);
             if(!file_exists($options['uploadDir']) && !is_dir($options['uploadDir']) && mkdir($options['uploadDir'], 750, true)){
                 $this->data['hasWarnings'] = true;
-                $this->data['warnings'] = trans("A new directory was created in") ." " . realpath($options['uploadDir']);
+                $this->data['warnings'] = trans("Un nouveau répertoire a été créé dans") ." " . realpath($options['uploadDir']);
             }
             if(!is_writable($options['uploadDir'])) @chmod($options['uploadDir'], 750);
             

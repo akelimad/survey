@@ -6,7 +6,7 @@
  * @return string
  **/
 function get_setting($name = null, $dafault = null) {
-	$settings = $GLOBALS['etalent']->settings;
+	$settings = (isset($GLOBALS['etalent']->settings)) ? $GLOBALS['etalent']->settings : [];
 	if( empty($settings) ) {
 		$settings = [];
 		$setting = getDB()->read('setting');

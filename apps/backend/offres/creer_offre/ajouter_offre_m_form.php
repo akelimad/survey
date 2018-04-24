@@ -569,7 +569,7 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
             <tr>
                 <td colspan="2">
                     <div class="subscription" style="margin: 10px 0 5px;">
-                        <h1>Résultats des concour</h1>
+                        <h1>Résultat du concour</h1>
                     </div>
                 </td>
             </tr>

@@ -46,11 +46,11 @@ class EventController
 			if(isset($data['status']['mail']) && $data['status']['mail']['sender'] != '') {
 				$message = $data['status']['mail']['message'];
 				$data['status']['mail']['message'] = Mailer::renderMessage($message, [
-					'lien_confirmation' => '<a href="'. site_url('module/candidatures/confirm/calendar/'.$saveStatus['id_agend']) .'"> <b>'. trans("Confirmer") .'</b></a>'
+					'lien_confirmation' => '<a href="'. site_url('candidature/confirm/'. md5($saveStatus['id_agend'])) .'"> <b>'. trans("Confirmer") .'</b></a>'
 				]);
 				$sendEmail = (new AjaxController())->sendEmail($data['status']['mail']);
 				if( $sendEmail['response'] == 'success' ) {
-					Session::setFlash('success', trans("Une convocation a été envoyé au candidat."));
+					Session::setFlash('success', trans("Une convocation a été envoyée au candidat."));
 				} else {
 					Session::setFlash('error', $sendEmail['message']);
 				}
@@ -71,7 +71,7 @@ class EventController
 			getDB()->update('candidature', 'id_candidature', $data['change_offre']['id_candidature'], [
 				'id_offre' => $data['change_offre']['id']
 			]);
-			Session::setFlash('success', trans("L'offre de candidature a été enregistré."));
+			Session::setFlash('success', trans("L'offre de candidature a été enregistrée."));
 		}
 	}
 

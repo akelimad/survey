@@ -32,7 +32,7 @@ class CandidatureController extends Controller
     $this->data['table'] = $tableCtrl->getTable();
     $this->data['params'] = $tableCtrl->params;
     $this->data['template'] = 'two-columns-left';
-    $this->data['breadcrumbs'] = [trans("Candidatures"), trans("Nouvelle candidatures")];
+    $this->data['breadcrumbs'] = [trans("Candidatures"), trans("Nouvelles candidatures")];
 
     $this->data['table_actions'] = array_map(function($action) {
       return $action['label'];

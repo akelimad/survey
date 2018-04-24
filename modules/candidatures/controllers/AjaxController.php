@@ -202,7 +202,7 @@ class AjaxController
     if( !isset($candidature->id_candidature) ) return [];
 
     return $this->renderAjaxView(
-      trans("Changer la note écrit"), 
+      trans("Changer la note écrite"), 
       'admin/candidature/popup/update-note-ecrit', [
         'id_candidature' => $data['id_candidature'],
         'note_ecrit' => $candidature->note_ecrit
@@ -385,7 +385,7 @@ class AjaxController
   {
     if(!isset($data['id_attachement']) || $data['id_attachement'] == '') return [
       'status' => 'error',
-      'message' => trans("Impossible de supprimer cette pièce joint.")
+      'message' => trans("Impossible de supprimer cette pièce jointe.")
     ];
 
     $db = getDB();
@@ -396,7 +396,7 @@ class AjaxController
     if( !isset($attachment->id_attachment) ) {
       return [
         'status' => 'error',
-        'message' => trans("Impossible de trouver cette pièce joint.")
+        'message' => trans("Impossible de trouver cette pièce jointe.")
       ];
     }
 
@@ -407,7 +407,7 @@ class AjaxController
     
     return [
       'status' => 'success',
-      'message' => trans("La pièce joint a été supprimé.")
+      'message' => trans("La pièce jointe a été supprimé.")
     ];
   }
 
@@ -446,7 +446,7 @@ class AjaxController
         'date_statu' => $date_statut,
         'lieu_statut' => $c->lieu,
         'lieu_statu' => $c->lieu,
-        'lien_confirmation' => '<a href="'. site_url('confirmation/?i='.$c->id_agend) .'"> <b>'. trans("Confirmer") .'</b></a>'
+        'lien_confirmation' => '<a href="'. site_url('candidature/confirm/'. md5($c->id_agend)) .'"><b>'. trans("Confirmer") .'</b></a>'
       );
 
       return preg_replace_callback('#{{([^}]+)}}#', function($m) use ($message, $variables){

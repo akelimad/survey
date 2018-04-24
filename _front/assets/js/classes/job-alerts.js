@@ -27,7 +27,7 @@ export default class chmJobAlerts {
       data: {id: id, curStatus: curStatus}
     }, {
       onSuccess: (response) => {
-        window.chmTable.refresh($('#alertsTable'), null, true)
+        window.chmTable.refresh($('#alertsTable'), {scrollTo: true})
         window['chmAlert'][response.status](response.message)
       }
     })
@@ -40,7 +40,7 @@ export default class chmJobAlerts {
       data: params
     }, {
       onSuccess: (response) => {
-        window.chmTable.refresh($('#alertsTable'), null, true)
+        window.chmTable.refresh($('#alertsTable'), {scrollTo: true})
         window['chmAlert'][response.status](response.message)
       }
     })

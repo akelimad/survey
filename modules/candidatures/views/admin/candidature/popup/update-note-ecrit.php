@@ -2,7 +2,7 @@
 	<input type="hidden" name="id_candidature" value="<?= $id_candidature ?>">
 
 	<div class="row mb-15">
-		<label for="note_ecrit" class="col-md-4"><?php trans_e("Note écrit"); ?>&nbsp;<font style="color:red;">*</font></label>
+		<label for="note_ecrit" class="col-md-4"><?php trans_e("Note écrite"); ?>&nbsp;<font style="color:red;">*</font></label>
 		<div class="col-md-8">
 			<input type="number" min="0" max="20" step="0.01" name="note_ecrit" id="note_ecrit" value="<?= $note_ecrit ?>" style="width: 100%;" required>
 		</div>

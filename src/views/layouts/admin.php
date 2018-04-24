@@ -21,6 +21,11 @@
             <div class="col-md-12">
                 <nav class="navbar navbar-default" id="top-navbar">
                     <div class="container-fluid pl-5 pl-xs-15">
+                        <ul class="nav navbar-nav navbar-left">
+                            <li>
+                                <a target="_blank" href="<?php site_url(); ?>" style="padding: 3px 5px;"><i class="fa fa-arrow-left"></i>&nbsp;<?php trans_e("Retour vers le site") ?></a>
+                            </li>
+                        </ul>
                         <ul class="nav navbar-nav navbar-right pr-5">
                             <li><a href="<?= get_site('site_url'); ?>" target="_blank" style="color:#ffffff;" title="Accès au site de l'institution - Nouvelle fenêtre"><?php trans_e("Accès au site de l'institution"); ?></a></li>
                             <li><a href="<?= site_url('contact') ?>" title="Contactez-nous"><?php trans_e("Contactez-nous"); ?></a></li>

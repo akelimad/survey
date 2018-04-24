@@ -42,7 +42,7 @@ class AjaxController extends Ajax
   {
     if( empty($data['id_offer']) ) return [];
 
-    return self::renderAjaxView(trans("Partager un offre"), 'admin/offer/popup/share', [
+    return self::renderAjaxView(trans("Partager une offre"), 'admin/offer/popup/share', [
       'id_offer' => $data['id_offer'], 
       'users' => getDB()->findByColumn('root_roles', 'id_type_role', 2)
     ], __FILE__);

@@ -868,7 +868,7 @@ title="Envoyer un email au candidat">
 
 echo '<a href="javascript:showDiv3(\''.$return['id_candidature'].'\',\''. $postit_c .'\')"
 
- title="Ajouter une pièce joint"  class="email" id="email" >
+ title="Ajouter une pièce jointe"  class="email" id="email" >
 
 <i class="fa fa-file-archive-o fa-fw fa-lg"></i>
 
@@ -904,7 +904,7 @@ if($piece_j != '')
 
 echo ' <a href="javascript:showDiv4(\''.$return['id_candidature'].'\',\'1\',\''.$postit01['piece_j'].'\')"
 
-                      title="+Voir la pièce joint :'.$postit01['piece_j'].'"  class="email" id="email" >
+                      title="+Voir la pièce jointe :'.$postit01['piece_j'].'"  class="email" id="email" >
 
                       <i class="fa fa-file-text fa-fw fa-lg" ></i>
 
@@ -918,7 +918,7 @@ if($piece_j1 != '')
 
 echo '<a href="javascript:showDiv4(\''.$return['id_candidature'].'\',\'2\',\''.$postit01['piece_j1'].'\')"
 
-                      title="+Voir la pièce joint :'.$postit01['piece_j1'].'"  class="email" id="email" >
+                      title="+Voir la pièce jointe :'.$postit01['piece_j1'].'"  class="email" id="email" >
 
                       <i class="fa fa-file-text fa-fw fa-lg" ></i>
 
@@ -930,7 +930,7 @@ if($piece_j2 != '')
 
 echo ' <a href="javascript:showDiv4(\''.$return['id_candidature'].'\',\'3\',\''.$postit01['piece_j2'].'\')"
 
-                      title="+Voir la pièce joint :'.$postit01['piece_j2'].'"  class="email" id="email" >
+                      title="+Voir la pièce jointe :'.$postit01['piece_j2'].'"  class="email" id="email" >
 
                       <i class="fa fa-file-text fa-fw fa-lg" ></i>
 
@@ -942,7 +942,7 @@ if($piece_j3 != '')
 
 echo '<a href="javascript:showDiv4(\''.$return['id_candidature'].'\',\'4\',\''.$postit01['piece_j3'].'\')"
 
-                      title="+Voir la pièce joint :'.$postit01['piece_j3'].'"  class="email" id="email" >
+                      title="+Voir la pièce jointe :'.$postit01['piece_j3'].'"  class="email" id="email" >
 
                       <i class="fa fa-file-text fa-fw fa-lg" ></i>
 
@@ -954,7 +954,7 @@ if($piece_j4 != '')
 
 echo ' <a href="javascript:showDiv4(\''.$return['id_candidature'].'\',\'5\',\''.$postit01['piece_j4'].'\')"
 
-                      title="+Voir la pièce joint :'.$postit01['piece_j4'].'"  class="email" id="email" >
+                      title="+Voir la pièce jointe :'.$postit01['piece_j4'].'"  class="email" id="email" >
 
                       <i class="fa fa-file-text fa-fw fa-lg" ></i>
 
@@ -1024,7 +1024,7 @@ onclick="colorer('<?php echo $i; ?>')"
 
   Pour la sélection : 
 
-     <input   name="email_tt" class="espace_candidat" type="submit" value="Emails avec pièce joint" 
+     <input   name="email_tt" class="espace_candidat" type="submit" value="Emails avec pièce jointe" 
 
      alt="Email envoyé aux candidats" style="    width: 175px;"/>
 

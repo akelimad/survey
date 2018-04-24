@@ -13,6 +13,14 @@ namespace App\Models;
 class TypePoste {
 
 
+  public static function findAll($with_empty = true)
+  {
+    $items = getDB()->prepare("SELECT id_tpost, designation, id_tpost as value, designation as text FROM prm_type_poste");
+    if ($with_empty) $items = ['' => ''] + $items;
+    return $items;
+  }
+
+
   /**
    * Get TypePoste name by ID
    *

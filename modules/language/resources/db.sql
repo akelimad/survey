@@ -25,3 +25,10 @@ CREATE TABLE `language_string_trans` (
   `value` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+
+INSERT INTO `languages` (`id`, `name`, `code`, `iso_code`, `short_name`, `direction`, `date_format`, `datetime_format`, `default_lang`, `active`) VALUES
+(1, 'Français', 'fr_FR', 'fr', 'FR', 0, 'd.m.Y', 'd.m.Y H:i:s', 1, 1),
+(2, 'English', 'en_US', 'en', 'EN', 0, 'Y-m-d', 'Y-m-d H:i:s', 0, 1),
+(3, 'اللغة العربية ', 'ar_AR', 'ar', 'AR', 1, 'd.m.Y', 'd.m.Y H:i:s', 0, 0),
+(4, 'Español', 'es_ES', 'es', 'ES', 0, 'd.m.Y', 'd.m.Y H:i:s', 0, 0);

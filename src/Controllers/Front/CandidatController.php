@@ -30,7 +30,7 @@ class CandidatController extends Controller
     'id_situ' => 'required|numeric',
     'id_sect' => 'required|numeric',
     'id_fonc' => 'required|numeric',
-    'id_salr' => 'required|numeric',
+    'id_salr' => 'numeric',
     'id_nfor' => 'required|numeric',
     'id_tfor' => 'required|numeric',
     'id_dispo' => 'required|numeric',
@@ -41,9 +41,10 @@ class CandidatController extends Controller
     'date_n' => 'required|date|min_age,15',
     'adresse' => 'required|eta_alpha_numeric|max_len,255',
     'code' => 'numeric|max_len,5',
-    'ville' => 'required|eta_alpha_numeric',
+    'ville' => 'required|eta_string',
+    'ville_other' => 'required|eta_string',
     'nationalite' => 'required|eta_string|max_len,16',
-    'cin' => 'required|alpha_numeric|max_len,8',
+    'cin' => 'alpha_numeric|max_len,8',
     'tel1' => 'required|phone_number|max_len,16',
     'tel2' => 'phone_number|max_len,16',
     'mobilite' => 'required|alpha',
@@ -70,6 +71,7 @@ class CandidatController extends Controller
     'adresse' => 'Adresse',
     'code' => 'Code postal',
     'ville' => 'Ville',
+    'ville_other' => 'Autre ville',
     'nationalite' => 'Nationalité',
     'cin' => 'CIN',
     'tel1' => 'Téléphone',
@@ -97,12 +99,11 @@ class CandidatController extends Controller
         // Send welcome email
         $template = getDB()->findOne('root_email_auto', 'ref', 'b');
         if(isset($template->id_email)) {
-          $message = Mailer::renderMessage($template->message, [
-            'nom_candidat' => Candidat::getDisplayName($candidat),
-            'email_candidat' => $candidat->email,
-            'mot_passe' => $candidat->nl_partenaire
-          ]);
-          Mailer::send($candidat->email, $template->objet, $message, [
+          $variables = Mailer::getVariables($candidat);
+          $subject = Mailer::renderMessage($template->objet, $variables);
+          $message = Mailer::renderMessage($template->message, $variables);
+
+          Mailer::send($candidat->email, $subject, $message, [
             'titre' => $template->titre,
             'type_email' => 'Envoi automatique'
           ]);
@@ -182,10 +183,11 @@ class CandidatController extends Controller
         // Send email
         $template = getDB()->findOne('root_email_auto', 'ref', 'o');
         if(isset($template->id_email)) {
-          $message = Mailer::renderMessage($template->message, [
-            'nom_candidat' => Candidat::getDisplayName()
-          ]);
-          Mailer::send(get_candidat('email'), $template->objet, $message, [
+          $variables = Mailer::getVariables(get_candidat_id());
+          $subject = Mailer::renderMessage($template->objet, $variables);
+          $message = Mailer::renderMessage($template->message, $variables);
+          
+          Mailer::send(get_candidat('email'), $subject, $message, [
             'titre' => $template->titre,
             'type_email' => 'Envoi automatique'
           ]);
@@ -211,6 +213,11 @@ class CandidatController extends Controller
       if(is_array($is_valid)) {
         return $this->jsonResponse('error', $is_valid);
       }
+
+      if (isset($data['ville_other']) && !empty($data['ville_other'])) {
+        $data['ville'] = $data['ville_other'];
+      }
+      unset($data['ville_other']);
 
       $data['date_n'] = \english_to_french_date($data['date_n']);
       $data['dateMAJ'] = date("Y-m-d H:i:s");

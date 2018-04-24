@@ -19,8 +19,11 @@ export default class chmUrl {
 	 * @param string name
 	 * @return string params
 	 */
-  static getParam (name, _default = null) {
-    var results = new RegExp('[?&]' + name + '=([^&#]*)').exec(window.location.href)
+  static getParam (name, _default = null, url = null) {
+    if (url === null) {
+      url = window.location.href
+    }
+    var results = new RegExp('[?&]' + name + '=([^&#]*)').exec(url)
     if (results == null) {
       return _default
     } else {
@@ -81,6 +84,11 @@ export default class chmUrl {
       }
       url = urlparts[0] + '?' + pars.join('&')
     }
+    window.history.pushState(null, document.title, url)
+  }
+
+  static eraseAllParams () {
+    var url = window.location.href.split('?')[0]
     window.history.pushState(null, document.title, url)
   }
 

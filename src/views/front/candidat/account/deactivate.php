@@ -31,7 +31,7 @@
 jQuery(document).ready(function(){
 
   // Trigger form success
-  $('form').on('chm_form_success', function(event, response) {
+  $('form').on('chmFormSuccess', function(event, response) {
     if(response.status === 'deactivated') {
       $('#candidat-account-menu').hide()
       $('#deactivateAccountForm').hide()

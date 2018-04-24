@@ -1,3 +1,5 @@
+<?php use App\Form; ?>
+
 <div class="chm-response-messages"></div>
 <?php
 $max_file_size = get_setting('max_file_size', 400);
@@ -43,7 +45,7 @@ $max_file_size = get_setting('max_file_size', 400);
 		</div>
 		<div class="col-sm-4 pl-0 pl-xs-15 required">
 			<label for="candidat_date_n"><?php trans_e("Date de naissance"); ?></label>
-			<input type="date" min="<?= date('Y-m-d', strtotime('-63year')); ?>" max="<?= date('Y-m-d', strtotime('-16year')); ?>" class="form-control" id="candidat_date_n" name="candidat[date_n]" required>
+			<input readonly type="text" class="form-control" id="candidat_date_n" name="candidat[date_n]" required>
 		</div>
 	</div>
 	<div class="row">
@@ -64,7 +66,12 @@ $max_file_size = get_setting('max_file_size', 400);
 				<?php foreach ($villes as $key => $value) : ?>
 					<option value="<?= $value->ville ?>"><?= $value->ville ?></option>
 				<?php endforeach; ?>
-	        </select>
+	    </select>
+	    <?= Form::input('text', 'candidat[ville_other]', null, null, [], [
+	    	'class' => 'form-control',
+	    	'style' => 'display:none;',
+	    	'title' => trans("Autre ville")
+	    ]); ?>
 		</div>
 		<div class="col-sm-4 pl-0 pl-xs-15 required">
 			<label for="candidat_pays"><?php trans_e("Pays de résidence"); ?></label>
@@ -81,9 +88,9 @@ $max_file_size = get_setting('max_file_size', 400);
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-4 col-xs-12 required">
+		<div class="col-sm-4 col-xs-12">
 			<label for="cin"><?php trans_e("CIN"); ?></label>
-			<input type="text" class="form-control" id="cin" name="candidat[cin]" required>
+			<input type="text" class="form-control" id="cin" name="candidat[cin]">
 		</div>
 		<div class="col-sm-4 col-xs-12 pl-0 pl-xs-15 required">
 			<label for="tel1"><?php trans_e("Téléphone"); ?></label>
@@ -150,9 +157,9 @@ $max_file_size = get_setting('max_file_size', 400);
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-4 required">
+		<div class="col-sm-4">
 			<label for="salaire"><?php trans_e("Salaire souhaité"); ?></label>
-			<select id="salaire" name="candidat[id_salr]" class="form-control" required>
+			<select id="salaire" name="candidat[id_salr]" class="form-control">
 				<option value=""></option>
 				<?php foreach (getDB()->read('prm_salaires') as $key => $value) : ?>
 					<option value="<?= $value->id_salr ?>"><?= $value->salaire ?></option>
@@ -238,17 +245,18 @@ $max_file_size = get_setting('max_file_size', 400);
 	</div>
 
 
+	<?php if (get_setting('register_show_last_formation', 1) != 0) : ?>
 	<div class="styled-title mt-0 mb-10">
 	  <h3><?php trans_e("Dernière formation"); ?></h3>
 	</div>
 	<div class="row">
 		<div class="col-sm-4 required">
 			<label for="forma_date_debut"><?php trans_e("Date de début"); ?></label>
-			<input type="date" max="<?= date('Y-m-d'); ?>" class="form-control" id="forma_date_debut" name="formation[date_debut]" required>
+			<input readonly type="text" class="form-control" id="forma_date_debut" name="formation[date_debut]" required>
 		</div>
 		<div class="col-sm-8 pl-0 pl-xs-15 required">
 			<label for="forma_date_fin"><?php trans_e("Date de fin"); ?></label>
-			<input type="date" max="<?= date('Y-m-d'); ?>" class="form-control" id="forma_date_fin" name="formation[date_fin]" style="max-width: 226px;float: left;margin-right: 10px;" required>
+			<input readonly type="text" class="form-control" id="forma_date_fin" name="formation[date_fin]" style="max-width: 226px;float: left;margin-right: 10px;" required>
 			<label for="forma_today" style="margin-top: 7px;" class="pointer">
 				<input type="checkbox" name="formation[today]" value="1" class="date_fin_today" id="forma_today">&nbsp;<?php trans_e("Jusqu'à aujourd'hui"); ?>
 			</label>
@@ -271,6 +279,11 @@ $max_file_size = get_setting('max_file_size', 400);
 				</optgroup‏>
 				<?php endforeach; ?>
 	    </select>
+	    <?= Form::input('text', 'formation[ecole]', null, null, [], [
+	    	'class' => 'form-control',
+	    	'style' => 'display:none;',
+	    	'title' => trans("Autre école ou établissement")
+	    ]); ?>
 		</div>
 		<div class="col-sm-4 pl-0 pl-xs-15 required">
 			<label for="forma_nfor"><?php trans_e("Nombre d’année de formation"); ?></label>
@@ -311,19 +324,21 @@ $max_file_size = get_setting('max_file_size', 400);
 			<textarea name="formation[description]" class="form-control" id="forma_description" required></textarea>
 		</div>
 	</div>
+	<?php endif; ?>
 
 	
+	<?php if (get_setting('register_show_last_experience', 1) != 0) : ?>
 	<div class="styled-title mt-10 mb-10">
 	  <h3><?php trans_e("Dernière expérience professionnelle"); ?></h3>
 	</div>
 	<div class="row">
 		<div class="col-sm-4">
 			<label for="date_debut"><?php trans_e("Date de début"); ?></label>
-			<input type="date" max="<?= date('Y-m-d'); ?>" class="form-control" id="exp_date_debut" name="experience[date_debut]">
+			<input readonly type="text" class="form-control" id="exp_date_debut" name="experience[date_debut]">
 		</div>
 		<div class="col-sm-8 pl-0 pl-xs-15">
 			<label for="date_fin"><?php trans_e("Date de fin"); ?></label>
-			<input type="date" max="<?= date('Y-m-d'); ?>" class="form-control" id="exp_date_fin" name="experience[date_fin]" style="max-width: 226px;float: left;margin-right: 10px;">
+			<input readonly type="text" class="form-control" id="exp_date_fin" name="experience[date_fin]" style="max-width: 226px;float: left;margin-right: 10px;">
 			<label for="exp_today" style="margin-top: 7px;" class="pointer">
 				<input type="checkbox" name="experience[today]" value="1" class="date_fin_today" id="exp_today">&nbsp;<?php trans_e("Jusqu'à aujourd'hui"); ?>
 			</label>
@@ -389,7 +404,12 @@ $max_file_size = get_setting('max_file_size', 400);
 				<?php foreach ($villes as $key => $value) : ?>
 					<option value="<?= $value->ville ?>"><?= $value->ville ?></option>
 				<?php endforeach; ?>
-	        </select>
+	    </select>
+	    <?= Form::input('text', 'experience[ville_other]', null, null, [], [
+	    	'class' => 'form-control',
+	    	'style' => 'display:none;',
+	    	'title' => trans("Autre ville")
+	    ]); ?>
 		</div>
 		<div class="col-sm-4 mb-10 pl-0 pl-xs-15">
 			<label for="copie_attestation"><?php trans_e("Copie de l’attestation"); ?>&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="<?php trans_e("Vous pouvez joindre votre Copie de l’attestation format Word, PDF ou Image, la taille ne doit pas dépasser"); ?> <?= $max_file_size; ?>ko"></i></label>
@@ -424,6 +444,7 @@ $max_file_size = get_setting('max_file_size', 400);
 			<textarea name="experience[description]" class="form-control" id="exp_description"></textarea>
 		</div>
 	</div>
+	<?php endif; ?>
 
 
 	<div class="styled-title mt-10 mb-10">
@@ -540,7 +561,7 @@ $max_file_size = get_setting('max_file_size', 400);
 		</div>
 	</div>
 
-
+	<?php if (get_setting('google_recaptcha_enabled', false)) : ?>
 	<div class="styled-title mt-0 mb-10">
 	  <h3><?php trans_e("Cocher la case suivant pour confirmer que vous n'êtes pas un robot."); ?></h3>
 	</div>
@@ -549,6 +570,7 @@ $max_file_size = get_setting('max_file_size', 400);
 			<div class="g-recaptcha" data-sitekey="<?= get_setting('google_recaptcha_sitekey') ?>"></div>
 		</div>
 	</div>
+	<?php endif; ?>
 
 	<div class="styled-title mt-10 mb-5">
 	  <h3><?php trans_e("Conditions d'utilisation"); ?></h3>
@@ -576,17 +598,75 @@ $max_file_size = get_setting('max_file_size', 400);
 jQuery(document).ready(function(){
 
 	// Editors
+	<?php if (get_setting('register_show_last_formation', 1) != 0) : ?>
 	CKEDITOR.replace('forma_description', {height: 200});
+	<?php endif; ?>
+
+	<?php if (get_setting('register_show_last_experience', 1) != 0) : ?>
 	CKEDITOR.replace('exp_description', {height: 200});
+	<?php endif; ?>
 
 	$('#candidat_titre').focus()
 
 	// Trigger success
-	$('form').on('chm_form_success', function(event, response) {
+	$('form').on('chmFormSuccess', function(event, response) {
 		if(response.status === 'success') {
 			$(this).hide()
 		}
 	})
+
+	// Show other school field
+  $('#forma_ecol').change(function() {
+    var $other_input = $('#formation_ecole')
+    $($other_input).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($other_input).prop('required', true)
+      $($other_input).show()
+    } else {
+      $($other_input).prop('required', false)
+      $($other_input).hide()
+    }   
+  })
+
+  // Ville
+  $('#ville').change(function() {
+    var $other_input = $('#candidat_ville_other')
+    $($other_input).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($other_input).prop('required', true)
+      $($other_input).show()
+    } else {
+      $($other_input).prop('required', false)
+      $($other_input).hide()
+    }   
+  })
+
+  // Experience ville
+  $('#exp_ville').change(function() {
+    var $other_input = $('#experience_ville_other')
+    $($other_input).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($other_input).prop('required', true)
+      $($other_input).show()
+    } else {
+      $($other_input).prop('required', false)
+      $($other_input).hide()
+    }   
+  })
+
+  cimDatepicker('#candidat_date_n', {
+  	dateFormat: 'dd/mm/yy',
+  	maxDate: '-17Y',
+    minDate: "-63Y",
+  })
+
+  <?php if (get_setting('register_show_last_formation', 1) != 0 || get_setting('register_show_last_experience', 1) != 0) : ?>
+  cimDatepicker('[id$="date_debut"], [id$="date_fin"]', {
+  	dateFormat: 'dd/mm/yy',
+  	maxDate: '-0day',
+    minDate: "-30Y",
+  })
+  <?php endif; ?>
 
 });
 </script>

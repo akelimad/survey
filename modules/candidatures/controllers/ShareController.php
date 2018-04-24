@@ -30,7 +30,7 @@ class ShareController
     $candidatures = json_decode($data['candidatures'], true);
     $randPassword = $this->genPassword(8);
 
-    $data['message'] .= "<br><br><p>". trans("Vos identifiants de connexion sur notre site web:") ." {{site}}<br>". trans("Votre email:") ." {{email}}<br>". trans("Mot de passe:") ." {{mot_passe}}<br>". trans("Ces identifiants vous permettront de consulté des candidatures ciblé.") ."</p>";
+    $data['message'] .= "<br><br><p>". trans("Vos identifiants de connexion sur notre site web:") ." {{site}}<br>". trans("Votre email:") ." {{email}}<br>". trans("Mot de passe:") ." {{mot_passe}}<br>". trans("Ces identifiants vous permettront de consulter des candidatures ciblées.") ."</p>";
 
     $login_url = site_url('backend/login');
     $data['message'] = Mailer::renderMessage($data['message'], [

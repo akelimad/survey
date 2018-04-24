@@ -260,6 +260,21 @@ class Database {
 	}
 
 
+  /**
+   * Select max ID from table
+   *
+   * @param string $table
+   * @param string $column
+   * @param string $value
+   *
+   * @return $datas array
+   */
+  public function max($table, $key){ 
+    $result = self::$_instance->prepare("SELECT MAX({$key}) as max FROM {$table}", [], true);
+    return intval($result->max);
+  }
+
+
 	/**
    * Tell if table contain at least one row by condition
    *
