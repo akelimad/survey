@@ -14,7 +14,6 @@ use App\Ajax;
 use App\Controllers\Controller;
 use Modules\Language\Models\Language;
 use App\Helpers\SimpleXLSX;
-use \ForceUTF8\Encoding;
 
 class LanguageController extends Controller
 {
@@ -117,6 +116,8 @@ class LanguageController extends Controller
   public function import($params)
   {
     if (form_submited()) {
+      header('Content-Type: text/html; charset=utf-8');
+      
       // Increase memory limit
       set_time_limit(0);
       ini_set('memory_limit', '-1');
