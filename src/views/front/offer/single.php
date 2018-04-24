@@ -15,7 +15,7 @@
       </tr>
       <tr>
         <td><?php trans_e("Niveau d'expérience"); ?></td>
-        <td>:<strong>&nbsp;<?= (isset($tpost->designation)) ? $tpost->designation : '' ?></strong></td>
+        <td>:<strong>&nbsp;<?= (isset($exp->intitule)) ? $exp->intitule : '' ?></strong></td>
       </tr>
       <tr>
         <td><?php trans_e("Niveau de formation"); ?></td>
