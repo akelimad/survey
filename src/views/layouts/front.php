@@ -25,9 +25,13 @@
             </div>
         </nav>
         
-        <a href="<?= site_url(); ?>" id="logo-banner">
-            <img src="<?= site_url('assets/images/bannier/'. $GLOBALS['etalent']->config['banniere']); ?>" class="img-responsive">
-        </a>
+        <?php if (get_setting('custom_logo_banner', '') != '') : ?>
+            <?= get_setting('custom_logo_banner') ?>
+        <?php else : ?>
+            <a href="<?= site_url(); ?>" id="logo-banner">
+                <img src="<?= site_url('assets/images/bannier/'. $GLOBALS['etalent']->config['banniere']); ?>" class="img-responsive">
+            </a>
+        <?php endif; ?>
 
         <div id="welcome">
             <h3 class="pull-left"><?= get_setting('front_welcome_message', trans("Bienvenue sur Etalent")); ?></h3>
