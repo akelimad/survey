@@ -59,7 +59,12 @@
       ?>
         <option value="<?= $value->id_fonc ?>" <?= $selected; ?>><?= $value->fonction ?></option>
       <?php endforeach; ?>
-        </select>
+    </select>
+    <?= Form::input('text', 'fonction_other', null, $exp->fonction_other, [], [
+      'class' => 'form-control',
+      'style' => (empty($exp->fonction_other)) ? 'display:none;' : '',
+      'title' => trans("Autre école ou établissement")
+    ]); ?>
   </div>
   <div class="col-sm-4 pl-0 pl-xs-15 required">
     <label for="exp_tpost"><?php trans_e("Type de contrat"); ?></label>
@@ -166,6 +171,19 @@ jQuery(document).ready(function(){
   // Experience ville
   $('#exp_ville').change(function() {
     var $other_input = $('#ville_other')
+    $($other_input).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($other_input).prop('required', true)
+      $($other_input).show()
+    } else {
+      $($other_input).prop('required', false)
+      $($other_input).hide()
+    }   
+  })
+
+  // Fonction
+  $('#exp_fonction').change(function() {
+    var $other_input = $('#fonction_other')
     $($other_input).val('')
     if ($(this).find('option:selected').text().match("^Autre")) {
       $($other_input).prop('required', true)

@@ -49,8 +49,7 @@ use App\Form;
       </optgroup‏>
       <?php endforeach; ?>
     </select>
-    <?php $forma_other = (isset($formation->ecole)) ? $formation->ecole : ''; ?>
-    <?= Form::input('text', 'ecole', null, $forma_other, [], [
+    <?= Form::input('text', 'ecole', null, $formation->ecole, [], [
       'class' => 'form-control',
       'style' => (empty($formation->ecole)) ? 'display:none;' : '',
       'title' => trans("Autre école ou établissement")
@@ -76,7 +75,12 @@ use App\Form;
       ?>
         <option value="<?= $value->id_fili ?>" <?= $selected; ?>><?= $value->filiere ?></option>
       <?php endforeach; ?>
-        </select>
+    </select>
+    <?= Form::input('text', 'diplome_other', null, $formation->diplome_other, [], [
+      'class' => 'form-control',
+      'style' => (empty($formation->diplome_other)) ? 'display:none;' : '',
+      'title' => trans("Autre (à péciser)")
+    ]); ?>
   </div>
 </div>
 <div class="row mt-0">
@@ -139,6 +143,19 @@ jQuery(document).ready(function(){
     }   
   })
 
+  // Fonction
+  $('#forma_diplome').change(function() {
+    var $other_input = $('#diplome_other')
+    $($other_input).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($other_input).prop('required', true)
+      $($other_input).show()
+    } else {
+      $($other_input).prop('required', false)
+      $($other_input).hide()
+    }   
+  })
+  
   cimDatepicker('[id$="date_debut"], [id$="date_fin"]', {
     dateFormat: 'dd/mm/yy',
     maxDate: '-0day',

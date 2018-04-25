@@ -49,6 +49,7 @@ class ExperienceController extends Controller
     Validator::set_field_names([
       'id_sect' => trans("Secteur d'activité"),
       'id_fonc' => trans("Fonction"),
+      'fonction_other' => trans("Autre Fonction"),
       'id_tpost' => trans("Type de contrat"),
       'id_pays' => trans("Pays"),
       'date_debut' => trans("Date de début"),
@@ -64,6 +65,7 @@ class ExperienceController extends Controller
     $is_valid = Validator::is_valid($data, [
       'id_sect' => 'numeric',
       'id_fonc' => 'numeric',
+      'fonction_other' => 'eta_string',
       'id_tpost' => 'numeric',
       'id_pays' => 'numeric',
       'date_debut' => 'date',

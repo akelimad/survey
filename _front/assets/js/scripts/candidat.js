@@ -41,12 +41,9 @@ $(document).ready(function () {
     }
   })
 
-  // set deal_code
+  // set dial_code
   $('body').on('change', '#candidat_pays', function () {
-    var codeFormated = ''
-    var code = $(this).find('option:selected').data('code')
-    if (code !== '') codeFormated = '(+' + code + ')'
-    $('.deal_code').val(codeFormated)
+    $('.dial_code').val($(this).find('option:selected').data('code'))
   })
 
   // mobilite

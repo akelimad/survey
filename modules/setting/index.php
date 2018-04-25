@@ -34,13 +34,23 @@ function get_setting($name = null, $dafault = null) {
  * @param string $value
  * @return bool
  **/
-function create_setting($name, $description, $value, $unique = true) {
+function create_setting($name, $description, $value, $unique = true, $editable = true) {
 	unset($GLOBALS['etalent']->settings);
 	$db = getDB();
+	$editable = ($editable) ? 1 : 0;
 	if( $unique && $db->exists('setting', 'name', $name) ) {
-		return $db->update('setting', 'name', $name, ['value' => $value, 'description' => $description]);
+		return $db->update('setting', 'name', $name, [
+			'value' => $value, 
+			'description' => $description, 
+			'editable' => $editable
+		]);
 	}
-	$db->create('setting', ['name' => $name, 'value' => $value, 'description' => $description]);
+	$db->create('setting', [
+		'name' => $name, 
+		'value' => $value, 
+		'description' => $description, 
+		'editable' => $editable
+	]);
 	return true;
 }
 

@@ -3,7 +3,7 @@
 		<h4 class="panel-title"><?php trans_e("Espace candidat"); ?></h4>
 	</div>
 	<div class="panel-body pt-5">
-		<div style="font-size: 12px;"><?php trans_e("Bienvenue"); ?>&nbsp;:&nbsp;<strong><?= App\Models\Candidat::getDisplayName(null, false) ?></strong></div>
+		<div style="font-size: 12px;"><?php trans_e("Bienvenue"); ?>&nbsp;:&nbsp;<strong><?= App\Models\Candidat::getDisplayName(null, true) ?></strong></div>
 		<h3><i class="fa fa-lock"></i>&nbsp;<?php trans_e("Vous êtes connectés à votre espace"); ?></h3>
 		
 		<ul class="account-nav">

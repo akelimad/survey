@@ -16,6 +16,7 @@ use App\Models\Candidat;
 use App\Ajax;
 use App\Media;
 use App\Mail\Mailer;
+use App\Form;
 
 class AuthController extends Controller
 {
@@ -27,7 +28,9 @@ class AuthController extends Controller
 		'candidat_id_situ' => ['required|numeric', 'Situation actuelle'],
 		'candidat_id_sect' => ['required|numeric', 'Secteur actuel'],
 		'candidat_id_fonc' => ['required|numeric', 'Fonction'],
+		'candidat_fonction_other' => ['eta_string', 'Autre Fonction'],
 		'candidat_id_salr' => ['numeric', 'Salaire souhaité'],
+		'candidat_id_currency' => ['numeric', 'Devise'],
 		'candidat_id_nfor' => ['required|numeric', 'Niveau de formation'],
 		'candidat_id_tfor' => ['required|numeric', 'Type de formation'],
 		'candidat_id_dispo' => ['required|numeric', 'Disponibilité'],
@@ -42,9 +45,8 @@ class AuthController extends Controller
 		'candidat_ville_other' => ['eta_string', 'Autre ville'],
 		'candidat_nationalite' => ['required|eta_string|max_len,16', 'Nationalité'],
 		'candidat_cin' => ['alpha_numeric|max_len,8', 'CIN'],
-		'candidat_tel1_deal_code' => ['eta_alpha_numeric', 'Code du pays'], // not a field
+		'candidat_dial_code' => ['required|eta_alpha_numeric', 'Indicatif téléphonique'],
 		'candidat_tel1' => ['required|phone_number|max_len,16', 'Téléphone'],
-		'candidat_tel2_deal_code' => ['required', 'Code du pays'], // not a field
 		'candidat_tel2' => ['phone_number|max_len,16', 'Téléphone secondaire'],
 		'candidat_email' => ['required|valid_email', 'Email'],
 		'candidat_mdp' => ['required|min_len,6', 'Mot de passe'],
@@ -66,12 +68,14 @@ class AuthController extends Controller
 		'formation_date_debut' => ['required|date', 'Date de début'],
 		'formation_date_fin' => ['date', 'Date de fin'],
 		'formation_diplome' => ['required|numeric', 'Diplôme'],
+		'formation_diplome_other' => ['eta_string', 'Autre diplôme'],
 		'formation_description' => ['required|eta_alpha_numeric', 'Description de la formation'],
 		'formation_nivformation' => ['required|numeric', 'Nombre d’année de formation'],
 		'formation_ecole' => ['required|eta_string', 'Autre école ou établissement'],
 		// Experience
 		'experience_id_sect' => ['numeric', 'Secteur d\'activité'],
 		'experience_id_fonc' => ['numeric', 'Fonction'],
+		'experience_fonction_other' => ['eta_string', 'Autre Fonction'],
 		'experience_id_tpost' => ['numeric', 'Type de contrat'],
 		'experience_id_pays' => ['numeric', 'Pays'],
 		'experience_date_debut' => ['date', 'Date de début'],
@@ -304,6 +308,7 @@ class AuthController extends Controller
 			// Create candidat
 			$cdata = $this->getCandidatData($params);
 			$cdata['photo'] = (isset($upload['files']['photo'])) ? $upload['files']['photo']['name'] : null;
+			$cdata['permis_conduire'] = (isset($upload['files']['permis_conduire'])) ? $upload['files']['permis_conduire']['name'] : null;
 			$id_candidat = $db->create('candidats', $cdata, false);
 			
 			// Create formation
@@ -332,16 +337,18 @@ class AuthController extends Controller
 			}
 
 			// Create CV
-			$db->create('cv', [
-				'candidats_id' => $id_candidat,
-				'lien_cv' => $upload['files']['cv']['name'],
-				'titre_cv' => $upload['files']['cv']['title'],
-				'principal' => 1,
-				'actif' => 1
-			], false);
+			if(isset($upload['files']['cv']) && Form::getFieldOption('displayed', 'register', 'cv')) {
+				$db->create('cv', [
+					'candidats_id' => $id_candidat,
+					'lien_cv' => $upload['files']['cv']['name'],
+					'titre_cv' => $upload['files']['cv']['title'],
+					'principal' => 1,
+					'actif' => 1
+				], false);
+			}
 
 			// Create LM
-			if(isset($upload['files']['lm'])) {
+			if(isset($upload['files']['lm']) && Form::getFieldOption('displayed', 'register', 'lm')) {
 				$db->create('lettres_motivation', [
 					'candidats_id' => $id_candidat,
 					'lettre' => $upload['files']['lm']['name'],
@@ -355,7 +362,7 @@ class AuthController extends Controller
 			$fullname = $this->getCandidatFullname($cdata['id_civi'], $cdata['nom'], $cdata['prenom']);
 			$this->sendVerificationEmail($id_candidat, $fullname, $cdata['email']);
 			
-			return $this->jsonResponse('success', [trans("Votre compte à été créé avec succès."), trans("Un e-mail vous a été envoyé avec des instructions détaillées sur la façon de l'activer.")], ['dismissible' => false]);
+			return $this->jsonResponse('success', [trans("Votre compte a été créé avec succès."), trans("Un e-mail vous a été envoyé avec des instructions détaillées sur la façon de l'activer.")], ['dismissible' => false]);
 		} else {
 			return $this->jsonResponse('error', $is_valid);
 		}
@@ -404,7 +411,7 @@ class AuthController extends Controller
 		];
 		$rules = preg_filter('/^candidat_(.*)/', '$1', array_keys($this->rules));
 		foreach ($params['candidat'] as $key => $value) {
-			if(in_array($key, $rules) && !in_array($key, ['tel1_deal_code', 'tel2_deal_code', 'mdp_confirm'])) {
+			if(in_array($key, $rules) && !in_array($key, ['mdp_confirm'])) {
 				$data[$key] = $value;
 			}
 		}
@@ -485,37 +492,43 @@ class AuthController extends Controller
 			'photo' => [
 				'name' => trans("Photo"),
 				'path' => 'apps/upload/frontend/photo_candidats/',
-				'required' => false,
+				'required' => Form::getFieldOption('required', 'register', 'photo'),
 				'extensions' => ['png', 'jpg', 'jpeg', 'gif'],
 			],
 			'cv' => [
 				'name' => trans("CV"),
 				'path' => 'apps/upload/frontend/cv/',
-				'required' => true,
+				'required' => Form::getFieldOption('required', 'register', 'cv'),
 				'extensions' => ['doc', 'docx', 'pdf'],
 			],
 			'lm' => [
 				'name' => trans("Lettre de motivation"),
 				'path' => 'apps/upload/frontend/lmotivation/',
-				'required' => false,
+				'required' => Form::getFieldOption('required', 'register', 'lm'),
 				'extensions' => ['doc', 'docx', 'pdf'],
 			],
 			'copie_diplome' => [
 				'name' => trans("Copie du diplôme"),
 				'path' => 'apps/upload/frontend/candidat/copie_attestation/',
-				'required' => false,
+				'required' => Form::getFieldOption('required', 'register', 'copie_diplome'),
 				'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
 			],
 			'copie_attestation' => [
 				'name' => trans("Copie de l’attestation"),
-				'path' => 'apps/upload/frontend/candidat/copie_diplome/',
-				'required' => false,
+				'path' => 'apps/upload/frontend/candidat/copie_attestation/',
+				'required' => Form::getFieldOption('required', 'register', 'copie_attestation'),
 				'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
 			],
 			'bulletin_paie' => [
 				'name' => trans("Bulletin de paie"),
 				'path' => 'apps/upload/frontend/candidat/bulletin_paie/',
-				'required' => false,
+				'required' => Form::getFieldOption('required', 'register', 'bulletin_paie'),
+				'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
+			],
+			'permis_conduire' => [
+				'name' => trans("Permis de conduire"),
+				'path' => 'apps/upload/frontend/candidat/permis_conduire/',
+				'required' => Form::getFieldOption('required', 'register', 'permis_conduire'),
 				'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
 			]
 		];
