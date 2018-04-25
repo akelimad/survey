@@ -1,3 +1,7 @@
+<?php
+use Modules\Socialshare\Models\Share;
+$params = Share::checkRequiredParameters();
+?>
 <style type="text/css">
 td{
 	vertical-align:middle !important;
@@ -9,42 +13,39 @@ i.fa-stop{
 	color:#ff1717;
 }
 </style>
-<h1 style="text-transform: uppercase"><?= trans('Liste des application linkedin') ?></h1>
-<div chm-table="socialshare/linkedin/table" id="ApplinkedinTableContainer"></div>
-<?php get_flash_message() ?>
+<?php get_flash_message() ?><br>
+<h1 style="text-transform: uppercase;" class="pull-left"><?= trans('Liste des applications linkedin') ?></h1>
+<a href="backend/socialshare/settings" chm-modal chm-modal-options='{"form": {"action": "backend/socialshare/settings", "class": "chm-simple-form"}, "footer": {"label": "<?php trans_e("Sauvgarder"); ?>"}, "width": "400"}' class="btn btn-primary btn-xs pull-right mb-15"><i class="fa fa-cogs"></i>&nbsp;<?php trans_e("Paramètrages") ?></a>
+<div chm-table="socialshare/linkedin/table" id="ApplinkedinTableContainer" style="clear:both"></div>
+<?php
+if ($params) {
+?>
 <form action="<?= site_url('backend/socialshare/linkedin/addconfig'); ?>" method="post">
 	<div class="row">
-		<div class="col-md-3">
-			<label for="client_id" class="col-md-4" style="width: 100%; padding: 0;"><?php trans_e("Client ID"); ?>&nbsp;<font style="color:red;">*</font></label>
-			<input type="text" name="client_id" id="client_id" style="width: 100%;" required />
-		</div>
-		<div class="col-md-3">
-			<label for="client_secret" class="col-md-4" style="width: 100%; padding: 0;"><?php trans_e("Client Secret"); ?>&nbsp;<font style="color:red;">*</font></label>
-			<input type="text" name="client_secret" id="client_secret" style="width: 100%;" />
-		</div>
-		<div class="col-md-3">
-			<label for="redirect_uri" class="col-md-4" style="width: 100%; padding: 0;"><?php trans_e("Redirect URI"); ?>&nbsp;<font style="color:red;">*</font></label>
-			<input type="text" name="redirect_uri" id="redirect_uri" style="width: 100%;" required />
-		</div>
-		<div class="col-md-3">
-			<label for="share_in" class="col-md-4" style="width: 100%; padding: 0;"><?php trans_e("Share in"); ?>&nbsp;<font style="color:red;">*</font></label>
+		<div class="col-md-4">
+			<label for="share_in" class="col-md-4" style="width: 100%; padding: 0;"><?php trans_e("Ou souhaitez vous partager vos offres ?"); ?>&nbsp;<font style="color:red;">*</font></label>
 			<select name="share_in" id="share_in" style="width: 100%;padding: 2.5px;" required>
 				<option value="">-----------</option>
-				<option value="company">Company</option>
-				<option value="profil">Profil</option>
+				<option value="company">Votre company</option>
+				<option value="profil">Votre profil</option>
 				<option value="two">Les deux</option>
 			</select>
 			<div id="company_block" style="display:none;">
 				<br>
-				<label for="company_id" class="col-md-4" style="width: 100%; padding: 0;"><?php trans_e("Company ID"); ?>&nbsp;<font style="color:red;">*</font></label>
+				<label for="company_id" class="col-md-4" style="width: 100%; padding: 0;"><?php trans_e("Entrez l'ID de votre company"); ?>&nbsp;<font style="color:red;">*</font></label>
 				<input type="text" name="company_id" id="company_id" style="width: 100%;" />
 			</div>
 		</div>
 	</div>
 	<div class="form-group mt-10 mb-0">
-		<button type="submit" class="btn btn-primary btn-sm pull-right"><?php trans_e("Enregistrer"); ?></button>
+		<button type="submit" class="btn btn-primary btn-sm pull-left"><?php trans_e("Autoriser l'accés à votre compte"); ?></button>
 	</div>
 </form>
+<?php
+} else {
+get_alert('danger', trans("Veuillez remplir vos paramètres en cliquant sur le botton paramètrages à fin de continuer de partager vos offre"), false);
+}
+?>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#share_in').change(function() {

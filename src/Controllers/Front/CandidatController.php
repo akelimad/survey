@@ -489,6 +489,5 @@ class CandidatController extends Controller
     $this->data['breadcrumbs'] = [trans("Accueil"), trans("Candidat"), trans("Mes identifiants")];
     return get_page('front/candidat/change-password', $this->data);
   }
-
 	
 } // END Class
