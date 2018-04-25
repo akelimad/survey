@@ -41,7 +41,12 @@ class RouteController
 
     Route::add(
       'socialshare/linkedin/share/company/getcode',
-      'Modules\Socialshare\Controllers\AutoShareLinkedinController@getcode'
+      'Modules\Socialshare\Controllers\AutoShareLinkedinController@getCode'
+    );
+
+    Route::add(
+      'synchronize/linkedin/profil/data',
+      'Modules\Socialshare\Controllers\AutoShareLinkedinController@getCode2'
     );
 
     Route::add(
@@ -62,6 +67,11 @@ class RouteController
     Route::add(
       'backend/socialshare/settings',
       'Modules\Socialshare\Controllers\AutoShareLinkedinController@settings'
+    );
+
+    Route::add(
+      'synchronize/compte/linkedin',
+      'Modules\Socialshare\Controllers\AutoShareLinkedinController@synchronize'
     );
   }
 

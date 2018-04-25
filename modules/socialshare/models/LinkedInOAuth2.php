@@ -51,6 +51,8 @@ class LinkedInOAuth2 extends OAuth2 {
 			'first-name',
 			'last-name',      
 			'public-profile-url',
+			'location',
+			'formatted-name',
 			'num-connections',
 		);
 		$request = join(',',$fields);

@@ -35,7 +35,7 @@ class Share {
 		$app_infos = Session::get('app_infos');
 		$cpt = 0;
 		$app_json = '{';
-		$app_json .= '"Client_ID": '. '"'.$app_infos['CLIENT_ID'].'"' .', "Client_secret": '. '"'.$app_infos['CLIENT_SECRET'].'"' .', "Redirect_URI": '. '"'.$app_infos['REDIRECT_URI'].'"' .', ';
+		/*$app_json .= '"Client_ID": '. '"'.$app_infos['CLIENT_ID'].'"' .', "Client_secret": '. '"'.$app_infos['CLIENT_SECRET'].'"' .', "Redirect_URI": '. '"'.$app_infos['REDIRECT_URI'].'"' .', ';*/
 		foreach ($profil_infos as $key => $value) {
 			$app_json .= '"'.$key.'"' .': '. ( is_numeric($value) ? $value : '"'.$value.'"' ) .( $cpt < count($profil_infos) - 1 ? ',' : '' );
 			$cpt++;
@@ -51,7 +51,7 @@ class Share {
 
 	public static function getApps()
 	{
-		$apps = getDB()->prepare("SELECT name, value FROM setting WHERE name LIKE '%linkedin_app%'", NULL, FALSE);
+		$apps = getDB()->prepare("SELECT name, value FROM setting WHERE name LIKE '%linkedin_app%'", null, false);
 		return $apps;
 	}
 
