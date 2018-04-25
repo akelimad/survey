@@ -159,6 +159,12 @@ return array(
 				"isVisible" => $isSuperAdmin
 			],
 			[
+				"label" => trans("Gestion de partage linkedin"),
+				"route" => "backend/socialshare/linkedin/gestion",
+				"icon" => "fa fa-globe",
+				"isVisible" => (isModuleEnabled('socialshare') && $isSuperAdmin)
+			],
+			[
 				"label" => trans("Gestion des filiales"),
 				"route" => "backend/administration/filiales/",
 				"icon" => "fa fa-asterisk",

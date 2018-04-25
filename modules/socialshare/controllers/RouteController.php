@@ -58,6 +58,11 @@ class RouteController
       'backend/socialshare/publish/status/set',
       'Modules\Socialshare\Controllers\AutoShareLinkedinController@setPublishStatus'
     );
+
+    Route::add(
+      'backend/socialshare/settings',
+      'Modules\Socialshare\Controllers\AutoShareLinkedinController@settings'
+    );
   }
 
   /**

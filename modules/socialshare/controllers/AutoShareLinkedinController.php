@@ -15,6 +15,7 @@ use App\Session;
 use Modules\Socialshare\Models\Share;
 use Modules\Socialshare\Config\Social;
 use Modules\Socialshare\Models\LinkedInOAuth2;
+use App\Ajax;
 
 class AutoShareLinkedinController extends Controller
 {
@@ -24,13 +25,13 @@ class AutoShareLinkedinController extends Controller
 
   public function __construct()
   {
-    $this->config = Social::getConfig();
+    //$this->config = Social::getConfig();
     $this->Auth2linkedin = new LinkedInOAuth2();
   }
 
   public function view()
   {
-    $this->publishPost();
+    //$this->publishPost();
     $this->data['layout'] = (isBackend()) ? 'admin' : 'front';
     $this->data['apps'] = Share::getApps();
     $this->data['breadcrumbs'] = [
@@ -43,10 +44,11 @@ class AutoShareLinkedinController extends Controller
 
   public function addconfig($data)
   {
+    $setting = json_decode(get_setting('linkedin_config_app'), TRUE);
     Session::set('app_infos', array(
-      'CLIENT_ID'     => $data['client_id'],
-      'CLIENT_SECRET' => $data['client_secret'],
-      'REDIRECT_URI'  => $data['redirect_uri'],
+      'CLIENT_ID'     => $setting['Client_ID'],
+      'CLIENT_SECRET' => $setting['Client_secret'],
+      'REDIRECT_URI'  => $setting['Redirect_URI'],
       'SHARE_IN'      => $data['share_in'],
       'COMPANY_ID'    => ( isset($data['company_id']) ? $data['company_id'] : NULL)
     ));
@@ -64,8 +66,8 @@ class AutoShareLinkedinController extends Controller
 
  public function getcode()
   {
-   $code = $_GET['code'];
-   if (isset($code)) {
+   if (isset($_GET['code'])) {
+     $code = $_GET['code'];
      $app_infos = Session::get('app_infos');
      $response = $this->Auth2linkedin->getAccessToken($app_infos['CLIENT_ID'], $app_infos['CLIENT_SECRET'], $app_infos['REDIRECT_URI'], $code);
      $obj_token = [ 'access_token' => $response['access_token'], 'expires_in' => time() + $response['expires_in'] ];
@@ -122,6 +124,8 @@ class AutoShareLinkedinController extends Controller
       set_flash_message('error', trans("Une erreur est survenue lors de partage de l'offre veuillez réessayer plus tard!"));
       redirect( site_url(). 'backend/socialshare/linkedin/gestion' );
      }
+   } else {
+    redirect( site_url(). 'backend/socialshare/linkedin/gestion' );
    }
  }
 
@@ -171,5 +175,18 @@ class AutoShareLinkedinController extends Controller
   $app_infos['publish_status'] = $data['new_status'];
   create_setting($data['app_id'], json_encode($app_infos));
  }
+
+  public function settings($data)
+  {
+    if (form_submited() && isset($data['client_id'])) {
+      $app_json = '{"Client_ID": '. '"'.$data['client_id'].'"' .', "Client_secret": '. '"'.$data['client_secret'].'"' .', "Redirect_URI": '. '"'.$data['redirect_uri'].'"' .'}';
+      create_setting('linkedin_config_app', $app_json);
+      set_flash_message('success', trans("Vos paramètres ont été bien sauvgardés"));
+      redirect( site_url(). 'backend/socialshare/linkedin/gestion' );
+    } else {
+      $settings = json_decode(get_setting('linkedin_config_app'), TRUE);
+      return Ajax::renderAjaxView(trans("Paramètrages"), 'admin/socialshare/settings', compact('settings'), __FILE__);
+    }
+  }
 
 } // END Class
