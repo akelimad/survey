@@ -53,7 +53,7 @@
 
 <label for="confirm" class="mt-10">
   <input type="checkbox" id="confirm" style="width: auto;" required>
-  <strong style="font-size: 10px;"><?php trans_e("Je confirme qu'après l'envoi de ma candidature, je ne pouvez plus editer vos informations."); ?></strong>
+  <strong style="font-size: 10px;"><?php trans_e("Je confirme qu'après l'envoi de ma candidature, je ne pourrai plus éditer mon dossier de candidature."); ?></strong>
 </label>
 
 <script>
