@@ -137,7 +137,7 @@ class OfferController extends Controller
 
       $send = Mailer::send($data['email'], $subject, $message, [
         'titre' => trans("Envoyer l'offre à un ami"),
-        'coresp_nom' => Candidat::getDisplayName($sender),
+        'coresp_nom' => Candidat::getDisplayName($sender, true),
         'from' => [
           'name'  => $from_name,
           'email' => $sender->email

@@ -219,7 +219,8 @@ class Mailer
 		}
 
 		if (isset($candidat->candidats_id)) {
-			$variables['nom_candidat'] = Candidat::getDisplayName($candidat);
+			$with_civilite = (get_setting('candidat_show_civility_with_fullname', 1) == 1)
+			$variables['nom_candidat'] = Candidat::getDisplayName($candidat, $with_civilite);
 			$variables['nom'] = $candidat->nom;
 			$variables['prenom'] = $candidat->prenom;
 			$variables['civilite'] = Civility::getNameById($candidat->id_civi);

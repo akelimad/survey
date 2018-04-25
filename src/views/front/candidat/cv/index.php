@@ -121,7 +121,7 @@ use App\Models\TypeFormation;
     <div class="col-sm-9">
       <table class="cvTable my-cv">
         <tr>
-          <th colspan="2"><i class="fa fa-user"></i>&nbsp;<?= Candidat::getDisplayName(); ?></th>
+          <th colspan="2"><i class="fa fa-user"></i>&nbsp;<?= Candidat::getDisplayName(null, true); ?></th>
         </tr>
         <tr>
           <th width="120"><i class="fa fa-envelope"></i>&nbsp;<?php trans_e("E-mail"); ?></th>

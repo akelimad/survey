@@ -47,7 +47,7 @@ use Modules\Message\Models\Message;
     <div class="col-sm-10 col-xs-12 pl-0 pl-xs-15">
       <table class="cvTable my-cv">
         <tr>
-          <th colspan="2"><i class="fa fa-user"></i>&nbsp;<?= Candidat::getDisplayName(); ?></th>
+          <th colspan="2"><i class="fa fa-user"></i>&nbsp;<?= Candidat::getDisplayName(null, true); ?></th>
         </tr>
         <tr>
           <th width="110"><i class="fa fa-file-text-o"></i>&nbsp;<?php trans_e("Titre du CV"); ?></th>
