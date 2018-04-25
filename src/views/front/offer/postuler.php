@@ -40,6 +40,7 @@
   <?php endforeach; ?>
 </select>
 
+<?php if (get_setting('offer_apply_display_domaine_formation', 1) == 1) : ?>
 <label for="domaine_formation" class="form-label mt-0"><?php trans_e("Choisissez un domaine de formation"); ?></label>
 <select id="domaine_formation" name="candidature[domaine_formation_id]" class="form-control">
   <option value=""></option>
@@ -47,6 +48,7 @@
     <option value="<?= $value->domaine_id ?>"><?= $value->name ?></option>
   <?php endforeach; ?>
 </select>
+<?php endif; ?>
 
 <label for="motivation" class="form-label mt-0"><?php trans_e("Vos motivations"); ?>&nbsp;<span style="color: red">*</span></label>
 <textarea name="candidature[motivation]" class="ckeditor form-control" id="motivation" required></textarea>

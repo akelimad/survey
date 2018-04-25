@@ -334,7 +334,7 @@ class OfferController extends Controller
       'id_cv'             => $data['candidature']['id_cv'],
       'id_lettre'         => $id_lettre,
       'id_offre'          => $id_offre,
-      'domaine_formation_id' => $data['candidature']['domaine_formation_id'],
+      'domaine_formation_id' => (isset($data['candidature']['domaine_formation_id'])) ? $data['candidature']['domaine_formation_id'] : 0,
       'lettre_motivation' => $data['candidature']['motivation'],
       'date_candidature'  => date('Y-m-d'),
       'status'            => 0,
