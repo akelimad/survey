@@ -1,4 +1,4 @@
-<?php if (App\Form::getFieldOption('displayed', 'register', 'id_fonc')) : ?>
+<?php if (App\Form::getFieldOption('displayed', 'register', 'id_fonc') && get_setting('candidature.spontanee.show_fonction_field', 0) == 1) : ?>
 <label for="id_fonc" class="form-label mt-0"><?php trans_e("Fonction"); ?>&nbsp;<span style="color: red">*</span></label>
 <select id="id_fonc" name="id_fonc" class="form-control" required>
   <option value=""></option>
