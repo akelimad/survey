@@ -470,6 +470,13 @@ class Form
     $settings = get_setting('form.fields.'. $form_id, '{}');
     $settings = json_decode($settings, true) ?: [];
 
+    if (
+      $option_name == 'required' && 
+      !self::getFieldOption('displayed', $form_id, $field_name)
+    ) {
+      return false;
+    }
+
     if (!isset($settings[$field_name][$option_name])) {
       return true;
     }

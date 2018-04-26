@@ -421,7 +421,7 @@ class AuthController extends Controller
 		}
 		unset($data['ville_other']);
 
-		$data['date_n'] = \english_to_french_date($data['date_n']);
+		$data['date_n'] = \eta_date($data['date_n'], 'Y-m-d');
 		$data['mdp'] = md5($data['mdp']);
 		return $data;
 	}
@@ -492,43 +492,36 @@ class AuthController extends Controller
 			'photo' => [
 				'name' => trans("Photo"),
 				'path' => 'apps/upload/frontend/photo_candidats/',
-				'required' => Form::getFieldOption('required', 'register', 'photo'),
 				'extensions' => ['png', 'jpg', 'jpeg', 'gif'],
 			],
 			'cv' => [
 				'name' => trans("CV"),
 				'path' => 'apps/upload/frontend/cv/',
-				'required' => Form::getFieldOption('required', 'register', 'cv'),
 				'extensions' => ['doc', 'docx', 'pdf'],
 			],
 			'lm' => [
 				'name' => trans("Lettre de motivation"),
 				'path' => 'apps/upload/frontend/lmotivation/',
-				'required' => Form::getFieldOption('required', 'register', 'lm'),
 				'extensions' => ['doc', 'docx', 'pdf'],
 			],
 			'copie_diplome' => [
 				'name' => trans("Copie du diplôme"),
-				'path' => 'apps/upload/frontend/candidat/copie_attestation/',
-				'required' => Form::getFieldOption('required', 'register', 'copie_diplome'),
+				'path' => 'apps/upload/frontend/candidat/copie_diplome/',
 				'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
 			],
 			'copie_attestation' => [
 				'name' => trans("Copie de l’attestation"),
 				'path' => 'apps/upload/frontend/candidat/copie_attestation/',
-				'required' => Form::getFieldOption('required', 'register', 'copie_attestation'),
 				'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
 			],
 			'bulletin_paie' => [
 				'name' => trans("Bulletin de paie"),
 				'path' => 'apps/upload/frontend/candidat/bulletin_paie/',
-				'required' => Form::getFieldOption('required', 'register', 'bulletin_paie'),
 				'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
 			],
 			'permis_conduire' => [
 				'name' => trans("Permis de conduire"),
 				'path' => 'apps/upload/frontend/candidat/permis_conduire/',
-				'required' => Form::getFieldOption('required', 'register', 'permis_conduire'),
 				'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
 			]
 		];
@@ -540,7 +533,10 @@ class AuthController extends Controller
 
 		foreach ($rules as $key => $rule) {
 			$valid = true;
-			if($rule['required'] && $_FILES[$key]['size'] < 1) {
+			$required = Form::getFieldOption('required', 'register', $key);
+			if (!Form::getFieldOption('displayed', 'register', $key)) continue;
+
+			if($required && $_FILES[$key]['size'] < 1) {
 				$return['errors'][] = trans("Le champs") ." <strong>{$rule['name']}</strong> ". trans("est obligatoire.");
 				$valid = false;
 			}
