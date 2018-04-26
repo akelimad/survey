@@ -26,6 +26,11 @@ class RouteController
   {
     // Register routes
     Route::add(
+      'language/api/strings',
+      'Modules\Language\Models\Language@getStrings'
+    );
+
+    Route::add(
       'backend/language/strings',
       'Modules\Language\Controllers\LanguageController@strings'
     );

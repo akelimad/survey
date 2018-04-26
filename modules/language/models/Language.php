@@ -26,6 +26,29 @@ class Language {
   ];
 
 
+  public static function getStrings()
+  {
+    $iso_code = self::getCurrentLanguage('iso_code', 'fr');
+    $file_path = site_base("messages/{$iso_code}.php");
+
+    if (!file_exists($file_path)) {
+      // get all strings from database
+      $language = getDB()->prepare("SELECT s.name, t.value FROM language_strings s JOIN language_string_trans t ON t.language_string_id=s.id WHERE t.language=?", [$iso_code]);
+
+      $strings = [];
+      if (!empty($language)) : foreach ($language as $key => $lang) :
+        $strings[$lang->name] = $lang->value;
+      endforeach; endif;
+
+      // Store strings to language messages file
+      file_put_contents($file_path, serialize($strings));
+    }
+
+    // Read strings from cache
+    return unserialize(file_get_contents($file_path)) ?: [];
+  }
+
+
   public static function findAll()
   {
     return getDB()->read('languages');

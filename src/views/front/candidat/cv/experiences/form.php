@@ -60,7 +60,8 @@
         <option value="<?= $value->id_fonc ?>" <?= $selected; ?>><?= $value->fonction ?></option>
       <?php endforeach; ?>
     </select>
-    <?= Form::input('text', 'fonction_other', null, $exp->fonction_other, [], [
+    <?php $fonction_other = (isset($exp->fonction_other)) ? $exp->fonction_other : ''; ?>
+    <?= Form::input('text', 'fonction_other', null, $fonction_other, [], [
       'class' => 'form-control',
       'style' => (empty($exp->fonction_other)) ? 'display:none;' : '',
       'title' => trans("Autre école ou établissement")
@@ -124,7 +125,10 @@
       'title' => trans("Autre ville")
     ]); ?>
   </div>
-  <div class="col-sm-4 mb-10 pl-0 pl-xs-15 ">
+
+  <?php if (Form::getFieldOption('displayed', 'register', 'copie_attestation')) : ?>
+    <?php $required = Form::getFieldOption('required', 'register', 'copie_attestation') ? ' required' : ''; ?>
+  <div class="col-sm-4 mb-10 pl-0 pl-xs-15<?= $required; ?>">
     <label for="copie_attestation"><?php trans_e("Copie de l’attestation"); ?></label>
     <div class="input-group file-upload<?= (isset($exp->copie_attestation) && $exp->copie_attestation != '') ? ' hidden' : '' ?>">
         <input type="text" class="form-control" readonly>
@@ -140,6 +144,7 @@
       <button class="btn btn-danger btn-xs" type="button" onclick="return chmModal.confirm('', '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer la copie de l’attestation ?"); ?>', 'chmExperience.deleteCertificate', {'id': <?= $exp->id_exp; ?>, cd: '<?= $exp->copie_attestation; ?>'}, {width: 431})"><i class="fa fa-trash"></i>&nbsp;<?php trans_e("Supprimer"); ?></button>
     <?php endif; ?>
   </div>
+  <?php endif; ?>
 </div>
 
 <div class="row mt-10">

@@ -29,6 +29,21 @@ class RouteController
       'candidature/confirm/([a-f0-9]{32}$)',
       'Modules\Candidatures\Controllers\ConfirmController@confirm'
     );
+
+    Route::add(
+      'backend/candidatures/spontanees',
+      'Modules\Candidatures\Controllers\CandidatureController@spontanees'
+    );
+
+    Route::add(
+      'backend/candidatures/stage',
+      'Modules\Candidatures\Controllers\CandidatureController@stage'
+    );
+
+    Route::add(
+      'backend/candidatures/assign-to-offer',
+      'Modules\Candidatures\Controllers\AjaxController@assignToOffer'
+    );
   }
 
 

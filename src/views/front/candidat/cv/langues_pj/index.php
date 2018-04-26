@@ -1,4 +1,6 @@
 <?php
+use App\Form;
+
 $languageLevels = [
   'Maîtrisé' =>'Maîtrisé',
   'Courant' =>'Courant',
@@ -99,7 +101,13 @@ $hasCV = \App\Models\Candidat::hasCV(get_candidat_id());
   <h3><?php trans_e("Pièces jointes"); ?></h3>
 </div>
 <div class="row mb-10">
-  <div class="col-sm-3 mb-10">
+  <?php 
+  $photo_displayed = false; 
+  if (Form::getFieldOption('displayed', 'register', 'photo')) :
+    $photo_displayed = true;
+    $required = Form::getFieldOption('required', 'register', 'photo') ? ' required' : ''; 
+  ?>
+  <div class="col-sm-3 mb-10<?= $required; ?>">
     <label for="candidat_photo"><?php trans_e("Photo"); ?>&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="<?php trans_e("Vous pouvez joindre votre Photo, la taille ne doit pas dépassé"); ?> <?= $max_file_size; ?>ko."></i></label>
     <div class="input-group file-upload photo" <?= (get_candidat('photo') != '') ? 'style="display: none;"' : '' ?>>
       <input type="text" class="form-control" readonly>
@@ -117,6 +125,8 @@ $hasCV = \App\Models\Candidat::hasCV(get_candidat_id());
       </div>
     <?php endif; ?>
   </div>
+  <?php endif; ?>
+  
   <div class="col-sm-9">
     <div class="row">
       <div class="col-sm-12 mb-10 pl-0 pl-xs-15 <?= !$hasCV ? 'required' : ''; ?>">
@@ -145,6 +155,9 @@ $hasCV = \App\Models\Candidat::hasCV(get_candidat_id());
           <?php endforeach; ?>
         </ul>
       </div>
+
+      <?php if (Form::getFieldOption('displayed', 'register', 'lm')) : ?>
+      <?php $required = Form::getFieldOption('required', 'register', 'lm') ? ' required' : ''; ?>
       <div class="col-sm-12 mb-10 pl-0 pl-xs-15">
         <label for="candidat_lm"><?php trans_e("Lettre de motivation"); ?>&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="<?php trans_e("Aide"); ?>" data-content="<?php trans_e("Vous pouvez joindre jusqu'à 5 lettres de motivation Word ou PDF, la taille de chaque lettre ne doit pas dépassé"); ?> <?= $max_file_size; ?>ko"></i></label>
         <div class="input-group file-upload" <?= (count($lms) > 5) ? 'style="display:none;"' : '' ?>>
@@ -171,6 +184,7 @@ $hasCV = \App\Models\Candidat::hasCV(get_candidat_id());
           <?php endforeach; ?>
         </ul>
       </div>
+      <?php endif; ?>
     </div>
   </div>
 </div>

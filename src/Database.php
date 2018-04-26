@@ -260,6 +260,11 @@ class Database {
 	}
 
 
+  public function countAll($table){ 
+    return getDB()->prepare("SELECT COUNT(*) AS nbr FROM {$table}", [], true)->nbr;
+  }
+
+
   /**
    * Select max ID from table
    *

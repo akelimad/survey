@@ -31,7 +31,7 @@
   <?php endforeach; ?>
 </select>
 
-
+<?php if (App\Form::getFieldOption('displayed', 'register', 'lm')) : ?>
 <label for="candidat_lm" class="form-label mt-0"><?php trans_e("Choisissez une Lettre de motivation"); ?></label>
 <select id="candidat_lm" name="candidature[id_lettre]" class="form-control">
   <option value=""></option>
@@ -39,6 +39,7 @@
     <option value="<?= $value->id_lettre ?>"><?= $value->titre ?></option>
   <?php endforeach; ?>
 </select>
+<?php endif; ?>
 
 <?php if (get_setting('offer_apply_display_domaine_formation', 0) == 1) : ?>
 <label for="domaine_formation" class="form-label mt-0"><?php trans_e("Choisissez un domaine de formation"); ?></label>

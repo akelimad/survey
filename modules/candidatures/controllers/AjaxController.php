@@ -10,11 +10,12 @@
  */
 namespace Modules\Candidatures\Controllers;
 
+use App\Controllers\Controller;
 use App\Ajax;
 use App\Models\Resume;
 use App\Media;
 
-class AjaxController
+class AjaxController extends Controller
 {
 
   private static $_instance = null;
@@ -254,6 +255,28 @@ class AjaxController
         'id_offre' => $data['id_offre'],
         'offres' => getDB()->read('offre')
     ]);
+  }
+
+  public function assignToOffer($data)
+  {
+    if (isset($data['cIds']) && !empty($data['cIds'])) {
+      return $this->renderAjaxView(
+        trans("Affecter à une offre"), 
+        'admin/candidature/popup/assign-to-offer',
+        ['cIds' => $data['cIds']]
+      );
+    } elseif (isset($data['offer_id']) && is_numeric($data['offer_id'])) {
+      $candIds = json_decode($data['candIds'], true) ?: [];
+      preg_match('/(spontanees|stage)$/', $_SERVER['HTTP_REFERER'], $m);
+      if (isset($m[1]) && !empty($candIds)) {
+        $table = ($m[1] == 'stage') ? 'candidature_stage' : 'candidature_spontanee';
+        foreach ($candIds as $key => $cid) {
+          $cand = getDB()->findOne($table, 'id_candidature', $cid);
+        }
+        // Delete candidature
+        return $this->jsonResponse('success', trans("Les candidatures ont été bien affectés"));
+      }
+    }
   }
   
 

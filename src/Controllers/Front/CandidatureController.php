@@ -52,7 +52,7 @@ class CandidatureController extends Controller
         'candidats_id' => get_candidat_id(),
         'message' => $data['motivation'],
         'id_cv' => $data['id_cv'],
-        'id_fonc' => $data['id_fonc'],
+        'id_fonc' => (isset($data['id_fonc'])) ? $data['id_fonc'] : 0,
         'date_cs' => date('Y-m-d H:i:s')
       ]);
 

@@ -250,25 +250,13 @@ margin-left: 820px;
 
 
 
-	<div id='entete' style="width: 1035px;height: 188px; background-image: url(<?php echo $imgurlban.$banniere; ?>);"  onClick="javascript:window.open('<?php echo $site; ?>','_self')" class="cu" >     
-
-                    <a href='<?php echo $urlhome; ?>'>
-
-                        <div id='logo'></div>
-
-                    </a>    
-
-   
-
-	
-
-	<div id="bandepremiere">
-
-  
-
-				</div>
-
-            </div>	
+	<?php if (get_setting('custom_logo_banner', '') != '') : ?>
+            <?= get_setting('custom_logo_banner') ?>
+        <?php else : ?>
+            <a href="<?= site_url(); ?>" id="logo-banner">
+                <img src="<?= site_url('assets/images/bannier/'. $GLOBALS['etalent']->config['banniere']); ?>" class="img-responsive">
+            </a>
+        <?php endif; ?>
 
 			<div id="menulangue-panier"  >
 

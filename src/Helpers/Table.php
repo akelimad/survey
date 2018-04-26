@@ -617,7 +617,10 @@ class Table extends Pagination {
 
             $i++;
 
-            if( $permission !== true ) continue;
+            if( $permission !== true ) {
+                $this->_actions[$actionName]['bulk_action'] = false;
+                continue;
+            }
 
             // permission
             $label = ($action['icon']!='') ? '<i class="'.$action['icon'].'"></i>' : trans($action['label']);
@@ -640,6 +643,10 @@ class Table extends Pagination {
             if( $action['patern'] == '#' ) $actionLink = 'javascript:void(0)';
 
             $attrs = '';
+            if (!isset($action['attributes']['style'])) {
+                $action['attributes']['style'] = '';
+            }
+            $action['attributes']['style'] .= 'width:24px;';
             if( !empty($action['attributes']) ) : foreach ($action['attributes'] as $key => $attr) :
 
                 $attrs .= $key. '="'. $this->parseTemplate($attr, $columns);
@@ -658,7 +665,7 @@ class Table extends Pagination {
                 $confirm = (!is_null($action['callback']) && $action['callback']!='') ? 'onclick="return '. $action['callback'] .'(event, ['. $columns[$this->primary_key] .']);"' : '';
             }
 
-            $html .= '<a style="width:24px;" title="'. trans($action['label']) .'" href="'. $actionLink .'" '. $attrs .' '. $confirm .'>'. $label .'&nbsp;</a>';
+            $html .= '<a title="'. trans($action['label']) .'" href="'. $actionLink .'" '. $attrs .' '. $confirm .'>'. $label .'&nbsp;</a>';
 
             // if($i < count($this->_actions)) $html .= '&nbsp;';
             if($i%3 != 0) $html .= '&nbsp;';

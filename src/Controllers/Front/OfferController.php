@@ -236,7 +236,7 @@ class OfferController extends Controller
       return $this->jsonResponse('error', trans("Impossible de trouver l'offre oû vous voulez postuler."));
     }
 
-    $id_lettre = intval($data['candidature']['id_lettre']);
+    $id_lettre = (isset($data['candidature']['id_lettre'])) ? intval($data['candidature']['id_lettre']) : 0;
 
     // Get candidat pertinence
     $nbr_p_c = $percent_titre = $percent_expe = $percent_ville = $percent_tposte = $percent_fonction = $percent_formation = $percent_mobilite = $percent_niveau_mobilite = $percent_taux_mobilite = 0;

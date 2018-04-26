@@ -131,6 +131,22 @@ class Candidat {
 
 
   /**
+   * Check if candidat has at least one experience
+   *
+   * @return bool
+   *
+   * @author Mhamed Chanchaf
+   */
+  public static function hasExperience($candidat_id = null)
+  {
+    if (is_null($candidat_id)) $candidat_id = get_candidat_id();
+    
+    $count = getDB()->prepare("SELECT COUNT(*) as nbr FROM experience_pro WHERE candidats_id=?", [$candidat_id], true);
+    return (intval($count->nbr) > 0);
+  }
+
+
+  /**
    * Check if candidat has candidature spontannee
    *
    * @return bool

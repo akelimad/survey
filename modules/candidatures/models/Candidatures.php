@@ -48,6 +48,15 @@ class Candidatures {
 		return getDB()->prepare("SELECT * FROM prm_statut_candidature ORDER BY order_statut ASC") ?: [];
 	}
 
+	public static function countSpontanees()
+	{
+		return getDB()->countAll('candidature_spontanee');
+	}
+
+	public static function countStage()
+	{
+		return getDB()->countAll('candidature_stage');
+	}
 
 	public static function countByStatus($status_id)
 	{

@@ -159,19 +159,26 @@ class CandidatController extends Controller
 
     if (!isset($candidat->candidats_id)) return $progress;
 
-    // Candiat has photo
-    if ($candidat->photo != '') $progress += 25;
+    $hasPhoto = ($candidat->photo != '');
+    $hasLM = Candidat::hasLM($candidat->candidats_id);
+    $hasExp = Candidat::hasExperience($candidat->candidats_id);
+
+    if (!$hasPhoto && !$hasLM && $hasExp) {
+      $progress += 75;
+    } else if ($hasPhoto) {
+      $progress += 25;
+    } else if ($hasLM) {
+      $progress += 25;
+    } else if ($hasExp) {
+      $progress += 25;
+    }
 
     // Candidat speak at least one language
     if ($candidat->arabic != '' || $candidat->french != '' || $candidat->english != '' || $candidat->autre != '' || $candidat->autre1 != '' || $candidat->autre2 != '') $progress += 25;
 
-    // Candidat has CV
-    if (Candidat::hasCV($candidat->candidats_id)) $progress += 25;
+    if ($progress == 0) $progress = 25;
 
-    // Candidat has LM
-    if (Candidat::hasLM($candidat->candidats_id)) $progress += 25;
-
-    return $progress;
+    return ($progress <= 100) ? $progress : 100;
   }
 
 

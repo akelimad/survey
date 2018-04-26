@@ -1,9 +1,3 @@
-<style>
-	.chm-alerts ul {
-    padding-left: 55px !important;
-	}
-</style>
-
 <div id="progress-wrap" style="display: none;">
 	<strong><?php trans_e("Envoi des emails en cours..."); ?>(<span id="send-count">0</span>/<span id="total-count">0</span>)</strong>
 	<div class="progress progress-striped active" style="margin-bottom: 10px;">

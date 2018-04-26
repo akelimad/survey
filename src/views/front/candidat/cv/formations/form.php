@@ -49,7 +49,8 @@ use App\Form;
       </optgroup‏>
       <?php endforeach; ?>
     </select>
-    <?= Form::input('text', 'ecole', null, $formation->ecole, [], [
+    <?php $ecole = (isset($formation->ecole)) ? $formation->ecole : ''; ?>
+    <?= Form::input('text', 'ecole', null, $ecole, [], [
       'class' => 'form-control',
       'style' => (empty($formation->ecole)) ? 'display:none;' : '',
       'title' => trans("Autre école ou établissement")
@@ -76,7 +77,8 @@ use App\Form;
         <option value="<?= $value->id_fili ?>" <?= $selected; ?>><?= $value->filiere ?></option>
       <?php endforeach; ?>
     </select>
-    <?= Form::input('text', 'diplome_other', null, $formation->diplome_other, [], [
+    <?php $diplome_other = (isset($formation->diplome_other)) ? $formation->diplome_other : ''; ?>
+    <?= Form::input('text', 'diplome_other', null, $diplome_other, [], [
       'class' => 'form-control',
       'style' => (empty($formation->diplome_other)) ? 'display:none;' : '',
       'title' => trans("Autre (à péciser)")
@@ -84,7 +86,9 @@ use App\Form;
   </div>
 </div>
 <div class="row mt-0">
-  <div class="col-sm-4">
+  <?php if (Form::getFieldOption('displayed', 'register', 'copie_diplome')) : ?>
+  <?php $required = Form::getFieldOption('required', 'register', 'copie_diplome') ? ' required' : ''; ?>
+  <div class="col-sm-4<?= $required; ?>">
     <label for="forma_copie_diplome"><?php trans_e("Copie du diplôme"); ?></label>
     <div class="input-group file-upload<?= (isset($formation->copie_diplome) && $formation->copie_diplome != '') ? ' hidden' : '' ?>">
         <input type="text" class="form-control" readonly>
@@ -96,6 +100,8 @@ use App\Form;
         </label>
     </div>
   </div>
+  <?php endif; ?>
+  
   <div class="col-sm-12">
     <?php if (isset($formation->copie_diplome) && $formation->copie_diplome != '') : ?>
       <a href="<?= site_url('apps/upload/frontend/candidat/copie_diplome/'. $formation->copie_diplome); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>

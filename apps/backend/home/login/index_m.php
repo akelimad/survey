@@ -71,7 +71,7 @@ if(isset($messages) and !empty($messages))  {
 
                                                                 <div align="center">
 
-                                                                    <input type="text" id="login"  name="login" 
+                                                                    <input autofocus type="text" id="login"  name="login" 
 
                                                                     title="veuillez entrez l'email d'utilisateur" required/>
 

@@ -83,15 +83,17 @@ class ExperienceController extends Controller
     }
 
     // Check if file posted
-    if ($_FILES['copie_attestation']['size'] > 0) {
-      $upload = Media::upload($_FILES['copie_attestation'], [
-        'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
-        'uploadDir' => 'apps/upload/frontend/candidat/copie_attestation/'
-      ]);
-      if(isset($upload['files'][0]) && $upload['files'][0] != '') {
-        $data['copie_attestation'] = $upload['files'][0];
-      } else {
-        return $this->jsonResponse('error', $upload['errors'][0]);
+    if (App\Form::getFieldOption('displayed', 'register', 'copie_attestation')) {
+      if ($_FILES['copie_attestation']['size'] > 0) {
+        $upload = Media::upload($_FILES['copie_attestation'], [
+          'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
+          'uploadDir' => 'apps/upload/frontend/candidat/copie_attestation/'
+        ]);
+        if(isset($upload['files'][0]) && $upload['files'][0] != '') {
+          $data['copie_attestation'] = $upload['files'][0];
+        } else {
+          return $this->jsonResponse('error', $upload['errors'][0]);
+        }
       }
     }
     

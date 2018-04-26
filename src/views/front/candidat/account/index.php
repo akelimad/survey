@@ -15,17 +15,16 @@ use Modules\Message\Models\Message;
 </style>
 
 <div id="account-container">
-  <div class="row">
+  <div class="row mb-10">
     <div class="col-sm-12">
       <h1 class="pull-left"><?php trans_e("Mon compte"); ?></h1>
       <a href="javascript:void(0)" chm-print="#account-container" chm-print-title="<?php trans_e("Mon compte"); ?>" class="btn btn-primary btn-xs pull-right hidden-xs" style="margin-top: 3px;"><i class="fa fa-print"></i>&nbsp;<?php trans_e("Imprimer"); ?></a>
     </div>
   </div>
 
-  <p class="mt-10 mb-5"><?php trans_e("Complété à"); ?> <?= $progress; ?>%</p>
-  <div class="progress mb-10" style="height: 16px;">
+  <div class="progress mb-10" style="height: 16px;text-align: center;">
     <div class="progress-bar progress-bar-xs progress-bar-default progress-bar-striped" role="progressbar" aria-valuenow="<?= $progress; ?>" aria-valuemin="0" aria-valuemax="100" style="background-color:#<?= $progress_color; ?>;width: <?= $progress; ?>%">
-      <span class="sr-only"><?php trans_e("Complété à"); ?> <?= $progress; ?>%</span>
+      <span style="font-size: 10px;margin-top: -2px;display: block;"><?php trans_e("Complété à"); ?> <?= $progress; ?>%</span>
     </div>
   </div>
 
@@ -156,20 +155,12 @@ use Modules\Message\Models\Message;
           $btnType = 'default';
           $btnDisabled = 'disabled';
         }
-        $label2 = trans("Discussion");
-        $icon2 = 'fa fa-comment-o';
-        $cursor2 = 'pointer';
-        $btnType2 = 'default';
-        if (Message::AdminIsStartingDiscussion($ca->id_candidature)) {
-          $btnDisabled2 = '';
-          $link = site_url('message/candidature/'. $ca->id_candidature .'/messages');
-        } else{
-          $btnDisabled2 = 'disabled';
-          $link = '';
-        }
         ?>
         <a href="<?= $confirmation_link; ?>" class="btn btn-<?= $btnType; ?> btn-xs mb-0 <?= $btnDisabled; ?>" title="<?= $label; ?>" style="cursor: <?= $cursor; ?>"><i class="<?= $icon; ?>"></i></a>
-        <a href="<?= $link ?>" class="btn btn-<?= $btnType2; ?> btn-xs mb-0 <?= $btnDisabled2; ?>" title="<?= $label2; ?>" style="cursor: <?= $cursor2; ?>"><i class="<?= $icon2; ?>"></i></a>
+
+        <?php if (isModuleEnabled('message') && Message::AdminIsStartingDiscussion($ca->id_candidature)) : ?>
+        <a href="<?= site_url('message/candidature/'. $ca->id_candidature .'/messages') ?>" class="btn btn-default btn-xs mb-0" title="<?php trans_e("Discussion"); ?>" style="cursor: pointer"><i class="fa fa-comment-o"></i></a>
+        <?php endif; ?>
       </td>
     </tr>
     <?php endforeach; ?>

@@ -24,7 +24,6 @@ class LanguageController extends Controller
 
   private $countDeleted = 0;
 
-
   public function strings()
   {
     $this->data['layout'] = 'admin';

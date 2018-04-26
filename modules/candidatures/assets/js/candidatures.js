@@ -8,33 +8,6 @@ jQuery(document).ready(function($){
 		ajax_args.type = 'POST';
 		ajax_args.url = site_url('src/includes/ajax/index.php')
 		window.chmModal.show(ajax_args)
-		// $('[data-toggle="popover"]').popover('hide');
-		/* $('#candidaturesModal').modal({backdrop: 'static', keyboard: false})
-
-		// Fire off the request
-    	ajax_args.type = 'POST';
-		ajax_args.url = site_url('src/includes/ajax/index.php');
-		$.ajax(ajax_args).done(function (response, textStatus, jqXHR) {
-			try {
-				var data = $.parseJSON(response);
-				var modal_title = 'ERREUR INATTENDU !'
-				var modal_content = '<strong>Une erreur est survenu lors de chargement de la requête, merci de réessayer.</strong>';
-				if( data.content != null && typeof data.content != undefined ) {
-					modal_content = data.content
-				} else if ( typeof data.status != undefined && data.status == 'error' ) {
-					modal_content = data.message
-				}
-				if( data.title != null && typeof data.title != undefined ) {
-					modal_title = data.title
-				}
-				$('#candidaturesModal .modal-header h4').html('<strong style="text-transform: uppercase;">'+modal_title+'</strong>')
-				$('#candidaturesModal .modal-body').html(modal_content).show()
-			} catch (e) {
-				ajax_error_message();
-			}
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-        	ajax_error_message();
-        }); */
 	}
 
 	showCandidaturesFilterForm = function(url_params, fields) {
@@ -63,7 +36,6 @@ jQuery(document).ready(function($){
         });
 	}
 
-
 	showAttachmentsPopup = function(event, candidatures, currentPage=1) {
 		event.preventDefault()
 		showModal({
@@ -74,7 +46,6 @@ jQuery(document).ready(function($){
 			}
 		})
 	}
-
 
 	showSendEmailPopup = function(event, candidatures) {
 		event.preventDefault()
@@ -142,7 +113,26 @@ jQuery(document).ready(function($){
 			}
 		})
 	}
-	
+
+	// Assign candidature To Offer
+	assignToOffer = function (event, ids) {
+		var url = window.chmSite.url('backend/candidatures/assign-to-offer')
+		window.chmModal.show({
+      type: 'POST',
+      url: url,
+      data: {cIds: ids}
+    }, {
+      form: {
+        action: url,
+        callback: 'chmForm.submit',
+        class: 'chm-simple-form'
+      },
+      footer: {
+        label: trans("Affecter")
+      },
+      width: 400
+    })
+	}	
 
 	$.fn.getWidthInPercent = function () {
 		var width = parseFloat($(this).css('width'))/parseFloat($(this).parent().css('width'));

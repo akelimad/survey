@@ -69,17 +69,20 @@ class FormationController extends Controller
     }
 
     // Check if file posted
-    if ($_FILES['copie_diplome']['size'] > 0) {
-      $upload = Media::upload($_FILES['copie_diplome'], [
-        'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
-        'uploadDir' => 'apps/upload/frontend/candidat/copie_diplome/'
-      ]);
-      if(isset($upload['files'][0]) && $upload['files'][0] != '') {
-        $data['copie_diplome'] = $upload['files'][0];
-      } else {
-        return $this->jsonResponse('error', $upload['errors'][0]);
+    if (App\Form::getFieldOption('displayed', 'register', 'copie_diplome')) {
+      if ($_FILES['copie_diplome']['size'] > 0) {
+        $upload = Media::upload($_FILES['copie_diplome'], [
+          'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
+          'uploadDir' => 'apps/upload/frontend/candidat/copie_diplome/'
+        ]);
+        if(isset($upload['files'][0]) && $upload['files'][0] != '') {
+          $data['copie_diplome'] = $upload['files'][0];
+        } else {
+          return $this->jsonResponse('error', $upload['errors'][0]);
+        }
       }
     }
+
     $id_formation = $data['id'];
     unset($data['id']);
     $data['date_debut'] = english_to_french_date($data['date_debut']);

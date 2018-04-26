@@ -29,7 +29,7 @@ class CandidatureController extends Controller
 
     $this->addAssets();
     $tableCtrl = new TableController();
-    $this->data['table'] = $tableCtrl->getTable();
+    $this->data['table'] = $tableCtrl->getTable($id);
     $this->data['params'] = $tableCtrl->params;
     $this->data['template'] = 'two-columns-left';
     $this->data['breadcrumbs'] = [trans("Candidatures"), trans("Nouvelles candidatures")];
@@ -54,6 +54,16 @@ class CandidatureController extends Controller
     $this->data['template'] = 'two-columns-left';
     $this->data['breadcrumbs'] = [trans("Candidatures"), trans("Etat des candidatures")];
     return get_page('admin/candidature/status', $this->data, __FILE__);  
+  }
+
+  public function spontanees()
+  {
+    return $this->actionIndex('spontanees');
+  }
+
+  public function stage()
+  {
+    return $this->actionIndex('stage');
   }
 
   // TODO - Make this action work
