@@ -6,11 +6,17 @@ use App\Form;
     textarea{
         resize: vertical;
     }
+    .required:after{
+        content: '*';
+        color: #d43939;
+        margin-left: 4px;
+        font-size: 13px;
+    }
 </style>
 <div class="content">
     <input type="hidden" name="id" value="<?= (isset($survey->id)) ? $survey->id : 0 ?>">
     <div class="form-group mb-0">
-        <label for="name" class="control-label"> <?= trans_e('Titre'); ?> <span class="asterisk">*</span></label>
+        <label for="name" class="control-label required"> <?= trans_e('Titre'); ?></label>
         <input type="text" class="form-control" name="name" id="name" value="<?= (isset($survey->name)) ? $survey->name : '' ?>" required>
     </div>
     <div class="form-group mb-0">

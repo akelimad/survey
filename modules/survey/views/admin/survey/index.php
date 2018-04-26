@@ -11,6 +11,16 @@ use App\Form;
 .form-group {
   margin-bottom: 0px;
 }
+td.actions{
+  width: 160px
+}
+td.actions a{
+  display: inline-block !important;
+}
+td.actions a.show{
+  margin-left: 3px;
+}
+
 </style>
 
 <h1 style="display: inline;text-transform: uppercase;"><?php trans_e('questionnaires'); ?></h1>
