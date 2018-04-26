@@ -322,8 +322,11 @@ $max_file_size = get_setting('max_file_size', 400);
 	    ]); ?>
 		</div>
 	</div>
+
+	<?php if (Form::getFieldOption('displayed', 'register', 'copie_diplome')) : ?>
+	<?php $required = Form::getFieldOption('required', 'register', 'copie_diplome') ? ' required' : ''; ?>
 	<div class="row mt-0">
-		<div class="col-sm-4">
+		<div class="col-sm-4<?= $required; ?>">
 			<label for="forma_copie_diplome"><?php trans_e("Copie du diplôme"); ?>&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="<?php trans_e("Vous pouvez joindre votre Copie du diplôme format Word, PDF ou Image, la taille ne doit pas dépasser"); ?> <?= $max_file_size; ?>ko"></i></label>
 			<div class="input-group file-upload">
 			    <input type="text" class="form-control" readonly>
@@ -336,6 +339,8 @@ $max_file_size = get_setting('max_file_size', 400);
 			</div>
 		</div>
 	</div>
+	<?php endif; ?>
+
 	<div class="row mt-10">
 		<div class="col-sm-12 required">
 			<label for="forma_description"><?php trans_e("Description de la formation"); ?></label>
@@ -434,7 +439,10 @@ $max_file_size = get_setting('max_file_size', 400);
 	    	'title' => trans("Autre (à péciser)")
 	    ]); ?>
 		</div>
-		<div class="col-sm-4 mb-10 pl-0 pl-xs-15">
+
+		<?php if (Form::getFieldOption('displayed', 'register', 'copie_attestation')) : ?>
+		<?php $required = Form::getFieldOption('required', 'register', 'copie_attestation') ? ' required' : ''; ?>
+		<div class="col-sm-4 mb-10 pl-0 pl-xs-15<?= $required; ?>">
 			<label for="copie_attestation"><?php trans_e("Copie de l’attestation"); ?>&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="<?php trans_e("Vous pouvez joindre votre Copie de l’attestation format Word, PDF ou Image, la taille ne doit pas dépasser"); ?> <?= $max_file_size; ?>ko"></i></label>
 			<div class="input-group file-upload">
 			    <input type="text" class="form-control" readonly>
@@ -446,7 +454,11 @@ $max_file_size = get_setting('max_file_size', 400);
 			    </label>
 			</div>
 		</div>
+		<?php endif; ?>
 	</div>
+
+	<?php if (Form::getFieldOption('displayed', 'register', 'bulletin_paie')) : ?>
+	<?php $required = Form::getFieldOption('required', 'register', 'bulletin_paie') ? ' required' : ''; ?>
 	<div class="row mb-10">
 		<div class="col-sm-4">
 			<label for="bulletin_paie"><?php trans_e("Bulletin de paie"); ?>&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="<?php trans_e("Vous pouvez joindre votre Bulletin de paie format Word, PDF ou Image, la taille ne doit pas dépasser"); ?> <?= $max_file_size; ?>ko"></i></label>
@@ -461,6 +473,8 @@ $max_file_size = get_setting('max_file_size', 400);
 			</div>
 		</div>
 	</div>
+	<?php endif; ?>
+	
 	<div class="row">
 		<div class="col-sm-12">
 			<label for="exp_description"><?php trans_e("Description du poste"); ?></label>
@@ -546,8 +560,12 @@ $max_file_size = get_setting('max_file_size', 400);
 	  <h3><?php trans_e("Pièces jointes"); ?></h3>
 	</div>
 	<div class="row mb-10">
-		<?php if (Form::getFieldOption('displayed', 'register', 'photo')) : ?>
-		<?php $required = Form::getFieldOption('required', 'register', 'photo') ? ' required' : ''; ?>
+		<?php 
+		$photo_displayed = false; 
+		if (Form::getFieldOption('displayed', 'register', 'photo')) :
+			$photo_displayed = true;
+			$required = Form::getFieldOption('required', 'register', 'photo') ? ' required' : ''; 
+		?>
 		<div class="col-sm-4 mb-10<?= $required; ?>">
 			<label for="candidat_photo"><?php trans_e("Photo"); ?>&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="<?php trans_e("Vous pouvez joindre votre Photo, la taille ne doit pas dépasser"); ?> <?= $max_file_size; ?>ko."></i></label>
 			<div class="input-group file-upload">
@@ -564,7 +582,7 @@ $max_file_size = get_setting('max_file_size', 400);
 
 		<?php if (Form::getFieldOption('displayed', 'register', 'cv')) : ?>
 		<?php $required = Form::getFieldOption('required', 'register', 'cv') ? ' required' : ''; ?>
-		<div class="col-sm-4 mb-10 pl-0 pl-xs-15<?= $required; ?>">
+		<div class="col-sm-4 mb-10<?= ($photo_displayed) ? ' pl-0 pl-xs-15' : '';?><?= $required; ?>">
 			<label for="candidat_cv"><?php trans_e("CV"); ?>&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="<?php trans_e("Vous pouvez joindre votre CV format Word ou PDF, la taille ne doit pas dépasser"); ?> <?= $max_file_size; ?>ko"></i></label>
 			<div class="input-group file-upload">
 			    <input type="text" class="form-control" readonly>
@@ -596,7 +614,7 @@ $max_file_size = get_setting('max_file_size', 400);
 
 		<?php if (Form::getFieldOption('displayed', 'register', 'permis_conduire')) : ?>
 		<?php $required = Form::getFieldOption('required', 'register', 'permis_conduire') ? ' required' : ''; ?>
-		<div class="col-sm-4<?= $required; ?>">
+		<div class="col-sm-4 pl-0 pl-xs-15<?= $required; ?>">
 			<label for="permis_conduire"><?php trans_e("Permis de conduire"); ?>&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="<?php trans_e("Vous pouvez joindre votre Permis de conduire format Word, PDF ou Image, la taille ne doit pas dépasser"); ?> <?= $max_file_size; ?>ko"></i></label>
 			<div class="input-group file-upload">
 			    <input type="text" class="form-control" readonly>

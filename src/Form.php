@@ -454,7 +454,7 @@ class Form
 
   public static function getSectionOption($section_name, $form_id, $field_name)
   {
-    $settings = get_setting('form_sections_'. $form_id, '{}');
+    $settings = get_setting('form.sections.'. $form_id, '{}');
     $settings = json_decode($settings, true) ?: [];
 
     if (!isset($settings[$field_name][$section_name])) {
@@ -467,7 +467,7 @@ class Form
 
   public static function getFieldOption($option_name, $form_id, $field_name)
   {
-    $settings = get_setting('form_fields_'. $form_id, '{}');
+    $settings = get_setting('form.fields.'. $form_id, '{}');
     $settings = json_decode($settings, true) ?: [];
 
     if (!isset($settings[$field_name][$option_name])) {
