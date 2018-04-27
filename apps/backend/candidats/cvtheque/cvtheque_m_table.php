@@ -78,10 +78,7 @@ if (($councv) || (!$councv)) {
 
 
             <?php 
-$date_naissance = str_replace('/', '-', $resultat['date_n']);
-$date_naissance_c = date('Y-m-d', strtotime($date_naissance));
-$age_c = strtotime($date_naissance_c);
-$newformat = date('Y-m-d',$age_c);
+$newformat = eta_date($resultat['date_n'], 'Y-m-d');
 
     $age = (time() - strtotime($newformat)) / 3600 / 24 / 365;
 ?>

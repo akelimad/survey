@@ -232,7 +232,7 @@ class CandidatController extends Controller
       }
       unset($data['ville_other']);
 
-      $data['date_n'] = \english_to_french_date($data['date_n']);
+      $data['date_n'] = \eta_date($data['date_n'], 'Y-m-d');
       $data['dateMAJ'] = date("Y-m-d H:i:s");
 
       getDB()->update('candidats', 'candidats_id', get_candidat_id(), $data, false);

@@ -238,15 +238,9 @@ if (isset($in_d) ) {
 
 	
 
-	
 
-$date_naissance = str_replace('/', '-', $resultat['date_n']);
+$newformat = strtotime(eta_date($resultat['date_n'], 'Y-m-d'));
 
-$date_naissance_c = date('Y-m-d', strtotime($date_naissance));
-
-$age_c = strtotime($date_naissance_c);
-
-$newformat = date('Y-m-d',$age_c);
 
 	$age = (time() - strtotime($newformat)) / 3600 / 24 / 365;
 

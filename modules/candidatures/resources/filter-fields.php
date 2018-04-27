@@ -139,4 +139,12 @@ return array(
 		'sortOrder' => 140,
 		'options' => getDB()->prepare("SELECT domaine_id AS value, name AS text FROM prm_domaines_formation")
 	],
+	[
+		'name' => 'age',
+		'type' => 'select',
+		'value' => '',
+		'label' => trans("Par age"),
+		'sortOrder' => 150,
+		'options' => getDB()->prepare("SELECT CONCAT(min, '-', max) AS value, description AS text FROM prm_age")
+	],
 );

@@ -5,7 +5,8 @@ $(document).ready(function () {
   $('body').on('change', '#candidat_date_n', function () {
     if (!$(this).val().startsWith(0)) {
       var maxDate = new Date(new Date().setFullYear(new Date().getFullYear() - 16))
-      var dateN = new Date($(this).val())
+      var d = $(this).val().split('/')
+      var dateN = new Date(d[2] + '-' + d[1] + '-' + d[0])
       if (dateN > maxDate) {
         $(this).val('')
         window.chmAlert.danger('Votre âge doit être supérieur à 16 ans.')

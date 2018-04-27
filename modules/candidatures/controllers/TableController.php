@@ -37,7 +37,8 @@ class TableController extends Controller
 		'ref_offre'  => ['cand' => 'id_offre'],
 		'pertinence' => ['cand' => 'pertinence'],
 		'ecole' 		 => ['f' => 'id_ecol'],
-		'campagne' 	 => ['co' => 'id_compagne']
+    'campagne'   => ['co' => 'id_compagne'],
+		'age' 	 => ['c' => 'date_n'],
 	];
 
 	private $joints = [
@@ -225,7 +226,7 @@ class TableController extends Controller
   		$html = '<a href="'. site_url('backend/cv/?candid='.$row->candidats_id) .'" target="_blank" class="cname" title="'. trans("Voir le profile") .'"><i class="fa fa-user"></i>&nbsp;'. $row->fullname .'</a>';
 
   		if( !is_null($row->date_n) ) {
-  			if( $birthday = french_to_english_date($row->date_n) ) {
+  			if( $birthday = \eta_date($row->date_n, 'Y-m-d') ) {
     			$age = (time() - strtotime($birthday)) / 3600 / 24 / 365;
     			$html .= '<br><b>'.number_format($age, 0).' ans</b>';
         }
@@ -529,6 +530,18 @@ class TableController extends Controller
   				$andWhere_array[] = key($column) .".". reset($column) ." BETWEEN 61 AND 100";
   				break;
   			}
+        break;
+        case 'age':
+        $parts = explode('-', $_GET[$key]);
+        if (isset($parts[1])) {
+          if ($parts[0] == 0) {
+            $andWhere_array[] = "TIMESTAMPDIFF(YEAR, date_n, CURDATE()) <= ". $parts[1];
+          } else if ($parts[1] == 0) {
+            $andWhere_array[] = "TIMESTAMPDIFF(YEAR, date_n, CURDATE()) >= ". $parts[0];
+          } else {
+            $andWhere_array[] = "TIMESTAMPDIFF(YEAR, date_n, CURDATE()) BETWEEN ". $parts[0] ." AND ". $parts[1];
+          }
+        }
   			break;
   			default:
   			$andWhere_array[] = key($column) .".". reset($column) ."='{$_GET[$key]}'";

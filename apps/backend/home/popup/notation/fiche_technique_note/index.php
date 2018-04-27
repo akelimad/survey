@@ -199,14 +199,7 @@ if (strpos($_SESSION['page_courant '],'offres') !== false) {
         $datacandidat = mysql_fetch_array($req_candidat);
 
 		    
-
-        $date_naissance = str_replace('/', '-', $datacandidat['date_n']);
-
-        $date_naissance_c = date('Y-m-d', strtotime($date_naissance));
-
-        $age_c = strtotime($date_naissance_c);
-
-        $newformat = date('Y-m-d',$age_c); 
+        $newformat = eta_date($datacandidat['date_n'], 'Y-m-d'); 
 
         $age = (time() - strtotime($newformat)) / 3600 / 24 / 365;
 

@@ -136,29 +136,31 @@
 	$('#candidaturesContactForm').submit(function(event){
 		event.preventDefault()
 
-		var receivers = $('#cp_receivers').val()
-		var message = CKEDITOR.instances['cp_message'].getData()
-		if( $('#cp_receivers').val() == null || message == '' ) {
-			error_message('<?php trans_e("Merci de remplir tous les champs."); ?>');
-			return;
+		if (confirm('<?php trans_e("Êtes vous sur de vouloir executer cet action?"); ?>')) {
+			var receivers = $('#cp_receivers').val()
+			var message = CKEDITOR.instances['cp_message'].getData()
+			if( $('#cp_receivers').val() == null || message == '' ) {
+				error_message('<?php trans_e("Merci de remplir tous les champs."); ?>');
+				return;
+			}
+
+			$('#progress-wrap').show()
+			$('#candidaturesContactForm').hide()
+			$('#total-count').text(receivers.length)
+
+			sendEmailLoop({
+				step: 100 / receivers.length,
+				width: $('.progress-bar').getWidthInPercent(),
+				count: receivers.length,
+				index: 0,
+				receivers: receivers,
+				receiver: receivers[0],
+				sender: $('#cp_sender').val(),
+				subject: $('#cp_subject').val(),
+				message: message,
+				cv_path: $('#cp_cv_path').val()
+			});
 		}
-
-		$('#progress-wrap').show()
-		$('#candidaturesContactForm').hide()
-		$('#total-count').text(receivers.length)
-
-		sendEmailLoop({
-			step: 100 / receivers.length,
-			width: $('.progress-bar').getWidthInPercent(),
-			count: receivers.length,
-			index: 0,
-			receivers: receivers,
-			receiver: receivers[0],
-			sender: $('#cp_sender').val(),
-			subject: $('#cp_subject').val(),
-			message: message,
-			cv_path: $('#cp_cv_path').val()
-		});
 	})
 
 
