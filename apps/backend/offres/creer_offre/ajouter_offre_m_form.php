@@ -577,6 +577,28 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
                 <td colspan="2"><input type="file" id="resultats_concours" name="resultats_concours" /></td>
             </tr>
 
+            <tr>
+                <td colspan="2">
+                    <div class="subscription" style="margin: 10px 0 5px;">
+                        <h1>Avis de Modification</h1>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="file" id="avis_modification" name="avis_modification" /></td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <div class="subscription" style="margin: 10px 0 5px;">
+                        <h1>Avis de report</h1>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="file" id="avis_report" name="avis_report" /></td>
+            </tr>
+
             <?php \App\Event::trigger('after_offre_fields'); ?>
             
 
