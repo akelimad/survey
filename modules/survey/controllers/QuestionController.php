@@ -65,13 +65,35 @@ class QuestionController extends Controller
     return Ajax::renderAjaxView($title, 'admin/question/form', $data, __FILE__);
   }
 
+  public function atLeastOneChecked($data){
+    if($data['type'] == 'checkbox'){
+      $c = 0;
+      foreach ($data['answers'] as $key => $value) {
+        if($data['type'] == "checkbox" and isset($value['isCorrect'])){
+          $c += 1;
+        }
+      }
+      return $c > 0 ? true : false ;      
+    }else{
+      if( in_array($data['type'], ['radio','select']) and !isset($data['answers'][0]['isCorrect']) ){
+        return false;
+      }else{
+        return true;
+      }
+    }
+  }
+
   public function store($data)
   {
+    if($this->atLeastOneChecked($data) == false){
+      return $this->jsonResponse('error', trans("Veuillez choisir la bonne réponse !"));
+    }
     if(Survey::unsafe($data['name'])){
       return $this->jsonResponse('error', trans("Le champs nom est invalide, veuillez ne saisir que des caractères.")); 
     }
     if (!isset($data['name']) || !isset($data['type'])) return false;
     $db = getDB();
+    // dump($data['answers']);
     if (intval($data['qid']) > 0) { // update action
       $question = Question::find($data['qid']);
       if (isset($question->id)) {
@@ -81,10 +103,12 @@ class QuestionController extends Controller
         if(isset($data['answers']) and count($data['answers'])>0){
           foreach ($data['answers'] as $key => $value) {
             $answerId = $question->type == "file" ? $data['firstKeyWordId'] : $data['firstanswerId'];
-            if($key == 0){
-              $id = $data['firstKeyWordId'];
+            if($key === 0){
+              $id = $answerId;
+              //var_dump($key." = 0  id= ".$id);
             }else{
               $id = $key;
+              //var_dump($key." != 0  id= ". $id);
             }
             $answer = Question::findAnswer( $id );
             if( in_array($question->type, ['radio', 'checkbox', 'select']) and isset($value['choice']) ){
@@ -102,12 +126,14 @@ class QuestionController extends Controller
               $isCorrect = 0;
             }
             if($answer){
+              //var_dump("exist");
               $db->update('survey_question_answers','id', $answer->id, [
                 'name' => $choice_key,
                 'is_correct' => $isCorrect,
               ]);
             }else{
-              if( ($question->type == 'file' and isset($value['key'])) or in_array($question->type, ['radio', 'checkbox', 'select']) ){
+              //var_dump(" no exist");
+              if( ($question->type == 'file' and isset($value['key'])) or (in_array($question->type, ['radio', 'checkbox', 'select']) and isset($value['choice'])) ){
                 $db->create('survey_question_answers', [
                   'survey_question_id' => $question->id,
                   'name' => $choice_key,
@@ -121,7 +147,7 @@ class QuestionController extends Controller
                 'title' => $value['attachmentLabels']
               ]);
             }
-          }
+          } //die();
         }
       } else {
         return $this->jsonResponse('error', trans("Impossible de mettre à jour la question."));
@@ -139,6 +165,9 @@ class QuestionController extends Controller
       // save questions answers
       if(isset($data['answers']) and count($data['answers'])>0){
         foreach ($data['answers'] as $key => $value) {
+          if($data['type'] == "checkbox" and isset($value['isCorrect'])){
+            $atLeastOneChecked = true;
+          }
           if( isset($data['answers'][0]['isCorrect']) and $key == $data['answers'][0]['isCorrect'] and in_array($data['type'],["radio", "select"]) ){
             $isCorrect = 1;
           }else if(isset($data['answers'][0]['isCorrect']) and $key != $data['answers'][0]['isCorrect'] ){
@@ -214,6 +243,15 @@ class QuestionController extends Controller
     } else {
       return $this->jsonResponse('error', trans("Une erreur est survenue . réessayez plus tard !"));
     }
+  }
+
+  public function deleteAnswer($data)
+  {
+    $db = getDB();
+    //if row to delete is choice or keyword
+    $delete_answer = $db->delete('survey_question_answers', 'id', $data['params'][1]);
+    //if row to delete is attachement
+    $delete_answer = $db->delete('survey_attachements', 'id', $data['params'][1]);
   }
 
   public static function deleteDir($dirPath) 

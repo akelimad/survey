@@ -56,7 +56,7 @@ use App\Form;
                                 <?php foreach (Survey::getQuestionAttachmnts($question->id) as $key => $choice) { ?>
                                     <option value="<?= $choice->id ?>"> <?= $choice->title ?> </option>
                                 <?php } ?>
-                            </select>
+                            </select> 
                         </div>
                         <?php if(($key+1) % 4 == 0 ) { ?>
                             <div class="clearfix"></div> 

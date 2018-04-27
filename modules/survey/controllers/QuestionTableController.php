@@ -12,6 +12,7 @@ namespace Modules\Survey\Controllers;
 
 use App\Controllers\Controller;
 use Modules\Survey\Models\Question;
+use Modules\Survey\Models\Survey;
 use App\Form;
 
 class QuestionTableController extends Controller
@@ -21,6 +22,7 @@ class QuestionTableController extends Controller
   {
     $this->params['sid'] = $data['params'][1];
     $this->params['gid'] = $data['params'][2];
+    $survey = Survey::find($data['params'][1]);
     $params = $_GET;
     $table = new \App\Helpers\Table($this->buildQuery($params), 'id', [
       'bulk_actions' => false,
@@ -47,6 +49,7 @@ class QuestionTableController extends Controller
     });
 
     $table->setAction('edit', [
+      'permission' => $survey->active == 0 ? true : false,
       'patern' => '#',
       'attributes' => [
         'onclick' => "Question.form(&#123;'sid': ".$data["params"][1].", 'gid':".$data["params"][2].", 'qid':{id} &#125)"
@@ -54,6 +57,7 @@ class QuestionTableController extends Controller
     ]);
 
     $table->setAction('delete', [
+      'permission' => $survey->active == 0 ? true : false,
       'patern' => '#',
       'label' => trans("Supprimer ce groupe"),
       'attributes' => [

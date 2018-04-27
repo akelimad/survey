@@ -45,7 +45,12 @@ class RouteController
     Route::add('backend/survey/([0-9]+)/group/([0-9]+)/question/table', 'Modules\Survey\Controllers\QuestionTableController@getAll');
     Route::add('backend/survey/([0-9]+)/group/([0-9]+)/question/form', 'Modules\Survey\Controllers\QuestionController@form');
     Route::add('backend/survey/([0-9]+)/group/([0-9]+)/question/store', 'Modules\Survey\Controllers\QuestionController@store');
-    Route::add('backend/survey/([0-9]+)/group/([0-9]+)/question/([0-9]+)/delete', 'Modules\Survey\Controllers\QuestionController@delete');
+    Route::add(
+      'backend/survey/([0-9]+)/group/([0-9]+)/question/([0-9]+)/delete', 
+      'Modules\Survey\Controllers\QuestionController@delete');
+    Route::add(
+      'backend/survey/group/question/answer/([0-9]+)', 
+      'Modules\Survey\Controllers\QuestionController@deleteAnswer');
   }
 
 

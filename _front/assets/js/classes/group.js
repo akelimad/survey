@@ -25,7 +25,6 @@ export default class Group {
   }
 
   static delete (params) {
-    console.log(params)
     window.chmModal.show({
       type: 'POST',
       url: window.chmSite.url('backend/survey/' + params.sid + '/group/' + params.gid + '/delete'),

@@ -95,7 +95,7 @@ use App\Form;
                 </div>
                 <div class="imageTypeRow">
                     <div class="col-md-5">
-                        <div class="input-group file-upload" <?= (!empty($question->id) and $question->type == "file") ? 'style="display:none" ':'dd' ?> >
+                        <div class="input-group file-upload" <?= (!empty($question->id) and $question->type == "file") ? 'style="display:none" ':'' ?> >
                             <input type="text" class="form-control" name="fileName[0]" readonly placeholder="<?= trans_e("Choisissez l'image") ?>">
                             <label class="input-group-btn">
                             <span class="btn btn-success btn-sm">
@@ -116,7 +116,7 @@ use App\Form;
                     </div>
                 </div>
                 <div class="col-md-1">
-                    <button type="button" class="btn btn-default btn-sm <?= $key == 0 ? 'addLine':'deleteLine' ?> pull-right" title="<?= $key == 0 ? trans("Ajouter un choix"): trans("Supprimer ce choix") ?>" ><i class="fa <?= $key == 0 ? 'fa-plus':'fa-minus' ?>"></i></button>
+                    <button type="button" data-answerid="<?= (!empty($question->id) and $key != 0) ? $choice->id:"" ?>" class="btn btn-default btn-sm <?= $key == 0 ? 'addLine':'deleteLine' ?> pull-right" title="<?= $key == 0 ? trans("Ajouter un choix"): trans("Supprimer ce choix") ?>" ><i class="fa <?= $key == 0 ? 'fa-plus':'fa-minus' ?>"></i></button>
                 </div>
             </div>
         <?php } ?>
@@ -137,7 +137,7 @@ use App\Form;
                     <input type="text" class="form-control" name="<?= !empty($question->id) && $key != 0 ? "answers[$keyword->id][key]":"answers[0][key]" ?>" value="<?= (!empty($question->id) and $question->type=="file") ? $keyword->name : '' ?>" placeholder="<?php trans_e("Mot clé") ?>" required />
                 </div>
                 <div class="col-md-1">
-                    <button type="button" class="btn btn-default btn-sm <?= $key == 0 ? 'addLine2':'deleteLine2' ?> pull-right" title="<?= $key == 0 ? trans("Ajouter un mot clé"): trans("Supprimer ce mot clé") ?>" ><i class="fa <?= $key == 0 ? 'fa-plus':'fa-minus' ?>"></i></button>
+                    <button type="button" data-answerid="<?= (!empty($question->id) and $key != 0) ? $keyword->id : "" ?>" class="btn btn-default btn-sm <?= $key == 0 ? 'addLine2':'deleteLine2' ?> pull-right" title="<?= $key == 0 ? trans("Ajouter un mot clé"): trans("Supprimer ce mot clé") ?>" ><i class="fa <?= $key == 0 ? 'fa-plus':'fa-minus' ?>"></i></button>
                 </div>
             </div>
         <?php } ?>
@@ -245,5 +245,29 @@ $(function() {
     $('form').on('chm_form_success', function(){
         chmTable.refresh('#questionsTable')
     })
+
+    $(".deleteLine ,.deleteLine2").on('click', function(){
+        var $this = $(this);
+        var aid = $(this).data('answerid');
+        var url = "backend/survey/group/question/answer/"+ aid;
+        var confirmText = "Etês-vous sûr de vouloir supprimer ?";
+        if( aid != "" ){
+            if(confirm(confirmText) ) {
+                $.ajax({
+                    type:"POST",
+                    url: url,
+                    data: aid,
+                    success:function () {
+                        $this.closest('.form-group').remove();
+                    },
+                });
+            }
+            return false;
+        }else{
+            $this.closest('.form-group').remove();
+        }
+    })
+
+
 })
 </script>

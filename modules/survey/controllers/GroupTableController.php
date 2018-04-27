@@ -12,6 +12,7 @@ namespace Modules\Survey\Controllers;
 
 use App\Controllers\Controller;
 use Modules\Survey\Models\Group;
+use Modules\Survey\Models\Survey;
 use App\Form;
 
 class GroupTableController extends Controller
@@ -21,7 +22,7 @@ class GroupTableController extends Controller
   {
     $this->params['sid'] = $data['params'][1];
     $params = $_GET;
-
+    $survey = Survey::find($data['params'][1]);
     $table = new \App\Helpers\Table($this->buildQuery($params), 'id', [
       'bulk_actions' => false,
       'actions' => true,
@@ -47,13 +48,14 @@ class GroupTableController extends Controller
     });
 
     $table->setAction('edit', [
+      'permission' => $survey->active == 0 ? true : false,
       'patern' => '#',
       'attributes' => [
         'onclick' => 'Group.form('.$data["params"][1].', {id})'
       ]
     ]);
-
     $table->setAction('delete', [
+      'permission' => $survey->active == 0 ? true : false,
       'patern' => '#',
       'label' => trans("Supprimer ce groupe"),
       'attributes' => [

@@ -45,6 +45,9 @@ class SurveyController extends Controller
 
   public function store($data)
   {
+    if(!isset($data['format'])){
+      return $this->jsonResponse('error', trans("Veuillez choisir le format !")); 
+    }
     if(Survey::unsafe($data['name'])){
       return $this->jsonResponse('error', trans("Le champs nom est invalide, veuillez ne saisir que des caractères.")); 
     }
@@ -58,6 +61,8 @@ class SurveyController extends Controller
         $db->update('surveys', 'id', $survey->id, [
           'name' => $data['name'], 
           'description' => $data['description'],
+          'format' => $data['format'],
+          'active' => $data['active'],
           'updated_at' => date('Y-m-d H:i:s')
         ]);
       } else {
@@ -68,6 +73,8 @@ class SurveyController extends Controller
         'name' => $data['name'],
         'description' => $data['description'],
         'created_by' => $created_by ,
+        'format' => $data['format'],
+        'active' => $data['active'],
         'created_at' => date('Y-m-d H:i:s')
       ]);
     }
@@ -132,6 +139,7 @@ class SurveyController extends Controller
 
   public function storeAnswers($data)
   {
+    // dump($data);
     $db = getDB();
     $questions = Question::All();
     foreach ($questions as $question) {
