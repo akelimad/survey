@@ -146,6 +146,12 @@ Route::add(
   ($isLoggedCandidat && $canUpdateAccount)
 );
 Route::add(
+  'candidat/cv/experience/delete-bulletin-paie', 
+  'App\Controllers\Front\ExperienceController@deleteBulletinPaie', 
+  true, 
+  ($isLoggedCandidat && $canUpdateAccount)
+);
+Route::add(
   'candidat/cv/experience/store', 
   'App\Controllers\Front\ExperienceController@store', 
   true, 

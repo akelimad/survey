@@ -140,8 +140,30 @@
         </label>
     </div>
     <?php if (isset($exp->copie_attestation) && $exp->copie_attestation != '') : ?>
-      <a href="<?= site_url('apps/upload/frontend/candidat/copie_attestation/'. $exp->copie_attestation); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
+      <a href="<?= site_url('apps/upload/frontend/candidat/copie_attestation/'. $exp->copie_attestation); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download" style="margin: 3px 0;"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
       <button class="btn btn-danger btn-xs" type="button" onclick="return chmModal.confirm('', '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer la copie de l’attestation ?"); ?>', 'chmExperience.deleteCertificate', {'id': <?= $exp->id_exp; ?>, cd: '<?= $exp->copie_attestation; ?>'}, {width: 431})"><i class="fa fa-trash"></i>&nbsp;<?php trans_e("Supprimer"); ?></button>
+    <?php endif; ?>
+  </div>
+  <?php endif; ?>
+</div>
+
+<div class="row">
+  <?php if (Form::getFieldOption('displayed', 'register', 'bulletin_paie')) : ?>
+    <?php $required = Form::getFieldOption('required', 'register', 'bulletin_paie') ? ' required' : ''; ?>
+  <div class="col-sm-4 mb-10<?= $required; ?>">
+    <label for="bulletin_paie"><?php trans_e("Bulletin de paie"); ?></label>
+    <div class="input-group file-upload<?= (isset($exp->bulletin_paie) && $exp->bulletin_paie != '') ? ' hidden' : '' ?>">
+        <input type="text" class="form-control" readonly>
+        <label class="input-group-btn">
+            <span class="btn btn-success btn-sm">
+                <i class="fa fa-upload"></i>
+                <input type="file" class="form-control" id="bulletin_paie" name="bulletin_paie" accept="image/*|.doc,.docx,.pdf">
+            </span>
+        </label>
+    </div>
+    <?php if (isset($exp->bulletin_paie) && $exp->bulletin_paie != '') : ?>
+      <a href="<?= site_url('apps/upload/frontend/candidat/bulletin_paie/'. $exp->bulletin_paie); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download" style="margin: 3px 0;"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
+      <button class="btn btn-danger btn-xs" type="button" onclick="return chmModal.confirm('', '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer la copie de la bulletin de paie?"); ?>', 'chmExperience.deleteBulletinPaie', {'id': <?= $exp->id_exp; ?>, cd: '<?= $exp->bulletin_paie; ?>'}, {width: 431})"><i class="fa fa-trash"></i>&nbsp;<?php trans_e("Supprimer"); ?></button>
     <?php endif; ?>
   </div>
   <?php endif; ?>

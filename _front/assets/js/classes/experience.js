@@ -47,4 +47,18 @@ export default class chmExperience {
     })
   }
 
+  static deleteBulletinPaie (params) {
+    window.chmModal.show({
+      type: 'POST',
+      url: window.chmSite.url('candidat/cv/experience/delete-bulletin-paie'),
+      data: params
+    }, {
+      message: '<i class="fa fa-trash"></i>&nbsp;Suppression en cours...',
+      onSuccess: (response) => {
+        this.getForm(params.id)
+        window.chmTable.refresh(document.querySelector('#experiencesTableContainer'))
+      }
+    })
+  }
+
 }

@@ -14,6 +14,7 @@ use App\Controllers\Controller;
 use App\Helpers\Form\Validator;
 use App\Ajax;
 use App\Media;
+use App\Form;
 
 class ExperienceController extends Controller
 {
@@ -83,7 +84,7 @@ class ExperienceController extends Controller
     }
 
     // Check if file posted
-    if (App\Form::getFieldOption('displayed', 'register', 'copie_attestation')) {
+    if (Form::getFieldOption('displayed', 'register', 'copie_attestation')) {
       if ($_FILES['copie_attestation']['size'] > 0) {
         $upload = Media::upload($_FILES['copie_attestation'], [
           'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
@@ -91,6 +92,20 @@ class ExperienceController extends Controller
         ]);
         if(isset($upload['files'][0]) && $upload['files'][0] != '') {
           $data['copie_attestation'] = $upload['files'][0];
+        } else {
+          return $this->jsonResponse('error', $upload['errors'][0]);
+        }
+      }
+    }
+    
+    if (Form::getFieldOption('displayed', 'register', 'bulletin_paie')) {
+      if ($_FILES['bulletin_paie']['size'] > 0) {
+        $upload = Media::upload($_FILES['bulletin_paie'], [
+          'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
+          'uploadDir' => 'apps/upload/frontend/candidat/bulletin_paie/'
+        ]);
+        if(isset($upload['files'][0]) && $upload['files'][0] != '') {
+          $data['bulletin_paie'] = $upload['files'][0];
         } else {
           return $this->jsonResponse('error', $upload['errors'][0]);
         }
@@ -133,8 +148,13 @@ class ExperienceController extends Controller
     }
 
     if ($experience->copie_attestation != '') {
-      unlinkFile(site_base('apps/upload/frontend/candidat/copie_attestation/'.$experience->copie_attestation));
+      unlinkFile(site_base('apps/upload/frontend/candidat/copie_attestation/'. $experience->copie_attestation));
     }
+
+    if ($experience->bulletin_paie != '') {
+      unlinkFile(site_base('apps/upload/frontend/candidat/bulletin_paie/'. $experience->bulletin_paie));
+    }
+
     getDB()->delete('experience_pro', 'id_exp', $data['id']);
     return $this->jsonResponse('success', trans("L'experience a été bien supprimé."));
   }
@@ -157,6 +177,26 @@ class ExperienceController extends Controller
     getDB()->update('experience_pro', 'id_exp', $data['id'], ['copie_attestation' => null]);
 
     return $this->jsonResponse('success', trans("La copie de l’attestation a été bien supprimé."));
+  }
+
+  public function deleteBulletinPaie($data)
+  {
+    $experience = getDB()->prepare("SELECT * FROM experience_pro WHERE candidats_id=? AND id_exp=?", [
+      get_candidat_id(),
+      $data['id']
+    ], true);
+
+    if (!isset($experience->id_exp)) {
+      return $this->jsonResponse('error', trans("Impossible de supprimer la bulletin de paie."));
+    }
+
+    if ($experience->bulletin_paie != '') {
+      unlinkFile(site_base('apps/upload/frontend/candidat/bulletin_paie/'.$experience->bulletin_paie));
+    }
+
+    getDB()->update('experience_pro', 'id_exp', $data['id'], ['bulletin_paie' => null]);
+
+    return $this->jsonResponse('success', trans("La bulletin de paie a été bien supprimé."));
   }
 
 	

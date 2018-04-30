@@ -17,6 +17,7 @@ use App\Ajax;
 use App\Media;
 use App\Mail\Mailer;
 use App\Form;
+use App\Models\Sector;
 
 class AuthController extends Controller
 {
@@ -258,7 +259,7 @@ class AuthController extends Controller
 		if(isLogged('candidat')) redirect('/');
 		$this->data['villes'] = getDB()->read('prm_villes');
 		$this->data['pays'] = getDB()->read('prm_pays');
-		$this->data['sectors'] = App\Models\Sector::findAll();
+		$this->data['sectors'] = Sector::findAll();
 		$this->data['niv_formation'] = getDB()->read('prm_niv_formation');
 		$this->data['layout'] = 'front';
 		$this->data['breadcrumbs'] = [trans("Accueil"), trans("Candidat"), trans("Inscrivez-vous")];
