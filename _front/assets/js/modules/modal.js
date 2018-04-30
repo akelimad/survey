@@ -4,6 +4,7 @@ import trans from './../classes/trans'
 export default class chmModal {
 
   static show (params, options = {}) {
+    $('[data-toggle="popover"]').popover('hide')
     var modalObject = {}
     params = $.extend({}, {
       type: 'POST'

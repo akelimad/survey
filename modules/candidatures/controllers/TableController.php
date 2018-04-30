@@ -22,6 +22,9 @@ use App\Models\MotivationLetter;
 class TableController extends Controller
 {
 
+  const STATUS_ARCHIVED = 53;
+  const STATUS_PRESENTES_ECRIT = 35;
+
 	private $andWhere = [
 		'motcle' 		 => ['c' => 'motcle'], 
 		'fonc' 	 		 => ['c' => 'id_fonc'], 
@@ -52,7 +55,8 @@ class TableController extends Controller
       'patern' => '#',
       'icon' => 'fa fa-pencil',
       'callback' => 'showChangeSatatusPopup',
-      'bulk_action' => false,
+      'bulk_action' => true,
+      'bulk_label' => 'Changer le statut',
       'attributes' => [
         'class' => 'btn btn-success btn-xs',
       ],
@@ -198,7 +202,7 @@ class TableController extends Controller
 	 */
   public function getTable($id)
   {
-    $this->params['options']['actions'] = (is_null($id) || $id != 53);
+    $this->params['options']['actions'] = (is_null($id) || $id != self::STATUS_ARCHIVED);
 
   	$query = $this->buildQuery($id);
   	$table = new \App\Helpers\Table($query, 'id_candidature', $this->params['options']);
@@ -207,10 +211,10 @@ class TableController extends Controller
   	$table->removeActions(['edit', 'delete']);
   	$table->setTrigger('table_notes', [$this, 'getPertinenceNotice']);
 
-    if( $id == 35 ) {
+    if( $id == self::STATUS_PRESENTES_ECRIT ) {
   	  $table->setOrderby('cand.note_ecrit'); 
     } else {
-      $table->setOrderby('cand.'. $this->getDateField($id)); 
+      $table->setOrderby('cand.id_candidature');
     }
     
   	$table->setOrder('DESC');
@@ -237,24 +241,31 @@ class TableController extends Controller
   		return $html;
   	});
 
-  	$table->addColumn('history', '', function($row){
-  		$history = getDB()->prepare("SELECT id, date_modification, status, utilisateur FROM historique WHERE id_candidature=?", [$row->id_candidature]);
-  		if ( empty($history) ) return;
-  		$html = '<i class="fa fa-history pull-right" data-toggle="popover" data-trigger="click" data-popover-content="#show_h_'. $row->candidats_id .'" title="'. trans("Historique des actions effectuées") .'"></i>';
-  		$html .= '<div id="show_h_'. $row->candidats_id .'" class="hidden">';
-  		$html .= '<table class="table table-history">';
-  		foreach ($history as $key => $h) :
-  			$html .= '<tr><td width="110">'. date('d.m.Y H:i', strtotime($h->date_modification)) .'</td><td width="110">'. $h->status .'</td><td width="40">'. $h->utilisateur .'</td><td>';
-        if( in_array($h->status, ['Préselectionnés', 'Présélectionné', 'Non présélectionné', 'Non préselectionnés']) ) {
-          if( Fiche::historyFicheExists($row->id_candidature, $h->id) ) {
-            $html .= '<a href="jaavscript:void(0);" onclick="return showFicheDetails('.$h->id.');"><i class="fa fa-file-text-o"></i></a>';
+    if (!in_array($id, ['spontanees', 'stage'])) {
+    	$table->addColumn('history', '', function($row){
+        $history = getDB()->prepare("SELECT * FROM historique WHERE id_candidature=? ORDER BY id DESC", [$row->id_candidature]);
+    		if ( empty($history) ) return;
+    		$html = '<i class="fa fa-history pull-right" data-toggle="popover" data-trigger="click" data-popover-content="#show_h_'. $row->id_candidature .'" title="'. trans("Historique des actions effectuées") .'" style="cursor:pointer;"></i>';
+    		$html .= '<div id="show_h_'. $row->id_candidature .'" class="hidden">';
+    		$html .= '<table class="table table-history">';
+    		foreach ($history as $key => $h) :
+    			$html .= '<tr><td width="100">'. date('d.m.Y H:i', strtotime($h->date_modification)) .'</td><td width="115">'. $h->status .'</td><td width="100">'. $h->utilisateur .'</td><td align="right" width="90">';
+
+          if (!empty($h->commentaire)) {
+            $html .= '<span class="btn btn-default btn-xs" data-toggle="tooltip" title="'. $h->commentaire .'" style="cursor:pointer;"><i class="fa fa-commenting"></i></span>';
           }
-        }
-        $html .='</td></tr>';
-  		endforeach;
-  		$html .= '</table></div>';
-  		return $html;
-  	});
+
+          if( in_array($h->status, ['Préselectionnés', 'Présélectionné', 'Non présélectionné', 'Non préselectionnés']) ) {
+            if(isModuleEnabled('fiches') && Fiche::historyFicheExists($row->id_candidature, $h->id) ) {
+              $html .= '&nbsp;<a href="jaavscript:void(0);" class="btn btn-info btn-xs" onclick="return showFicheDetails('.$h->id.');"><i class="fa fa-file-text-o"></i></a>';
+            }
+          }
+          $html .='</td></tr>';
+    		endforeach;
+    		$html .= '</table></div>';
+    		return $html;
+    	});
+    }
 
   	$table->addColumn('exp_salr', '', function($row){
   		$mobilite = (isset($row->mobilite) && $row->mobilite!='') ? ucfirst($row->mobilite) : 'Non';
@@ -349,7 +360,7 @@ class TableController extends Controller
     			$style = '';
     			$tooltip = 'data-toggle="tooltip" title="'. trans("Non défini.") .'"';
     		}
-        if($id != 53) {
+        if($id != self::STATUS_ARCHIVED) {
           return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteEcritPopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
         } else {
     		  return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" '.$tooltip.'>'.$value.'</i>';
@@ -370,7 +381,7 @@ class TableController extends Controller
           $style = '';
           $tooltip = 'data-toggle="tooltip" title="'. trans("Non défini.") .'"';
         }
-        if($id != 53) {
+        if($id != self::STATUS_ARCHIVED) {
           return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteOralePopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
         } else {
           return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" '.$tooltip.'>'.$value.'</i>';
@@ -409,10 +420,14 @@ class TableController extends Controller
     $field_date = $this->getDateField($id);
     $table = $this->getTableName($id);
     
-    $status = ($id == 53) ? trans("Archivée") : trans("En cours");
+    $status = ($id == self::STATUS_ARCHIVED) ? trans("Archivée") : trans("En cours");
     $condition = " WHERE o.status='". $status ."'";
 
-    if($id != 53) $condition .= " AND cand.status=". $id;
+    if (is_null($id)) {
+      $condition .= " AND cand.status != 0";
+    } else if($id != self::STATUS_ARCHIVED) {
+      $condition .= " AND cand.status=". $id;
+    }
 
     $condition .= $this->getAndWhereStatement('AND');
 
@@ -434,7 +449,8 @@ class TableController extends Controller
       SELECT c.candidats_id, CONCAT(c.nom, ' ',c.prenom) AS fullname, c.email, c.titre, c.ville, c.id_situ, c.id_tfor, c.id_nfor, c.id_expe, c.id_sect, c.id_fonc, c.mobilite, c.id_pays, c.id_salr, c.date_n, c.dateMAJ, c.CVdateMAJ, cand.*, cand.{$field_date} as date_cand {$fields}
       FROM {$table} cand 
       JOIN candidats c ON c.candidats_id = cand.candidats_id
-      {$joints} {$condition} GROUP BY cand.id_candidature";
+      {$joints} {$condition} GROUP BY cand.id_candidature
+    ";
 
   	return $query;
   }

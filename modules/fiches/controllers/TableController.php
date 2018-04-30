@@ -85,7 +85,7 @@ class TableController extends Controller
 	public function getNoteOraleTable()
 	{
 		$query = "
-	      SELECT fc.id_fiche_candidature, r.nom, fc.comments, fc.created_at, fc.updated_at, COUNT(fcr.id_result) AS nbr, SUM(fcr.value) AS total
+	      SELECT f.id_fiche, fc.id_fiche_candidature, r.nom, fc.comments, fc.created_at, fc.updated_at, COUNT(fcr.id_result) AS nbr, SUM(fcr.value) AS total
 	      FROM fiches f
 	      JOIN fiche_candidature fc ON fc.id_fiche=f.id_fiche
 	      JOIN fiche_candidature_results fcr ON fcr.id_fiche_candidature=fc.id_fiche_candidature

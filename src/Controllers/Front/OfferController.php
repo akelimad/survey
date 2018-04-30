@@ -204,36 +204,41 @@ class OfferController extends Controller
   public function storeCandidature($data)
   {
     // Check if candiat logged
-    if(!isLogged('candidat')) {
+    if(!isLogged('admin') && !isLogged('candidat')) {
       return $this->jsonResponse('error', trans("Vous devez vous connecter pour répondre à cette l'offre."));
     }
 
     $db = getDB();
 
-    $candidat_id = read_session('abb_id_candidat');
-    $id_offre = (isset($data['candidature']['id_offre'])) ? $data['candidature']['id_offre'] : 0;
-
-    // Check if candidat already applied to this offer
-    $count = $db->prepare("SELECT COUNT(*) as nbr FROM candidature WHERE candidats_id=? AND id_offre=?", [$candidat_id, $id_offre], true);
-
-    if(intval($count->nbr) > 0) {
-      return $this->jsonResponse('error', trans("Vous avez déjà postulé à cette offre, vous ne pouvez postuler qu'une seule fois."));
-    }
-
-    if(!isset($data['candidature']['motivation']) || empty($data['candidature']['motivation'])) {
-      return $this->jsonResponse('error', trans("Le message de motivation est obligatoire."));
-    }
+    $candidat_id = (isset($data['candidat_id'])) ? $data['candidat_id'] : read_session('abb_id_candidat');
 
     // Check if candidat account exists
     $candidat = $db->findOne('candidats', 'candidats_id', $candidat_id);
-    if(!isset($candidat->candidats_id)) {
+    if(!isset($candidat->candidats_id) && !isLogged('admin')) {
       return $this->jsonResponse('error', trans("Votre session est expiré, essaye de vous reconnecter."));
     }
+
+    $id_offre = (isset($data['candidature']['id_offre'])) ? $data['candidature']['id_offre'] : 0;
 
     // Get offer
     $offer = $db->findOne('offre', 'id_offre', $id_offre);
     if(!isset($offer->id_offre)) {
       return $this->jsonResponse('error', trans("Impossible de trouver l'offre oû vous voulez postuler."));
+    }
+
+    // Check if candidat already applied to this offer
+    $count = $db->prepare("SELECT COUNT(*) as nbr FROM candidature WHERE candidats_id=? AND id_offre=?", [$candidat_id, $id_offre], true);
+
+    if(intval($count->nbr) > 0) {
+      if (!isLogged('admin')) {
+        return $this->jsonResponse('error', trans("Vous avez déjà postulé à cette offre, vous ne pouvez postuler qu'une seule fois."));
+      } else {
+        return $this->jsonResponse('success', trans("Le candidat") .' <b>'. Candidat::getDisplayName($candidat, false) .'</b> '. trans("a déjà postulé à l'offre") .' <b>'. $offer->Name .'</b>');
+      }
+    }
+
+    if(!isset($data['candidature']['motivation']) || empty($data['candidature']['motivation'])) {
+      return $this->jsonResponse('error', trans("Le message de motivation est obligatoire."));
     }
 
     $id_lettre = (isset($data['candidature']['id_lettre'])) ? intval($data['candidature']['id_lettre']) : 0;
@@ -404,31 +409,45 @@ class OfferController extends Controller
     ]);
 
     // Candidature region
-    $candidature_region_id = getDB()->create('candidature_region', [
-      'id_candidature' => $candidature_id,
-      'id_region'      => $data['region']['id'],
-      'ville_region'   => $data['region']['ville'],
-      'date_action'    => date("Y-m-d H:i:s")
-    ]);
+    if (!isLogged('admin')) {
+      $candidature_region_id = getDB()->create('candidature_region', [
+        'id_candidature' => $candidature_id,
+        'id_region'      => $data['region']['id'],
+        'ville_region'   => $data['region']['ville'],
+        'date_action'    => date("Y-m-d H:i:s")
+      ]);
+    }
 
     // Candidature region
+    $commentaire = '';
+    if (
+      isset($data['cand_type']) && 
+      in_array($data['cand_type'], ['spontanees', 'stage'])
+    ) {
+      $type = ($data['cand_type'] == 'spontanees') ? 'spontanées' : 'pour un stage'; 
+      $commentaire = "Affecter la candidature {$type} à l'offre N°". $offer->reference;
+    }
     $historique_id = getDB()->create('historique', [
       'id_candidature' => $candidature_id,
-      'status' => 'En attente',
+      'status' => "En attente",
       'date_modification' => date("Y-m-d H:i:s"),
-      'utilisateur' => $candidat->email,
+      'utilisateur' => (isBackend()) ? get_admin('email') : $candidat->email,
       'lieu' => '',
-      'commentaire' => '' // TODO fill this fied
+      'commentaire' => $commentaire
     ]);
 
-    // Disable update account links
-    $db->update('candidats', 'candidats_id', $candidat_id, ['can_update_account' => 0]);
+    if (!isLogged('admin')) {
+      // Disable update account links
+      $db->update('candidats', 'candidats_id', $candidat_id, ['can_update_account' => 0]);
 
-    // Notify website RH about new candidature
-    $this->sendCandidatureEmail($candidat, $offer, $candidature_id);
-
-    // Return success message
-    return $this->jsonResponse('success', trans("Votre candidature a bien été envoyée avec succès."));
+      // Notify website RH about new candidature
+      $this->sendCandidatureEmail($candidat, $offer, $candidature_id);
+      
+      // Return success message
+      return $this->jsonResponse('success', trans("Votre candidature a bien été envoyée avec succès."));
+    } else {
+      return $this->jsonResponse('success', trans("La candidature a été affectés à l'offre") .' <b>'. $offer->Name .'</b> '. trans("pour le candidat:") .' <b>'. Candidat::getDisplayName($candidat, false) .'</b>');
+    }
   }
 
 

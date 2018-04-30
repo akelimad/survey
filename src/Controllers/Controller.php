@@ -58,7 +58,7 @@ class Controller
 	}
 
 
-	public function jsonResponse($status, $message, $data = [])
+	public function jsonResponse($status, $message = '', $data = [])
 	{
 		return json_encode(['status' => $status, 'message' => $message, 'data' => $data]);
 	}

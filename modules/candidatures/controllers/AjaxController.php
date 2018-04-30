@@ -14,18 +14,13 @@ use App\Controllers\Controller;
 use App\Ajax;
 use App\Models\Resume;
 use App\Media;
+use App\Models\Civility;
+use App\Controllers\Front\OfferController;
 
 class AjaxController extends Controller
 {
 
   private static $_instance = null;
-
-  private $civilite = array(
-    1 => 'M.',
-    2 => 'Mlle.',
-    4 => 'Mme.'
-  );
-
 
   public function __construct()
   {
@@ -260,21 +255,50 @@ class AjaxController extends Controller
   public function assignToOffer($data)
   {
     if (isset($data['cIds']) && !empty($data['cIds'])) {
+      preg_match('/(spontanees|stage)$/', $_SERVER['HTTP_REFERER'], $m);
       return $this->renderAjaxView(
         trans("Affecter à une offre"), 
         'admin/candidature/popup/assign-to-offer',
-        ['cIds' => $data['cIds']]
+        [
+          'cIds' => $data['cIds'],
+          'cand_type' => $m[1]
+        ]
       );
     } elseif (isset($data['offer_id']) && is_numeric($data['offer_id'])) {
+      $db = getDB();
       $candIds = json_decode($data['candIds'], true) ?: [];
       preg_match('/(spontanees|stage)$/', $_SERVER['HTTP_REFERER'], $m);
       if (isset($m[1]) && !empty($candIds)) {
         $table = ($m[1] == 'stage') ? 'candidature_stage' : 'candidature_spontanee';
         foreach ($candIds as $key => $cid) {
-          $cand = getDB()->findOne($table, 'id_candidature', $cid);
+          $cand = $db->findOne($table, 'id_candidature', $cid);
+
+          if ($table == 'candidature_stage') {
+            $motivation = $cand->motivations;          
+            $id_cv = 0;
+          } else {
+            $motivation = $cand->message;
+            $id_cv = $cand->id_cv;      
+          }
+
+          $data['candidat_id'] = $cand->candidats_id;
+          $data['candidature']['id_offre'] = $data['offer_id'];
+          $data['candidature']['motivation'] = $motivation;
+          $data['candidature']['id_lettre'] = 0;
+          $data['candidature']['id_cv'] = $id_cv;
+          
+          $response = (new OfferController())->storeCandidature($data);
+          $response = json_decode($response, true);
+
+          if ($response['status'] == 'success') {
+            // TODO - Delete this candidature
+            // $db->delete($table, 'id_candidature', $cid);
+            set_flash_message($response['status'], $response['message']);
+          } else {
+            set_flash_message($response['status'], $response['message']);
+          }
         }
-        // Delete candidature
-        return $this->jsonResponse('success', trans("Les candidatures ont été bien affectés"));
+        return $this->jsonResponse('reload');
       }
     }
   }
@@ -454,7 +478,7 @@ class AjaxController extends Controller
 
       $c = $db->prepare("SELECT c.date_candidature, h.status, h.date_modification, h.lieu, o.Name AS titre_offre, o.reference AS ref_offre, a.id_agend FROM candidature AS c JOIN historique AS h ON h.id_candidature=c.id_candidature JOIN offre AS o ON o.id_offre=c.id_offre LEFT JOIN agenda AS a ON a.id_candidature=c.id_candidature WHERE c.id_candidature=? ORDER BY h.date_modification DESC", [$id_candidature], true);
 
-      $civilite = $this->civilite[$candidat->id_civi];
+      $civilite = Civility::getNameById($candidat->id_civi);
       $date_statut = date('d.m.Y H:i:s', strtotime($c->date_modification));
       $variables = array(
         'nom_candidat' => $civilite .' '. $candidat->prenom .' '. $candidat->nom,

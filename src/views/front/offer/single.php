@@ -90,7 +90,7 @@
   <?php endif; ?>
 </div>
 
-<?php if($offer->status != 'Archivée' && strtotime($offer->date_expiration) > strtotime(date('Y-m-d', time()))) : ?>
+<?php if($offer->status != 'Archivée' && strtotime($offer->date_expiration) >= strtotime(date('Y-m-d', time()))) : ?>
 <div class="ligneBleu"></div>
 <ul id="offer-actions">
   <li class="mb-5">

@@ -7,6 +7,7 @@ jQuery(document).ready(function($){
 	showModal = function(ajax_args) {
 		ajax_args.type = 'POST';
 		ajax_args.url = site_url('src/includes/ajax/index.php')
+		$('[data-toggle="popover"]').popover('hide')
 		window.chmModal.show(ajax_args)
 	}
 
@@ -70,13 +71,25 @@ jQuery(document).ready(function($){
 	// show change status popup
 	showChangeSatatusPopup = function(event, candidatures) {
 		event.preventDefault()
-		showModal({
-			data: {
-				'action': 'cand_change_status_popup',
-				'candidatures': candidatures,
+
+		var url = window.chmSite.url('backend/candidatures/change-status')
+		window.chmModal.show({
+      type: 'POST',
+      url: url,
+      data: {
+      	candidatures: candidatures,
 				'id_statut': $('input#current_statut_id').val()
-			}
-		})
+      }
+    }, {
+      form: {
+        action: url,
+        callback: 'chmForm.submit',
+        id: 'changeSatatusForm'
+      },
+      footer: {
+        label: trans("Appliquer les changements")
+      }
+    })
 	}
 
 	// Update candidature note ecrit

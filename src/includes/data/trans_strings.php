@@ -109,6 +109,7 @@ return array(
 
     // Modules\Candidatures\Controllers\TableController
     trans("Editer le statut de cette candidature"),
+    trans("Changer le statut"),
     trans("Transférer le CV"),
     trans("Transférer le CV"),
     trans("Envoyer un email au candidat"),

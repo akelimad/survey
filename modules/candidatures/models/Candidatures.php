@@ -72,6 +72,16 @@ class Candidatures {
 	}
 
 
+	public static function countPending()
+	{
+		return getDB()->prepare("
+			SELECT COUNT(*) AS nbr 
+			FROM candidature cand
+			JOIN offre o ON o.id_offre=cand.id_offre
+			WHERE o.status = ? AND cand.status != ?
+		", ['En cours', 0], true)->nbr;
+	}
+
 	public static function getUserStatusUrls()
 	{
 		if(!isLogged('admin')) return [];

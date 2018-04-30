@@ -41,6 +41,11 @@ class RouteController
     );
 
     Route::add(
+      'backend/candidatures/change-status',
+      'Modules\Candidatures\Controllers\CandidatureController@changeSatatus'
+    );
+
+    Route::add(
       'backend/candidatures/assign-to-offer',
       'Modules\Candidatures\Controllers\AjaxController@assignToOffer'
     );

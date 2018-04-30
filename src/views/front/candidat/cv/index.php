@@ -68,7 +68,7 @@ use App\Models\TypeFormation;
         </tr>
         <tr>
           <th><i class="fa fa-anchor"></i>&nbsp;<?php trans_e("Disponibilité"); ?></th>
-          <td>:&nbsp;<?= Availability::getNameById(get_candidat('id_situ')); ?></td>
+          <td>:&nbsp;<?= Availability::getNameById(get_candidat('id_dispo')); ?></td>
         </tr>
         <tr>
           <th><i class="fa fa-plane"></i>&nbsp;<?php trans_e("Mobilite"); ?></th>

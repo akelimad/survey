@@ -41,18 +41,24 @@ class EventController
 	{
 		// Save status popup data
 		if( isset($data['status']['id']) ) {
-			$saveStatus = (new StatusController())->saveStatus($data);
-			// Send convocation email
-			if(isset($data['status']['mail']) && $data['status']['mail']['sender'] != '') {
-				$message = $data['status']['mail']['message'];
-				$data['status']['mail']['message'] = Mailer::renderMessage($message, [
-					'lien_confirmation' => '<a href="'. site_url('candidature/confirm/'. md5($saveStatus['id_agend'])) .'"> <b>'. trans("Confirmer") .'</b></a>'
-				]);
-				$sendEmail = (new AjaxController())->sendEmail($data['status']['mail']);
-				if( $sendEmail['response'] == 'success' ) {
-					Session::setFlash('success', trans("Une convocation a été envoyée au candidat."));
-				} else {
-					Session::setFlash('error', $sendEmail['message']);
+			foreach ($data['status']['receivers'] as $key => $receiver) {
+				$parts = explode('|', $receiver);
+				$data['status']['id_candidature'] = $parts[0];
+				$saveStatus = (new StatusController())->saveStatus($data);
+				if ($key == 0 && isset($saveStatus['candidature']->id_candidature)) {
+					Session::setFlash('success', trans("Le statut a été bien changé."));
+				}
+
+				// Send convocation email
+				if(isset($data['status']['mail']) && $data['status']['mail']['sender'] != '') {
+					if ($key == 0) Session::setFlash('success', trans("Une convocation a été envoyée au(x) candidat(s)."));
+						
+					$message = $data['status']['mail']['message'];
+					$data['status']['mail']['message'] = Mailer::renderMessage($message, [
+						'lien_confirmation' => '<a href="'. site_url('candidature/confirm/'. md5($saveStatus['id_agend'])) .'"> <b>'. trans("Confirmer") .'</b></a>'
+					]);
+					$data['status']['mail']['receiver'] = $receiver;
+					$send = (new AjaxController())->sendEmail($data['status']['mail']);
 				}
 			}
 		} else {
@@ -64,7 +70,9 @@ class EventController
 		}
 
 		// share candidature
-		if( isset($data['share']['candidatures']) ) (new ShareController())->share($data['share']);
+		if( isset($data['share']['candidatures']) ) {
+			$share = (new ShareController())->share($data['share']);
+		}
 
 		// change candidature offre
 		if( isset($data['change_offre']['id']) ) {

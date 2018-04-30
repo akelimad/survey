@@ -54,15 +54,19 @@ function set_flash_message($type, $message) {
  *
  * @return void
  */
-function get_flash_message(){
+function get_flash_message($print = true) {
 	if( $flash = read_session('flash_message') ) {
 		erase_session('flash_message');
 		// Render views
+		$msgs = [];
 		foreach ($flash as $type => $messages) {
-			get_view('alerts/'.$type, [
-				'messages' => $messages
-			]);
+			if ($print) {
+				get_view('alerts/'.$type, ['messages' => $messages]);
+			} else {
+				$msgs += (is_array($messages)) ? $messages : [$messages];
+			}
 		}
+		if (!$print) return $msgs;
 	}
 }
 
@@ -74,9 +78,17 @@ function get_flash_message(){
  *
  * @return bool
  */
-function has_session_flash($type){
+function has_session_flash($type) {
 	if( $flash = read_session('flash_message') ) {
-		return (isset($flash[$type]));
+		if( is_array($type) ) {
+			foreach ($type as $key => $t) {
+				if (isset($flash[$t])) {
+					return true;
+				}
+			}
+		} else {
+			return (isset($flash[$type]));
+		}
 	}
 	return false;
 }

@@ -9,10 +9,10 @@
 						<a href="<?= site_url('backend/module/candidatures/candidature/status'); ?>"><i class="fa fa-pie-chart"></i>&nbsp;<?php trans_e("État des candidatures"); ?></a>
 					</li>
 					<li <?= (isset($_GET['id']) && $_GET['id']==0) ? 'class="menufo-active"' : ''; ?>>
-						<a href="<?= site_url('backend/module/candidatures/candidature/list/0'); ?>"><i class="fa fa-spinner"></i>&nbsp;<?php trans_e("Nouvelles candidatures"); ?></a>
+						<a href="<?= site_url('backend/module/candidatures/candidature/list/0'); ?>"><i class="fa fa-spinner"></i>&nbsp;<?php trans_e("Nouvelles candidatures"); ?><span class="badge badge-error pull-right"><?= Candidatures::countByStatus(0); ?></span></a>
 					</li>
 					<li <?= (!isset($_GET['id']) && isset($_GET['action']) && $_GET['action'] == 'index') ? 'class="menufo-active"' : ''; ?>>
-						<a href="<?= site_url('backend/module/candidatures/candidature'); ?>"><i class="fa fa-list-ol"></i>&nbsp;<?php trans_e("Candidatures en cours"); ?></a>
+						<a href="<?= site_url('backend/module/candidatures/candidature'); ?>"><i class="fa fa-list-ol"></i>&nbsp;<?php trans_e("Candidatures en cours"); ?><span class="badge badge-info pull-right"><?= Candidatures::countPending(); ?></span></a>
 					</li>
 				<?php endif; ?>
 

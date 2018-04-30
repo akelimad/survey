@@ -14,12 +14,11 @@ use App\Route;
 function can_view_action($row) {
   $action = $row->table_action['name'];
 
-  if (
-    preg_match('/(spontanees|stage)$/', Route::getRoute()) &&
-    !in_array($action, ['assign_to_offer', 'send_cv_mail', 'send_mail'])
-  ) {
-    return false;
+  if (preg_match('/(spontanees|stage)$/', Route::getRoute())) {
+    return (in_array($action, ['assign_to_offer', 'send_cv_mail', 'send_mail']));
   }
+
+  if ($action == 'assign_to_offer') return false;
 
   if ($action == 'fiche_evaluation' && (!isset($_GET['id']) || $_GET['id'] != 45))
     return false;
