@@ -137,9 +137,41 @@ class SurveyController extends Controller
     return get_page('admin/survey/success_quiz', $this->data, __FILE__);
   }
 
+  public function draw_survey($survey_id, $participant_id)
+  {
+    $survey = Survey::find($survey_id);
+    $this->data['layout'] = 'admin';
+    $this->data['breadcrumbs'] = [
+      trans("Questionnaires"),
+      trans($survey->name ? $survey->name : "Introuvable")
+    ];
+    if($survey){
+      $this->data['survey'] = $survey;
+    }
+    return get_page('admin/survey/quiz', $this->data, __FILE__);
+  }
+
+  public function atLeastOneChecked($data){
+    if($data['type'] == 'checkbox'){
+      $c = 0;
+      foreach ($data['answers'] as $key => $value) {
+        if($data['type'] == "checkbox" and isset($value['isCorrect'])){
+          $c += 1;
+        }
+      }
+      return $c > 0 ? true : false ;      
+    }else{
+      if( in_array($data['type'], ['radio','select']) and !isset($data['answers'][0]['isCorrect']) ){
+        return false;
+      }else{
+        return true;
+      }
+    }
+  }
+
   public function storeAnswers($data)
   {
-    // dump($data);
+
     $db = getDB();
     $questions = Question::All();
     foreach ($questions as $question) {
@@ -165,6 +197,7 @@ class SurveyController extends Controller
         }
       }
     }
+
     $db->create('survey_tokens', [
       'user_id' => Survey::get_candidat_id(),
       'survey_id' => $data['params'][1],

@@ -52,14 +52,9 @@ class Survey {
     return $images;
   }
 
-  public static function getKeyWords($qid)
-  {
-    
-  }
-
   // Does string match this chars?
   public static function unsafe( $string ) {
-    return preg_match("/[^a-zA-Z éèàç]+/i", $string);
+    return preg_match("/[^a-zA-Z éèê'’àç:]+/i", $string);
   }
 
 
