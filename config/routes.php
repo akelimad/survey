@@ -18,6 +18,10 @@ Route::add('candidat/account/reset-password', 'App\Controllers\Front\AuthControl
 Route::add('candidat/account/re-activate', 'App\Controllers\Front\AuthController@reActivate', true);
 Route::add('candidat/account/resent-email', 'App\Controllers\Front\AuthController@resentEmail', true);
 
+// Formulaire Forum
+Route::add('candidat/forum', 'App\Controllers\Front\CandidatController@getForumForm', false, !$isLoggedCandidat);
+
+
 // Candidat account
 Route::add('candidat/account/confirm/[a-zA-Z0-9]+', 'App\Controllers\Front\CandidatController@confirmAccount');
 Route::add('candidat/account/candidature/deleteSpontanee', 'App\Controllers\Front\CandidatureController@deleteSpontanee');
@@ -185,6 +189,12 @@ Route::add(
 Route::add(
   'candidat/cv/langues_pj/delete-lm', 
   'App\Controllers\Front\CandidatController@deleteLM', 
+  true, 
+  ($isLoggedCandidat && $canUpdateAccount)
+);
+Route::add(
+  'candidat/cv/langues_pj/delete-permis-conduire', 
+  'App\Controllers\Front\CandidatController@deletePermisConduire', 
   true, 
   ($isLoggedCandidat && $canUpdateAccount)
 );

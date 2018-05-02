@@ -177,7 +177,7 @@ class AuthController extends Controller
 		$candidat = getDB()->findOne('candidats', 'candidats_id', $data['cid']);
     if(isset($candidat->candidats_id)) {
 			$fullname = $this->getCandidatFullname($candidat->id_civi, $candidat->nom, $candidat->prenom);
-			$this->sendVerificationEmail($candidat->candidats_id, $fullname, $candidat->email);
+			self::sendVerificationEmail($candidat->candidats_id, $fullname, $candidat->email);
 				
 			return $this->jsonResponse('success', [trans("Un e-mail vous a été envoyé avec des instructions détaillées sur la façon de l'activer.")]);
     }
@@ -361,7 +361,7 @@ class AuthController extends Controller
 
 			// Send email to candidat
 			$fullname = $this->getCandidatFullname($cdata['id_civi'], $cdata['nom'], $cdata['prenom']);
-			$this->sendVerificationEmail($id_candidat, $fullname, $cdata['email']);
+			self::sendVerificationEmail($id_candidat, $fullname, $cdata['email']);
 			
 			return $this->jsonResponse('success', [trans("Votre compte a été créé avec succès."), trans("Un e-mail vous a été envoyé avec des instructions détaillées sur la façon de l'activer.")], ['dismissible' => false]);
 		} else {
@@ -589,7 +589,7 @@ class AuthController extends Controller
 	}
 
 	
-	private function sendVerificationEmail($id_candidat, $fullname, $email)
+	public static function sendVerificationEmail($id_candidat, $fullname, $email)
 	{
 		global $email_e;
 

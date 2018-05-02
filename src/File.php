@@ -39,7 +39,7 @@ class File
 
     public static function getExtension($filename)
     {
-        return pathinfo($filename, PATHINFO_EXTENSION);
+        return strtolower(pathinfo($filename, PATHINFO_EXTENSION));
     }
 
     public static function getName($filename)
@@ -108,5 +108,18 @@ class File
     {
         return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
     }
+
+
+    public static function koToOctet($size)
+    {
+        return round($size * 1024, 2);
+    }
+
+
+    public static function octetToKo($size)
+    {
+        return round($size/1024, 2);
+    }
+
 
 }

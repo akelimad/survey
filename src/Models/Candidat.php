@@ -42,6 +42,12 @@ class Candidat {
   }
 
 
+  public static function exists($email)
+  {
+    return getDB()->exists('candidats', 'email', $email);
+  }
+
+
   /**
    * Tell if password is strong
    *
