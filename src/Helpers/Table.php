@@ -369,6 +369,8 @@ class Table extends Pagination {
             $this->_run();
         }
 
+        \App\Event::trigger($this->table_id .'_before_rendering', $this);
+
         $html = '';
         if( empty($this->headers) ) {
             if( !isset($this->rows[0]) ) return $html;
