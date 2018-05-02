@@ -209,3 +209,5 @@ if(isset($_SESSION['abb_login_candidat']) and $_SESSION['abb_login_candidat']!='
 		$_SESSION['timestamp'] = time();
 	}
 }
+
+// \App\Event::trigger('offer_published', 1);

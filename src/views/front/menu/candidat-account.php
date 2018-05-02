@@ -19,11 +19,11 @@
 				"route" => "candidat/identifiants",
 				"icon" => "fa fa-key"
 			],
-			[
+			/*[
 				"label" => trans("Synchroniser votre compte linkedin"),
 				"route" => "synchronize/compte/linkedin",
 				"icon" => "fa fa-retweet"
-			],
+			],*/
 			[
 				"label" => trans("Mon CV"),
 				"route" => "candidat/cv",

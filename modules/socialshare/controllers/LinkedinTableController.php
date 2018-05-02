@@ -1,14 +1,14 @@
 <?php
 /**
- * StringTableController
+ * LinkedinTableController
  *
  * @author saleh
  *
- * @package modules.language.controllers
+ * @package modules.socialshare.controllers
  * @version 1.0
  * @since 1.5.0
  */
-namespace Modules\socialshare\Controllers;
+namespace Modules\Socialshare\Controllers;
 
 use App\Controllers\Controller;
 use Modules\Socialshare\Models\Share;

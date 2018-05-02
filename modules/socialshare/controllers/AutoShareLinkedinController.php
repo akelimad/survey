@@ -31,7 +31,6 @@ class AutoShareLinkedinController extends Controller
 
   public function view()
   {
-    //$this->publishPost();
     $this->data['layout'] = (isBackend()) ? 'admin' : 'front';
     $this->data['apps'] = Share::getApps();
     $this->data['breadcrumbs'] = [
@@ -134,40 +133,6 @@ class AutoShareLinkedinController extends Controller
    }
  }
 
- public function getCode2()
- {
-  dump($_GET['code']);
- }
-
- public function publishPost()
- {
-  $post = array(
-    'title' => 'Test work app',
-    'comment' => 'This is the comment',
-    'submitted-url' => site_url(''),
-    'submitted-image-url' => 'http://biomattitude.com/wp-content/uploads/2016/02/recrutement.jpg',
-    'description' => 'Test work description'
-  );
-  foreach (Share::getApps() as $app) {
-    $app = json_decode($app->value, true);
-    if ($app['publish_status'] == 'stop') {
-      continue;
-    }
-    if (time() > $app['expires_in']) {
-      $this->generateCodeForToken(true);
-      unset($_SESSION['token_expired']);
-    }
-    $this->Auth2linkedin = new LinkedInOAuth2($app['token']);
-    if ($app['share_in'] == 'profil') {
-      $this->Auth2linkedin->shareStatus($post);
-    } elseif ($app['share_in'] == 'company') {
-      $this->Auth2linkedin->postToCompany($app['profil_ID'], $post);
-    } else {
-      $this->Auth2linkedin->shareStatus($post);
-      $this->Auth2linkedin->postToCompany($app['profil_ID'], $post);
-    }
-  }
- }
 
  public function deleteApp($data)
  {
@@ -183,14 +148,14 @@ class AutoShareLinkedinController extends Controller
   $app_json = get_setting($data['app_id']);
   $app_infos = json_decode(get_setting($data['app_id']), true);
   $app_infos['publish_status'] = $data['new_status'];
-  create_setting($data['app_id'], json_encode($app_infos));
+  create_setting($data['app_id'], '', json_encode($app_infos), true, false);
  }
 
  public function settings($data)
  {
   if (form_submited() && isset($data['client_id'])) {
     $app_json = '{"Client_ID": '. '"'.$data['client_id'].'"' .', "Client_secret": '. '"'.$data['client_secret'].'"' .', "Redirect_URI": '. '"'.$data['redirect_uri'].'"' .'}';
-    create_setting('linkedin_config_app', $app_json);
+    create_setting('linkedin_config_app', '', $app_json, true, false);
     set_flash_message('success', trans("Vos paramètres ont été bien sauvgardés"));
     redirect( site_url(). 'backend/socialshare/linkedin/gestion' );
   } else {

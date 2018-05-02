@@ -42,7 +42,7 @@ class Share {
 		}
 		$app_json .= '}';
 		$name = 'linkedin_app_'. $profil_infos['profil_ID'];
-		if(create_setting($name, $app_json)){
+		if(create_setting($name, '', $app_json, true, false)){
 			return [ 'etat' => 'success', 'message' => 'Votre app est bien enregistré' ];
 		} else {
 			return [ 'etat' => 'error', 'message' => 'Votre app déjà existant' ];
