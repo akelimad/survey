@@ -42,7 +42,7 @@
     </div>
     <div class="col-sm-4 pl-0 pl-xs-15 required">
       <label for="candidat_date_n"><?php trans_e("Date de naissance"); ?></label>
-      <input readonly type="text" class="form-control" id="candidat_date_n" name="date_n" value="<?= eta_date(get_candidat('date_n')) ?>" required>
+      <input readonly type="text" class="form-control" id="candidat_date_n" name="date_n" value="<?= eta_date(get_candidat('date_n'), 'd/m/Y') ?>" required>
     </div>
   </div>
   <div class="row">
@@ -65,7 +65,7 @@
         $is_other = false;
         foreach ($villes as $key => $value) :
           $selected = '';
-          if (!empty(get_candidat('ville'))) {
+          if (get_candidat('ville', '') != '') {
             if (get_candidat('ville') == $value->ville) {
               $selected = 'selected';
               $is_selected = true;

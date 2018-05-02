@@ -14,6 +14,7 @@ use App\Controllers\Controller;
 use App\Helpers\Form\Validator;
 use App\Ajax;
 use App\Media;
+use App\Form;
 
 class FormationController extends Controller
 {
@@ -54,6 +55,11 @@ class FormationController extends Controller
       'ecole' => trans("Autre école ou établissement")
     ]);
 
+    $data['date_debut'] = eta_date($data['date_debut'], 'Y-m-d');
+    if (!empty($data['date_fin'])) {
+      $data['date_fin'] = eta_date($data['date_fin'], 'Y-m-d');
+    }
+
     $is_valid = Validator::is_valid($data, [
       'id_ecol' => 'required|numeric',
       'date_debut' => 'required|date',
@@ -69,7 +75,7 @@ class FormationController extends Controller
     }
 
     // Check if file posted
-    if (App\Form::getFieldOption('displayed', 'register', 'copie_diplome')) {
+    if (Form::getFieldOption('displayed', 'register', 'copie_diplome')) {
       if ($_FILES['copie_diplome']['size'] > 0) {
         $upload = Media::upload($_FILES['copie_diplome'], [
           'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],

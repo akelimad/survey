@@ -62,7 +62,7 @@ if($p=='ec') {
 
 	<tr> 
 
-    <td scope="col" width="13%" style="border:1px solid #FFFFFF;" >Ajouter une exp?ience : </td>
+    <td scope="col" width="13%" style="border:1px solid #FFFFFF;" >Ajouter une expéience : </td>
 
     <td scope="col" width="23%" style="border:1px solid #FFFFFF;" >
 

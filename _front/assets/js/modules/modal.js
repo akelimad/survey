@@ -298,6 +298,7 @@ $(document).ready(function () {
       // Add event listener
       $(chmModals[i]).on('click', function (event) {
         event.preventDefault()
+        params.type = 'GET'
         chmModal.show(params, options)
       })
     }

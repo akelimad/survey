@@ -129,7 +129,7 @@ $hasCV = \App\Models\Candidat::hasCV(get_candidat_id());
   
   <div class="col-sm-9">
     <div class="row">
-      <div class="col-sm-12 mb-10 pl-0 pl-xs-15 <?= !$hasCV ? 'required' : ''; ?>">
+      <div class="col-sm-12 mb-10<?= $photo_displayed ? ' pl-0 pl-xs-15' : ''; ?><?= !$hasCV ? ' required' : ''; ?>">
         <label for="candidat_cv"><?php trans_e("CV"); ?>&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="<?php trans_e("Vous pouvez joindre jusqu'à 5 CVs Word ou PDF, la taille de chaque cv ne doit pas dépassé"); ?> <?= $max_file_size; ?>ko"></i></label>
         <div class="input-group file-upload" <?= (count($cvs) > 5) ? 'style="display:none;"' : '' ?>>
           <input type="text" class="form-control" readonly>
@@ -186,6 +186,33 @@ $hasCV = \App\Models\Candidat::hasCV(get_candidat_id());
       </div>
       <?php endif; ?>
     </div>
+
+
+    <?php if (Form::getFieldOption('displayed', 'register', 'permis_conduire')) : ?>
+    <div class="row mt-0">
+      <?php $required = Form::getFieldOption('required', 'register', 'permis_conduire') ? ' required' : ''; ?>
+      <div class="col-sm-4 pl-0 pl-xs-15<?= $required; ?>" id="permisInput">
+        <label for="permis_conduire"><?php trans_e("Permis de conduire"); ?></label>
+        <div class="input-group file-upload<?= (get_candidat('permis_conduire', '') != '') ? ' hidden' : '' ?>">
+            <input type="text" class="form-control" readonly>
+            <label class="input-group-btn">
+                <span class="btn btn-success btn-sm">
+                    <i class="fa fa-upload"></i>
+                    <input type="file" class="form-control" id="permis_conduire" name="permis_conduire" accept="image/*|.doc,.docx,.pdf">
+                </span>
+            </label>
+        </div>
+      </div>
+    
+      <div class="col-sm-12 pl-0 pl-xs-15" id="permisActions">
+        <?php if (get_candidat('permis_conduire', '') != '') : ?>
+          <a href="<?= get_permis_conduire_url(get_candidat('permis_conduire')); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
+          <button class="btn btn-danger btn-xs" type="button" onclick="return chmModal.confirm('', '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer la permis de conduire?"); ?>', 'chmCandidat.deletePermisConduire', {'fname': '<?= get_candidat('permis_conduire'); ?>'}, {width: 317})"><i class="fa fa-trash"></i>&nbsp;<?php trans_e("Supprimer"); ?></button>
+        <?php endif; ?>
+      </div>
+    </div>
+    <?php endif; ?>
+
   </div>
 </div>
 

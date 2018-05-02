@@ -446,7 +446,7 @@ class OfferController extends Controller
       // Return success message
       return $this->jsonResponse('success', trans("Votre candidature a bien été envoyée avec succès."));
     } else {
-      return $this->jsonResponse('success', trans("La candidature a été affectés à l'offre") .' <b>'. $offer->Name .'</b> '. trans("pour le candidat:") .' <b>'. Candidat::getDisplayName($candidat, false) .'</b>');
+      return $this->jsonResponse('success', trans("La candidature a été affecté à l'offre") .' <b>'. $offer->Name .'</b> '. trans("pour le candidat:") .' <b>'. Candidat::getDisplayName($candidat, false) .'</b>');
     }
   }
 

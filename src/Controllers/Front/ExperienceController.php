@@ -63,6 +63,11 @@ class ExperienceController extends Controller
       'salair_pecu' => trans("Dernier salaire perçu")
     ]);
 
+    $data['date_debut'] = eta_date($data['date_debut'], 'Y-m-d');
+    if (!empty($data['date_fin'])) {
+      $data['date_fin'] = eta_date($data['date_fin'], 'Y-m-d');
+    }
+
     $is_valid = Validator::is_valid($data, [
       'id_sect' => 'numeric',
       'id_fonc' => 'numeric',

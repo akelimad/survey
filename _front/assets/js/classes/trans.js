@@ -1,14 +1,16 @@
 import $ from 'jquery'
 
-var transStrings = []
+window.transStrings = []
 
 export default function trans (msgid) {
-  if (window.Object.keys(transStrings).length === 0) {
+  if (window.Object.keys(window.transStrings).length === 0) {
     $.get('language/api/strings', function (response) {
-      transStrings = $.parseJSON(response)
+      window.transStrings = $.parseJSON(response)
     })
-  } else if (msgid in transStrings) {
-    return transStrings[msgid]
+  }
+
+  if (msgid in window.transStrings) {
+    return window.transStrings[msgid]
   } else {
     return msgid
   }
@@ -20,4 +22,4 @@ export function getTrans (callback) {
   })
 }
 
-trans('msgid')
+// trans('msgid')
