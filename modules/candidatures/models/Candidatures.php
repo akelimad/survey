@@ -48,6 +48,15 @@ class Candidatures {
 		return getDB()->prepare("SELECT * FROM prm_statut_candidature ORDER BY order_statut ASC") ?: [];
 	}
 
+	public static function countSpontanees()
+	{
+		return getDB()->countAll('candidature_spontanee');
+	}
+
+	public static function countStage()
+	{
+		return getDB()->countAll('candidature_stage');
+	}
 
 	public static function countByStatus($status_id)
 	{
@@ -62,6 +71,16 @@ class Candidatures {
 		return getDB()->prepare($query, [], true)->count;
 	}
 
+
+	public static function countPending()
+	{
+		return getDB()->prepare("
+			SELECT COUNT(*) AS nbr 
+			FROM candidature cand
+			JOIN offre o ON o.id_offre=cand.id_offre
+			WHERE o.status = ? AND cand.status != ?
+		", ['En cours', 0], true)->nbr;
+	}
 
 	public static function getUserStatusUrls()
 	{

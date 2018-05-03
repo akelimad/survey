@@ -1,3 +1,4 @@
+<?php use App\Form; ?>
 <input type="hidden" name="id" value="<?= (isset($exp->id_exp)) ? $exp->id_exp : 0 ?>">
 <div class="row">
   <div class="col-sm-4 required">
@@ -9,7 +10,7 @@
       $date_debut = french_to_english_date($date_debut);
     }
     ?>
-    <input type="date" max="<?= date('Y-m-d'); ?>" value="<?= $date_debut ?>" class="form-control" id="exp_date_debut" name="date_debut" required>
+    <input readonly type="text" value="<?= $date_debut ?>" class="form-control" id="exp_date_debut" name="date_debut" required>
   </div>
   <div class="col-sm-8 pl-0 pl-xs-15 required">
     <label for="exp_date_fin"><?php trans_e("Date de fin"); ?></label>
@@ -20,7 +21,7 @@
       $date_fin = french_to_english_date($date_fin);
     }
     ?>
-    <input type="date" max="<?= date('Y-m-d'); ?>" value="<?= $date_fin ?>" class="form-control" id="exp_date_fin" name="date_fin" style="max-width: 186px;float: left;margin-right: 10px;<?= (isset($exp->date_fin) && $exp->date_fin == '') ? 'display: none;"' : '" required' ?>>
+    <input readonly type="text" value="<?= $date_fin ?>" class="form-control" id="exp_date_fin" name="date_fin" style="max-width: 186px;float: left;margin-right: 10px;<?= (isset($exp->date_fin) && $exp->date_fin == '') ? 'display: none;"' : '" required' ?>>
     <label for="exp_today" style="margin-top: 10px;" class="pointer">
       <input type="checkbox" value="1" class="date_fin_today" id="exp_today"<?= (isset($exp->date_fin) && $exp->date_fin == '') ? ' checked' : '' ?>>&nbsp;<?php trans_e("Jusqu'à aujourd'hui"); ?>
     </label>
@@ -58,7 +59,13 @@
       ?>
         <option value="<?= $value->id_fonc ?>" <?= $selected; ?>><?= $value->fonction ?></option>
       <?php endforeach; ?>
-        </select>
+    </select>
+    <?php $fonction_other = (isset($exp->fonction_other)) ? $exp->fonction_other : ''; ?>
+    <?= Form::input('text', 'fonction_other', null, $fonction_other, [], [
+      'class' => 'form-control',
+      'style' => (empty($exp->fonction_other)) ? 'display:none;' : '',
+      'title' => trans("Autre école ou établissement")
+    ]); ?>
   </div>
   <div class="col-sm-4 pl-0 pl-xs-15 required">
     <label for="exp_tpost"><?php trans_e("Type de contrat"); ?></label>
@@ -88,18 +95,40 @@
       <?php endforeach; ?>
         </select>
   </div>
+  <?php //var_dump($exp->ville) ?>
   <div class="col-sm-4 pl-0 pl-xs-15 required">
     <label for="exp_ville"><?php trans_e("Ville"); ?></label>
     <select id="exp_ville" name="ville" class="form-control" required>
       <option value=""></option>
-      <?php foreach ($villes as $key => $value) : 
-      $selected = (isset($exp->ville) && $exp->ville == $value->ville) ? 'selected' : '';
-      ?>
+      <?php
+      $is_selected = false;
+      $is_other = false;
+      foreach ($villes as $key => $value) :
+        $selected = '';
+        if (isset($exp->ville)) {
+          if ($exp->ville == $value->ville) {
+            $selected = 'selected';
+            $is_selected = true;
+          } elseif (count($villes) == ($key+1) && !$is_selected) {
+            $selected = 'selected';
+            $is_other = true;
+          }
+        }
+        ?>
         <option value="<?= $value->ville ?>" <?= $selected; ?>><?= $value->ville ?></option>
       <?php endforeach; ?>
-        </select>
+    </select>
+    <?php $ville_other = (isset($exp->ville) && $is_other) ? $exp->ville : ''; ?>
+    <?= Form::input('text', 'ville_other', null, $ville_other, [], [
+      'class' => 'form-control',
+      'style' => (!$is_other) ? 'display:none;' : '',
+      'title' => trans("Autre ville")
+    ]); ?>
   </div>
-  <div class="col-sm-4 mb-10 pl-0 pl-xs-15 ">
+
+  <?php if (Form::getFieldOption('displayed', 'register', 'copie_attestation')) : ?>
+    <?php $required = Form::getFieldOption('required', 'register', 'copie_attestation') ? ' required' : ''; ?>
+  <div class="col-sm-4 mb-10 pl-0 pl-xs-15<?= $required; ?>">
     <label for="copie_attestation"><?php trans_e("Copie de l’attestation"); ?></label>
     <div class="input-group file-upload<?= (isset($exp->copie_attestation) && $exp->copie_attestation != '') ? ' hidden' : '' ?>">
         <input type="text" class="form-control" readonly>
@@ -111,10 +140,33 @@
         </label>
     </div>
     <?php if (isset($exp->copie_attestation) && $exp->copie_attestation != '') : ?>
-      <a href="<?= site_url('apps/upload/frontend/candidat/copie_attestation/'. $exp->copie_attestation); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
+      <a href="<?= site_url('apps/upload/frontend/candidat/copie_attestation/'. $exp->copie_attestation); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download" style="margin: 3px 0;"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
       <button class="btn btn-danger btn-xs" type="button" onclick="return chmModal.confirm('', '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer la copie de l’attestation ?"); ?>', 'chmExperience.deleteCertificate', {'id': <?= $exp->id_exp; ?>, cd: '<?= $exp->copie_attestation; ?>'}, {width: 431})"><i class="fa fa-trash"></i>&nbsp;<?php trans_e("Supprimer"); ?></button>
     <?php endif; ?>
   </div>
+  <?php endif; ?>
+</div>
+
+<div class="row">
+  <?php if (Form::getFieldOption('displayed', 'register', 'bulletin_paie')) : ?>
+    <?php $required = Form::getFieldOption('required', 'register', 'bulletin_paie') ? ' required' : ''; ?>
+  <div class="col-sm-4 mb-10<?= $required; ?>">
+    <label for="bulletin_paie"><?php trans_e("Bulletin de paie"); ?></label>
+    <div class="input-group file-upload<?= (isset($exp->bulletin_paie) && $exp->bulletin_paie != '') ? ' hidden' : '' ?>">
+        <input type="text" class="form-control" readonly>
+        <label class="input-group-btn">
+            <span class="btn btn-success btn-sm">
+                <i class="fa fa-upload"></i>
+                <input type="file" class="form-control" id="bulletin_paie" name="bulletin_paie" accept="image/*|.doc,.docx,.pdf">
+            </span>
+        </label>
+    </div>
+    <?php if (isset($exp->bulletin_paie) && $exp->bulletin_paie != '') : ?>
+      <a href="<?= site_url('apps/upload/frontend/candidat/bulletin_paie/'. $exp->bulletin_paie); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download" style="margin: 3px 0;"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
+      <button class="btn btn-danger btn-xs" type="button" onclick="return chmModal.confirm('', '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer la copie de la bulletin de paie?"); ?>', 'chmExperience.deleteBulletinPaie', {'id': <?= $exp->id_exp; ?>, cd: '<?= $exp->bulletin_paie; ?>'}, {width: 431})"><i class="fa fa-trash"></i>&nbsp;<?php trans_e("Supprimer"); ?></button>
+    <?php endif; ?>
+  </div>
+  <?php endif; ?>
 </div>
 
 <div class="row mt-10">
@@ -131,7 +183,7 @@ jQuery(document).ready(function(){
   CKEDITOR.replace('exp_description', {height: 200});
 
   // Trigger success
-  $('form').on('chm_form_success', function(event, response) {
+  $('form').on('chmFormSuccess', function(event, response) {
     if(response.status === 'success') {
       chmModal.destroy()
       window['chmAlert'][response.status](response.message)
@@ -143,5 +195,37 @@ jQuery(document).ready(function(){
     }
   })
 
+  // Experience ville
+  $('#exp_ville').change(function() {
+    var $other_input = $('#ville_other')
+    $($other_input).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($other_input).prop('required', true)
+      $($other_input).show()
+    } else {
+      $($other_input).prop('required', false)
+      $($other_input).hide()
+    }   
+  })
+
+  // Fonction
+  $('#exp_fonction').change(function() {
+    var $other_input = $('#fonction_other')
+    $($other_input).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($other_input).prop('required', true)
+      $($other_input).show()
+    } else {
+      $($other_input).prop('required', false)
+      $($other_input).hide()
+    }   
+  })
+
+  cimDatepicker('[id$="date_debut"], [id$="date_fin"]', {
+    dateFormat: 'dd/mm/yy',
+    maxDate: '-0day',
+    minDate: "-30Y",
+  })
+  
 })
 </script>

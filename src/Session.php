@@ -65,10 +65,11 @@ class Session
      */
     public static function destroy($key)
     {
-        if( !self::get($key) )
+        if( !self::get($key) ) {
             return false;
-
+        }
         unset($_SESSION[$key]);
+
         return true;
     }
 

@@ -49,6 +49,23 @@ export default class chmCandidat {
     })
   }
 
+  static deletePermisConduire (params) {
+    window.chmModal.show({
+      type: 'POST',
+      url: window.chmSite.url('candidat/cv/langues_pj/delete-permis-conduire'),
+      data: params
+    }, {
+      message: '<i class="fa fa-trash"></i>&nbsp;Suppression en cours...',
+      onSuccess: (response) => {
+        if (response.status === 'success') {
+          $('#permisInput .file-upload').removeClass('hidden')
+          $('#permisActions').remove()
+        }
+        window['chmAlert'][response.status](response.message)
+      }
+    })
+  }
+
   static setCVDefault (id) {
     window.chmModal.show({
       type: 'POST',

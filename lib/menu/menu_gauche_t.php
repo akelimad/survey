@@ -48,7 +48,7 @@ $canUpdateAccount = \Modules\Candidat\Models\Candidat::canUpdateAccount();
 		<label for="ctl00_connexion_tbxIdentifiant"><?php trans_e("Bienvenue :"); ?></label><b>
 		<?php if(isset($_SESSION['abb_nom'])) echo $_SESSION['abb_nom']; ?></b> <br>
 		<label for="ctl00_connexion_tbxIdentifiant"><i class="fa fa-sign-in fa-lg" style="color:<?php echo $color_bg;?>;"></i> 
-		<?php trans_e("Vous êtes connecté à votre espace"); ?></label><br>
+		<?php trans_e("Vous êtes connectés à votre espace"); ?></label><br>
 		</td>
 		</tr>
 		</tbody>

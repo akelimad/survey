@@ -22,6 +22,8 @@ use App\Models\MotivationLetter;
 class TableController extends Controller
 {
 
+  const STATUS_ARCHIVED = 53;
+  const STATUS_PRESENTES_ECRIT = 35;
 
 	private $andWhere = [
 		'motcle' 		 => ['c' => 'motcle'], 
@@ -38,7 +40,8 @@ class TableController extends Controller
 		'ref_offre'  => ['cand' => 'id_offre'],
 		'pertinence' => ['cand' => 'pertinence'],
 		'ecole' 		 => ['f' => 'id_ecol'],
-		'campagne' 	 => ['co' => 'id_compagne']
+    'campagne'   => ['co' => 'id_compagne'],
+		'age' 	 => ['c' => 'date_n'],
 	];
 
 	private $joints = [
@@ -52,7 +55,8 @@ class TableController extends Controller
       'patern' => '#',
       'icon' => 'fa fa-pencil',
       'callback' => 'showChangeSatatusPopup',
-      'bulk_action' => false,
+      'bulk_action' => true,
+      'bulk_label' => 'Changer le statut',
       'attributes' => [
         'class' => 'btn btn-success btn-xs',
       ],
@@ -82,7 +86,7 @@ class TableController extends Controller
       'permission' => 'can_view_action'
     ],
     'note_ecrit' => [
-      'label' => 'Afficher la note écrit',
+      'label' => 'Afficher la note écrite',
       'patern' => '#',
       'icon' => 'fa fa-trophy',
       'bulk_action' => false,
@@ -114,6 +118,18 @@ class TableController extends Controller
       ],
       'permission' => 'can_view_action'
     ],
+    'assign_to_offer' => [
+      'label' => "Affecter à une offre",
+      'patern' => '/backend/candidatures/assign-to-offer',
+      'icon' => 'fa fa-paperclip',
+      'bulk_action' => false,
+      'callback' => 'assignToOffer',
+      'attributes' => [
+        'class' => 'btn btn-primary btn-xs',
+        'style' => 'margin-left:3px;'
+      ],
+      'permission' => 'can_view_action'
+    ],
     'change_offre' => [
       'label' => "Changer l'offre",
       'patern' => '#',
@@ -136,7 +152,7 @@ class TableController extends Controller
         'class' => 'btn btn-default btn-xs',
       ],
       'permission' => 'can_view_action'
-    ]
+    ],
 	];
 
 	private $pertinence;
@@ -157,6 +173,7 @@ class TableController extends Controller
 		]
 	];
 
+
 	public function __construct($options=[], $andWhere=[], $joints=[])
 	{
 		$this->params['options'] = array_replace_recursive($this->params['options'], $options);
@@ -165,8 +182,6 @@ class TableController extends Controller
 		$this->pertinence = getDB()->findOne('prm_pertinence', 'ref_p', 'p');
 	}
 
-
-
   /**
 	 * Get table object
 	 *
@@ -174,21 +189,21 @@ class TableController extends Controller
 	 *
 	 * @author Mhamed Chanchaf
 	 */
-  public function getTable()
+  public function getTable($id)
   {
-    $this->params['options']['actions'] = (!isset($_GET['id']) || $_GET['id'] != 53);
+    $this->params['options']['actions'] = (is_null($id) || $id != self::STATUS_ARCHIVED);
 
-  	$query = $this->buildQuery();
+  	$query = $this->buildQuery($id);
   	$table = new \App\Helpers\Table($query, 'id_candidature', $this->params['options']);
   	$table->setTableClass(['table', 'table-striped', 'table-hover']);
   	$table->setTableId('candidatureTable');
   	$table->removeActions(['edit', 'delete']);
   	$table->setTrigger('table_notes', [$this, 'getPertinenceNotice']);
 
-    if( isset($_GET['id']) && $_GET['id'] == 35 ) {
+    if( $id == self::STATUS_PRESENTES_ECRIT ) {
   	  $table->setOrderby('cand.note_ecrit'); 
     } else {
-      $table->setOrderby('cand.date_candidature'); 
+      $table->setOrderby('cand.id_candidature');
     }
     
   	$table->setOrder('DESC');
@@ -199,18 +214,12 @@ class TableController extends Controller
   		$table->setAction($key, $attributes);
   	}
 
-		// $table->addColumn('ref_offre', 'Réf', function($row){
-		// 	$offre = Candidatures::getOfferById($row->id_offre);
-		// 	$row->titre_offre = $offre->Name;
-		// 	return $offre->reference;
-		// });
-
 		// Add table columns
   	$table->addColumn('sinfos', trans("Informations"), function($row){
   		$html = '<a href="'. site_url('backend/cv/?candid='.$row->candidats_id) .'" target="_blank" class="cname" title="'. trans("Voir le profile") .'"><i class="fa fa-user"></i>&nbsp;'. $row->fullname .'</a>';
 
   		if( !is_null($row->date_n) ) {
-  			if( $birthday = french_to_english_date($row->date_n) ) {
+  			if( $birthday = \eta_date($row->date_n, 'Y-m-d') ) {
     			$age = (time() - strtotime($birthday)) / 3600 / 24 / 365;
     			$html .= '<br><b>'.number_format($age, 0).' ans</b>';
         }
@@ -221,24 +230,31 @@ class TableController extends Controller
   		return $html;
   	});
 
-  	$table->addColumn('history', '', function($row){
-  		$history = getDB()->prepare("SELECT id, date_modification, status, utilisateur FROM historique WHERE id_candidature=?", [$row->id_candidature]);
-  		if ( empty($history) ) return;
-  		$html = '<i class="fa fa-history pull-right" data-toggle="popover" data-trigger="click" data-popover-content="#show_h_'. $row->candidats_id .'" title="'. trans("Historique des actions effectuées") .'"></i>';
-  		$html .= '<div id="show_h_'. $row->candidats_id .'" class="hidden">';
-  		$html .= '<table class="table table-history">';
-  		foreach ($history as $key => $h) :
-  			$html .= '<tr><td width="110">'. date('d.m.Y H:i', strtotime($h->date_modification)) .'</td><td width="110">'. $h->status .'</td><td width="40">'. $h->utilisateur .'</td><td>';
-        if( in_array($h->status, ['Préselectionnés', 'Présélectionné', 'Non présélectionné', 'Non préselectionnés']) ) {
-          if( Fiche::historyFicheExists($row->id_candidature, $h->id) ) {
-            $html .= '<a href="jaavscript:void(0);" onclick="return showFicheDetails('.$h->id.');"><i class="fa fa-file-text-o"></i></a>';
+    if (!in_array($id, ['spontanees', 'stage'])) {
+    	$table->addColumn('history', '', function($row){
+        $history = getDB()->prepare("SELECT * FROM historique WHERE id_candidature=? ORDER BY id DESC", [$row->id_candidature]);
+    		if ( empty($history) ) return;
+    		$html = '<i class="fa fa-history pull-right" data-toggle="popover" data-trigger="click" data-popover-content="#show_h_'. $row->id_candidature .'" title="'. trans("Historique des actions effectuées") .'" style="cursor:pointer;"></i>';
+    		$html .= '<div id="show_h_'. $row->id_candidature .'" class="hidden">';
+    		$html .= '<table class="table table-history">';
+    		foreach ($history as $key => $h) :
+    			$html .= '<tr><td width="100">'. date('d.m.Y H:i', strtotime($h->date_modification)) .'</td><td width="115">'. $h->status .'</td><td width="100">'. $h->utilisateur .'</td><td align="right" width="90">';
+
+          if (!empty($h->commentaire)) {
+            $html .= '<span class="btn btn-default btn-xs" data-toggle="tooltip" title="'. $h->commentaire .'" style="cursor:pointer;"><i class="fa fa-commenting"></i></span>';
           }
-        }
-        $html .='</td></tr>';
-  		endforeach;
-  		$html .= '</table></div>';
-  		return $html;
-  	});
+
+          if( in_array($h->status, ['Préselectionnés', 'Présélectionné', 'Non présélectionné', 'Non préselectionnés']) ) {
+            if(isModuleEnabled('fiches') && Fiche::historyFicheExists($row->id_candidature, $h->id) ) {
+              $html .= '&nbsp;<a href="jaavscript:void(0);" class="btn btn-info btn-xs" onclick="return showFicheDetails('.$h->id.');"><i class="fa fa-file-text-o"></i></a>';
+            }
+          }
+          $html .='</td></tr>';
+    		endforeach;
+    		$html .= '</table></div>';
+    		return $html;
+    	});
+    }
 
   	$table->addColumn('exp_salr', '', function($row){
   		$mobilite = (isset($row->mobilite) && $row->mobilite!='') ? ucfirst($row->mobilite) : 'Non';
@@ -270,14 +286,26 @@ class TableController extends Controller
 
   	$table->addColumn('details', trans("Détails"), function($row){
   		$details = '';
-  		if( intval($row->id_cv) > 0 ) {
+
+      if (!isset($row->id_cv)) {
+        $cv = Resume::getByCandidatId($row->candidats_id, true);
+        $row->id_cv = $cv->id_cv;
+      }
+
+  		if(isset($row->id_cv) && intval($row->id_cv) > 0 ) {
   			$cv_ext = Resume::getExtension($row->id_cv);
   			if( !is_null($cv_ext) ) {
   				$icon = $this->getIconByExtention($cv_ext);
   				$details .= '<a href="'. site_url('backend/module/candidatures/candidat/cv/'.$row->id_cv) .'" title="'. trans("Télécharger le CV") .'"><i class="'.$icon.'"></i></a>';
   			}
   		}
-  		if( intval($row->id_lettre) > 0 ) {
+
+      if (!isset($row->id_cv)) {
+        $lm = MotivationLetter::getByCandidatId($row->candidats_id, true);
+        $row->id_lettre = $lm->id_lettre;
+      }
+
+  		if(isset($row->id_lettre) && intval($row->id_lettre) > 0 ) {
   			$lettre_ext = MotivationLetter::getExtension($row->id_lettre);
   			if( !is_null($lettre_ext) ) {
   				$icon = $this->getIconByExtention($lettre_ext);
@@ -287,70 +315,74 @@ class TableController extends Controller
   		return $details;
   	});
 
-  	$table->addColumn('pertinence', 'P', function($row){
-  		$p = Candidat::getPertinance($row->candidats_id, $row->id_offre);
-  		$total_p = (isset($p->total_p)) ? $p->total_p : 0;
-  		$html = '<i class="fa fa-circle" style="font-size: 1.3em;color:'. $this->getPertinanceColor($total_p) .'" data-toggle="popover"  title="'. trans("Pertinence") .'" data-trigger="click" data-popover-content="#show_p_'. $row->candidats_id .'"></i>';
-  		$html .= '<div id="show_p_'. $row->candidats_id .'" class="hidden">';
-  		if( isset($p->total_p) ) {
-  			$html .= '<table class="table table-pertinance">';
-  			$pscores = $this->getPertinanceScores($p);
-  			foreach ($pscores as $key => $score) :
-  				$html .= '<tr><td>'. $key .'</td><td>=</td><td>'. $score .'&nbsp;%</td></tr>';
-  			endforeach;
-  			$html .= '<tr><td><strong>'. trans("Pertinence total") .'</strong></td><td>=</td><td><strong>'. $p->total_p .'&nbsp;%</strong></td></tr>';
-  			$html .= '</table>';
-  		} else {
-  			$html .= trans("Aucun résultat.") .'</div>';
-  		}
-  		$html .= '</div>';
-  		return $html;
-  	}, ['attributes' => ['title' => trans("Pertinence")]]);
+    // Hide column for candidaure spotanees an stage
+    if (!in_array($id, ['spontanees', 'stage'])) {
+    	$table->addColumn('pertinence', 'P', function($row){
+    		$p = Candidat::getPertinance($row->candidats_id, $row->id_offre);
+    		$total_p = (isset($p->total_p)) ? $p->total_p : 0;
+    		$html = '<i class="fa fa-circle" style="font-size: 1.3em;color:'. $this->getPertinanceColor($total_p) .'" data-toggle="popover"  title="'. trans("Pertinence") .'" data-trigger="click" data-popover-content="#show_p_'. $row->candidats_id .'"></i>';
+    		$html .= '<div id="show_p_'. $row->candidats_id .'" class="hidden">';
+    		if( isset($p->total_p) ) {
+    			$html .= '<table class="table table-pertinance">';
+    			$pscores = $this->getPertinanceScores($p);
+    			foreach ($pscores as $key => $score) :
+    				$html .= '<tr><td>'. $key .'</td><td>=</td><td>'. $score .'&nbsp;%</td></tr>';
+    			endforeach;
+    			$html .= '<tr><td><strong>'. trans("Pertinence total") .'</strong></td><td>=</td><td><strong>'. $p->total_p .'&nbsp;%</strong></td></tr>';
+    			$html .= '</table>';
+    		} else {
+    			$html .= trans("Aucun résultat.") .'</div>';
+    		}
+    		$html .= '</div>';
+    		return $html;
+    	}, ['attributes' => ['title' => trans("Pertinence")]]);
 
-  	$table->addColumn('note_ecrit', 'NE', function($row){
-  		if( is_valid_int($row->note_ecrit) ) {
-  			$value = ($row->note_ecrit==0.00) ? 0 : $row->note_ecrit;
-  			$color = $this->percent2Color($row->note_ecrit, 200, 20);
-  			$style = 'background-color:#'.$color.';';
-  			$tooltip = '';
-  		} else {
-  			$value = '<i class="fa fa-times" style="font-size: 10px;"></i>';
-  			$style = '';
-  			$tooltip = 'data-toggle="tooltip" title="'. trans("Non défini.") .'"';
-  		}
-      if(isset($_GET['id']) && $_GET['id'] != 53) {
-        return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteEcritPopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
-      } else {
-  		  return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" '.$tooltip.'>'.$value.'</i>';
-      }
-  	}, ['attributes' => ['title' => trans("Note Écrit")]]);
-
-
-    // FICHES D'EVALUATION 
-    $table->addColumn('note_orale', 'NO', function($row){
-      if( is_valid_int($row->note_orale) ) {
-        $value = ($row->note_orale==0.00) ? 0 : $row->note_orale;
-        $color = $this->percent2Color($row->note_orale, 200, 4);
-        $style = 'background-color:#'.$color.';';
-        $tooltip = '';
-      } else {
-        $value = '<i class="fa fa-times" style="font-size: 10px;"></i>';
-        $style = '';
-        $tooltip = 'data-toggle="tooltip" title="'. trans("Non défini.") .'"';
-      }
-      if(isset($_GET['id']) && $_GET['id'] != 53) {
-        return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteOralePopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
-      } else {
-        return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" '.$tooltip.'>'.$value.'</i>';
-      }
-
-    }, ['attributes' => ['title' => trans("Note Orale")]]);
+    	$table->addColumn('note_ecrit', 'NE', function($row){
+        global $id;
+    		if( is_valid_int($row->note_ecrit) ) {
+    			$value = ($row->note_ecrit==0.00) ? 0 : $row->note_ecrit;
+    			$color = $this->percent2Color($row->note_ecrit, 200, 20);
+    			$style = 'background-color:#'.$color.';';
+    			$tooltip = '';
+    		} else {
+    			$value = '<i class="fa fa-times" style="font-size: 10px;"></i>';
+    			$style = '';
+    			$tooltip = 'data-toggle="tooltip" title="'. trans("Non défini.") .'"';
+    		}
+        if($id != self::STATUS_ARCHIVED) {
+          return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteEcritPopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
+        } else {
+    		  return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" '.$tooltip.'>'.$value.'</i>';
+        }
+    	}, ['attributes' => ['title' => trans("Note écrite")]]);
 
 
-  	$table->addColumn('titre_offre', trans("Titre du poste"), function($row){
-      // $offre = Candidatures::getOfferById($row->id_offre);
-  		return $row->offre_name;
-  	}, ['attributes' => ['width'=> '120px']]);
+      // FICHES D'EVALUATION 
+      $table->addColumn('note_orale', 'NO', function($row){
+        global $id;
+        if( is_valid_int($row->note_orale) ) {
+          $value = ($row->note_orale==0.00) ? 0 : $row->note_orale;
+          $color = $this->percent2Color($row->note_orale, 200, 4);
+          $style = 'background-color:#'.$color.';';
+          $tooltip = '';
+        } else {
+          $value = '<i class="fa fa-times" style="font-size: 10px;"></i>';
+          $style = '';
+          $tooltip = 'data-toggle="tooltip" title="'. trans("Non défini.") .'"';
+        }
+        if($id != self::STATUS_ARCHIVED) {
+          return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteOralePopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
+        } else {
+          return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" '.$tooltip.'>'.$value.'</i>';
+        }
+      }, ['attributes' => ['title' => trans("Note Orale")]]);
+
+    	$table->addColumn('titre_offre', trans("Titre du poste"), function($row){
+        // $offre = Candidatures::getOfferById($row->id_offre);
+    		return $row->offre_name;
+    	}, ['attributes' => ['width'=> '120px']]);
+    }
+
 
   	$table->addColumn('date_cand', trans("Date"), function($row){
   		return '<b>'. date ("d.m.Y", strtotime($row->date_cand)) .'</b>';
@@ -372,28 +404,72 @@ class TableController extends Controller
 	 *
 	 * @author Mhamed Chanchaf
 	 */
-  public function buildQuery()
+  public function buildQuery($id)
   {
-    $status = (isset($_GET['id']) && $_GET['id'] == 53) ? trans("Archivée") : trans("En cours");
+    $field_date = $this->getDateField($id);
+    $table = $this->getTableName($id);
+    
+    $status = ($id == self::STATUS_ARCHIVED) ? trans("Archivée") : trans("En cours");
     $condition = " WHERE o.status='". $status ."'";
 
-    if(isset($_GET['id']) && $_GET['id'] != 53) $condition .= " AND cand.status=".$_GET['id'];
+    if (is_null($id)) {
+      $condition .= " AND cand.status != 0";
+    } else if($id != self::STATUS_ARCHIVED) {
+      $condition .= " AND cand.status=". $id;
+    }
 
     $condition .= $this->getAndWhereStatement('AND');
 
   	$joints = $this->getJoints();
     if( !isAdmin() ) {
-      $condition .= " AND rc.id_role=".$_SESSION['id_role'];
+      $condition .= " AND rc.id_role=". $_SESSION['id_role'];
       $joints .= ' JOIN role_candidature rc ON rc.id_candidature = cand.id_candidature';
     }
 
+    if (!in_array($id, ['spontanees', 'stage'])) {
+      $fields = ', o.status AS offre_status, o.Name AS offre_name';
+      $joints .= ' JOIN offre o ON o.id_offre = cand.id_offre';
+    } else {
+      $fields = '';
+      $condition = '';
+    }
+
   	$query = "
-      SELECT c.candidats_id, CONCAT(c.nom, ' ',c.prenom) AS fullname, c.email, c.titre, c.ville, c.id_situ, c.id_tfor, c.id_nfor, c.id_expe, c.id_sect, c.id_fonc, c.mobilite, c.id_pays, c.id_salr, c.date_n, c.dateMAJ, c.CVdateMAJ, cand.*, cand.date_candidature as date_cand, o.status AS offre_status, o.Name AS offre_name
-      FROM candidature cand 
-      JOIN offre o ON o.id_offre = cand.id_offre
+      SELECT c.candidats_id, CONCAT(c.nom, ' ',c.prenom) AS fullname, c.email, c.titre, c.ville, c.id_situ, c.id_tfor, c.id_nfor, c.id_expe, c.id_sect, c.id_fonc, c.mobilite, c.id_pays, c.id_salr, c.date_n, c.dateMAJ, c.CVdateMAJ, cand.*, cand.{$field_date} as date_cand {$fields}
+      FROM {$table} cand 
       JOIN candidats c ON c.candidats_id = cand.candidats_id
-      {$joints} {$condition} GROUP BY cand.id_candidature";
+      {$joints} {$condition} GROUP BY cand.id_candidature
+    ";
+
   	return $query;
+  }
+
+  private function getDateField($id) {
+    switch ($id) {
+      case 'spontanees':
+        return 'date_cs';
+        break;
+      case 'stage':
+        return 'date';
+        break;
+      default:
+        return 'date_candidature';
+        break;
+    }
+  }
+
+  private function getTableName($id) {
+    switch ($id) {
+      case 'spontanees':
+        return 'candidature_spontanee';
+        break;
+      case 'stage':
+        return 'candidature_stage';
+        break;
+      default:
+        return 'candidature';
+        break;
+    }
   }
 
 
@@ -459,6 +535,18 @@ class TableController extends Controller
   				$andWhere_array[] = key($column) .".". reset($column) ." BETWEEN 61 AND 100";
   				break;
   			}
+        break;
+        case 'age':
+        $parts = explode('-', $_GET[$key]);
+        if (isset($parts[1])) {
+          if ($parts[0] == 0) {
+            $andWhere_array[] = "TIMESTAMPDIFF(YEAR, date_n, CURDATE()) <= ". $parts[1];
+          } else if ($parts[1] == 0) {
+            $andWhere_array[] = "TIMESTAMPDIFF(YEAR, date_n, CURDATE()) >= ". $parts[0];
+          } else {
+            $andWhere_array[] = "TIMESTAMPDIFF(YEAR, date_n, CURDATE()) BETWEEN ". $parts[0] ." AND ". $parts[1];
+          }
+        }
   			break;
   			default:
   			$andWhere_array[] = key($column) .".". reset($column) ."='{$_GET[$key]}'";

@@ -2,7 +2,7 @@
 
 <div id="form-success-message" style="display: none;">
   <?php get_alert('success', [
-    trans("Merci de nous avoir signaler un probléme."), 
+    trans("Merci de nous avoir signalé un problème."), 
     trans("Votre message sera traité et nous reviendrons vers vous sous peu.")
   ], false) ?>
 </div>
@@ -104,7 +104,7 @@
 jQuery(document).ready(function(){
 
   // Trigger success
-  $('form').on('chm_form_success', function(event, response) {
+  $('form').on('chmFormSuccess', function(event, response) {
     if(response.status === 'success') {
       $('form').hide();
       $('#form-success-message').show();

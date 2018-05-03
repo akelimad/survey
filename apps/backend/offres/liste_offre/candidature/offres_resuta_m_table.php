@@ -200,13 +200,7 @@ $is=$inum+$limitstart;
 
     <?php 
 
-$date_naissance = str_replace('/', '-', $return['date_n']);
-
-$date_naissance_c = date('Y-m-d', strtotime($date_naissance));
-
-$age_c = strtotime($date_naissance_c);
-
-$newformat = date('Y-m-d',$age_c);
+$newformat = eta_date($return['date_n'], 'Y-m-d');
 
         $nomPre = $return['prenom'].'&nbsp;'.$return['nom'];
 
@@ -1144,7 +1138,7 @@ if($counlettre)
 
 		  <div style="float: right; padding-right: 5px;" >     
 
-		  Pour la sélection :      <input   name="cv_mass_tt" class="espace_candidat" type="submit" value="Télécharger les CV en masse"      alt="Emails avec pièce joint" style="    width: 200px;"/>	       
+		  Pour la sélection :      <input   name="cv_mass_tt" class="espace_candidat" type="submit" value="Télécharger les CV en masse"      alt="Emails avec la pièce jointe" style="    width: 200px;"/>	       
 
 		  <!--
 

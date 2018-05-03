@@ -200,15 +200,7 @@ $req00_theme = mysql_query( "SELECT * FROM candidats
 
 $data00 = mysql_fetch_array($req00_theme);
 
-
-
-$date_naissance = str_replace('/', '-', $data00['date_n']);
-
-$date_naissance_c = date('Y-m-d', strtotime($date_naissance));
-
-$age_c = strtotime($date_naissance_c);
-
-$newformat = date('Y-m-d',$age_c); 
+$newformat = eta_date($data00['date_n'], 'Y-m-d'); 
 
 $age = (time() - strtotime($newformat)) / 3600 / 24 / 365;
 

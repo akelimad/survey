@@ -50,7 +50,7 @@ $('.etaTable .email-condidat').click(function(event){
 	popup_send_email([$(this).data('cid')])
 });
 
-$('#bulk-wrap input[type="submit"]').click(function(event){
+$('body').on('click', '#bulk-wrap [type="submit"]', function(){
 	var selectedBulk = $('#bulk-wrap select').val()
 	var bulkCallable = $('#bulk-wrap select option:selected').data('callback')
 	if( $('.etaTable_cb:checked').length == 0 ) {
@@ -66,18 +66,23 @@ $('#bulk-wrap input[type="submit"]').click(function(event){
 		var checked = []
 		$('.etaTable_cb:checked').each(function(k, v){
 			checked[k] = $(this).val()
-		})	
-		window[bulkCallable](event, checked);
+		})
+		var parts = bulkCallable.split('.')
+    if (parts.length === 2) {
+      window[parts[0]][parts[1]](event, checked)
+    } else {
+      window[parts[0]](event, checked)
+    }
 	}
 })
 
 
-$('.etaTable_cb').change(function(){
+$('body').on('change', '.etaTable_cb', function(){
 	$('.etaTable_checkAll').prop('checked', ($('.etaTable_cb').length == $('.etaTable_cb:checked').length) )
 })
 
 
-$('.etaTable_perpage').change(function(){
+$('body').on('change', '.etaTable_perpage', function(){
 	var perpage = $(this).val()
 	change_url_param('page', 1)
 	change_url_param('perpage', perpage)
@@ -85,7 +90,7 @@ $('.etaTable_perpage').change(function(){
 })
 
 // Check all
-$('.etaTable_checkAll').change(function(){
+$('body').on('change', '.etaTable_checkAll', function(){
 	$('.etaTable_checkAll').not($(this)).prop('checked', $(this).is(':checked'))
 	$(".etaTable_cb").prop("checked", $(this).is(':checked'));
 })

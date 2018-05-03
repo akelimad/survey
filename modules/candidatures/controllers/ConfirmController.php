@@ -18,29 +18,35 @@ class ConfirmController
 {
 
 
-  public function actionCalendar($id)
+  public function confirm($data)
   {
     $db = getDB();
 
     // test if already confirmed
-    $agenda = $db->findOne('agenda', 'id_agend', $id);
-    if( $agenda->confirmation_statu == 1 ) {
-      $type = 'info';
-      $message = trans("La convocation a été déja confirmé.");
-    } else {
-      // get current candidature status
-      $candidature = $db->findOne('candidature', 'id_candidature', $agenda->id_candidature);
-      $data['status']['id_candidature'] = $agenda->id_candidature;
-      $data['status']['id'] = ($candidature->status == 32) ? 33 : 40;
-      $data['status']['comments'] = '';
-      $data['status']['date'] = date("Y-m-d");
-      $data['status']['time'] = date("H:m");
-      $data['status']['agenda']['confirmation_statu'] = 1;
+    $md5 = $data['params'][1];
+    $agenda = getDB()->prepare("SELECT * FROM agenda WHERE md5(id_agend)=?", [$md5], true);
 
-      
-      $confirm = (new StatusController())->saveStatus($data);
-      $type = 'success';
-      $message = trans("La convocation a été bien confirmé, merci.");
+    if (isset($agenda->id_agend)) {
+      if( $agenda->confirmation_statu == 1 ) {
+        $type = 'info';
+        $message = trans("La convocation a été déjà confirmée.");
+      } else {
+        // get current candidature status
+        $candidature = $db->findOne('candidature', 'id_candidature', $agenda->id_candidature);
+        $data['status']['id_candidature'] = $agenda->id_candidature;
+        $data['status']['id'] = ($candidature->status == 32) ? 33 : 40;
+        $data['status']['comments'] = '';
+        $data['status']['date'] = date("Y-m-d");
+        $data['status']['time'] = date("H:m");
+        $data['status']['agenda']['confirmation_statu'] = 1;
+
+        $confirm = (new StatusController())->saveStatus($data);
+        $type = 'success';
+        $message = trans("La convocation a été bien confirmé, merci.");
+      }
+    } else {
+      $type = 'danger';
+      $message = trans("Impossible de trouver cette convocation.");
     }
 
     return get_page('front/pages/confirm-convocation', [

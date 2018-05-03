@@ -87,4 +87,9 @@ export default class chmUrl {
     window.history.pushState(null, document.title, url)
   }
 
+  static eraseAllParams () {
+    var url = window.location.href.split('?')[0]
+    window.history.pushState(null, document.title, url)
+  }
+
 }

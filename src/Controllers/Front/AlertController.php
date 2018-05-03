@@ -34,7 +34,7 @@ class AlertController extends Controller
           'candidats_id' => get_candidat_id(),
           'titre' => $data['titre'],
           'date' => date('d/m/Y', time()),
-          'activate' => 'true'
+          'activate' => 1
         ]);
         return $this->jsonResponse('success', trans("L'alerte a été bien créé."));
       }
@@ -52,7 +52,7 @@ class AlertController extends Controller
   public function activate($data)
   {
     if ($this->isOwner($data['id'])) {
-      $status = ($data['curStatus'] == 'true') ? 'false' : 'true';
+      $status = ($data['curStatus'] == 1) ? 0 : 1;
       getDB()->update('alert', 'id_alert', $data['id'], ['activate' => $status]);
       return $this->jsonResponse('success', trans("Le status a été mis à jour."));
     } else {

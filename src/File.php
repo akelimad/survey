@@ -39,7 +39,7 @@ class File
 
     public static function getExtension($filename)
     {
-        return pathinfo($filename, PATHINFO_EXTENSION);
+        return strtolower(pathinfo($filename, PATHINFO_EXTENSION));
     }
 
     public static function getName($filename)
@@ -54,7 +54,7 @@ class File
         return self::randomString() .'.'. $ext;
     }
 
-    public static function copyFile($source, $distination)
+    public static function copy($source, $distination)
     {
         if (file_exists($source) && is_file($source) && is_readable($source)) {
             try {
@@ -65,7 +65,7 @@ class File
         return false;
     }
 
-    public static function deleteFile($path)
+    public static function delete($path)
     {
         if( file_exists($path) ) {
             chown($path, 666);
@@ -73,6 +73,27 @@ class File
         }
         return false;
     }
+
+    public static function deleteDirectory($dirPath) {
+        if (!is_dir($dirPath)) {
+          throw new \InvalidArgumentException("$dirPath must be a directory");
+        }
+
+        if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+          $dirPath .= '/';
+        }
+
+        $files = glob($dirPath . '*', GLOB_MARK);
+        foreach ($files as $file) {
+          if (is_dir($file)) {
+            self::deleteDirectory($file);
+          } else {
+            unlink($file);
+          }
+        }
+        rmdir($dirPath);
+    }
+
 
     /**
      * Generate random string
@@ -87,5 +108,18 @@ class File
     {
         return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
     }
+
+
+    public static function koToOctet($size)
+    {
+        return round($size * 1024, 2);
+    }
+
+
+    public static function octetToKo($size)
+    {
+        return round($size/1024, 2);
+    }
+
 
 }

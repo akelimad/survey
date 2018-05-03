@@ -182,13 +182,8 @@
 
          
 
-$date_naissance = str_replace('/', '-', $r_candidats['date_n']);
 
-$date_naissance_c = date('Y-m-d', strtotime($date_naissance));
-
-$age_c = strtotime($date_naissance_c);
-
-$newformat = date('Y-m-d',$age_c); 
+$newformat = eta_date($r_candidats['date_n'], 'Y-m-d'); 
 
 $age = (time() - strtotime($newformat)) / 3600 / 24 / 365;
 
@@ -1020,7 +1015,7 @@ echo $r_prm_situation['situation']; ?>
 
   Pour la sélection : 
 
-     <input   name="email_tt" class="espace_candidat" type="submit" value="Emails avec pièce joint" 
+     <input   name="email_tt" class="espace_candidat" type="submit" value="Emails avec pièce jointe" 
 
      alt="Email envoyé aux candidats" style="    width: 175px;"/>
 

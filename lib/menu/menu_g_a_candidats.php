@@ -3,9 +3,10 @@
 	<ul id="menu_site_carriere" style="padding: 1px;">
 
 <?php	
+$s_cls0 = $s_cls1 = $s_cls2 = $s_cls3 = $s_cls4 = $s_cls5 = $s_cls6 = $s_cls7 = $s_cls8 = $s_cls9 = $s_cls10 = '';
 $_SESSION['s_link']=isset($_GET['b'])	 ? $_GET['b']      : $_SESSION['link_bak_b'];
 
-if ($_SESSION['link']==2)	{
+if (isset($_SESSION['link']) && $_SESSION['link']==2)	{
 	$s_cls0='ctl00_liSpontanee';$s_cls1='ctl00_liSpontanee';$s_cls2='ctl00_liSpontanee';$s_cls3='ctl00_liSpontanee';$s_cls4='ctl00_liSpontanee';$s_cls5='ctl00_liSpontanee';$s_cls6='borderbas';$s_cls7='borderbas';$s_cls8='ctl00_liSpontanee';$s_cls9='ctl00_liSpontanee';$s_cls10='ctl00_liSpontanee';
 
 	if ($_SESSION['s_link']==20)

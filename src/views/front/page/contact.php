@@ -1,6 +1,6 @@
 <h1 class="mb-10">Nous contacter</h1>
 
-<?php get_alert('info', trans("Vos questions, commentaires et suggestions sont les bienvenues!"), false) ?>
+<?php get_alert('info', trans("Vos questions, commentaires et suggestions sont les bienvenus!"), false) ?>
 
 <p class="mt-15 mb-15"><strong><?php trans_e("Courriel:"); ?></strong>&nbsp;<a href="mailto:<?= get_setting('email_e'); ?>"><?= get_setting('email_e'); ?></a></p>
 
@@ -87,7 +87,7 @@
 jQuery(document).ready(function(){
 
   // Trigger success
-  $('form').on('chm_form_success', function(event, response) {
+  $('form').on('chmFormSuccess', function(event, response) {
     if(response.status === 'success') {
       $('[type="reset"]').trigger('click')
     }

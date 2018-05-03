@@ -15,7 +15,7 @@
       </tr>
       <tr>
         <td><?php trans_e("Niveau d'expérience"); ?></td>
-        <td>:<strong>&nbsp;<?= (isset($tpost->designation)) ? $tpost->designation : '' ?></strong></td>
+        <td>:<strong>&nbsp;<?= (isset($exp->intitule)) ? $exp->intitule : '' ?></strong></td>
       </tr>
       <tr>
         <td><?php trans_e("Niveau de formation"); ?></td>
@@ -41,6 +41,13 @@
       </tr>
     </tbody>
   </table>
+
+  <?php if ($description = get_setting('offer_company_description', false)) : ?>
+  <div class="styled-title mt-10 mb-10">
+    <h3><?php trans_e("Description de l'entreprise"); ?></h3>
+  </div>
+  <p align="justify"><?= $description ?></p>
+  <?php endif; ?>
 
   <div class="styled-title mt-10 mb-10">
     <h3><?php trans_e("Description du poste"); ?></h3>
@@ -71,9 +78,19 @@
     <div class="styled-title mt-10 mb-10"><h3><?php trans_e("Résultats des concours"); ?></h3></div>
     <a href="<?= site_url('apps/upload/frontend/offre/resultats_concours/'.$offer->resultats_concours) ;?>"><i class="fa fa-download"> <?php trans_e("Télécharger"); ?></i></a>
   <?php endif; ?>
+
+  <?php if(isset($offer->avis_modification) && $offer->avis_modification != '') : ?>
+    <div class="styled-title mt-10 mb-10"><h3><?php trans_e("Avis de Modification"); ?></h3></div>
+    <a href="<?= site_url('apps/upload/frontend/offre/avis_modification/'. $offer->avis_modification) ;?>"><i class="fa fa-download"> <?php trans_e("Télécharger"); ?></i></a>
+  <?php endif; ?>
+
+  <?php if(isset($offer->avis_report) && $offer->avis_report != '') : ?>
+    <div class="styled-title mt-10 mb-10"><h3><?php trans_e("Avis de report"); ?></h3></div>
+    <a href="<?= site_url('apps/upload/frontend/offre/avis_report/'. $offer->avis_report) ;?>"><i class="fa fa-download"> <?php trans_e("Télécharger"); ?></i></a>
+  <?php endif; ?>
 </div>
 
-<?php if($offer->status != 'Archivée' && strtotime($offer->date_expiration) > strtotime(date('Y-m-d', time()))) : ?>
+<?php if($offer->status != 'Archivée' && strtotime($offer->date_expiration) >= strtotime(date('Y-m-d', time()))) : ?>
 <div class="ligneBleu"></div>
 <ul id="offer-actions">
   <li class="mb-5">
@@ -84,7 +101,6 @@
   </li>
   <li class="mb-5 hidden-xs">
     <a href="javascript:void(0)" chm-print="#offer-container" chm-print-title="<?= $offer->Name; ?>" class="btn btn-primary btn-sm" id="offer-print"><i class="fa fa-print"></i>&nbsp;<?php trans_e("Imprimer l'offre"); ?></a>
-    <!--a target="_blank" href="<?//= site_url('offre/'. $offer->id_offre .'/print') ?>" class="btn btn-primary btn-sm"><i class="fa fa-print"></i>&nbsp;Imprimer l'offre</a-->
   </li>
   <li class="mb-5">
     <a href="javascript:void(0)" class="btn btn-primary btn-sm" onclick="return chmOffer.sendToFriend(<?= $offer->id_offre; ?>)"><i class="fa fa-envelope"></i>&nbsp;<?php trans_e("Envoyer cette offre à un ami"); ?></a>

@@ -55,7 +55,7 @@ use App\Form;
 
 <script>
 $(document).ready(function() {
-    $('form').on('chm_form_success', function(){
+    $('form').on('chmFormSuccess', function(){
         chmTable.refresh('#surveysTable')
     })
 })

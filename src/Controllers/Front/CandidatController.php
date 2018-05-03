@@ -17,8 +17,10 @@ use App\Models\Resume;
 use App\Models\MotivationLetter;
 use App\Models\Formation;
 use App\Models\Experience;
-use App\Media;
 use App\Mail\Mailer;
+use App\Ajax;
+use App\Form;
+use App\Media;
 use Mpdf\Mpdf;
 
 class CandidatController extends Controller
@@ -30,7 +32,9 @@ class CandidatController extends Controller
     'id_situ' => 'required|numeric',
     'id_sect' => 'required|numeric',
     'id_fonc' => 'required|numeric',
-    'id_salr' => 'required|numeric',
+    'fonction_other' => 'eta_string',
+    'id_salr' => 'numeric',
+    'id_currency' => 'numeric',
     'id_nfor' => 'required|numeric',
     'id_tfor' => 'required|numeric',
     'id_dispo' => 'required|numeric',
@@ -41,9 +45,11 @@ class CandidatController extends Controller
     'date_n' => 'required|date|min_age,15',
     'adresse' => 'required|eta_alpha_numeric|max_len,255',
     'code' => 'numeric|max_len,5',
-    'ville' => 'required|eta_alpha_numeric',
+    'ville' => 'required|eta_string',
+    'ville_other' => 'eta_string',
     'nationalite' => 'required|eta_string|max_len,16',
-    'cin' => 'required|alpha_numeric|max_len,8',
+    'cin' => 'alpha_numeric|max_len,8',
+    'dial_code' => 'required|eta_alpha_numeric',
     'tel1' => 'required|phone_number|max_len,16',
     'tel2' => 'phone_number|max_len,16',
     'mobilite' => 'required|alpha',
@@ -58,7 +64,9 @@ class CandidatController extends Controller
     'id_situ' => 'Situation actuelle',
     'id_sect' => 'Secteur actuel',
     'id_fonc' => 'Fonction',
+    'fonction_other' => 'Autre Fonction',
     'id_salr' => 'Salaire souhaité',
+    'id_currency' => 'Devise',
     'id_nfor' => 'Niveau de formation',
     'id_tfor' => 'Type de formation',
     'id_dispo' => 'Disponibilité',
@@ -70,8 +78,10 @@ class CandidatController extends Controller
     'adresse' => 'Adresse',
     'code' => 'Code postal',
     'ville' => 'Ville',
+    'ville_other' => 'Autre ville',
     'nationalite' => 'Nationalité',
     'cin' => 'CIN',
+    'dial_code' => 'Indicatif téléphonique',
     'tel1' => 'Téléphone',
     'tel2' => 'Téléphone secondaire',
     'mobilite' => 'Mobilité géographique',
@@ -97,12 +107,11 @@ class CandidatController extends Controller
         // Send welcome email
         $template = getDB()->findOne('root_email_auto', 'ref', 'b');
         if(isset($template->id_email)) {
-          $message = Mailer::renderMessage($template->message, [
-            'nom_candidat' => Candidat::getDisplayName($candidat),
-            'email_candidat' => $candidat->email,
-            'mot_passe' => $candidat->nl_partenaire
-          ]);
-          Mailer::send($candidat->email, $template->objet, $message, [
+          $variables = Mailer::getVariables($candidat);
+          $subject = Mailer::renderMessage($template->objet, $variables);
+          $message = Mailer::renderMessage($template->message, $variables);
+
+          Mailer::send($candidat->email, $subject, $message, [
             'titre' => $template->titre,
             'type_email' => 'Envoi automatique'
           ]);
@@ -152,19 +161,26 @@ class CandidatController extends Controller
 
     if (!isset($candidat->candidats_id)) return $progress;
 
-    // Candiat has photo
-    if ($candidat->photo != '') $progress += 25;
+    $hasPhoto = ($candidat->photo != '');
+    $hasLM = Candidat::hasLM($candidat->candidats_id);
+    $hasExp = Candidat::hasExperience($candidat->candidats_id);
+
+    if (!$hasPhoto && !$hasLM && $hasExp) {
+      $progress += 75;
+    } else if ($hasPhoto) {
+      $progress += 25;
+    } else if ($hasLM) {
+      $progress += 25;
+    } else if ($hasExp) {
+      $progress += 25;
+    }
 
     // Candidat speak at least one language
     if ($candidat->arabic != '' || $candidat->french != '' || $candidat->english != '' || $candidat->autre != '' || $candidat->autre1 != '' || $candidat->autre2 != '') $progress += 25;
 
-    // Candidat has CV
-    if (Candidat::hasCV($candidat->candidats_id)) $progress += 25;
+    if ($progress == 0) $progress = 25;
 
-    // Candidat has LM
-    if (Candidat::hasLM($candidat->candidats_id)) $progress += 25;
-
-    return $progress;
+    return ($progress <= 100) ? $progress : 100;
   }
 
 
@@ -182,10 +198,11 @@ class CandidatController extends Controller
         // Send email
         $template = getDB()->findOne('root_email_auto', 'ref', 'o');
         if(isset($template->id_email)) {
-          $message = Mailer::renderMessage($template->message, [
-            'nom_candidat' => Candidat::getDisplayName()
-          ]);
-          Mailer::send(get_candidat('email'), $template->objet, $message, [
+          $variables = Mailer::getVariables(get_candidat_id());
+          $subject = Mailer::renderMessage($template->objet, $variables);
+          $message = Mailer::renderMessage($template->message, $variables);
+          
+          Mailer::send(get_candidat('email'), $subject, $message, [
             'titre' => $template->titre,
             'type_email' => 'Envoi automatique'
           ]);
@@ -206,13 +223,19 @@ class CandidatController extends Controller
     if (is_ajax() && form_submited()) {
       Validator::set_field_names($this->field_names);
 
+      $data['date_n'] = \eta_date($data['date_n'], 'Y-m-d');
+
       $is_valid = Validator::is_valid($data, $this->rules);
       
       if(is_array($is_valid)) {
         return $this->jsonResponse('error', $is_valid);
       }
 
-      $data['date_n'] = \english_to_french_date($data['date_n']);
+      if (isset($data['ville_other']) && !empty($data['ville_other'])) {
+        $data['ville'] = $data['ville_other'];
+      }
+      unset($data['ville_other']);
+
       $data['dateMAJ'] = date("Y-m-d H:i:s");
 
       getDB()->update('candidats', 'candidats_id', get_candidat_id(), $data, false);
@@ -295,6 +318,7 @@ class CandidatController extends Controller
 
           // update candidat languages
           if (isset($upload['files']['photo'])) $data['candidat']['photo'] = $upload['files']['photo']['name'];
+          if (isset($upload['files']['permis_conduire'])) $data['candidat']['permis_conduire'] = $upload['files']['permis_conduire']['name'];
           $data['candidat']['dateMAJ'] = date("Y-m-d H:i:s");
           $db->update('candidats', 'candidats_id', get_candidat_id(), $data['candidat'], false);
           set_flash_message('success', trans("Vos informations ont été bien mis à jour."));
@@ -319,7 +343,7 @@ class CandidatController extends Controller
       'photo' => [
         'name' => trans("Photo"),
         'path' => 'apps/upload/frontend/photo_candidats/',
-        'required' => false,
+        'required' => Form::getFieldOption('required', 'register', 'photo'),
         'extensions' => ['png', 'jpg', 'jpeg', 'gif'],
       ],
       'cv' => [
@@ -331,8 +355,14 @@ class CandidatController extends Controller
       'lm' => [
         'name' => trans("Lettre de motivation"),
         'path' => 'apps/upload/frontend/lmotivation/',
-        'required' => false,
+        'required' => Form::getFieldOption('required', 'register', 'lm'),
         'extensions' => ['doc', 'docx', 'pdf'],
+      ],
+      'permis_conduire' => [
+        'name' => trans("Permis de conduire"),
+        'path' => 'apps/upload/frontend/candidat/permis_conduire/',
+        'required' => Form::getFieldOption('required', 'register', 'permis_conduire'),
+        'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
       ]
     ];
 
@@ -343,6 +373,8 @@ class CandidatController extends Controller
 
     foreach ($rules as $key => $rule) {
       $valid = true;
+      if (!Form::getFieldOption('displayed', 'register', $key)) continue;
+
       if($rule['required'] && $_FILES[$key]['size'] < 1) {
         $return['errors'][] = trans("Le champs") ." <strong>{$rule['name']}</strong> ". trans("est obligatoire.");
         $valid = false;
@@ -386,6 +418,15 @@ class CandidatController extends Controller
     getDB()->update('candidats', 'candidats_id', get_candidat_id(), ['photo' => null, 'dateMAJ' => date("Y-m-d H:i:s")]);
 
     return $this->jsonResponse('success', trans("La photo a été bien supprimé."));
+  }
+
+
+  public function deletePermisConduire($data)
+  {
+    unlinkFile(site_base('apps/upload/frontend/candidat/permis_conduire/'. $data['fname']));
+    getDB()->update('candidats', 'candidats_id', get_candidat_id(), ['permis_conduire' => null, 'dateMAJ' => date("Y-m-d H:i:s")]);
+
+    return $this->jsonResponse('success', trans("La permis de conduire a été bien supprimé."));
   }
 
 
@@ -475,6 +516,116 @@ class CandidatController extends Controller
     $this->data['layout'] = 'front';
     $this->data['breadcrumbs'] = [trans("Accueil"), trans("Candidat"), trans("Mes identifiants")];
     return get_page('front/candidat/change-password', $this->data);
+  }
+
+
+  public function getForumForm($data)
+  {
+    if (form_submited()) {
+      if ($_FILES['cv']['size'] < 1) {
+        return $this->jsonResponse('error', trans("Le CV est obligatoire."));
+      }
+
+      // Verify google recaptcha
+      /*if(
+        get_setting('google_recaptcha_enabled', false) &&
+        (!isset($data['g-recaptcha-response']) || 
+        !$this->verifyGoogleRecaptcha($data['g-recaptcha-response']))
+      ) {
+        return $this->jsonResponse('error', trans("Merci de cocher la case 'Je ne suis pas un robot'"));
+      }*/
+
+      Validator::set_field_names([
+        'nom' => trans("Nom de famille"),
+        'prenom' => trans("Prénom"),
+        'email' => trans("E-mail"),
+        'tel1' => trans("Numéro de téléphone"),
+        'id_dispo' => trans("Date de disponibilité"),
+        'title' => trans("Poste souhaité")
+      ]);
+
+      $is_valid = Validator::is_valid($data, [
+        'nom' => 'required|valid_name|min_len,3|max_len,32',
+        'prenom' => 'required|valid_name|min_len,3|max_len,32',
+        'email' => 'required|valid_email',
+        'tel1' => 'required|phone_number|max_len,16',
+        'id_dispo' => 'required|numeric',
+        'titre' => 'required|eta_alpha_numeric|min_len,3|max_len,255'
+      ]);
+
+      if(is_array($is_valid)) {
+        return $this->jsonResponse('error', $is_valid);
+      }
+
+      // Check unique email
+      if(Candidat::exists($data['email'])) {
+        return $this->jsonResponse('error', trans("Cette email est déja utilisé avec une autre compte."));
+      }
+
+      $db = getDB();
+
+      // Upload cv
+      $upload = Media::uploadMultiple([
+        [
+          'name' => 'cv',
+          'title' => trans("CV"),
+          'required' => true,
+          'uploadDir' => 'apps/upload/frontend/cv/',
+          'extensions' => ['doc', 'docx', 'pdf']
+        ]
+      ]);
+
+      if(isset($upload['errors'])) {
+        return $this->jsonResponse('error', $upload['errors']);
+      }
+
+      // Create candidat account
+      $password = $this->randomString(8);
+      $id_candidat = $db->create('candidats', [
+        'titre' => $data['titre'],
+        'nom' => $data['nom'],
+        'prenom' => $data['prenom'],
+        'email' => $data['email'],
+        'mdp' => md5($password),
+        'tel1' => $data['tel1'],
+        'id_dispo' => $data['id_dispo'],
+        'note_diplome' => 0,
+        'nl_emploi' => 1,
+        'nl_partenaire' => $password,
+        'date_inscription' => date('Y-m-d'),
+        'status' => 2,
+        'last_connexion' => null,
+        'vues' => 0,
+        'dateMAJ' => date('Y-m-d H:i:s'),
+        'CVdateMAJ' => date('Y-m-d H:i:s'),
+        'can_update_account' => 1
+      ], false);
+
+      if ($id_candidat < 1) {
+        return $this->jsonResponse('error', trans("Une erreur est survenue lors de création de compte, essaye plus tards."));
+      }
+
+      if(isset($upload['files']['cv'][0]['name'])) {
+        $db->create('cv', [
+          'candidats_id' => $id_candidat,
+          'lien_cv'  => $upload['files']['cv'][0]['name'],
+          'titre_cv' => $upload['files']['cv'][0]['title'],
+          'principal' => 1,
+          'actif' => 1
+        ], false);
+      }
+
+      // Send email to candidat
+      $fullname = $data['nom'] .' '. $data['prenom'];
+      AuthController::sendVerificationEmail($id_candidat, $fullname, $data['email']);
+      
+      return $this->jsonResponse('success', [trans("Votre compte a été créé avec succès."), trans("Un e-mail vous a été envoyé avec des instructions détaillées sur la façon de l'activer.")], ['dismissible' => false]);
+
+    } else {
+      $this->data['layout'] = 'front';
+      $this->data['breadcrumbs'] = [trans("Accueil"), trans("Formulaire Forum")];
+      return get_page('front/candidat/forum/form', $this->data);
+    }
   }
 
 	

@@ -13,7 +13,7 @@ use App\Form;
       $date_debut = french_to_english_date($date_debut);
     }
     ?>
-    <input type="date" max="<?= date('Y-m-d'); ?>" value="<?= $date_debut ?>" class="form-control" id="forma_date_debut" name="date_debut" required>
+    <input type="text" readonly value="<?= $date_debut ?>" class="form-control" id="forma_date_debut" name="date_debut" required>
   </div>
   <div class="col-sm-8 pl-0 pl-xs-15 required">
     <label for="forma_date_fin"><?php trans_e("Date de fin"); ?></label>
@@ -24,7 +24,7 @@ use App\Form;
       $date_fin = french_to_english_date($date_fin);
     }
     ?>
-    <input type="date" max="<?= date('Y-m-d'); ?>" value="<?= $date_fin ?>" class="form-control" id="forma_date_fin" name="date_fin" style="max-width: 186px;float: left;margin-right: 10px;<?= (isset($formation->date_fin) && $formation->date_fin == '') ? 'display: none;"' : '" required' ?>>
+    <input type="text" readonly value="<?= $date_fin ?>" class="form-control" id="forma_date_fin" name="date_fin" style="max-width: 186px;float: left;margin-right: 10px;<?= (isset($formation->date_fin) && $formation->date_fin == '') ? 'display: none;"' : '" required' ?>>
     <label for="forma_today" style="margin-top: 10px;" class="pointer">
       <input type="checkbox" value="1" class="date_fin_today" id="forma_today"<?= (isset($formation->date_fin) && $formation->date_fin == '') ? ' checked' : '' ?>>&nbsp;<?php trans_e("Jusqu'à aujourd'hui"); ?>
     </label>
@@ -49,8 +49,8 @@ use App\Form;
       </optgroup‏>
       <?php endforeach; ?>
     </select>
-    <?php $forma_other = (isset($formation->ecole)) ? $formation->ecole : ''; ?>
-    <?= Form::input('text', 'ecole', null, $forma_other, [
+    <?php $ecole = (isset($formation->ecole)) ? $formation->ecole : ''; ?>
+    <?= Form::input('text', 'ecole', null, $ecole, [], [
       'class' => 'form-control',
       'style' => (empty($formation->ecole)) ? 'display:none;' : '',
       'title' => trans("Autre école ou établissement")
@@ -76,11 +76,19 @@ use App\Form;
       ?>
         <option value="<?= $value->id_fili ?>" <?= $selected; ?>><?= $value->filiere ?></option>
       <?php endforeach; ?>
-        </select>
+    </select>
+    <?php $diplome_other = (isset($formation->diplome_other)) ? $formation->diplome_other : ''; ?>
+    <?= Form::input('text', 'diplome_other', null, $diplome_other, [], [
+      'class' => 'form-control',
+      'style' => (empty($formation->diplome_other)) ? 'display:none;' : '',
+      'title' => trans("Autre (à péciser)")
+    ]); ?>
   </div>
 </div>
 <div class="row mt-0">
-  <div class="col-sm-4">
+  <?php if (Form::getFieldOption('displayed', 'register', 'copie_diplome')) : ?>
+  <?php $required = Form::getFieldOption('required', 'register', 'copie_diplome') ? ' required' : ''; ?>
+  <div class="col-sm-4<?= $required; ?>">
     <label for="forma_copie_diplome"><?php trans_e("Copie du diplôme"); ?></label>
     <div class="input-group file-upload<?= (isset($formation->copie_diplome) && $formation->copie_diplome != '') ? ' hidden' : '' ?>">
         <input type="text" class="form-control" readonly>
@@ -92,6 +100,8 @@ use App\Form;
         </label>
     </div>
   </div>
+  <?php endif; ?>
+  
   <div class="col-sm-12">
     <?php if (isset($formation->copie_diplome) && $formation->copie_diplome != '') : ?>
       <a href="<?= site_url('apps/upload/frontend/candidat/copie_diplome/'. $formation->copie_diplome); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
@@ -113,7 +123,7 @@ jQuery(document).ready(function(){
   CKEDITOR.replace('forma_description', {height: 200});
 
   // Trigger success
-  $('form').on('chm_form_success', function(event, response) {
+  $('form').on('chmFormSuccess', function(event, response) {
     if(response.status === 'success') {
       chmModal.destroy()
       window['chmAlert'][response.status](response.message)
@@ -137,6 +147,25 @@ jQuery(document).ready(function(){
       $($forma_other).prop('required', false)
       $($forma_other).hide()
     }   
+  })
+
+  // Fonction
+  $('#forma_diplome').change(function() {
+    var $other_input = $('#diplome_other')
+    $($other_input).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($other_input).prop('required', true)
+      $($other_input).show()
+    } else {
+      $($other_input).prop('required', false)
+      $($other_input).hide()
+    }   
+  })
+  
+  cimDatepicker('[id$="date_debut"], [id$="date_fin"]', {
+    dateFormat: 'dd/mm/yy',
+    maxDate: '-0day',
+    minDate: "-30Y",
   })
 
 })

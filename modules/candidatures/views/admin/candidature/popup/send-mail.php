@@ -1,9 +1,3 @@
-<style>
-	.chm-alerts ul {
-    padding-left: 55px !important;
-	}
-</style>
-
 <div id="progress-wrap" style="display: none;">
 	<strong><?php trans_e("Envoi des emails en cours..."); ?>(<span id="send-count">0</span>/<span id="total-count">0</span>)</strong>
 	<div class="progress progress-striped active" style="margin-bottom: 10px;">
@@ -48,7 +42,7 @@
 	<div class="form-group">
 		<input type="hidden" name="cv_path" id="cp_cv_path" value="<?= (isset($cv_path) && $cv_path != '') ? $cv_path : ''; ?>">
 		<?php if(isset($cv_name) && $cv_name != '') : ?>
-			<strong><i class="fa fa-paperclip"></i>&nbsp;<?php trans_e("Pièce joint:"); ?></strong>
+			<strong><i class="fa fa-paperclip"></i>&nbsp;<?php trans_e("Pièce jointe:"); ?></strong>
 			<a href="<?= site_url($cv_path) ?>" target="_blank"><?= $cv_name; ?></a>
 		<?php endif; ?>
 	</div>
@@ -60,7 +54,7 @@
 		foreach ($_variables as $key => $v) {
 			$_variablesHtml .= '<code style="display: inline-block;">{{'.$v.'}}</code>';
 		}
-		get_alert('info', trans("Vous pouvez utiliser les variables suivants dans votre email:") .'<br>'.$_variablesHtml, false);
+		get_alert('info', trans("Vous pouvez utiliser les variables suivantes dans votre email:") .'<br>'.$_variablesHtml, false);
 		?>
 	</div>
 	<div class="ligneBleu" style="width: 100%;"></div>
@@ -142,29 +136,31 @@
 	$('#candidaturesContactForm').submit(function(event){
 		event.preventDefault()
 
-		var receivers = $('#cp_receivers').val()
-		var message = CKEDITOR.instances['cp_message'].getData()
-		if( $('#cp_receivers').val() == null || message == '' ) {
-			error_message('<?php trans_e("Merci de remplir tous les champs."); ?>');
-			return;
+		if (confirm('<?php trans_e("Êtes vous sur de vouloir executer cet action?"); ?>')) {
+			var receivers = $('#cp_receivers').val()
+			var message = CKEDITOR.instances['cp_message'].getData()
+			if( $('#cp_receivers').val() == null || message == '' ) {
+				error_message('<?php trans_e("Merci de remplir tous les champs."); ?>');
+				return;
+			}
+
+			$('#progress-wrap').show()
+			$('#candidaturesContactForm').hide()
+			$('#total-count').text(receivers.length)
+
+			sendEmailLoop({
+				step: 100 / receivers.length,
+				width: $('.progress-bar').getWidthInPercent(),
+				count: receivers.length,
+				index: 0,
+				receivers: receivers,
+				receiver: receivers[0],
+				sender: $('#cp_sender').val(),
+				subject: $('#cp_subject').val(),
+				message: message,
+				cv_path: $('#cp_cv_path').val()
+			});
 		}
-
-		$('#progress-wrap').show()
-		$('#candidaturesContactForm').hide()
-		$('#total-count').text(receivers.length)
-
-		sendEmailLoop({
-			step: 100 / receivers.length,
-			width: $('.progress-bar').getWidthInPercent(),
-			count: receivers.length,
-			index: 0,
-			receivers: receivers,
-			receiver: receivers[0],
-			sender: $('#cp_sender').val(),
-			subject: $('#cp_subject').val(),
-			message: message,
-			cv_path: $('#cp_cv_path').val()
-		});
 	})
 
 

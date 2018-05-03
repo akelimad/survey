@@ -28,7 +28,7 @@ class CandidatController
   	if( !isLogged('admin') ) redirect( site_url('backend/login') );
     $cv = Resume::getByID($id_cv);
     if (!isset($cv->lien_cv) || empty($cv->lien_cv)) {
-      die(tarns("Impossible de trouvez ce CV."));
+      die(tarns("Impossible de trouver ce CV."));
     }
     $cvPath = site_base('apps/upload/frontend/cv/'. $cv->lien_cv);
     if(file_exists($cvPath)) {
@@ -38,7 +38,7 @@ class CandidatController
 	    readfile($cvPath);
 	    exit;
     } else {
-      die(trans("Impossible de trouvez ce CV."));
+      die(trans("Impossible de trouver ce CV."));
     }
   }
 
@@ -54,7 +54,7 @@ class CandidatController
   	if( !isLogged('admin') ) redirect( site_url('backend/login') );
     $lettre = MotivationLetter::getByID($id_lettre);
     if (!isset($lettre->lettre) || empty($lettre->lettre)) {
-      die(trans("Impossible de trouvez ce CV."));
+      die(trans("Impossible de trouver ce CV."));
     }
     $lettrePath = site_base('apps/upload/frontend/lmotivation/'. $lettre->lettre);
     if(file_exists($lettrePath)) {
@@ -64,7 +64,7 @@ class CandidatController
 	    readfile($lettrePath);
 	    exit;
     } else {
-      die(trans("Impossible de trouvez cette lettre de motivation."));
+      die(trans("Impossible de trouver cette lettre de motivation."));
     }
   }
 

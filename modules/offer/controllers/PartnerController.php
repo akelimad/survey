@@ -21,7 +21,7 @@ class PartnerController extends \App\Controllers\Controller
   public function actionOffers()
   {
     $this->data['table'] = (new TableController())->getOffersTable();
-    $this->data['breadcrumbs'] = [trans("Accueil"), trans("Offres partagés avec moi")];
+    $this->data['breadcrumbs'] = [trans("Accueil"), trans("Offres partagées avec moi")];
     return get_page('admin/partner/offer/index', $this->data, __FILE__);
   }
 

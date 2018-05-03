@@ -737,7 +737,7 @@ $insertion_cv = mysql_query($insertion_cv1);*/
     //echo $insertion;
 
     //$succes2 = mysql_affected_rows();
-array_push($messages," <center><li style='color:#00D936;display: block;'>Candidate ".$nom." ".$prenom." à été ajoute avec succès sur la base des candidats </li> </center><br>");
+array_push($messages," <center><li style='color:#00D936;display: block;'>Candidate ".$nom." ".$prenom." a été ajoute avec succès sur la base des candidats </li> </center><br>");
      array_push($messages,'<meta http-equiv="refresh" content="4;URL=../">');
 
 ?>

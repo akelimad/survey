@@ -242,7 +242,7 @@ var rel3=c;
 
             $("#pj").append(pj);
 
-			 var btnpj = '<a href="../../popup/piece_joint/down_postit.php?id='+rel3+'" title="Voir la pièce joint 1" style="border-style: outset;background-color: yellowgreen;padding: 1px 15px;" > Télécharger </a>';
+			 var btnpj = '<a href="../../popup/piece_joint/down_postit.php?id='+rel3+'" title="Voir la pièce jointe 1" style="border-style: outset;background-color: yellowgreen;padding: 1px 15px;" > Télécharger </a>';
 
             $("#btnpj").append(btnpj);
 

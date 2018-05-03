@@ -143,6 +143,8 @@ if(isset($messages) and !empty($messages))  {
             'decisions_recrutement' => $offreData->decisions_recrutement,
             'candidats_convoques' => $offreData->candidats_convoques,
             'resultats_concours' => $offreData->resultats_concours,
+            'avis_modification' => $offreData->avis_modification,
+            'avis_report' => $offreData->avis_report,
             'attachements' => json_decode($offreData->attachements, true)
         );
 
@@ -163,7 +165,17 @@ if(isset($messages) and !empty($messages))  {
                 'extensions' => ['doc', 'docx', 'pdf']
             ],
             'resultats_concours' => [
-                'errorMessage' => "Impossible d'envoyer les résultats des concour",
+                'errorMessage' => "Impossible d'envoyer le résultat du concour",
+                'name' => '',
+                'extensions' => ['doc', 'docx', 'pdf']
+            ],
+            'avis_modification' => [
+                'errorMessage' => "Impossible d'envoyer l'avis de modification",
+                'name' => '',
+                'extensions' => ['doc', 'docx', 'pdf']
+            ],
+            'avis_report' => [
+                'errorMessage' => "Impossible d'envoyer l'avis de report",
                 'name' => '',
                 'extensions' => ['doc', 'docx', 'pdf']
             ],
@@ -219,6 +231,8 @@ if(isset($messages) and !empty($messages))  {
             'decisions_recrutement' => $formData['decisions_recrutement'],
             'candidats_convoques' => $formData['candidats_convoques'],
             'resultats_concours' => $formData['resultats_concours'],
+            'avis_modification' => $formData['avis_modification'],
+            'avis_report' => $formData['avis_report'],
             'attachements' => json_encode($formData['attachements'])
         ]);
 
@@ -756,7 +770,7 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
   <tr>
       <td colspan="2">
           <div class="subscription" style="margin: 10px 0 5px;">
-              <h1>Résultats des concours</h1>
+              <h1>Résultat du concour</h1>
           </div>
       </td>
   </tr>
@@ -764,6 +778,34 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
       <td colspan="2"><input type="file" id="resultats_concours" name="resultats_concours" />
       <?php if(isset($r01['resultats_concours']) && $r01['resultats_concours'] != '') : ?>
           <a href="<?= site_url('apps/upload/frontend/offre/resultats_concours/'.$r01['resultats_concours']) ;?>" style="margin-top: 10px;display: block;"><i class="fa fa-download"></i>&nbsp;Télécharger (<?= $r01['resultats_concours']; ?>)</a>
+      <?php endif; ?></td>
+  </tr>
+
+  <tr>
+      <td colspan="2">
+          <div class="subscription" style="margin: 10px 0 5px;">
+              <h1>Avis de Modification</h1>
+          </div>
+      </td>
+  </tr>
+  <tr>
+      <td colspan="2"><input type="file" id="avis_modification" name="avis_modification" />
+      <?php if(isset($r01['avis_modification']) && $r01['avis_modification'] != '') : ?>
+          <a href="<?= site_url('apps/upload/frontend/offre/avis_modification/'.$r01['avis_modification']) ;?>" style="margin-top: 10px;display: block;"><i class="fa fa-download"></i>&nbsp;Télécharger (<?= $r01['avis_modification']; ?>)</a>
+      <?php endif; ?></td>
+  </tr>
+
+  <tr>
+      <td colspan="2">
+          <div class="subscription" style="margin: 10px 0 5px;">
+              <h1>Avis de report</h1>
+          </div>
+      </td>
+  </tr>
+  <tr>
+      <td colspan="2"><input type="file" id="avis_report" name="avis_report" />
+      <?php if(isset($r01['avis_report']) && $r01['avis_report'] != '') : ?>
+          <a href="<?= site_url('apps/upload/frontend/offre/avis_report/'.$r01['avis_report']) ;?>" style="margin-top: 10px;display: block;"><i class="fa fa-download"></i>&nbsp;Télécharger (<?= $r01['avis_report']; ?>)</a>
       <?php endif; ?></td>
   </tr>
 

@@ -15,14 +15,7 @@ $r_candidats = mysql_fetch_assoc($s_candidats);
 //$data_pays = mysql_fetch_array($select_pays); 
 
 
-
-$date_naissance = str_replace('/', '-', $r_candidats['date_n']);
-
-$date_naissance_c = date('Y-m-d', strtotime($date_naissance));
-
-$age_c = strtotime($date_naissance_c);
-
-$newformat = date('Y-m-d',$age_c); 
+$newformat = eta_date($r_candidats['date_n'], 'Y-m-d'); 
 
 $age = (time() - strtotime($newformat)) / 3600 / 24 / 365;
 

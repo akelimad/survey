@@ -3,8 +3,8 @@
 		<h4 class="panel-title"><?php trans_e("Espace candidat"); ?></h4>
 	</div>
 	<div class="panel-body pt-5">
-		<div style="font-size: 12px;"><?php trans_e("Bienvenue"); ?>&nbsp;:&nbsp;<strong><?= App\Models\Candidat::getDisplayName(null, false) ?></strong></div>
-		<h3><i class="fa fa-lock"></i>&nbsp;<?php trans_e("Vous êtes connecté à votre espace"); ?></h3>
+		<div style="font-size: 12px;"><?php trans_e("Bienvenue"); ?>&nbsp;:&nbsp;<strong><?= App\Models\Candidat::getDisplayName(null, true) ?></strong></div>
+		<h3><i class="fa fa-lock"></i>&nbsp;<?php trans_e("Vous êtes connectés à votre espace"); ?></h3>
 		
 		<ul class="account-nav">
 		<?php $canUpdateAccount = \Modules\Candidat\Models\Candidat::canUpdateAccount(); ?>
@@ -19,6 +19,11 @@
 				"route" => "candidat/identifiants",
 				"icon" => "fa fa-key"
 			],
+			/*[
+				"label" => trans("Synchroniser votre compte linkedin"),
+				"route" => "synchronize/compte/linkedin",
+				"icon" => "fa fa-retweet"
+			],*/
 			[
 				"label" => trans("Mon CV"),
 				"route" => "candidat/cv",

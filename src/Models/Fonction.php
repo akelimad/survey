@@ -27,4 +27,13 @@ class Fonction {
     return (isset($fonc->fonction)) ? $fonc->fonction : null;
   }
 
+
+  public static function findAll($with_empty = true)
+  {
+    $items = getDB()->prepare("SELECT id_fonc, fonction, id_fonc as value, fonction as text FROM prm_fonctions");
+    if ($with_empty) $items = ['' => ''] + $items;
+    return $items;
+  }
+
+
 }

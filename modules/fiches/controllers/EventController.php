@@ -151,7 +151,7 @@ class EventController
 			// update note orale
 			if(isset($data['fiche']['type']) && $data['fiche']['type'] == 1) $this->updateNoteOrale($id_candidature);
 
-			Session::setFlash('success', trans("La fiche a été bien sauvegarder."));
+			Session::setFlash('success', trans("La fiche a été bien sauvegardé."));
 		else :
 			Session::setFlash('danger', trans("Impossible de sauvegarder la fiche."));
 		endif;

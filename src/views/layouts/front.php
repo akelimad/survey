@@ -19,27 +19,34 @@
         <nav class="navbar navbar-default" id="top-navbar">
             <div class="container-fluid pl-5 pl-xs-15">
                 <ul class="nav navbar-nav navbar-right pr-5">
-                    <li><a href="<?= get_site('site_url'); ?>" target="_blank" style="color:#ffffff;" title="Accès au site de l'institution - Nouvelle fenêtre"><?php trans_e("Accès au site de l'institution"); ?></a></li>
+                    <li><a href="<?= get_site('site_url'); ?>" target="_blank" style="color:#ffffff;" title="<?php trans_e("Accès au site de l'institution - Nouvelle fenêtre") ?>"><?php trans_e("Accès au site de l'institution"); ?></a></li>
                     <li><a href="<?= site_url('contact') ?>" title="Contactez-nous"><?php trans_e("Contactez-nous"); ?></a></li>
                 </ul>
             </div>
         </nav>
         
-        <a href="<?= site_url(); ?>" id="logo-banner">
-            <img src="<?= site_url('assets/images/bannier/'. $GLOBALS['etalent']->config['banniere']); ?>" class="img-responsive">
-        </a>
+        <?php if (get_setting('custom_logo_banner', '') != '') : ?>
+            <?= get_setting('custom_logo_banner') ?>
+        <?php else : ?>
+            <a href="<?= site_url(); ?>" id="logo-banner">
+                <img src="<?= site_url('assets/images/bannier/'. $GLOBALS['etalent']->config['banniere']); ?>" class="img-responsive">
+            </a>
+        <?php endif; ?>
 
         <div id="welcome">
             <h3 class="pull-left"><?= get_setting('front_welcome_message', trans("Bienvenue sur Etalent")); ?></h3>
-            <?php if (isModuleEnabled('language')) : ?>
+            <?php
+            $languages = \Modules\Language\Models\Language::getActiveLanguages();
+             if (isModuleEnabled('language') && count($languages) > 1) : ?>
             <div id="languageBlock" class="pull-right" style="margin-top: 5px;">
                 <i class="fa fa-globe"></i>
                 <?= \App\Form::select(
                     null, null, 
                     \Modules\Language\Models\Language::getCurrentLanguage('iso_code', 'fr'),
-                    \Modules\Language\Models\Language::getActiveLanguages(), [
+                    $languages, [
                         'onchange' => 'Language.change(this.value)',
-                        'style' => 'outline:0;'
+                        'style' => 'outline:0;',
+                        'class' => ''
                     ]
                 ); ?>
             </div>

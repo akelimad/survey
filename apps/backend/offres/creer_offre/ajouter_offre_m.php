@@ -124,7 +124,9 @@ if(isset($messages) and !empty($messages))  {
           'avis_concours' => '',
           'decisions_recrutement' => '',
           'candidats_convoques' => '',
-          'resultats_concours' => ''
+          'resultats_concours' => '',
+          'avis_modification' => '',
+          'avis_report' => '',
       );
 
       $uploadFiles = [
@@ -144,7 +146,17 @@ if(isset($messages) and !empty($messages))  {
               'extensions' => ['doc', 'docx', 'pdf']
           ],
           'resultats_concours' => [
-              'errorMessage' => "Impossible d'envoyer les résultats des concour",
+              'errorMessage' => "Impossible d'envoyer le résultat du concour",
+              'name' => '',
+              'extensions' => ['doc', 'docx', 'pdf']
+          ],
+          'avis_modification' => [
+              'errorMessage' => "Impossible d'envoyer l'avis de modification",
+              'name' => '',
+              'extensions' => ['doc', 'docx', 'pdf']
+          ],
+          'avis_report' => [
+              'errorMessage' => "Impossible d'envoyer l'avis de report",
               'name' => '',
               'extensions' => ['doc', 'docx', 'pdf']
           ],
@@ -198,7 +210,9 @@ if(isset($messages) and !empty($messages))  {
           'avis_concours' => $formData['avis_concours'],
           'decisions_recrutement' => $formData['decisions_recrutement'],
           'candidats_convoques' => $formData['candidats_convoques'],
-          'resultats_concours' => $formData['resultats_concours']
+          'resultats_concours' => $formData['resultats_concours'],
+          'avis_modification' => $formData['avis_modification'],
+          'avis_report' => $formData['avis_report'],
       ]);
 
       // Fire after offre form submit event

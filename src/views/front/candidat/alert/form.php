@@ -6,7 +6,7 @@
 jQuery(document).ready(function(){
 
   // Trigger success
-  $('form').on('chm_form_success', function(event, response) {
+  $('form').on('chmFormSuccess', function(event, response) {
     if(response.status === 'success') {
       window.chmTable.refresh($('#alertsTable'), {scrollTo: true})
     }

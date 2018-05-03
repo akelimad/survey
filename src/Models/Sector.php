@@ -12,6 +12,15 @@ namespace App\Models;
 
 class Sector {
 
+  public static function findAll($with_empty = true)
+  {
+    $items = getDB()->prepare("SELECT *, id_sect as value, FR as text FROM prm_sectors ORDER BY id_sect ASC");
+    if ($with_empty) {
+      $items = ['' => ''] + $items;
+    }
+    return $items;
+  }
+
 
   /**
    * Get Sector name by ID

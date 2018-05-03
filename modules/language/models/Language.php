@@ -26,6 +26,29 @@ class Language {
   ];
 
 
+  public static function getStrings()
+  {
+    $iso_code = self::getCurrentLanguage('iso_code', 'fr');
+    $file_path = site_base("messages/{$iso_code}.php");
+
+    if (!file_exists($file_path)) {
+      // get all strings from database
+      $language = getDB()->prepare("SELECT s.name, t.value FROM language_strings s JOIN language_string_trans t ON t.language_string_id=s.id WHERE t.language=?", [$iso_code]);
+
+      $strings = [];
+      if (!empty($language)) : foreach ($language as $key => $lang) :
+        $strings[$lang->name] = $lang->value;
+      endforeach; endif;
+
+      // Store strings to language messages file
+      file_put_contents($file_path, serialize($strings));
+    }
+
+    // Read strings from cache
+    return unserialize(file_get_contents($file_path)) ?: [];
+  }
+
+
   public static function findAll()
   {
     return getDB()->read('languages');
@@ -99,6 +122,35 @@ class Language {
     return $this->strings;
   }
 
+  public static function buildQuery($params)
+  {
+    $where_array = [];
+    if (isset($params['s']) && !empty($params['s'])) {
+      $keywords = explode(" ", mysql_real_escape_string(htmlspecialchars($params['s'])));
+      $parts = array();
+      for ($i = 0; $i < count($keywords); $i++) {
+        $parts[] = "(s.name LIKE '%". $keywords[$i] ."%')";
+      }
+      $where_array[] = '('. implode(' AND ', $parts) .')';
+    }
 
+    if (isset($params['status']) && !empty($params['status'])) {
+      if ($params['status'] == 1) {
+        $where_array[] = 'st.value IS NOT NULL';
+      } else {
+        $where_array[] = 'st.value IS NULL';
+      }
+    }
+
+    $where = (!empty($where_array)) ? ' WHERE ('. implode(' AND ', $where_array) .')' : '';
+
+    return "
+      SELECT s.id, s.name, st.value 
+      FROM language_strings as s 
+      LEFT JOIN language_string_trans as st 
+      ON (st.language_string_id=s.id AND st.language='". $params['lang'] ."') 
+      {$where}
+    ";
+  }
 
 } // End Class

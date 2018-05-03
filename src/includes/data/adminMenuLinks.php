@@ -19,6 +19,20 @@ foreach ($status as $key => $value) {
 	$candidaturesStatus[] = ["route" => "backend/module/candidatures/candidature/list/". $value->id, "label" => $value->label];
 }
 
+if (get_setting('front_menu_offres_candidature_spontannee', 0) == 1) {
+	$candidaturesStatus[] = [
+		"label" => trans("Candidatures spontanées"),
+		"route" => "backend/candidatures/spontanees"
+	];
+}
+
+if (get_setting('front_menu_offres_candidature_stage', 0) == 1) {
+	$candidaturesStatus[] = [
+		"label" => trans("Candidatures pour stage"),
+		"route" => "backend/candidatures/stage"
+	];
+}
+
 return array(
 	[
 		"label" => trans("Accueil"),
@@ -157,6 +171,12 @@ return array(
 				"route" => "backend/administration/profils/",
 				"icon" => "fa fa-users",
 				"isVisible" => $isSuperAdmin
+			],
+			[
+				"label" => trans("Gestion de partage linkedin"),
+				"route" => "backend/socialshare/linkedin/gestion",
+				"icon" => "fa fa-globe",
+				"isVisible" => (isModuleEnabled('socialshare') && $isSuperAdmin)
 			],
 			[
 				"label" => trans("Gestion des filiales"),

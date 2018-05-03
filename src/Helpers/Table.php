@@ -282,6 +282,14 @@ class Table extends Pagination {
             $this->_options['db_handle'] = getDB()->pdo;
         }
 
+        if( isset($options['text_prev']) ) {
+            $this->_options['text_prev'] = $options['text_prev'];
+        }
+
+        if( isset($options['text_next']) ) {
+            $this->_options['text_next'] = $options['text_next'];
+        }
+
         if( isset($options['currentPage']) ) {
             self::$currentPage = $options['currentPage'];
         }
@@ -360,6 +368,8 @@ class Table extends Pagination {
         if( !$this->_success ) {
             $this->_run();
         }
+
+        \App\Event::trigger($this->table_id .'_before_rendering', $this);
 
         $html = '';
         if( empty($this->headers) ) {
@@ -489,8 +499,8 @@ class Table extends Pagination {
             $html .= '<tbody>';
             $headers = array_keys($this->headers);
             if( !empty($this->rows) ) : foreach ($this->rows as $key => $row) :
-                $html .= '<tr>';
                 $columns = array_merge(array_flip($headers), (array) $row);
+                $html .= '<tr data-pkv="'. $columns[$this->primary_key] .'">';
 
                 if( $this->_options['bulk_actions'] && $this->hasBulkActions() ) :
                     $html .= '<td class="bulk-cb"><input type="checkbox" name="'. $this->table_id .'_items[]" value="'. $columns[$this->primary_key] .'" class="'. $this->table_id .'_cb etaTable_cb"></td>';
@@ -520,7 +530,7 @@ class Table extends Pagination {
                 $html .= '</tr>';
             endforeach; else :
 
-            $html .= '<tr><td class="empty" colspan="'. $rowspan .'" style="text-align: center; border-top: 3px solid #e32b2b !important; border-bottom: 3px solid #e32b2b !important;">'. trans("Aucune donnée à afficher.") .'</td></tr>';
+            $html .= '<tr class="emptyRow"><td class="empty" colspan="'. $rowspan .'" style="text-align: center; border-top: 3px solid #e32b2b !important; border-bottom: 3px solid #e32b2b !important;">'. trans("Aucune donnée à afficher.") .'</td></tr>';
 
                 endif; // END Table
                 $html .= '</tbody>';
@@ -548,7 +558,7 @@ class Table extends Pagination {
                         $html .= '<option value="'. $key .'" '.$callable.'>'. $bulk_label .'</option>';
                     }
                     $html .= '</select>&nbsp;';
-                    $html .= '<input type="submit" class="espace_candidat" value="'. trans("Appliquer") .'" style="padding: 0px 8px;border: 0px;margin-right: 5px;">';
+                    $html .= '<button type="submit" class="btn btn-primary btn-xs" style="padding: 0px 8px;border: 0px;margin-right: 5px;">'. trans("Appliquer") .'</button>';
                     $html .= '<div class="form-group">';
                     $html .= '<select id="'.$this->table_id.'_perpage" class="etaTable_perpage">';
                     foreach ($this->perpages as $key => $value) {
@@ -609,7 +619,10 @@ class Table extends Pagination {
 
             $i++;
 
-            if( $permission !== true ) continue;
+            if( $permission !== true ) {
+                $this->_actions[$actionName]['bulk_action'] = false;
+                continue;
+            }
 
             // permission
             $label = ($action['icon']!='') ? '<i class="'.$action['icon'].'"></i>' : trans($action['label']);
@@ -618,16 +631,24 @@ class Table extends Pagination {
             // $patern = str_replace('primary_key', $this->primary_key, $action['patern']);
 
             $actionLink = $this->parseTemplate($action['patern'], $columns);
+            
+            if ( substr($actionLink, 0, 1) === "/" ) {
+                $actionLink = site_url(ltrim($actionLink, '/'));
+            }
 
             $sep = ( strpos($actionLink, '?') === false ) ? '?' : '&'; 
 
-            if (strpos($action['patern'], 'http') === false && $action['patern'] != '#') {
+            if (strpos($actionLink, 'http') === false && $action['patern'] != '#') {
                 $actionLink = $sep . $actionLink;
             }
             
             if( $action['patern'] == '#' ) $actionLink = 'javascript:void(0)';
 
             $attrs = '';
+            if (!isset($action['attributes']['style'])) {
+                $action['attributes']['style'] = '';
+            }
+            $action['attributes']['style'] .= 'width:24px;';
             if( !empty($action['attributes']) ) : foreach ($action['attributes'] as $key => $attr) :
 
                 $attrs .= $key. '="'. $this->parseTemplate($attr, $columns);
@@ -646,7 +667,7 @@ class Table extends Pagination {
                 $confirm = (!is_null($action['callback']) && $action['callback']!='') ? 'onclick="return '. $action['callback'] .'(event, ['. $columns[$this->primary_key] .']);"' : '';
             }
 
-            $html .= '<a style="width:24px;" title="'. trans($action['label']) .'" href="'. $actionLink .'" '. $attrs .' '. $confirm .'>'. $label .'&nbsp;</a>';
+            $html .= '<a title="'. trans($action['label']) .'" href="'. $actionLink .'" '. $attrs .' '. $confirm .'>'. $label .'&nbsp;</a>';
 
             // if($i < count($this->_actions)) $html .= '&nbsp;';
             if($i%3 != 0) $html .= '&nbsp;';

@@ -117,3 +117,17 @@ function get_photo_url($name) {
 	}
 	return site_url('uploads/candidat/photo/'. $name);
 }
+
+
+/**
+ * Get motivation letter url by name
+ *
+ * @param string $name
+ *
+ * @return string $url
+ *
+ * @author Mhamed Chanchaf
+ */
+function get_permis_conduire_url($name) {
+	return site_url('apps/upload/frontend/candidat/permis_conduire/'. $name);
+}

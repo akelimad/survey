@@ -45,7 +45,7 @@ class AlertTableController extends Controller
         'onclick' => 'return chmJobAlerts.activate({id_alert}, {activate})'
       ],
       'permission' => function ($row) {
-        return ($row->activate == 'false');
+        return ($row->activate == 0);
       }
     ]);
 
@@ -59,7 +59,7 @@ class AlertTableController extends Controller
         'onclick' => 'return chmJobAlerts.activate({id_alert}, {activate})'
       ],
       'permission' => function ($row) {
-        return ($row->activate == 'true');
+        return ($row->activate == 1);
       }
     ]);
 

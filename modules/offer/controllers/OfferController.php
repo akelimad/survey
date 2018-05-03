@@ -10,10 +10,13 @@
  */
 namespace Modules\Offer\Controllers;
 
+use App\Ajax;
 use App\Mail\Mailer;
 
 class OfferController extends \App\Controllers\Controller
 {
+
+  private $data = [];
 
   public function index()
   {
@@ -27,16 +30,34 @@ class OfferController extends \App\Controllers\Controller
       $offer = getDB()->findOne('offre', 'id_offre', $data['params'][1]);
     }
 
+    $this->data['offer'] = $offer;
+    $this->data['formFields'] = require(module_base(__FILE__, 'resources/forms/offer.php'));
     $this->data['layout'] = 'admin';
     $this->data['breadcrumbs'][] = trans("Offre");
     if (isset($offer->id_offre)) {
-      $this->data['breadcrumbs'][] = trans("Modifier un offre");
+      $this->data['breadcrumbs'][] = trans("Modifier une offre");
       $this->data['breadcrumbs'][] = $offer->Name;
     } else {
-      $this->data['breadcrumbs'][] = trans("Créer un offre");
+      $this->data['breadcrumbs'][] = trans("Créer une offre");
     }
 
     return get_page('admin/offer/form', $this->data, __FILE__);
+  }
+
+  public function store($data)
+  {
+
+  }
+
+
+  public function manageFields()
+  {
+    return Ajax::renderAjaxView(
+      trans("Gestion des champs"),
+      'admin/offer/manage-fields',
+      $this->data,
+      __FILE__
+    );
   }
 
 
@@ -61,7 +82,7 @@ class OfferController extends \App\Controllers\Controller
   {
     global $email_e;
 
-    $data['message'] .= "<br><br><p>". trans("Vos identifiants de connexion sur notre site web:") ." {{site}}<br>". trans("Votre email:") ." {{email}}<br>". trans("Mot de passe: votre mot de passe actuel") ."<br>" . trans("Ces identifiants vous permettront de consulté des offres ciblé.") ."</p>";
+    $data['message'] .= "<br><br><p>". trans("Vos identifiants de connexion sur notre site web:") ." {{site}}<br>". trans("Votre email:") ." {{email}}<br>". trans("Mot de passe: votre mot de passe actuel") ."<br>" . trans("Ces identifiants vous permettront de consulter des offres ciblées.") ."</p>";
 
     $login_url = site_url('backend/login');
     $message = Mailer::renderMessage($data['message'], [
@@ -70,7 +91,7 @@ class OfferController extends \App\Controllers\Controller
     ]);
 
     $sendEmail = Mailer::send($data['receiver'], $data['subject'], $message, [
-      'titre' => trans("Partager un offre avec un partenaire"),
+      'titre' => trans("Partager une offre avec un partenaire"),
       'Bcc' => [$email_e]
     ]);
   

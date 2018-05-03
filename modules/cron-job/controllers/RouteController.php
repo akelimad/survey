@@ -26,8 +26,16 @@ class RouteController
   {
     // Register routes
     Route::add(
+      'cron-job/candidat/delete-one-year-account-not-updated',
+      'Modules\CronJob\Controllers\DeleteOneYearAccountNotUpdatedCronController@run'
+    );
+    Route::add(
       'cron-job/candidat/one-year-account-not-updated',
-      'Modules\CronJob\Controllers\CronController@oneYearAccountNotUpdated'
+      'Modules\CronJob\Controllers\OneYearAccountNotUpdatedCronController@run'
+    );
+    Route::add(
+      'cron-job/offer/published-offers-alert',
+      'Modules\CronJob\Controllers\PublishedOffersAlertCronController@run'
     );
   }
 

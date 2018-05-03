@@ -64,12 +64,14 @@ class Route
 		if ( method_exists($controller, $method) && is_callable($callable)) {
 			if( is_ajax() ) {
 				header('HTTP/1.1 200 OK');
-				echo call_user_func_array([new $controller(), $method], [$params]);
+        $response = call_user_func_array([new $controller(), $method], [$params]);
+        if (is_array($response)) $response = json_encode($response);
+				echo $response;
 			} else {
-				call_user_func_array([new $controller(), $method], [$params]);
+				return call_user_func_array([new $controller(), $method], [$params]);
 			}
 		} else {
-      get_view('errors/404');
+      return get_view('errors/404');
     }
 	}
 

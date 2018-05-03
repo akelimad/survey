@@ -72,10 +72,8 @@ class StatusController
     Event::trigger('change_status_form_submit', $data);
 
     // Send email notification
-    $this->sendNotif();  
-
-    Session::setFlash('success', trans("Le statut a été bien changé."));
-
+    $this->sendNotif();
+    
     return [
       'id_agend' => $id_agend,
       'candidature' => $candidature, 

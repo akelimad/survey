@@ -34,8 +34,16 @@ class RouteController
       'Modules\Offer\Controllers\OfferController@getForm'
     );
     Route::add(
+      'backend/offer/store',
+      'Modules\Offer\Controllers\OfferController@store'
+    );
+    Route::add(
       ['backend/offer/delete', 'backend/offer/([0-9]+)/delete'],
       'Modules\Offer\Controllers\OfferController@delete'
+    );
+    Route::add(
+      'backend/offer/manage-fields',
+      'Modules\Offer\Controllers\OfferController@manageFields'
     );
   }
 

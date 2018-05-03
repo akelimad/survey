@@ -1,8 +1,10 @@
 import $ from 'jquery'
+import trans from './../classes/trans'
 
 export default class chmModal {
 
   static show (params, options = {}) {
+    $('[data-toggle="popover"]').popover('hide')
     var modalObject = {}
     params = $.extend({}, {
       type: 'POST'
@@ -272,4 +274,33 @@ export default class chmModal {
       .replace(/"/g, '&quot;')
   }
 
+  static getModal (target, type = 'params') {
+    var params = {}
+    if ($(target).attr('chm-modal-' + type) !== undefined) {
+      try {
+        params = $.parseJSON($(target).attr('chm-modal-' + type))
+      } catch (e) {
+        window.chmAlert.warning(trans("Le format de JSON donné n'est pas correct."))
+      }
+    }
+    return params
+  }
 }
+
+$(document).ready(function () {
+  // Select all Modal occurences
+  var chmModals = document.querySelectorAll('[chm-modal]')
+  if (chmModals.length > 0) {
+    for (var i = 0; i < chmModals.length; ++i) {
+      var params = chmModal.getModal(chmModals[i], 'params')
+      var options = chmModal.getModal(chmModals[i], 'options')
+      params.url = $(chmModals[i]).attr('href')
+      // Add event listener
+      $(chmModals[i]).on('click', function (event) {
+        event.preventDefault()
+        params.type = 'GET'
+        chmModal.show(params, options)
+      })
+    }
+  }
+})

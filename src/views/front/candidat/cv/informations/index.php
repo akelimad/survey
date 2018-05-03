@@ -1,5 +1,6 @@
-<h1><?php trans_e("Informations personnalles"); ?></h1>
+<?php use App\Form; ?>
 
+<h1><?php trans_e("Informations personnalles"); ?></h1>
 
 <form method="POST" action="<?= site_url('candidat/cv/informations'); ?>" class="chm-simple-form" onsubmit="return window.chmForm.submit(event)">
 
@@ -41,7 +42,7 @@
     </div>
     <div class="col-sm-4 pl-0 pl-xs-15 required">
       <label for="candidat_date_n"><?php trans_e("Date de naissance"); ?></label>
-      <input type="date" min="<?= date('Y-m-d', strtotime('-63year')); ?>" max="<?= date('Y-m-d', strtotime('-16year')); ?>" class="form-control" id="candidat_date_n" name="date_n" value="<?= french_to_english_date(get_candidat('date_n')) ?>" required>
+      <input readonly type="text" class="form-control" id="candidat_date_n" name="date_n" value="<?= eta_date(get_candidat('date_n'), 'd/m/Y') ?>" required>
     </div>
   </div>
   <div class="row">
@@ -59,27 +60,40 @@
       <label for="ville"><?php trans_e("Ville"); ?></label>
       <select id="ville" name="ville" class="form-control" required>
         <option value=""></option>
-        <?php foreach ($villes as $key => $value) : 
-        $selected = (get_candidat('ville') == $value->ville) ? 'selected' : '';
+        <?php
+        $is_selected = false;
+        $is_other = false;
+        foreach ($villes as $key => $value) :
+          $selected = '';
+          if (get_candidat('ville', '') != '') {
+            if (get_candidat('ville') == $value->ville) {
+              $selected = 'selected';
+              $is_selected = true;
+            } elseif (count($villes) == ($key+1) && !$is_selected) {
+              $selected = 'selected';
+              $is_other = true;
+            }
+          }
         ?>
           <option value="<?= $value->ville ?>" <?= $selected; ?>><?= $value->ville ?></option>
         <?php endforeach; ?>
-          </select>
+      </select>
+      <?php $ville_other = ($is_other) ? get_candidat('ville') : ''; ?>
+      <?= Form::input('text', 'ville_other', null, $ville_other, [], [
+        'class' => 'form-control',
+        'style' => (!$is_other) ? 'display:none;' : '',
+        'title' => trans("Autres (à péciser)")
+      ]); ?>
     </div>
     <div class="col-sm-4 pl-0 pl-xs-15 required">
       <label for="candidat_pays"><?php trans_e("Pays de résidence"); ?></label>
       <select id="candidat_pays" name="id_pays" class="form-control" required>
         <option value="" data-code=""></option>
-        <?php 
-        $dial_code = ''; 
+        <?php
         foreach ($pays as $key => $value) : 
-        $selected = '';
-        if (get_candidat('id_pays') == $value->id_pays) {
-          $dial_code = $value->dial_code;
-          $selected = 'selected';
-        }
+          $selected = (get_candidat('id_pays') == $value->id_pays) ? 'selected' : '';
         ?>
-          <option value="<?= $value->id_pays ?>" data-code="<?= $value->dial_code ?>" <?= $selected; ?>><?= $value->pays ?></option>
+          <option value="<?= $value->id_pays ?>" data-code="+<?= $value->dial_code ?>" <?= $selected; ?>><?= $value->pays ?></option>
         <?php endforeach; ?>
           </select>
     </div>
@@ -95,16 +109,14 @@
     </div>
     <div class="col-sm-4 col-xs-12 pl-0 pl-xs-15 required">
       <label for="tel1"><?php trans_e("Téléphone"); ?></label>
-      <input type="text" class="form-control deal_code" placeholder="(+212)" value="(+<?= $dial_code ?>)" style="float: left;max-width: 55px;" disabled>
-      <input type="text" class="form-control" id="tel1" name="tel1" value="<?= get_candidat('tel1') ?>" placeholder="0611223344" style="float: left;max-width: 165px;margin-left: 5px;" required>
+      <input type="text" class="form-control dial_code" name="dial_code" value="<?= get_candidat('dial_code'); ?>" title="<?php trans_e("Indicatif téléphonique") ?>" style="float: left;max-width: 55px;" required>
+      <input type="number" min="1" step="1" class="form-control" id="tel1" name="tel1" value="<?= get_candidat('tel1') ?>" style="float: left;max-width: 165px;margin-left: 5px;" required>
     </div>
     <div class="col-sm-4 col-xs-12 pl-0 pl-xs-15">
       <label for="tel2"><?php trans_e("Téléphone secondaire"); ?></label>
-      <input type="text" class="form-control deal_code" placeholder="(+212)" value="(+<?= $dial_code ?>)" style="float: left;max-width: 55px;" disabled>
-      <input type="text" class="form-control" id="tel2" name="tel2" value="<?= get_candidat('tel2') ?>" placeholder="0511223344" style="float: left;max-width: 165px;margin-left: 5px;">
+      <input type="number" min="1" step="1" class="form-control" id="tel2" name="tel2" value="<?= get_candidat('tel2') ?>">
     </div>
   </div>
-
 
   <div class="styled-title mt-0 mb-10" style="height: 23px;">
     <h3><?php trans_e("Profil"); ?></h3>
@@ -132,29 +144,47 @@
         <?php endforeach; ?>
           </select>
     </div>
+
     <div class="col-sm-4 pl-0 pl-xs-15 required">
       <label for="fonction"><?php trans_e("Fonction"); ?></label>
       <select id="fonction" name="id_fonc" class="form-control" required>
         <option value=""></option>
-        <?php foreach (getDB()->read('prm_fonctions') as $key => $value) : 
-        $selected = (get_candidat('id_fonc') == $value->id_fonc) ? 'selected' : '';
+        <?php foreach (getDB()->read('prm_fonctions') as $key => $value) :
+          $selected = (get_candidat('id_fonc') == $value->id_fonc) ? 'selected' : '';
         ?>
           <option value="<?= $value->id_fonc ?>" <?= $selected ?>><?= $value->fonction ?></option>
         <?php endforeach; ?>
-          </select>
+      </select>
+      <?php $fonction_other = get_candidat('fonction_other'); ?>
+      <?= Form::input('text', 'fonction_other', null, $fonction_other, [], [
+        'class' => 'form-control',
+        'style' => ($fonction_other == '') ? 'display:none;' : '',
+        'title' => trans("Autres (à péciser)")
+      ]); ?>
     </div>
   </div>
   <div class="row">
     <div class="col-sm-4 required">
       <label for="salaire"><?php trans_e("Salaire souhaité"); ?></label>
-      <select id="salaire" name="id_salr" class="form-control" required>
+      <?php $currencies = App\Models\Currency::findAll(false); ?>
+      <select id="salaire" name="id_salr" class="form-control"<?php if (!empty($currencies)) : ?> style="float: left;max-width: 146px;"<?php endif; ?> required>
         <option value=""></option>
         <?php foreach (getDB()->read('prm_salaires') as $key => $value) : 
         $selected = (get_candidat('id_salr') == $value->id_salr) ? 'selected' : '';
         ?>
           <option value="<?= $value->id_salr ?>" <?= $selected ?>><?= $value->salaire ?></option>
         <?php endforeach; ?>
-          </select>
+      </select>
+      <?php if (!empty($currencies)) : ?>
+      <select id="id_currency" name="id_currency" class="form-control" style="float: left;max-width: 60px;margin-left: 5px;">
+        <option value=""></option>
+        <?php foreach ($currencies as $key => $value) : 
+          $selected = (get_candidat('id_currency') == $value->id) ? 'selected' : '';
+        ?>
+          <option value="<?= $value->id ?>" <?= $selected ?>><?= $value->text ?></option>
+        <?php endforeach; ?>
+      </select>
+      <?php endif; ?>
     </div>
     <div class="col-sm-4 pl-0 pl-xs-15 required">
       <label for="formation"><?php trans_e("Niveau de formation"); ?></label>
@@ -249,3 +279,50 @@
     </div>
   </div>
 </form>
+
+
+<script>
+jQuery(document).ready(function(){
+
+  // Salary
+  $('#salaire').change(function() {
+    if ($(this).val() != '') {
+      $('#id_currency').prop('required', true)
+    } else {
+      $('#id_currency').prop('required', false)
+    }
+  })
+
+  // Fonction
+  $('#fonction').change(function() {
+    var $other_input = $('#fonction_other')
+    $($other_input).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($other_input).prop('required', true)
+      $($other_input).show()
+    } else {
+      $($other_input).prop('required', false)
+      $($other_input).hide()
+    }   
+  })
+
+  $('#ville').change(function() {
+    var $other_input = $('#ville_other')
+    $($other_input).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($other_input).prop('required', true)
+      $($other_input).show()
+    } else {
+      $($other_input).prop('required', false)
+      $($other_input).hide()
+    }   
+  })
+
+  cimDatepicker('#candidat_date_n', {
+    dateFormat: 'dd/mm/yy',
+    maxDate: '-17Y',
+    minDate: "-63Y",
+  })
+  
+})
+</script>

@@ -12,6 +12,13 @@ namespace App\Models;
 
 class Experience {
 
+  public static function findAll($with_empty = true)
+  {
+    $items = getDB()->prepare("SELECT id_expe, intitule, id_expe as value, intitule as text FROM prm_experience");
+    if ($with_empty) $items = ['' => ''] + $items;
+    return $items;
+  }
+
 
   /**
    * Get Filiere name by ID

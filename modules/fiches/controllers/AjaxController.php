@@ -76,7 +76,7 @@ class AjaxController
       'fiche_candidature' => $fiche_candidature,
       'fiche_type' => 1,
       'id_fiche' => $fiche_offre->id_fiche,
-      'name' => rans("Fiches d'evaluation:") .' ('.$fiche_offre->name.')'
+      'name' => trans("Fiches d'evaluation:") .' ('.$fiche_offre->name.')'
     ], __FILE__);
     $content = ob_get_clean();
 

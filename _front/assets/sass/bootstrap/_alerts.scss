@@ -3,8 +3,8 @@
     border-radius: 0;
     -webkit-border-radius: 0;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.11);
-    display: table;
-    width: 100%;
+    display: block;
+    width: 100% !important;
     padding: 8px 5px 8px 60px !important;
     margin-bottom: 0px;
     min-height: 28px !important;
@@ -74,14 +74,14 @@
   }
   ul {
     text-transform: none !important;
-    padding: 0px !important;
+    padding: 0 !important;
     li {
       list-style: none;
     }
   }
   button.close {
     position: relative !important;
-    top: 2px;
+    top: 0px;
     right: 5px;
     font-size: 16px;
   }

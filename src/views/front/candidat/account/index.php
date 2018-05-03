@@ -3,6 +3,7 @@ use App\Models\Candidat;
 use App\Models\Candidature;
 use App\Models\Situation;
 use App\Models\Status;
+use Modules\Message\Models\Message;
 ?>
 
 <script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -14,17 +15,16 @@ use App\Models\Status;
 </style>
 
 <div id="account-container">
-  <div class="row">
+  <div class="row mb-10">
     <div class="col-sm-12">
       <h1 class="pull-left"><?php trans_e("Mon compte"); ?></h1>
       <a href="javascript:void(0)" chm-print="#account-container" chm-print-title="<?php trans_e("Mon compte"); ?>" class="btn btn-primary btn-xs pull-right hidden-xs" style="margin-top: 3px;"><i class="fa fa-print"></i>&nbsp;<?php trans_e("Imprimer"); ?></a>
     </div>
   </div>
 
-  <p class="mt-10 mb-5"><?php trans_e("Complété à"); ?> <?= $progress; ?>%</p>
-  <div class="progress mb-10" style="height: 16px;">
+  <div class="progress mb-10" style="height: 16px;text-align: center;">
     <div class="progress-bar progress-bar-xs progress-bar-default progress-bar-striped" role="progressbar" aria-valuenow="<?= $progress; ?>" aria-valuemin="0" aria-valuemax="100" style="background-color:#<?= $progress_color; ?>;width: <?= $progress; ?>%">
-      <span class="sr-only"><?php trans_e("Complété à"); ?> <?= $progress; ?>%</span>
+      <span style="font-size: 10px;margin-top: -2px;display: block;"><?php trans_e("Complété à"); ?> <?= $progress; ?>%</span>
     </div>
   </div>
 
@@ -46,7 +46,7 @@ use App\Models\Status;
     <div class="col-sm-10 col-xs-12 pl-0 pl-xs-15">
       <table class="cvTable my-cv">
         <tr>
-          <th colspan="2"><i class="fa fa-user"></i>&nbsp;<?= Candidat::getDisplayName(); ?></th>
+          <th colspan="2"><i class="fa fa-user"></i>&nbsp;<?= Candidat::getDisplayName(null, true); ?></th>
         </tr>
         <tr>
           <th width="110"><i class="fa fa-file-text-o"></i>&nbsp;<?php trans_e("Titre du CV"); ?></th>
@@ -112,7 +112,7 @@ use App\Models\Status;
         <th><?php trans_e("Date"); ?></th>
         <th><?php trans_e("Intitulé du poste"); ?></th>
         <th><?php trans_e("Etat"); ?></th>
-        <th width="30"><?php trans_e("Action"); ?></th>
+        <th width="60"><?php trans_e("Action"); ?></th>
       </tr>
     </thead>
     <?php foreach ($candidatures as $key => $ca) : ?>
@@ -130,7 +130,7 @@ use App\Models\Status;
         if (isset($calendar->id_agend)) {
           $confirmation_status = $calendar->confirmation_statu;
           if ($confirmation_status == 0) {
-            $confirmation_link = site_url('module/candidatures/confirm/calendar/'.$calendar->id_agend);
+            $confirmation_link = site_url('candidature/confirm/'. md5($calendar->id_agend));
           }
           $calendar_status = $calendar->action;
         }
@@ -157,6 +157,10 @@ use App\Models\Status;
         }
         ?>
         <a href="<?= $confirmation_link; ?>" class="btn btn-<?= $btnType; ?> btn-xs mb-0 <?= $btnDisabled; ?>" title="<?= $label; ?>" style="cursor: <?= $cursor; ?>"><i class="<?= $icon; ?>"></i></a>
+
+        <?php if (isModuleEnabled('message') && Message::AdminIsStartingDiscussion($ca->id_candidature)) : ?>
+        <a href="<?= site_url('message/candidature/'. $ca->id_candidature .'/messages') ?>" class="btn btn-default btn-xs mb-0" title="<?php trans_e("Discussion"); ?>" style="cursor: pointer"><i class="fa fa-comment-o"></i></a>
+        <?php endif; ?>
       </td>
     </tr>
     <?php endforeach; ?>

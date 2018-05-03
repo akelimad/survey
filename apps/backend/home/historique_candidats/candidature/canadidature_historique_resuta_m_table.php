@@ -142,13 +142,7 @@ $select_exp = mysql_query("select * from prm_pays where id_pays = '" . $data00['
 
 $exp = mysql_fetch_array($select_exp); 
 
-$date_naissance = str_replace('/', '-', $data00['date_n']);
-
-$date_naissance_c = date('Y-m-d', strtotime($date_naissance));
-
-$age_c = strtotime($date_naissance_c);
-
-$newformat = date('Y-m-d',$age_c); 
+$newformat = eta_date($data00['date_n'], 'Y-m-d'); 
 
 $age = (time() - strtotime($newformat)) / 3600 / 24 / 365;
 

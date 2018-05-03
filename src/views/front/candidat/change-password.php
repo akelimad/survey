@@ -35,7 +35,7 @@
 jQuery(document).ready(function(){
 
   // Trigger form success
-  $('form').on('chm_form_success', function(event, response) {
+  $('form').on('chmFormSuccess', function(event, response) {
     if(response.status === 'success') {
       $(this).find('input').val('')
       window.location.href = site_url('candidat/logout')

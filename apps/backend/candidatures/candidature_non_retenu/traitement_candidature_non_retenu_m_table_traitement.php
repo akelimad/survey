@@ -16,13 +16,8 @@ $r_candidats = mysql_fetch_assoc($s_candidats);
 
 
 
-$date_naissance = str_replace('/', '-', $r_candidats['date_n']);
 
-$date_naissance_c = date('Y-m-d', strtotime($date_naissance));
-
-$age_c = strtotime($date_naissance_c);
-
-$newformat = date('Y-m-d',$age_c); 
+$newformat = eta_date('Y-m-d', $r_candidats['date_n']); 
 
 $age = (time() - strtotime($newformat)) / 3600 / 24 / 365;
 

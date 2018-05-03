@@ -68,7 +68,7 @@ use App\Models\TypeFormation;
         </tr>
         <tr>
           <th><i class="fa fa-anchor"></i>&nbsp;<?php trans_e("Disponibilité"); ?></th>
-          <td>:&nbsp;<?= Availability::getNameById(get_candidat('id_situ')); ?></td>
+          <td>:&nbsp;<?= Availability::getNameById(get_candidat('id_dispo')); ?></td>
         </tr>
         <tr>
           <th><i class="fa fa-plane"></i>&nbsp;<?php trans_e("Mobilite"); ?></th>
@@ -121,7 +121,7 @@ use App\Models\TypeFormation;
     <div class="col-sm-9">
       <table class="cvTable my-cv">
         <tr>
-          <th colspan="2"><i class="fa fa-user"></i>&nbsp;<?= Candidat::getDisplayName(); ?></th>
+          <th colspan="2"><i class="fa fa-user"></i>&nbsp;<?= Candidat::getDisplayName(null, true); ?></th>
         </tr>
         <tr>
           <th width="120"><i class="fa fa-envelope"></i>&nbsp;<?php trans_e("E-mail"); ?></th>
@@ -284,7 +284,7 @@ use App\Models\TypeFormation;
     </div>
     <?php endif; ?>
 
-    <?php if (!empty($cvs)) : ?>
+    <?php if (!empty($lms)) : ?>
     <div class="col-sm-6">
     <strong><?php trans_e("Lettres de motivation"); ?></strong>
     <ul class="mt-10">

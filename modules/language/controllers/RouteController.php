@@ -26,6 +26,11 @@ class RouteController
   {
     // Register routes
     Route::add(
+      'language/api/strings',
+      'Modules\Language\Models\Language@getStrings'
+    );
+
+    Route::add(
       'backend/language/strings',
       'Modules\Language\Controllers\LanguageController@strings'
     );
@@ -40,6 +45,16 @@ class RouteController
       'backend/language/strings/store',
       'Modules\Language\Controllers\LanguageController@store',
       true
+    );
+
+    Route::add(
+      'backend/language/import',
+      'Modules\Language\Controllers\LanguageController@import'
+    );
+
+    Route::add(
+      'backend/language/export',
+      'Modules\Language\Controllers\LanguageController@export'
     );
 
     Route::add(

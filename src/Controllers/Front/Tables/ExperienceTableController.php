@@ -65,6 +65,23 @@ class ExperienceTableController extends Controller
       }
     ]);
 
+    $table->setAction('bulletin_paie',  [
+      'label' => trans("Bulletin de paie"),
+      'patern' => site_url('apps/upload/frontend/candidat/bulletin_paie/{bulletin_paie}'),
+      'icon' => 'fa fa-file-text-o',
+      'bulk_action' => false,
+      'attributes' => [
+        'class' => 'btn btn-info btn-xs',
+        'target' => '_blank'
+      ],
+      'permission' => function ($row) {
+        return ($row->bulletin_paie != '');
+      },
+      'attributes' => [
+        'style' => 'margin-left:3px;'
+      ]
+    ]);
+
     $table->setAction('edit', [
       'patern' => '#',
       'attributes' => [

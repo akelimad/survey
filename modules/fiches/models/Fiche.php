@@ -126,11 +126,12 @@ class Fiche extends Model
      */
     public function genReference($length=8)
     {
-        $fiche = getDB()->prepare("SELECT MAX(id_fiche) as max FROM fiches", true);
+        $fiche = getDB()->prepare("SELECT MAX(id_fiche) as max FROM fiches", [], true);
         $max = (isset($fiche->max)) ? $fiche->max : 0;
         $char_length = $length - strlen( intval($max) + 1 );
         $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
+        $reference = '';
         for ($i = 0; $i < $char_length; $i++) {
             $reference .= $characters[rand(0, $charactersLength - 1)];
         }
