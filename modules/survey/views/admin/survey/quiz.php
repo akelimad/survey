@@ -98,108 +98,110 @@ use App\Form;
 
 </style>
 <div class="content chm-simple-form">
-    <?php if( isset($survey) ) { ?>
-        <div class="errorForm mb-10">
-            <?php get_alert('danger', trans("Veuillez cocher au moins un choix pour chaque question")) ?>
-        </div>
-        <form action="survey/<?= $survey->id ?>/storeAnswers" method="post" id="quizForm" onsubmit="return chmForm.submit(event)">
-            <?php $c = 0; ?>
-            <?php if( $survey->format == "all" ) {  ?>
-            <div class="tab">
-            <?php } ?>
-            <?php foreach (Survey::getSurveyGroups($survey->id) as $group) { ?>
-                <?php if( $survey->format == "byGroup" ) { $c += 1; ?>
+    <?php if(!Survey::checkUserResponse($token)) { ?>
+        <?php if( isset($survey) ) { ?>
+            <div class="errorForm mb-10">
+                <?php get_alert('danger', trans("Veuillez cocher au moins un choix pour chaque question")) ?>
+            </div>
+            <form action="<?=site_url().'survey/'.$data["params"][1].'/'.$data["params"][2].'/storeAnswers' ?>" method="POST" id="quizForm" onsubmit="return chmForm.submit(event)">
+                <?php $c = 0; ?>
+                <?php if( $survey->format == "all" ) {  ?>
                 <div class="tab">
                 <?php } ?>
-                    <div class="form-group mb-0">
-                        <?php if($survey->format != "byQst"){ ?>
-                        <p class="groupeTitle"> <?= $group->name ?> </p>
-                        <?php } ?>
-                        <?php foreach (Survey::getGroupeQuestions($group->id) as $key => $question) {  ?>
-                            <?php if( $survey->format == "byQst" ) { $c += 1; ?>
-                            <div class="tab">
+                <?php foreach (Survey::getSurveyGroups($survey->id) as $group) { ?>
+                    <?php if( $survey->format == "byGroup" ) { $c += 1; ?>
+                    <div class="tab">
+                    <?php } ?>
+                        <div class="form-group mb-0">
+                            <?php if($survey->format != "byQst"){ ?>
+                            <p class="groupeTitle"> <?= $group->name ?> </p>
                             <?php } ?>
-                            <div class="question-wrap" id="q-<?= $question->id ?>">
-                            <p class="questionTitle"> <i class="fa fa-caret-right"></i> <?= $question->name ?> </p>
-                            <?php if($question->type == "textarea" ) { ?>
-                                <textarea name="<?= $question->id ?>" id="" rows="30" class="form-control" ></textarea> 
-                            <?php }elseif($question->type == "text"){ ?>
-                                <input type="text" name="<?= $question->id ?>" oninput="this.className = ''" class="form-control" >
-                            <?php }elseif($question->type == "file"){ ?> <!-- file -->
-                                <?php foreach (Survey::getQuestionAttachmnts($question->id) as $key => $image) { ?>
-                                    <div class="col-md-3">
-                                        <div class="imgBox mb-10">
-                                            <img src="<?= site_url("uploads/survey/questions/".$question->id."/".$image->file_name) ?>" class="img-responsive" alt="image choice">
+                            <?php foreach (Survey::getGroupeQuestions($group->id) as $key => $question) {  ?>
+                                <?php if( $survey->format == "byQst" ) { $c += 1; ?>
+                                <div class="tab">
+                                <?php } ?>
+                                <div class="question-wrap" id="q-<?= $question->id ?>">
+                                <p class="questionTitle"> <i class="fa fa-caret-right"></i> <?= $question->name ?> </p>
+                                <?php if($question->type == "textarea" ) { ?>
+                                    <textarea name="<?= $question->id ?>" id="" rows="30" class="form-control" ></textarea> 
+                                <?php }elseif($question->type == "text"){ ?>
+                                    <input type="text" name="<?= $question->id ?>" oninput="this.className = ''" class="form-control" >
+                                <?php }elseif($question->type == "file"){ ?> <!-- file -->
+                                    <?php foreach (Survey::getQuestionAttachmnts($question->id) as $key => $image) { ?>
+                                        <div class="col-md-3">
+                                            <div class="imgBox mb-10">
+                                                <img src="<?= site_url("uploads/survey/questions/".$question->id."/".$image->file_name) ?>" class="img-responsive" alt="image choice">
+                                            </div>
+                                            <select name="<?= $question->id."[".$image->id."]" ?>" id="" class="form-control" required>
+                                                <option value=""> <?= trans("Selectionnez") ?> </option>
+                                                <?php foreach (Survey::getQuestionChoices($question->id) as $key => $choice) { ?>
+                                                    <option value="<?= $choice->id ?>"> <?= $choice->name ?> </option>
+                                                <?php } ?>
+                                                <?php foreach (Survey::getQuestionAttachmnts($question->id) as $key => $choice) { ?>
+                                                    <option value="<?= $choice->id ?>"> <?= $choice->title ?> </option>
+                                                <?php } ?>
+                                            </select>
                                         </div>
-                                        <select name="<?= $question->id."[".$image->id."]" ?>" id="" class="form-control" required>
+                                        <?php if(($key+1) % 3 == 0 ) { ?>
+                                        <div class="clearfix"></div> 
+                                        <?php } ?>
+                                    <?php } ?>
+                                    <div class="clearfix"></div>
+                                <?php }else if($question->type == "select"){ ?> <!-- select -->
+                                    <div class="col-md-4 pl-0">
+                                        <select name="<?= $question->id ?>" id="" class="form-control" required>
                                             <option value=""> <?= trans("Selectionnez") ?> </option>
                                             <?php foreach (Survey::getQuestionChoices($question->id) as $key => $choice) { ?>
                                                 <option value="<?= $choice->id ?>"> <?= $choice->name ?> </option>
                                             <?php } ?>
-                                            <?php foreach (Survey::getQuestionAttachmnts($question->id) as $key => $choice) { ?>
-                                                <option value="<?= $choice->id ?>"> <?= $choice->title ?> </option>
-                                            <?php } ?>
                                         </select>
                                     </div>
-                                    <?php if(($key+1) % 3 == 0 ) { ?>
-                                    <div class="clearfix"></div> 
+                                    <div class="clearfix"></div>
+                                <?php }else{ ?> <!-- checkbox or radio -->
+                                    <?php foreach (Survey::getQuestionChoices($question->id) as $key => $choice) { ?>
+                                    <p class="mb-0"> <input type="<?= $question->type ?>" data-id="<?= $question->id ?>" name="<?= $question->id."[]" ?>" class="check-radio" value="<?= $choice->id ?>" id="answer-<?= $choice->id ?>" > <label for="answer-<?= $choice->id ?>"> <?= $choice->name ?> </label> </p>
                                     <?php } ?>
                                 <?php } ?>
-                                <div class="clearfix"></div>
-                            <?php }else if($question->type == "select"){ ?> <!-- select -->
-                                <div class="col-md-4 pl-0">
-                                    <select name="<?= $question->id ?>" id="" class="form-control" required>
-                                        <option value=""> <?= trans("Selectionnez") ?> </option>
-                                        <?php foreach (Survey::getQuestionChoices($question->id) as $key => $choice) { ?>
-                                            <option value="<?= $choice->id ?>"> <?= $choice->name ?> </option>
-                                        <?php } ?>
-                                    </select>
+                                <?php if( $survey->format == "byQst" ) { ?>
                                 </div>
-                                <div class="clearfix"></div>
-                            <?php }else{ ?> <!-- checkbox or radio -->
-                                <?php foreach (Survey::getQuestionChoices($question->id) as $key => $choice) { ?>
-                                <p class="mb-0"> <input type="<?= $question->type ?>" data-id="<?= $question->id ?>" name="<?= $question->id."[]" ?>" class="check-radio" value="<?= $choice->id ?>" id="answer-<?= $choice->id ?>" > <label for="answer-<?= $choice->id ?>"> <?= $choice->name ?> </label> </p>
                                 <?php } ?>
+                                </div>
                             <?php } ?>
-                            <?php if( $survey->format == "byQst" ) { ?>
-                            </div>
-                            <?php } ?>
-                            </div>
-                        <?php } ?>
+                        </div>
+                    <?php if( $survey->format == "byGroup" ) { ?>
                     </div>
-                <?php if( $survey->format == "byGroup" ) { ?>
+                    <?php } ?>
+                <?php } ?>
+                <?php if( $survey->format == "all" ) { ?>
                 </div>
                 <?php } ?>
-            <?php } ?>
-            <?php if( $survey->format == "all" ) { ?>
-            </div>
-            <?php } ?>
-            <div style="overflow:auto;">
-                <div style="float:right;">
-                    <button type="button" class="btn btn-default" id="prevBtn" onclick="nextPrev(-1)">Précédent</button>
-                    <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Suivant</button>
-                    <button type="submit" class="btn btn-primary" id="sendBtn">Envoyer</button>
+                <div style="overflow:auto;">
+                    <div style="float:right;">
+                        <button type="button" class="btn btn-default" id="prevBtn" onclick="nextPrev(-1)">Précédent</button>
+                        <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Suivant</button>
+                        <button type="submit" class="btn btn-primary" id="sendBtn">Envoyer</button>
+                    </div>
                 </div>
-            </div>
-            <div style="text-align:center;margin-top:40px;">
-                <?php for ($i = 0; $i < $c; $i++) { ?>
-                    <span class="step"></span>
-                <?php } ?>
-            </div>
-
-
-        </form>
+                <div style="text-align:center;margin-top:40px;">
+                    <?php for ($i = 0; $i < $c; $i++) { ?>
+                        <span class="step"></span>
+                    <?php } ?>
+                </div>
+            </form>
+        <?php }else{ ?>
+            <?php get_alert('warning', trans("Il n'ya aucune question pour ce questionnaire !")) ?>
+        <?php } ?>
+        <div class="success" style="display: none;">
+            <?php get_alert('success', trans("Merci pour votre réponse !")) ?>
+        </div>
     <?php }else{ ?>
-        <?php get_alert('warning', trans("Il n'ya aucune question pour ce questionnaire !")) ?>
+        <?php get_alert('warning', trans("Vous avez déjà répondu sur ce questionnaire !")) ?>
     <?php } ?>
-    <div class="success" style="display: none;">
-        <?php get_alert('success', trans("Merci pour votre réponse !")) ?>
-    </div>
 </div>
 
 <script>
     $(document).ready(function() {
-        $('form').on('chm_form_success', function(event){
+        $('form').on('chmFormSuccess', function(event){
             $(this).remove()
             $(".success").show().slideDown()
             $(".errorForm").hide()
@@ -260,22 +262,31 @@ use App\Form;
     }
 
     function validateForm() {
-        // This function deals with validation of the form fields
-        var x, y, i, j, valid = false;
-        x = document.getElementsByClassName("tab");
+        var tabs, y, i, j, valid = false;
+        tabs = document.getElementsByClassName("tab");
         step = document.getElementsByClassName("step");
-        input = x[currentTab].getElementsByTagName("input");
-        select = x[currentTab].getElementsByTagName("select");
+        input = tabs[currentTab].getElementsByTagName("input");
+        select = tabs[currentTab].getElementsByTagName("select");
         var checkInput = true;
-        var checkRadio = false;
         var checkCheckbox = false;
+        var checkRadio = false;
         var checkSelect = false;
+        // if(tabs.length <= 1){
+        //     $('.question-wrap').each(function() {
+        //         if( $(this).find(':radio').length > 0){
+        //             if ($(this).find(':radio:checked').length == 0) {
+        //                 checkRadio = false;
+        //             }
+        //         }
+        //     });
+        // }
         for (i = 0; i < input.length; i++) {
             if (input[i].type == "text" && input[i].value == "" ) {
                 valid = false;
                 checkInput = false;
                 input[i].className += " invalid";
-            }else if(input[i].type == "checkbox"){
+            }
+            else if(input[i].type == "checkbox"){
                 valid = true;
                 checkCheckbox = true;
             }else if(input[i].type == "radio" && input[i].checked == false){
@@ -296,6 +307,9 @@ use App\Form;
             valid = true;
             checkSelect = true;
         }
+        console.log('text: '+ checkInput)
+        console.log('radio: '+ checkRadio)
+        console.log('select: '+ checkSelect)
         if(!checkInput || !checkRadio || !checkCheckbox || !checkSelect ){
             $(".errorForm").fadeIn()
             $('html, body').animate({

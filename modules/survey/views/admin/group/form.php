@@ -28,7 +28,7 @@ use App\Form;
 <script>
 $(document).ready(function() {
     $('form').on('chmFormSuccess', function(){
-        chmTable.refresh('#surveysTable')
+        chmTable.refresh('#groupsTable')
     })
 })
 </script>

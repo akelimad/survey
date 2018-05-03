@@ -85,7 +85,6 @@ class QuestionController extends Controller
 
   public function store($data)
   {
-    // dump($data);
     if($this->atLeastOneChecked($data) == false){
       return $this->jsonResponse('error', trans("Veuillez choisir la bonne réponse !"));
     }
@@ -148,18 +147,15 @@ class QuestionController extends Controller
                 'title' => $value['attachmentLabels']
               ]);
             }
-          } //die();
+          }
         }
       } else {
         return $this->jsonResponse('error', trans("Impossible de mettre à jour la question."));
       }
     } else { // store action
-      // save questions details
-      // dump($data['answers']);
       $lastInsertedId = $db->create('survey_questions', [
         'name' => $data['name'],
         'type' => $data['type'],
-        // 'answerBy' => $data['answerBy'],
         'group_id' => $data['params'][2],
         'survey_id' => $data['params'][1],
       ]);
@@ -235,6 +231,7 @@ class QuestionController extends Controller
     $question = Question::find($data['qid']);
     $delete = $db->delete('survey_questions', 'id', $data['qid']);
     $delete_answer = $db->delete('survey_question_answers', 'survey_question_id', $data['qid']);
+    $delete_attachments = $db->delete('survey_attachements', 'object_id', $data['qid']);
     if($question->type == "file" ){
       $uploadDir = 'uploads/survey/questions/'. $data['qid'].'/';      
       $this->deleteDir(site_base($uploadDir));

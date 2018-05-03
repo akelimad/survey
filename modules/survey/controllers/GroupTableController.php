@@ -32,7 +32,7 @@ class GroupTableController extends Controller
     ]);
 
     $table->setTableClass(['accountTable', 'table']);
-    $table->setTableId('stringsTable');
+    $table->setTableId('groupsTable');
     $table->setOrderby('id');
     $table->setOrder('DESC');
     $page = (isset($_GET['page'])) ? $_GET['page'] : 1;

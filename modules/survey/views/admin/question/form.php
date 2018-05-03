@@ -96,7 +96,7 @@ use App\Form;
                 <div class="imageTypeRow">
                     <div class="col-md-5">
                         <div class="input-group file-upload" id="<?= (!empty($question->id) and $question->type == "file") ? $choice->id:'' ?>" <?= (!empty($question->id) and $question->type == "file") ? 'style="display:none" ':'' ?> >
-                            <input type="text" class="form-control" name="fileName[0]" readonly placeholder="<?= trans_e("Choisissez l'image") ?>">
+                            <input type="text" class="form-control" name="fileName[0]" disabled placeholder="<?= trans_e("Choisissez l'image") ?>">
                             <label class="input-group-btn">
                             <span class="btn btn-success btn-sm">
                                 <i class="fa fa-upload"></i>
@@ -244,7 +244,7 @@ $(function() {
         $(this).closest('.form-group').remove();
     });
 
-    $('form').on('chm_form_success', function(){
+    $('form').on('chmFormSuccess', function(){
         chmTable.refresh('#questionsTable')
     })
 

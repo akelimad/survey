@@ -17,7 +17,6 @@ use App\Form;
     }
     label input{
         float: left;
-        width: 17% !important;
         position: static !important;
     }
 </style>

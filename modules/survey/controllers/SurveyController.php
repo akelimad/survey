@@ -15,6 +15,8 @@ use Modules\Survey\Models\Survey;
 use Modules\Survey\Models\Group;
 use Modules\Survey\Models\Question;
 use App\Ajax;
+use App\Mail\Mailer;
+use App\Models\Candidat;
 
 class SurveyController extends Controller
 {
@@ -112,36 +114,6 @@ class SurveyController extends Controller
     }
   }
 
-  public function quiz($data)
-  {
-    $survey = Survey::find($data['params'][1]);
-    $this->data['layout'] = 'admin';
-    $this->data['breadcrumbs'] = [
-      trans("Questionnaires"),
-      isset($survey->name) ? $survey->name : trans("Introuvable"),
-    ];
-    $survey = Survey::find($data['params'][1]);
-    if($survey){
-      $this->data['survey'] = $survey;
-    }
-    return get_page('admin/survey/quiz', $this->data, __FILE__);
-  }
-
-  public function quizzResult($data)
-  {
-    $survey = Survey::find($data['params'][1]);
-    $this->data['layout'] = 'admin';
-    $this->data['breadcrumbs'] = [
-      trans("Questionnaire"),
-      isset($survey->name) ? $survey->name : trans("Introuvable"),
-      trans("Resultats")
-    ];
-    if($survey){
-      $this->data['survey'] = $survey;
-    }
-    return get_page('admin/survey/quizz-result', $this->data, __FILE__);
-  }
-
   public function draw_survey($survey_id, $participant_id)
   {
     $survey = Survey::find($survey_id);
@@ -174,22 +146,137 @@ class SurveyController extends Controller
     }
   }
 
-  public function storeAnswers($data)
+  private function sendSurveyInvitation($candidat, $cDisplayName, $offer_id, $candId, $survey_id)
   {
+    global $email_e;
+    // Get email template
+    $template = getDB()->findOne('root_email_auto', 'ref', 'send_survey');
+    if(!isset($template->id_email)) return;
+
+    $variables = Mailer::getVariables($candidat, $offer_id, $candId);
+    $variables['survey_name'] = Survey::getNameById($survey_id);
+    $variables['survey_url'] = site_url("survey/". $survey_id ."/". md5($candidat->email.$candId));
+    $subject = Mailer::renderMessage($template->objet, $variables);
+    $message = Mailer::renderMessage($template->message, $variables);
+
+    $bcc = [$email_e];
+    if($email_e != $template->email) $bcc[] = $template->email;
+    
+    return Mailer::send($candidat->email, $subject, $message, [
+      'titre' => $template->titre,
+      'coresp_nom' => $cDisplayName,
+      'type_email' => 'Envoi automatique',
+      'Bcc' => $bcc
+    ]);
+  }
+
+  public function sendSurvey($data)
+  {
+    if (!isset($data['candIds']) || empty($data['candIds']))
+      return;
+
+    if (isset($data['survey_id']) && is_numeric($data['survey_id'])) {
+      $db = getDB();
+      $errors = $success = [];
+      $candIds = json_decode($data['candIds'], true) ?: [];
+      if (!empty($candIds)) {
+        foreach ($candIds as $key => $candId) {
+          // Get candidat infos
+          $candidat = $db->prepare("
+            SELECT c.*, cand.id_offre as offer_id FROM candidats c 
+            JOIN candidature cand ON cand.candidats_id=c.candidats_id
+            WHERE cand.id_candidature=?
+          ", [$candId], true);
+          
+          $cDisplayName = Candidat::getDisplayName($candidat, false);
+
+          // Check if token already exist
+          $sToken = $db->prepare("SELECT COUNT(*) as count FROM survey_tokens WHERE token=?", [md5($candidat->email.$candId)], true);
+          if ($sToken->count != "0") {
+            $errors[] = sprintf(trans("Le candidat <strong>%s</strong> a déjà reçu l'invitation pour ce questionnaire."), $cDisplayName);
+            continue;
+          }
+
+          // Add canddiat to tokens table
+          $db->create('survey_tokens', [
+            'survey_id' => $data['survey_id'],
+            'participant_id' => $candidat->candidats_id,
+            'entity_id' => $candId,
+            'entity_name' => 'candidature',
+            'firstname' => $candidat->prenom,
+            'lastname' => $candidat->nom,
+            'token' => md5($candidat->email.$candId),
+            'completed' => 0,
+            'expired_at' => null,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => null,
+          ]);
+
+          // Send email
+          $send = $this->sendSurveyInvitation($candidat, $cDisplayName, $candidat->offer_id, $candId, $data['survey_id']);
+
+          if ($send['response'] == 'success') {
+            $success[] = sprintf(trans("L'invitation a été envoyée au candidat <strong>%s</strong>"), $cDisplayName);
+          } else {
+            $errors[] = (isset($send['message'])) ? $send['message'] : trans("Impossible de trouver le message automatique");
+          }
+        }
+      }
+
+      // Store messages
+      if (!empty($success)) set_flash_message('success', $success);
+      if (!empty($errors)) set_flash_message('error', $errors);
+
+      return $this->jsonResponse('reload');
+    } else {
+      return Ajax::renderAjaxView(
+        trans("Envoyer un questionnaire"), 
+        'admin/survey/send',
+        ['candIds' => $data['candIds']],
+        __FILE__
+      );
+    }
+  }
+
+
+  public function quiz($data)
+  {
+    $survey = Survey::find($data['params'][1]);
+    $this->data['sid'] = $data['params'][1];
+    $this->data['token'] = $data['params'][2];
+    $this->data['data'] = $data;
+    $this->data['layout'] = 'admin';
+    $this->data['breadcrumbs'] = [
+      trans("Questionnaires"),
+      isset($survey->name) ? $survey->name : trans("Introuvable"),
+    ];
+    $survey = Survey::find($data['params'][1]);
+    if($survey){
+      $this->data['survey'] = $survey;
+    }
+    return get_page('admin/survey/quiz', $this->data, __FILE__);
+  }
+
+
+  public function storeQuizz($data)
+  {
+    // dump($data);
     $db = getDB();
-    if(!Survey::checkUserResponse(Survey::get_candidat_id() ,$data['params'][1])){
+    if(!Survey::checkUserResponse($data['params'][2])){
       $questions = Question::All();
       foreach ($questions as $question) {
         if(in_array($question->type, ["text", "textarea", "select"] )){
           $db->create('survey_responses', [
             'survey_question_id' => $question->id,
             'answer' => $data[$question->id],
+            'token'  => $data['params'][2],
           ]);
         }else if(in_array($question->type, ["checkbox", "radio"] )){
           foreach ($data[$question->id] as $key => $value) {
             $db->create('survey_responses', [
               'survey_question_id' => $question->id,
               'answer' => $value,
+              'token'  => $data['params'][2],
             ]);
           }
         }else if($question->type =="file" ){
@@ -198,6 +285,7 @@ class SurveyController extends Controller
               'survey_question_id' => $question->id,
               'survey_question_answer_id' => $key,
               'answer' => $value,
+              'token'  => $data['params'][2],
             ]);
           }
         }
@@ -206,13 +294,30 @@ class SurveyController extends Controller
       return $this->jsonResponse('error', trans("Vous avez déjà répondu sur ce questionnaire !"));
     }
 
-    $db->create('survey_tokens', [
-      'user_id' => Survey::get_candidat_id(),
-      'survey_id' => $data['params'][1],
-      'sent_at' => date('Y-m-d H:i:s'),
+    $db->update('survey_tokens', 'token', $data['params'][2], [
+      'completed' => 1,
+      'updated_at' => date('Y-m-d H:i:s'),
     ]);
+
     return $this->jsonResponse('success', trans("Merci pour votre réponse !"));
 
+  }
+
+  public function quizzResult($data)
+  {
+    $survey = Survey::find($data['params'][1]);
+    $this->data['sid'] = $data['params'][1];
+    $this->data['token'] = $data['params'][2];
+    $this->data['layout'] = 'admin';
+    $this->data['breadcrumbs'] = [
+      trans("Questionnaire"),
+      isset($survey->name) ? $survey->name : trans("Introuvable"),
+      trans("Resultats")
+    ];
+    if($survey){
+      $this->data['survey'] = $survey;
+    }
+    return get_page('admin/survey/quizz-result', $this->data, __FILE__);
   }
 
 } // END Class

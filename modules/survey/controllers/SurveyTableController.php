@@ -30,7 +30,7 @@ class SurveyTableController extends Controller
     ]);
 
     $table->setTableClass(['accountTable', 'table']);
-    $table->setTableId('stringsTable');
+    $table->setTableId('surveysTable');
     $table->setOrderby('id');
     $table->setOrder('DESC');
     $page = (isset($_GET['page'])) ? $_GET['page'] : 1;

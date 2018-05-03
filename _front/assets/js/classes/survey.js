@@ -38,4 +38,23 @@ export default class Survey {
     })
   }
 
+  static send (event, candIds) {
+    event.preventDefault()
+    window.chmModal.show({
+      type: 'POST',
+      url: 'backend/survey/send',
+      data: {candIds: candIds}
+    }, {
+      form: {
+        action: 'backend/survey/send',
+        callback: 'chmForm.submit',
+        class: 'chm-simple-form'
+      },
+      footer: {
+        label: trans("Envoyer")
+      },
+      width: 400
+    })
+  }
+
 }

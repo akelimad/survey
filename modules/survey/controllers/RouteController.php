@@ -31,9 +31,10 @@ class RouteController
     Route::add('backend/survey/store', 'Modules\Survey\Controllers\SurveyController@store');
     Route::add('backend/survey/([0-9]+)/show', 'Modules\Survey\Controllers\SurveyController@show');
     Route::add('backend/survey/([0-9]+)/delete', 'Modules\Survey\Controllers\SurveyController@delete');
-    Route::add('survey/([0-9]+)', 'Modules\Survey\Controllers\SurveyController@quiz');
-    Route::add('survey/([0-9]+)/storeAnswers', 'Modules\Survey\Controllers\SurveyController@storeAnswers');
-    Route::add('survey/([0-9]+)/result', 'Modules\Survey\Controllers\SurveyController@quizzResult');
+    Route::add('backend/survey/send', 'Modules\Survey\Controllers\SurveyController@sendSurvey', true);
+    Route::add('survey/([0-9]+)/([a-f0-9]{32}$)', 'Modules\Survey\Controllers\SurveyController@quiz');
+    Route::add('survey/([0-9]+)/([a-f0-9]{32})/storeAnswers', 'Modules\Survey\Controllers\SurveyController@storeQuizz');
+    Route::add('survey/([0-9]+)/([a-f0-9]{32})/result', 'Modules\Survey\Controllers\SurveyController@quizzResult');
 
     Route::add('backend/survey/([0-9]+)/group/index', 'Modules\Survey\Controllers\GroupController@index');
     Route::add('backend/survey/([0-9]+)/group/table', 'Modules\Survey\Controllers\GroupTableController@getAll');

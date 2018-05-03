@@ -45,7 +45,7 @@ use App\Form;
 
 </style>
 <div class="content chm-simple-form">
-    <?php if( isset($survey) ) { ?>
+    <?php if( isset($survey) and Survey::checkUserResponse($token) ) { ?>
         <?php foreach (Survey::getSurveyGroups($survey->id) as $group) { ?>
             <div class="tab">
                 <div class="form-group mb-0">
@@ -54,9 +54,9 @@ use App\Form;
                         <div class="question-wrap">
                         <p class="questionTitle"> <i class="fa fa-caret-right"></i> <?= $question->name ?>  </p>
                         <?php if($question->type == "textarea" ) { ?>
-                            <textarea name="<?= $question->id ?>" id="" rows="30" class="form-control" ></textarea> 
+                            <p> <?= $question->type=="textarea" ? Survey::getUserResponse($token ,$question->id)[0] : '' ?> </p>
                         <?php }elseif($question->type == "text"){ ?>
-                            <input type="text" name="<?= $question->id ?>" class="form-control" value="">
+                            <p> <?= $question->type=="text" ? Survey::getUserResponse($token ,$question->id)[0] : '' ?> </p>
                         <?php }elseif($question->type == "file"){ ?> <!-- file -->
                             <?php foreach (Survey::getQuestionAttachmnts($question->id) as $key => $image) { ?>
                                 <div class="col-md-3">
@@ -90,7 +90,7 @@ use App\Form;
                             <div class="clearfix"></div>
                         <?php }else{ ?> <!-- checkbox or radio -->
                             <?php foreach (Survey::getQuestionChoices($question->id) as $key => $choice) { ?>
-                            <p class="mb-0"> <input type="<?= $question->type ?>" data-id="<?= $question->id ?>" name="<?= $question->id."[]" ?>" class="check-radio " value="<?= $choice->id ?>" id="answer-<?= $choice->id ?>" <?= $choice->is_correct == 1 ? 'checked':'' ?> disabled > <label for="answer-<?= $choice->id ?>" class="<?php if(in_array($choice->id, Survey::getUserResponse($question->id)) and $choice->is_correct == 1 ){ echo 'correct'; }else if(!in_array($choice->id, Survey::getUserResponse($question->id)) and $choice->is_correct == 1){echo 'incorrect';} ?> " > <?= $choice->name ?> </label> </p>
+                            <p class="mb-0"> <input type="<?= $question->type ?>" data-id="<?= $question->id ?>" name="<?= $question->id."[]" ?>" class="check-radio " value="<?= $choice->id ?>" id="answer-<?= $choice->id ?>" <?= $choice->is_correct == 1 ? 'checked':'' ?> disabled > <label for="answer-<?= $choice->id ?>" class="<?php if(in_array($choice->id, Survey::getUserResponse($token ,$question->id)) and $choice->is_correct == 1 ){ echo 'correct'; }else if(!in_array($choice->id, Survey::getUserResponse($token ,$question->id)) and $choice->is_correct == 1){echo 'incorrect';} ?> " > <?= $choice->name ?> </label> </p>
                             <?php } ?>
                         <?php } ?>
                         </div>
@@ -99,6 +99,6 @@ use App\Form;
             </div>
         <?php } ?>
     <?php }else{ ?>
-        <?php get_alert('warning', trans("Il n'ya aucune question pour ce questionnaire !")) ?>
+        <?php get_alert('warning', trans("Il n'ya aucune question pour ce questionnaire ou vous avez n'avez pas encore répondu !")) ?>
     <?php } ?>
 </div>
