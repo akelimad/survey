@@ -14,7 +14,11 @@ use App\Form;
         font-weight: bold;
         padding: 6px 0;
         color: black;
-        border-bottom: 2px solid #c7ac8a;
+    }
+    .question-wrap {
+        border: 1px solid #d6d1d1;
+        margin-bottom: 10px;
+        padding: 0 20px;
     }
     textarea{
         min-height: 7em !important;
@@ -36,7 +40,10 @@ use App\Form;
     }
     /* Mark input boxes that gets an error on validation: */
     input.invalid {
-      background-color: #efd3d3 !important; 
+      background-color: #eadddd !important; 
+    }
+    select.invalid {
+      color : #a71414 !important;
     }
     /* Hide all steps by default: */
     .tab {
@@ -85,6 +92,9 @@ use App\Form;
     .errorForm{
         display: none ;
     }
+    #sendBtn{
+        display: none;
+    }
 
 </style>
 <div class="content chm-simple-form">
@@ -106,10 +116,11 @@ use App\Form;
                         <p class="groupeTitle"> <?= $group->name ?> </p>
                         <?php } ?>
                         <?php foreach (Survey::getGroupeQuestions($group->id) as $key => $question) {  ?>
-                            <?php if( $survey->format == "byQst" ) {$c += 1; ?>
+                            <?php if( $survey->format == "byQst" ) { $c += 1; ?>
                             <div class="tab">
                             <?php } ?>
-                            <p class="questionTitle"> <?= $question->name ?> </p>
+                            <div class="question-wrap" id="q-<?= $question->id ?>">
+                            <p class="questionTitle"> <i class="fa fa-caret-right"></i> <?= $question->name ?> </p>
                             <?php if($question->type == "textarea" ) { ?>
                                 <textarea name="<?= $question->id ?>" id="" rows="30" class="form-control" ></textarea> 
                             <?php }elseif($question->type == "text"){ ?>
@@ -120,8 +131,8 @@ use App\Form;
                                         <div class="imgBox mb-10">
                                             <img src="<?= site_url("uploads/survey/questions/".$question->id."/".$image->file_name) ?>" class="img-responsive" alt="image choice">
                                         </div>
-                                        <select name="<?= $question->id."[".$image->id."]" ?>" id="" class="form-control" >
-                                            <option value="0"> <?= trans("Selectionnez") ?> </option>
+                                        <select name="<?= $question->id."[".$image->id."]" ?>" id="" class="form-control" required>
+                                            <option value=""> <?= trans("Selectionnez") ?> </option>
                                             <?php foreach (Survey::getQuestionChoices($question->id) as $key => $choice) { ?>
                                                 <option value="<?= $choice->id ?>"> <?= $choice->name ?> </option>
                                             <?php } ?>
@@ -138,7 +149,7 @@ use App\Form;
                             <?php }else if($question->type == "select"){ ?> <!-- select -->
                                 <div class="col-md-4 pl-0">
                                     <select name="<?= $question->id ?>" id="" class="form-control" required>
-                                        <option value="0"> <?= trans("Selectionnez") ?> </option>
+                                        <option value=""> <?= trans("Selectionnez") ?> </option>
                                         <?php foreach (Survey::getQuestionChoices($question->id) as $key => $choice) { ?>
                                             <option value="<?= $choice->id ?>"> <?= $choice->name ?> </option>
                                         <?php } ?>
@@ -153,6 +164,7 @@ use App\Form;
                             <?php if( $survey->format == "byQst" ) { ?>
                             </div>
                             <?php } ?>
+                            </div>
                         <?php } ?>
                     </div>
                 <?php if( $survey->format == "byGroup" ) { ?>
@@ -164,8 +176,9 @@ use App\Form;
             <?php } ?>
             <div style="overflow:auto;">
                 <div style="float:right;">
-                    <button type="button" class="btn btn-default" id="prevBtn" onclick="nextPrev(-1)">Précedent</button>
+                    <button type="button" class="btn btn-default" id="prevBtn" onclick="nextPrev(-1)">Précédent</button>
                     <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Suivant</button>
+                    <button type="submit" class="btn btn-primary" id="sendBtn">Envoyer</button>
                 </div>
             </div>
             <div style="text-align:center;margin-top:40px;">
@@ -189,6 +202,16 @@ use App\Form;
         $('form').on('chm_form_success', function(event){
             $(this).remove()
             $(".success").show().slideDown()
+            $(".errorForm").hide()
+        })
+        $("#sendBtn").on("click", function(){
+            if (!validateForm()){
+                $(this).attr('type', 'button')
+                return false;
+            }else{
+                $(this).attr('type', 'submit')
+                return true
+            }
         })
     })
     var currentTab = 0; // Current tab is set to be the first tab (0)
@@ -200,17 +223,16 @@ use App\Form;
         x[n].style.display = "block";
         //... and fix the Previous/Next buttons:
         if (n == 0) {
-        document.getElementById("prevBtn").style.display = "none";
+            document.getElementById("prevBtn").style.display = "none";
         } else {
-        document.getElementById("prevBtn").style.display = "inline";
+            document.getElementById("prevBtn").style.display = "inline";
         }
         if (n == (x.length - 1)) {
-        document.getElementById("nextBtn").innerHTML = "Envoyer";
-        document.getElementById("nextBtn").type = "submit";
-        document.getElementById("nextBtn").setAttribute('onclick','');
-        }else if( n == (x.length) ) {
+            $("#nextBtn").hide()
+            $("#sendBtn").show()
+            $(".errorForm").fadeOut()
         } else {
-        document.getElementById("nextBtn").innerHTML = "Suivant";
+            document.getElementById("nextBtn").innerHTML = "Suivant";
         }
         //... and run a function that will display the correct step indicator:
         fixStepIndicator(n)
@@ -219,52 +241,60 @@ use App\Form;
     function nextPrev(n) {
         console.log(validateForm())
         // This function will figure out which tab to display
-        var x = document.getElementsByClassName("tab");
+        var tab = document.getElementsByClassName("tab");
         // Exit the function if any field in the current tab is invalid:
-        if (n == 1 && !validateForm()) return false;
+        if ( n == 1 && !validateForm()) return false;
         // Hide the current tab:
-        x[currentTab].style.display = "none";
+        tab[currentTab].style.display = "none";
         // Increase or decrease the current tab by 1:
         currentTab = currentTab + n;
         // if you have reached the end of the form...
-        if (currentTab >= x.length) {
-            // ... the form gets submitted:
-            document.getElementById("quizForm").submit();
-            return false;
-        }
+        // if (currentTab >= tab.length) {
+        //     // // ... the form gets submitted:
+        //     document.getElementById("quizForm").submit();
+        //     return false;
+        // }
         // Otherwise, display the correct tab:
         showTab(currentTab);
-        return chmForm.submit(event)
+        // return chmForm.submit(event)
     }
 
     function validateForm() {
         // This function deals with validation of the form fields
-        var x, y, i, valid = false;
+        var x, y, i, j, valid = false;
         x = document.getElementsByClassName("tab");
         step = document.getElementsByClassName("step");
         input = x[currentTab].getElementsByTagName("input");
         select = x[currentTab].getElementsByTagName("select");
-        var checkInput = false;
+        var checkInput = true;
         var checkRadio = false;
         var checkCheckbox = false;
         var checkSelect = false;
         for (i = 0; i < input.length; i++) {
-            if (input[i].type == "text" && input[i].value != "") {
-              valid = true;
-              checkInput = true;
-            }else if(input[i].type == "checkbox" && input[i].checked){
-                valid = true;
-                checkRadio = true;
-            }else if(input[i].type == "radio" && input[i].checked){
+            if (input[i].type == "text" && input[i].value == "" ) {
+                valid = false;
+                checkInput = false;
+                input[i].className += " invalid";
+            }else if(input[i].type == "checkbox"){
                 valid = true;
                 checkCheckbox = true;
+            }else if(input[i].type == "radio" && input[i].checked == false){
+                valid = false;
+                checkRadio = false;
+                input[i].className += " invalid";
             }
         }
+        var c=0
         for (i = 0; i < select.length; i++) {
-            if(select[i].value != 0){
-                valid = true;
-                checkSelect = true;
+            if(select[i].value == ""){
+                select[i].className += " invalid";
+                valid = false
+                checkSelect = false
             }
+        }
+        if(c == select.length){
+            valid = true;
+            checkSelect = true;
         }
         if(!checkInput || !checkRadio || !checkCheckbox || !checkSelect ){
             $(".errorForm").fadeIn()
@@ -278,7 +308,7 @@ use App\Form;
             if(step.length>0){
                 document.getElementsByClassName("step")[currentTab].className += " finish";
             }
-            $(".errorForm").fadeOut()
+            // $(".errorForm").fadeOut()
         }
         return valid;
     }

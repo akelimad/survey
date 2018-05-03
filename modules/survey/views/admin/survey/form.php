@@ -34,10 +34,10 @@ use App\Form;
     <div class="form-group mb-0">
         <label for="format" class="control-label"><?= trans_e('Format'); ?></label>
         <div class="col-md-4 pl-0">
-            <label class="radio-inline"><input type="radio" name="format" value="byGroup" <?= (isset($survey->format) and $survey->format == "byGroup") ? 'checked':'' ?> ><?php trans_e("Par groupe"); ?></label>
+            <label class="radio-inline"><input type="radio" name="format" value="byGroup" <?= (isset($survey->format) and $survey->format == "byGroup") ? 'checked':'' ?> disabled><?php trans_e("Par groupe"); ?></label>
         </div>
         <div class="col-md-4">
-            <label class="radio-inline"><input type="radio" name="format" value="byQst" <?= (isset($survey->format) and $survey->format == "byQst") ? 'checked':'' ?> ><?php trans_e("Par question "); ?></label>
+            <label class="radio-inline"><input type="radio" name="format" value="byQst" <?= (isset($survey->format) and $survey->format == "byQst") ? 'checked':'' ?> disabled><?php trans_e("Par question "); ?></label>
         </div>
         <div class="col-md-4">
             <label class="radio-inline"><input type="radio" name="format" value="all" <?= (isset($survey->format) and $survey->format == "all") ? 'checked':'' ?> ><?php trans_e("Tout en un "); ?></label>

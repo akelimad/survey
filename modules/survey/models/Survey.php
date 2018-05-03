@@ -57,5 +57,24 @@ class Survey {
     return preg_match("/[^a-zA-Z éèê'’àç:]+/i", $string);
   }
 
+  public static function checkUserResponse($uid, $sid)
+  {
+    $response = getDB()->prepare("SELECT * FROM survey_tokens as r WHERE r.user_id = ? and r.survey_id = ? ", [$uid, $sid], false);
+    return $response;
+  }
+
+  public static function getUserResponse($qid)
+  {
+    $responses = getDB()->prepare("SELECT * FROM survey_responses as r WHERE r.survey_question_id = ? ", [$qid], false);
+    foreach ($responses as $response) {
+      $new_array[] = $response->answer;
+    }
+    if(count($responses)>0){
+      return $new_array;
+    }else{
+      return $responses[0];
+    }
+  }
+
 
 } // End Class

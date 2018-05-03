@@ -95,7 +95,7 @@ use App\Form;
                 </div>
                 <div class="imageTypeRow">
                     <div class="col-md-5">
-                        <div class="input-group file-upload" <?= (!empty($question->id) and $question->type == "file") ? 'style="display:none" ':'' ?> >
+                        <div class="input-group file-upload" id="<?= (!empty($question->id) and $question->type == "file") ? $choice->id:'' ?>" <?= (!empty($question->id) and $question->type == "file") ? 'style="display:none" ':'' ?> >
                             <input type="text" class="form-control" name="fileName[0]" readonly placeholder="<?= trans_e("Choisissez l'image") ?>">
                             <label class="input-group-btn">
                             <span class="btn btn-success btn-sm">
@@ -105,7 +105,7 @@ use App\Form;
                             </label>
                         </div>
                         <?php if(!empty($question->id) and $question->type == "file"){ ?>
-                        <div class="answerImage">
+                        <div class="answerImage" id="<?= (!empty($question->id) and $question->type == "file") ? $choice->id:'' ?>">
                             <img src="<?= site_url("uploads/survey/questions/".$question->id."/".$choice->file_name) ?>" class="img-responsive" width="50" alt="image choice" required>
                             <span class="deleteImage" data-id="<?= !empty($question->id) ? $choice->id : '' ?>"> <i class="fa fa-close"></i> </span>
                         </div>
@@ -203,6 +203,8 @@ $(function() {
         copy.find('input:checkbox').prop('checked', false)
         copy.find('input:radio').prop('checked', false)
         copy.find('img').remove()
+        copy.find('.answerImage').hide()
+        copy.find(".file-upload").show().attr('id', '')
         copy.find('button').toggleClass('addLine deleteLine')
         copy.find('button>i').toggleClass('fa-plus fa-minus')
         var uid = uuidv4()

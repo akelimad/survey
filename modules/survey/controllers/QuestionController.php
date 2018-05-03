@@ -85,6 +85,7 @@ class QuestionController extends Controller
 
   public function store($data)
   {
+    // dump($data);
     if($this->atLeastOneChecked($data) == false){
       return $this->jsonResponse('error', trans("Veuillez choisir la bonne réponse !"));
     }

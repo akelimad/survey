@@ -33,7 +33,7 @@ class RouteController
     Route::add('backend/survey/([0-9]+)/delete', 'Modules\Survey\Controllers\SurveyController@delete');
     Route::add('survey/([0-9]+)', 'Modules\Survey\Controllers\SurveyController@quiz');
     Route::add('survey/([0-9]+)/storeAnswers', 'Modules\Survey\Controllers\SurveyController@storeAnswers');
-    Route::add('survey/([0-9]+)/success-quiz', 'Modules\Survey\Controllers\SurveyController@successQuiz');
+    Route::add('survey/([0-9]+)/result', 'Modules\Survey\Controllers\SurveyController@quizzResult');
 
     Route::add('backend/survey/([0-9]+)/group/index', 'Modules\Survey\Controllers\GroupController@index');
     Route::add('backend/survey/([0-9]+)/group/table', 'Modules\Survey\Controllers\GroupTableController@getAll');
