@@ -135,10 +135,10 @@ use App\Form;
                                             <select name="<?= $question->id."[".$image->id."]" ?>" id="" class="form-control" required>
                                                 <option value=""> <?= trans("Selectionnez") ?> </option>
                                                 <?php foreach (Survey::getQuestionChoices($question->id) as $key => $choice) { ?>
-                                                    <option value="<?= $choice->id ?>"> <?= $choice->name ?> </option>
+                                                    <option value="<?= $choice->name ?>"> <?= $choice->name ?> </option>
                                                 <?php } ?>
                                                 <?php foreach (Survey::getQuestionAttachmnts($question->id) as $key => $choice) { ?>
-                                                    <option value="<?= $choice->id ?>"> <?= $choice->title ?> </option>
+                                                    <option value="<?= $choice->title ?>"> <?= $choice->title ?> </option>
                                                 <?php } ?>
                                             </select>
                                         </div>

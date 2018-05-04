@@ -305,7 +305,10 @@ class SurveyController extends Controller
 
   public function quizzResult($data)
   {
+    // dump(Survey::calculateSurveyNote($data['params'][1], $data['params'][2]));
     $survey = Survey::find($data['params'][1]);
+    $countQuestions = Survey::countQuestions($data['params'][1]);
+    $this->data['countQuestions'] = $countQuestions;
     $this->data['sid'] = $data['params'][1];
     $this->data['token'] = $data['params'][2];
     $this->data['layout'] = 'admin';

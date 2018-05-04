@@ -43,6 +43,12 @@ class Survey {
     return $items;
   }
 
+  public static function countQuestions($sid)
+  {
+    $survey = getDB()->prepare("SELECT count(*) as count FROM survey_questions as q WHERE q.survey_id = ? ", [$sid], true);
+    return $survey->count;
+  }
+
   public static function get_candidat_id() {
     return read_session('abb_id_candidat', false);
   }
@@ -89,19 +95,42 @@ class Survey {
 
   public static function getUserResponse($token, $qid)
   {
+    $question = getDB()->prepare("SELECT * FROM survey_questions as q WHERE q.id = ?", [$qid], true);
     $responses = getDB()->prepare("SELECT * FROM survey_responses as r WHERE r.token = ? AND r.survey_question_id = ? ", [$token ,$qid], false);
-    // dump($responses);
+    if($question->type =="file"){
+      $attachments = getDB()->prepare("SELECT * FROM survey_attachements as a WHERE a.object_id = ?", [$qid]);
+    }
     foreach ($responses as $response) {
       $new_array[] = $response->answer;
     }
     if(isset($responses) && count($responses)>0){
       return $new_array;
     }else if(isset($responses) && count($responses) == 1){
-      vard_dump($responses[0]); die();
       return $responses[0];
+    }elseif($question->type =="file"){
+      $imageArray = [];
+      foreach ($responses as $key => $value) {
+        $responseArray[$value->id] = $value->title;
+      }
+      return $responseArray;
     }else{
       return null;
     }
+  }
+
+  public static function calculateSurveyNote($sid, $token)
+  {
+    $answers = getDB()->prepare("SELECT COUNT(*) as count FROM survey_question_answers a where a.is_correct = 1 group by a.survey_question_id");
+
+    $responses = getDB()->prepare("SELECT COUNT(*) as count FROM survey_responses r where r.survey_question_answer_id is NULL and r.answer REGEXP '^[0-9]+$' group by r.survey_question_id");
+    $new_array=[];
+    foreach ($answers as $key => $value) {
+      $new_array[$key] = $value;
+    }
+    foreach ($responses as $key => $value) {
+      $new_array[$key] = $value;
+    }
+    return $new_array;
   }
 
 
