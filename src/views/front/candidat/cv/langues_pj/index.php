@@ -8,7 +8,7 @@ $languageLevels = [
   'Néant' =>'Néant'
 ];
 $max_file_size = get_setting('max_file_size');
-$hasCV = \App\Models\Candidat::hasCV(get_candidat_id());
+$hasResume = \App\Models\Candidat::hasResume();
 ?>
 
 <h1><?php trans_e("Langues et pieces joints"); ?></h1>
@@ -129,7 +129,7 @@ $hasCV = \App\Models\Candidat::hasCV(get_candidat_id());
   
   <div class="col-sm-9">
     <div class="row">
-      <div class="col-sm-12 mb-10<?= $photo_displayed ? ' pl-0 pl-xs-15' : ''; ?><?= !$hasCV ? ' required' : ''; ?>">
+      <div class="col-sm-12 mb-10<?= $photo_displayed ? ' pl-0 pl-xs-15' : ''; ?><?= !$hasResume ? ' required' : ''; ?>">
         <label for="candidat_cv"><?php trans_e("CV"); ?>&nbsp;<i class="fa fa-info-circle" data-toggle="popover" data-trigger="hover" title="Aide" data-content="<?php trans_e("Vous pouvez joindre jusqu'à 5 CVs Word ou PDF, la taille de chaque cv ne doit pas dépassé"); ?> <?= $max_file_size; ?>ko"></i></label>
         <div class="input-group file-upload" <?= (count($cvs) > 5) ? 'style="display:none;"' : '' ?>>
           <input type="text" class="form-control" readonly>

@@ -213,6 +213,7 @@ if(isset($messages) and !empty($messages))  {
           'resultats_concours' => $formData['resultats_concours'],
           'avis_modification' => $formData['avis_modification'],
           'avis_report' => $formData['avis_report'],
+          'required_files' => (isset($_POST['required_files'])) ? json_encode($_POST['required_files']) : null
       ]);
 
       // Fire after offre form submit event

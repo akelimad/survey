@@ -13,6 +13,34 @@ namespace Modules\Candidatures\Models;
 class Candidature {
 
 
+  public static $candidatureFiles = [
+    'photo' => [
+      'title' => 'Photo',
+      'action' => 'App\Models\Candidat@hasPhoto'
+    ],
+    'lm' => [
+      'title' => 'Lettre de motivation',
+      'action' => 'App\Models\Candidat@hasMotivationLetter'
+    ],
+    'copie_diplome' => [
+      'title' => 'Copie du diplôme',
+      'action' => 'App\Models\Candidat@hasCopieDiplome'
+    ],
+    'copie_attestation' => [
+      'title' => 'Copie de l’attestation',
+      'action' => 'App\Models\Candidat@hasCopieAttestation'
+    ],
+    'bulletin_paie' => [
+      'title' => 'Bulletin de paie',
+      'action' => 'App\Models\Candidat@hasBulletinPaie'
+    ],
+    'permis_conduire' => [
+      'title' => 'Permis de conduire',
+      'action' => 'App\Models\Candidat@hasPermisConduire'
+    ],
+  ];
+
+
 	/**
 	 * Get offre by ID
 	 *

@@ -162,14 +162,14 @@ class CandidatController extends Controller
     if (!isset($candidat->candidats_id)) return $progress;
 
     $hasPhoto = ($candidat->photo != '');
-    $hasLM = Candidat::hasLM($candidat->candidats_id);
+    $hasMotivationLetter = Candidat::hasMotivationLetter($candidat->candidats_id);
     $hasExp = Candidat::hasExperience($candidat->candidats_id);
 
-    if (!$hasPhoto && !$hasLM && $hasExp) {
+    if (!$hasPhoto && !$hasMotivationLetter && $hasExp) {
       $progress += 75;
     } else if ($hasPhoto) {
       $progress += 25;
-    } else if ($hasLM) {
+    } else if ($hasMotivationLetter) {
       $progress += 25;
     } else if ($hasExp) {
       $progress += 25;
@@ -349,7 +349,7 @@ class CandidatController extends Controller
       'cv' => [
         'name' => trans("CV"),
         'path' => 'apps/upload/frontend/cv/',
-        'required' => !Candidat::hasCV(get_candidat_id()),
+        'required' => !Candidat::hasResume(),
         'extensions' => ['doc', 'docx', 'pdf'],
       ],
       'lm' => [

@@ -434,7 +434,7 @@ class Form
   }
 
 
-  private static function execute($value, $args = [])
+  public static function execute($value, $args = [])
   {
     if (is_callable($value)) {
       return call_user_func($value, $args);

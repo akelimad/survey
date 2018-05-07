@@ -5,6 +5,7 @@
  * @author mchanchaf
  * @since 03/10/2017
  */
+use App\Models\Candidat;
 
 /**
  * Get logged candidat ID
@@ -84,7 +85,7 @@ function get_candidat_offre_pertinence($id_candidat, $id_offre) {
  * @author Mhamed Chanchaf
  */
 function get_resume_url($name) {
-	return site_url('uploads/candidat/resume/'. $name);
+	return site_url(Candidat::$resumePath . $name);
 }
 
 
@@ -98,7 +99,7 @@ function get_resume_url($name) {
  * @author Mhamed Chanchaf
  */
 function get_motivation_letter_url($name) {
-	return site_url('uploads/candidat/motivation_letter/'. $name);
+	return site_url(Candidat::$motivationPath . $name);
 }
 
 
@@ -112,10 +113,7 @@ function get_motivation_letter_url($name) {
  * @author Mhamed Chanchaf
  */
 function get_photo_url($name) {
-	if ($name == 'no-photo.png') {
-		return site_url('apps/upload/frontend/photo_candidats/'. $name);
-	}
-	return site_url('uploads/candidat/photo/'. $name);
+	return site_url(Candidat::$photoPath . $name);
 }
 
 
@@ -129,5 +127,5 @@ function get_photo_url($name) {
  * @author Mhamed Chanchaf
  */
 function get_permis_conduire_url($name) {
-	return site_url('apps/upload/frontend/candidat/permis_conduire/'. $name);
+	return site_url(Candidat::$permisConduirePath . $name);
 }
