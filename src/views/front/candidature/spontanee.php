@@ -29,5 +29,15 @@ jQuery(document).ready(function(){
   // editors
   CKEDITOR.replace('motivation', {height: 200});
 
+  <?php if (get_setting('candidature.spontanee.show_alert', 0) == 1) : ?>
+  $('body').on('chmFormSuccess', '#candidature-spontanee', function (event, response) {
+    if (response.status == 'success') {
+      setTimeout(function() {
+        chmModal.alert('', "<?php trans_e("Pensez à créer une alerte emploi"); ?>", {width:250})
+      }, 200)
+    }
+  })
+  <?php endif; ?>
+
 })
 </script>

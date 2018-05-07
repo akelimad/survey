@@ -122,7 +122,7 @@ class Mailer
 			// Send email
 			if( $mail->Send() ) {
 				$nom = (isset($args['coresp_nom'])) ? $args['coresp_nom'] : 'NA';
-				$nom = (isLogged('admin')) ? read_session('abb_admin') : $nom;
+				$nom = (isBackend()) ? get_admin('nom') .' ('. get_admin('email') .')' : $nom;
 				
 				getDB()->create('corespondances', [
 					'sujet' => $subject,
@@ -188,6 +188,7 @@ class Mailer
 			'lieu_statut' => null,
 			'lien_confirmation' => null,
 			'message' => null,
+			'site_name' => get_setting('nom_site'),
 			'site' => site_url()
 		];
 

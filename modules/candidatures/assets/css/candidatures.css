@@ -89,13 +89,13 @@
 
 #candidatures-filter input, #candidatures-filter select {
   width: 100%;
-  height: 20px;
+  height: 25px;
 }
 
 #candidatures-filter label{
   font-weight: normal;
   font-size: 11px;
-  margin-bottom: 0px;
+  margin-bottom: 2px;
 }
 
 #candidatures-filter .espace_candidat {

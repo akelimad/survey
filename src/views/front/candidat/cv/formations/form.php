@@ -10,7 +10,7 @@ use App\Form;
     $date_debut = '';
     if (isset($formation->date_debut) && $formation->date_debut != '') {
       $date_debut = (strlen($formation->date_debut) == 7) ? '01/'. $formation->date_debut : $formation->date_debut;
-      $date_debut = french_to_english_date($date_debut);
+      $date_debut = eta_date($date_debut, 'd/m/Y');
     }
     ?>
     <input type="text" readonly value="<?= $date_debut ?>" class="form-control" id="forma_date_debut" name="date_debut" required>
@@ -21,12 +21,12 @@ use App\Form;
     $date_fin = '';
     if (isset($formation->date_fin) && $formation->date_fin != '') {
       $date_fin = (strlen($formation->date_fin) == 7) ? '01/'. $formation->date_fin : $formation->date_fin;
-      $date_fin = french_to_english_date($date_fin);
+      $date_fin = eta_date($date_fin, 'd/m/Y');
     }
     ?>
     <input type="text" readonly value="<?= $date_fin ?>" class="form-control" id="forma_date_fin" name="date_fin" style="max-width: 186px;float: left;margin-right: 10px;<?= (isset($formation->date_fin) && $formation->date_fin == '') ? 'display: none;"' : '" required' ?>>
     <label for="forma_today" style="margin-top: 10px;" class="pointer">
-      <input type="checkbox" value="1" class="date_fin_today" id="forma_today"<?= (isset($formation->date_fin) && $formation->date_fin == '') ? ' checked' : '' ?>>&nbsp;<?php trans_e("Jusqu'à aujourd'hui"); ?>
+      <input type="checkbox" value="1" class="date_fin_today forma_today" id="forma_today"<?= (isset($formation->date_fin) && $formation->date_fin == '') ? ' checked' : '' ?>>&nbsp;<?php trans_e("Jusqu'à aujourd'hui"); ?>
     </label>
   </div>
 </div>
@@ -86,9 +86,34 @@ use App\Form;
   </div>
 </div>
 <div class="row mt-0">
+  <?php 
+    $specialty_displayed = false;
+    if (Form::getFieldOption('displayed', 'register', 'specialty')) : 
+    $specialty_displayed = true;
+    $required = Form::getFieldOption('required', 'register', 'specialty') ? ' required' : '';
+  ?>
+  <div class="col-sm-4 required">
+    <label for="forma_specialty"><?php trans_e("Spécialité"); ?></label>
+    <select id="forma_specialty" name="specialty_id" class="form-control" required>
+      <option value=""></option>
+      <?php foreach (App\Models\Specialty::findAll(false) as $key => $value) :
+      $selected = (isset($formation->specialty_id) && $formation->specialty_id == $value->id) ? 'selected' : '';
+      ?>
+        <option value="<?= $value->id ?>" <?= $selected; ?>><?= $value->name ?></option>
+      <?php endforeach; ?>
+    </select>
+    <?php $specialty_other = (isset($formation->specialty_other)) ? $formation->specialty_other : ''; ?>
+    <?= Form::input('text', 'specialty_other', null, $specialty_other, [], [
+      'class' => 'form-control',
+      'style' => (empty($formation->specialty_other)) ? 'display:none;' : '',
+      'title' => trans("Autre (à péciser)")
+    ]); ?>
+  </div>
+  <?php endif; ?>
+
   <?php if (Form::getFieldOption('displayed', 'register', 'copie_diplome')) : ?>
   <?php $required = Form::getFieldOption('required', 'register', 'copie_diplome') ? ' required' : ''; ?>
-  <div class="col-sm-4<?= $required; ?>">
+  <div class="col-sm-4<?= ($specialty_displayed) ? ' pl-0 pl-xs-15' : ''; ?><?= $required; ?>">
     <label for="forma_copie_diplome"><?php trans_e("Copie du diplôme"); ?></label>
     <div class="input-group file-upload<?= (isset($formation->copie_diplome) && $formation->copie_diplome != '') ? ' hidden' : '' ?>">
         <input type="text" class="form-control" readonly>
@@ -99,15 +124,13 @@ use App\Form;
             </span>
         </label>
     </div>
-  </div>
-  <?php endif; ?>
-  
-  <div class="col-sm-12">
     <?php if (isset($formation->copie_diplome) && $formation->copie_diplome != '') : ?>
       <a href="<?= site_url('apps/upload/frontend/candidat/copie_diplome/'. $formation->copie_diplome); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
       <button class="btn btn-danger btn-xs" type="button" onclick="return chmModal.confirm('', '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer la copie de diplôme ?"); ?>', 'chmFormation.deleteDiplome', {'id': <?= $formation->id_formation; ?>, cd: '<?= $formation->copie_diplome; ?>'}, {width: 405})"><i class="fa fa-trash"></i>&nbsp;<?php trans_e("Supprimer"); ?></button>
     <?php endif; ?>
   </div>
+  </div>
+  <?php endif; ?>
 </div>
 <div class="row mt-10">
   <div class="col-sm-12 required">
@@ -149,9 +172,22 @@ jQuery(document).ready(function(){
     }   
   })
 
-  // Fonction
+  // Diplome
   $('#forma_diplome').change(function() {
     var $other_input = $('#diplome_other')
+    $($other_input).val('')
+    if ($(this).find('option:selected').text().match("^Autre")) {
+      $($other_input).prop('required', true)
+      $($other_input).show()
+    } else {
+      $($other_input).prop('required', false)
+      $($other_input).hide()
+    }   
+  })
+
+  // Speciality
+  $('#forma_specialty').change(function() {
+    var $other_input = $('#specialty_other')
     $($other_input).val('')
     if ($(this).find('option:selected').text().match("^Autre")) {
       $($other_input).prop('required', true)

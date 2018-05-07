@@ -9,7 +9,7 @@
 		"label" => trans("Formulaire Forum"),
 		"route" => "candidat/forum",
 		"icon" => "fa fa-pencil-square",
-		"isVisible" => get_setting('left-sidebar-menu.show.forum_form', 0) == 1
+		"isVisible" => (!isLogged('candidat') && get_setting('left-sidebar-menu.show.forum_form', 0) == 1)
 	],
 	[
 		"label" => trans("Déposer une candidature spontanée"),

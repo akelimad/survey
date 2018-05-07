@@ -100,17 +100,18 @@ export default class chmForm {
     var alert = window.chmAlert.getAlertBlock(type, messages, dismissible)
     var modal = $(target).closest('.chm-modal')
     var container = (modal.length > 0) ? modal : target
+    var messagesContainer = $('.chm-response-messages')
     if (modal.length > 0) {
-      if ($('.chm-response-messages').length < 1) {
+      if ($(messagesContainer).length < 1) {
         $(container).find('.modal-body').prepend('<div class="chm-response-messages"></div>')
       }
-      $('.chm-response-messages').html(alert)
+      $(messagesContainer).empty().html(alert)
     } else {
-      if ($('.chm-response-messages').length === 0) {
+      if ($(messagesContainer).length === 0) {
         $(container).prepend('<div class="chm-response-messages"></div>')
       }
-      $('.chm-response-messages').html(alert)
-      $('body, html').animate({scrollTop: $(target).offset().top}, 1000)
+      $(messagesContainer).empty().html(alert)
+      $('body, html').animate({scrollTop: $(messagesContainer).offset().top - 5}, 1000)
     }
   }
 
@@ -119,34 +120,22 @@ export default class chmForm {
 // Initialise forms
 $(document).ready(function () {
   // Select all Forms occurences
-  var chmForms = document.querySelectorAll('[chm-form]')
-  if (chmForms.length > 0) {
-    // Loop for each Table
-    for (var i = 0; i < chmForms.length; ++i) {
-      // Add event listener
-      $(chmForms[i]).on('submit', function (event) {
-        event.preventDefault()
-        chmForm.submit(event, this)
-      })
-    }
-  }
+  $('body').on('submit', '[chm-form]', function (event) {
+    event.preventDefault()
+    chmForm.submit(event, this)
+  })
 
   // Show hide other field
-  var chmFormOther = document.querySelectorAll('[chm-form-other]')
-  if (chmFormOther.length > 0) {
-    for (var o = 0; o < chmFormOther.length; ++o) {
-      var id = $(chmFormOther[o]).attr('chm-form-other')
-      $(chmFormOther[o]).closest('select').on('change', function (event) {
-        var $otherInput = $('input#' + id)
-        $($otherInput).val('')
-        if ($(this).val() === '_other') {
-          $($otherInput).prop('required', true)
-          $($otherInput).show()
-        } else {
-          $($otherInput).prop('required', false)
-          $($otherInput).hide()
-        }
-      })
+  $('body').on('change', 'select:has([chm-form-other])', function (event) {
+    var otherOption = $(this).find('[chm-form-other]')
+    var $otherInput = $('input#' + otherOption.attr('chm-form-other'))
+    $($otherInput).val('')
+    if ($(this).val() === '_other') {
+      $($otherInput).prop('required', true)
+      $($otherInput).show()
+    } else {
+      $($otherInput).prop('required', false)
+      $($otherInput).hide()
     }
-  }
+  })
 })

@@ -50,6 +50,7 @@ class FormationController extends Controller
       'date_debut' => trans("Date de début"),
       'date_fin' => trans("Date de fin"),
       'diplome' => trans("Diplôme"),
+      'specialty_id' => trans("Spécialité"),
       'nivformation' => trans("Nombre d’année de formation"),
       'description' => trans("Description de la formation"),
       'ecole' => trans("Autre école ou établissement")
@@ -65,6 +66,7 @@ class FormationController extends Controller
       'date_debut' => 'required|date',
       'date_fin' => 'date',
       'diplome' => 'required|numeric',
+      'specialty_id' => 'required|numeric',
       'nivformation' => 'required|numeric',
       'description' => 'required|eta_alpha_numeric',
       'ecole' => 'eta_string'

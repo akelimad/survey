@@ -14,7 +14,7 @@ use App\Models\Mobilite;
 use App\Models\Salary;
 use App\Models\TypeFormation;
 ?>
-<script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="<?= site_url('assets/vendors/html2canvas/html2canvas.min.js'); ?>"></script>
 
 <div id="cv-container">
   <div class="row">

@@ -42,7 +42,6 @@ class CandidatureController extends Controller
 
     // Store candidature
     if (form_submited()) {
-
       if(!isset($data['motivation']) || $data['motivation'] == '') {
         return $this->jsonResponse('error', trans("Vous n'avez pas précisé vos motivations pour cette candidature spontanée!"));
       }

@@ -110,430 +110,54 @@
   echo '<tr class="sectiontableentry1"><td></td><td colspan="14" align="center">Aucune candidature</td></tr></tbody></table>'; 
 ?>
 
-
-
-
-
-
-
-
-
-
-
 <?php
-/*==============================================================*/
+$history = getDB()->prepare("SELECT c.candidats_id, c.nom, c.prenom, c.date_n, c.id_expe, h.status, h.motif_rejet FROM candidature cand JOIN candidats c ON c.candidats_id=cand.candidats_id JOIN historique h ON h.id_candidature=cand.id_candidature WHERE cand.id_offre=? GROUP BY cand.id_candidature ORDER BY h.date_modification DESC", [$_POST['co']]);
 ?>
 
-
-
-
-
-
-
-
-<!-- -->
-
-
-
-
-
-
-
-
-
-
-<?php
-/*==============================================================*/
-?>
-
-
-<?php
-
-$select_status_r = mysql_query("SELECT ref_statut , statut 
-    FROM `prm_statut_candidature` 
-    WHERE statut IN (SELECT distinct(status) FROM historique) 
-    group BY statut  order by order_statut DESC" );
-	
-	$status_count=mysql_num_rows($select_status_r);
- 
-	
-?>
-
-
-
-
-
-
-
-<table width="100%" border="0" cellspacing="0" id="note_candidature" class="tablesorter" style="background: none;">  
-<thead>
-  <tr>
-    <td widtd="10%" >
-    </td>
-    <td widtd="90%" colspan="<?php echo $status_count+1; ?>"  style="border: 1px solid #ccc;text-align: left;background:<?php echo $color_bg;?>">
-    <center>
-    <b style="color:#fff">STATUS</b>
-    </center>
-    </td>
-  </tr>
-  <tr>
-  <td widtd="2%" style="border: 1px solid #ccc;text-align: left;
-  background:<?php echo $color_bg;?>" >
-  <center><b style="color:#fff">N°</b></center>
-  </td>
-  <td widtd="10%" style="border: 1px solid #ccc;text-align: left;
-  background:<?php echo $color_bg;?>" >
-  <center><b style="color:#fff">NOM & PRENOM</b></center>
-  </td>
-<?php 
- 
-$select_status_r = mysql_query("SELECT ref_statut , statut 
-    FROM `prm_statut_candidature` 
-    WHERE statut IN (SELECT distinct(status) FROM historique) 
-    group BY statut  order by order_statut DESC" );
-$r_status =0;
- while($status_ref_r = mysql_fetch_array($select_status_r))
- {
-$ref_statut = $status_ref_r['ref_statut'];
-$statut = $status_ref_r['statut'];
-$r_status++;
-?>
-  <td  style="border: 1px solid #ccc;text-align: left;
-  background:<?php echo $color_bg;?>">
-  <center><b style="color:#fff"><?php echo $statut; ?></b></center>
-  </td>
-<?php
- } 
-?>
-  </tr>
-</thead>
-<tbody>
-<?php
-
-$query_candidature12312 = mysql_query($sql_pagination);
-$is=0;
-while($return_candidature= mysql_fetch_array($query_candidature12312)){
-$is++;
-$is=$is+$limitstart;
-
-$nom=$return_candidature['nom'];$prenom=$return_candidature['prenom'];
-$id_offre=$return_candidature['id_offre'];$status=$return_candidature['status'];
-$id_candidatures=$return_candidature['id_candidature'];
-
- ?>
-<tr>
-    <td style="border: 1px solid #ccc;text-align: left;width: 2%;vertical-align:middle">
-      <center><?php echo $is; ?></center>
-    </td>
-    <td style="border: 1px solid #ccc;text-align: left;width: 16%;vertical-align:middle">
-      <center><?php echo $nom." ".$prenom; ?></center>
-    </td>
-
-	
-	
-	
-	
-
-<?php 
- 
-$select_status_r = mysql_query("SELECT ref_statut , statut 
-    FROM `prm_statut_candidature` 
-    WHERE statut IN (SELECT distinct(status) FROM historique) 
-    group BY statut  order by order_statut DESC" );
-$r_status =0;
- while($status_ref_r = mysql_fetch_array($select_status_r))
- {
-$ref_statut = $status_ref_r['ref_statut'];
-$statut = $status_ref_r['statut'];
-$r_status++;
-
-//echo $statut."<br>";
-?>
-
-
-	
-    
-    <?php
-    if($status !='En attente'){
-    $sql_enatt = "SELECT * from historique h,root_roles r
-    where id_candidature = '".$id_candidatures."' and r.login = h.utilisateur
-    and status like '".$statut ."' limit 0,1";
-    $sql_query_enatt = mysql_query($sql_enatt);
-    $csount = mysql_num_rows($sql_query_enatt);
-    $couleurs = array('#ddd', '#e8f0f0');
-    $nombre = count($couleurs);
-    $i = 0;
-    while ($i < $csount)
-    {
-    while($sql_enatt_num = mysql_fetch_array($sql_query_enatt)){
-    $E_TES11=$sql_enatt_num['nom'];$E_TES2=date("d.m.Y H:m",strtotime($sql_enatt_num['date_modification']));
-    $E_TES1 = substr ( $sql_enatt_num['nom'], 0, 20 );
-    ?>
-	
-    <td style="border: 1px solid #ccc;text-align: left;width: 14%;">
-    <table>
+<table width="100%" border="0" cellspacing="0" id="note_candidature" class="tablesorter tablesorter-default" style="background: none;" role="grid">
+  <thead>
     <tr>
-    <td style="border: 1px solid #ccc;text-align: left;width: 16%;background-color : <?php echo $couleurs[ $i % $nombre];?>">
-    <center><b><?php echo $E_TES1; ?></b></center>
-    </td>
-    </tr><tr>
-    <td style="border: 1px solid #ccc;text-align: left;width: 16%;background-color : <?php echo $couleurs[ ($i-1) % $nombre];?>">
-    <center><b><?php echo $E_TES2; ?></b></center>
-    </td>
+      <th>N°</th>
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Etablissement</th>
+      <th>Spécialité</th>
+      <th>Age</th>
+      <th>Expérience</th>
+      <th>Statut</th>
+      <th>Motif rejet</th>
     </tr>
-    </table>
-    </td>
-	
-    <?php }$i++; 
-      }
-	  
-	  if(( $csount == 0)){
-    ?>
-		
-    <td style="border: 1px solid #ccc;text-align: left;width: 14%;"> </td>
-	
-	<?php
-	 } 
-	 	
-    }?>
-	
-
-
-
-<?php
- } 
-?>	
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	  
-
-</tr>
-<?php } ?>
-</tbody>
+  </thead>
+  <tbody>
+    <?php if (!empty($history)) : ?>
+      <?php $i=1; foreach ($history as $key => $h) : 
+        $school = $specialty = '';
+        $forma = App\Models\Candidat::getLastFormation($h->candidats_id);
+        if (isset($forma->id_formation)) {
+          $school = App\Models\School::getNameById($forma->id_ecol);
+          if (!empty($forma->specialty_other)) {
+            $specialty = $forma->specialty_other;
+          } elseif (!empty($forma->specialty_id)) {
+            $specialty = App\Models\Specialty::getNameById($forma->specialty_id);
+          }
+        }
+      ?>
+      <tr role="row">
+        <td><?= $i ?></td>
+        <td><?= $h->nom ?></td>
+        <td><?= $h->prenom ?></td>
+        <td><?= $school; ?></td>
+        <td><?= $specialty; ?></td>
+        <td><?= eta_date($h->date_n) ?></td>
+        <td><?= App\Models\Experience::getNameById($h->id_expe) ?></td>
+        <td><?= $h->status ?></td>
+        <td><?= $h->motif_rejet ?></td>
+      </tr>
+      <?php $i++; endforeach; ?>
+    <?php else : ?>
+      <tr>
+        <td colspan="9">Aucune donnée trouvée</td>
+      </tr>
+    <?php endif; ?>
+  </tbody>
 </table>
-<table width="100%" border="0" cellspacing="0" id="note_candidature" class="tablesorter" style="background: none;">  
-<thead>
-  <tr>
-    <td widtd="10%" >
-    
-    </td>
-    <td widtd="90%" colspan="<?php echo $status_count+1; ?>" style="border: 1px solid #ccc;text-align: left;background:<?php echo $color_bg;?>">
-    <center><b style="color:#fff">COMMENTAIRE</b></center>
-    </td>
-  </tr>
-  <tr>
-  
-  <td widtd="2%" style="border: 1px solid #ccc;text-align: left;
-  background:<?php echo $color_bg;?>" >
-  <center><b style="color:#fff">N°</b></center>
-  </td>
-  
-  <td widtd="10%" style="border: 1px solid #ccc;text-align: left;background:<?php echo $color_bg;?>" >
-  <center><b style="color:#fff">NOM & PRENOM</b></center>
-  </td>
-
-
-<?php 
- 
-$select_status_r = mysql_query("SELECT ref_statut , statut 
-    FROM `prm_statut_candidature` 
-    WHERE statut IN (SELECT distinct(status) FROM historique) 
-    group BY statut  order by order_statut DESC" );
-$r_status =0;
- while($status_ref_r = mysql_fetch_array($select_status_r))
- {
-$ref_statut = $status_ref_r['ref_statut'];
-$statut = $status_ref_r['statut'];
-$r_status++;
-?>
-  <td  style="border: 1px solid #ccc;text-align: left;
-  background:<?php echo $color_bg;?>">
-  <center><b style="color:#fff"><?php echo $statut; ?></b></center>
-  </td>
-<?php
- } 
-?>
-  
-  </tr>
-</thead>
-<tbody>
-<?php
-
-
-$isc=0;
-
-while($return_candidature12= mysql_fetch_array($query_candidature123)){
-$isc++;
-$isc=$isc+$limitstart;
-
-$nom=$return_candidature12['nom'];$prenom=$return_candidature12['prenom'];
-$id_offre=$return_candidature12['id_offre'];$status=$return_candidature12['status'];
-$id_candidatures=$return_candidature12['id_candidature'];
-
- ?>
-<tr>
-
-    <td style="border: 1px solid #ccc;text-align: left;width: 2%;vertical-align:middle">
-      <center><?php echo $isc; ?></center>
-    </td>
-	
-    <td style="border: 1px solid #ccc;text-align: left;width: 16%;vertical-align:middle">
-      <center><?php echo $nom." ".$prenom; ?></center>
-    </td>
- 
- 
- 
- 
- 
- 
-	
-	
-	
-
-<?php 
- 
-$select_status_r = mysql_query("SELECT ref_statut , statut 
-    FROM `prm_statut_candidature` 
-    WHERE statut IN (SELECT distinct(status) FROM historique) 
-    group BY statut  order by order_statut DESC" );
-$r_status =0;
- while($status_ref_r = mysql_fetch_array($select_status_r))
- {
-$ref_statut = $status_ref_r['ref_statut'];
-$statut = $status_ref_r['statut'];
-$r_status++;
-
-//echo $statut."<br>";
-?>
-
-
-	
-    
- <td style="border: 1px solid #ccc;text-align: left;width: 14%;">
-    <?php
-    if($status !='En attente'){
-    $sql_enatt = "SELECT * from historique h,root_roles r
-    where id_candidature = '".$id_candidatures."' and r.login = h.utilisateur
-    and status like '".$statut."' limit 0,1";
-    $sql_query_enatt = mysql_query($sql_enatt);
-    $csount = mysql_num_rows($sql_query_enatt);
-    $couleurs = array('#ddd', '#e8f0f0');
-    $nombre = count($couleurs);
-    $i = 0;
-    while ($i < $csount)
-    {
-    while($sql_enatt_num = mysql_fetch_array($sql_query_enatt)){
-    $E_TES1=$sql_enatt_num['commentaire'];$E_TES2 = substr ( $sql_enatt_num['commentaire'], 0, 30 );
-    $E_TES3 = substr ( $sql_enatt_num['nom'], 0, 20 ); 
-    ?>
-    <table>
-    <tr>
-    <td style="border: 1px solid #ccc;text-align: left;width: 16%;background-color : <?php echo $couleurs[ $i % $nombre];?>">
-    <center><b><?php echo " ".$E_TES3; ?></b></center>
-    </td>
-    </tr>
-    </table>
-    <center><?php echo utf8_decode($E_TES2); ?></center>
-    <?php }$i++; 
-      }
-	  
-	 	
-    } 
-	 
-    ?>
-    </td>
-	
-    
-	
-
-
-
-<?php
- } 
-?>	
-	
-	
-	
-
-	
-	
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-  
-    
-     
-
-</tr>
-<?php } ?>
-</tbody>
-</table>
-<!-- -->
- 
-</div>
-
-
-</div>
-
-
-
-<div class="pagination">
-       
-      <?php   if( $cc2>10  or $nbPages>1 ) { ?>
-      <div style="  float: left;" >
-        <form id="frm" method='post' >
-          <select onchange="this.form.submit()" name="t_p_g"  style="width: 50px; margin-right: 20px;" >
-            <option value="10"  <?php if(isset($_SESSION["i_t_p_g"]) and $_SESSION["i_t_p_g"]=='10')  echo "selected"; ?> >10 </option>
-            <option value="20"  <?php if(isset($_SESSION["i_t_p_g"]) and $_SESSION["i_t_p_g"]=='20')  echo "selected"; ?> >20 </option>
-            <option value="30"  <?php if(isset($_SESSION["i_t_p_g"]) and $_SESSION["i_t_p_g"]=='30')  echo "selected"; ?> >30 </option>
-            <option value="40"  <?php if(isset($_SESSION["i_t_p_g"]) and $_SESSION["i_t_p_g"]=='40')  echo "selected"; ?> >40 </option>
-            <option value="50"  <?php if(isset($_SESSION["i_t_p_g"]) and $_SESSION["i_t_p_g"]=='50')  echo "selected"; ?> >50 </option>
-            <option value="100" <?php if(isset($_SESSION["i_t_p_g"]) and $_SESSION["i_t_p_g"]=='100') echo "selected"; ?> >100</option>
-			<option value="99999" <?php if(isset($_SESSION["i_t_p_g"]) and $_SESSION["i_t_p_g"]=='99999') echo "selected"; ?> >Tous</option>			
-          </select>
-        </form>
-      </div>
-      <?php   } ?>
-           
-      <div id=""> 
-					<?php       
-					$lapage = '?offre='.$id_offre;
-					
-					require_once (dirname ( __FILE__ ) . $incurl3.'/class.pagination2.php');
-					Pagination::affiche ( $lapage, 'idPage', $nbPages, $pageCourante, 2 ); 
-					 
-					/* 
-					$lapage = 'pages/'  ;
-					require_once (dirname ( __FILE__ ) . $incurl2.'/class.pagination.php');
-					 
-					Pagination::affiche ( $lapage, 'idPage', $nbPages, $pageCourante, 2,$urladmin.'/accueil' );
-			
-					//*/
-					?>
-      </div>
-              
-    </div>
- 
-
- 

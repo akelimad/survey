@@ -54,9 +54,9 @@ class EventController
 					if ($key == 0) Session::setFlash('success', trans("Une convocation a été envoyée au(x) candidat(s)."));
 						
 					$message = $data['status']['mail']['message'];
-					$data['status']['mail']['message'] = Mailer::renderMessage($message, [
-						'lien_confirmation' => '<a href="'. site_url('candidature/confirm/'. md5($saveStatus['id_agend'])) .'"> <b>'. trans("Confirmer") .'</b></a>'
-					]);
+					$variables = Mailer::getVariables($parts[0], null, $saveStatus['candidature']->id_candidature);
+					$variables['lien_confirmation'] = '<a href="'. site_url('candidature/confirm/'. md5($saveStatus['id_agend'])) .'"> <b>'. trans("Confirmer") .'</b></a>';
+					$data['status']['mail']['message'] = Mailer::renderMessage($message, $variables);
 					$data['status']['mail']['receiver'] = $receiver;
 					$send = (new AjaxController())->sendEmail($data['status']['mail']);
 				}

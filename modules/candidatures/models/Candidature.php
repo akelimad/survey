@@ -1,6 +1,6 @@
 <?php
 /**
- * Candidatures
+ * Candidature
  *
  * @author mchanchaf
  *
@@ -10,7 +10,7 @@
  */
 namespace Modules\Candidatures\Models; 
 
-class Candidatures {
+class Candidature {
 
 
 	/**
@@ -25,7 +25,6 @@ class Candidatures {
 	{
 		return getDB()->findOne('offre', 'id_offre', $id_offre);
 	}
-
 
 
 	/**

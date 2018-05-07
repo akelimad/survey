@@ -277,7 +277,7 @@ if(isset($messages) and !empty($messages))  {
                          while ($ecol = mysql_fetch_array($req_exp)) { 
                              $ecol_id = $ecol['id_ecole'];
 							 
-						 if($_POST[$ecol_id."_e"]!='0') {
+						 if(isset($_POST[$ecol_id."_e"]) && $_POST[$ecol_id."_e"]!='0') {
 							 //echo '<br>$_POST['.$ecol_id.'_e]'.$_POST[$ecol_id."_e"].'<br>'; 
 							 $sql_o_e="INSERT INTO offre_necole VALUES ('".$id_off_m."','".$ecol_id."','".$_POST[$ecol_id."_e"]."')";
 							//echo '<br>'.$sql;
@@ -291,7 +291,7 @@ if(isset($messages) and !empty($messages))  {
                          while ($fili = mysql_fetch_array($req_exp)) {
                              $fili_id = $fili['id_fili'];
 							 
-						 if($_POST[$fili_id."_f"]!='0') {
+						 if(isset($_POST[$fili_id."_f"]) && $_POST[$fili_id."_f"]!='0') {
 							 //echo '<br>$_POST['.$fili_id.'_f]'.$_POST[$fili_id."_f"].'<br>';  
 							 $sql_o_f="INSERT INTO offre_nfiliere VALUES ('".$id_off_m."','".$fili_id."','".$_POST[$fili_id."_f"]."')";
 							//echo '<br>'.$sql;

@@ -44,7 +44,9 @@ $(document).ready(function () {
 
   // set dial_code
   $('body').on('change', '#candidat_pays', function () {
-    $('.dial_code').val($(this).find('option:selected').data('code'))
+    var code = $(this).find('option:selected').data('code')
+    var dialCode = (code !== undefined) ? code : ''
+    $('.dial_code').val(dialCode)
   })
 
   // mobilite
@@ -62,12 +64,12 @@ $(document).ready(function () {
     if ($(this).is(':checked')) {
       $(dateFin).hide()
       $(dateFin).val('')
-      if ($(this).is('#forma_today')) {
+      if ($(this).is('.forma_today')) {
         $(dateFin).prop('required', false)
       }
     } else {
       $(dateFin).show()
-      if ($(this).is('#forma_today')) {
+      if ($(this).is('.forma_today')) {
         $(dateFin).prop('required', true)
       }
     }

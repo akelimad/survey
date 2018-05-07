@@ -1,6 +1,6 @@
 <?php
 /**
- * Filiere
+ * Specialty
  *
  * @author mchanchaf
  *
@@ -10,11 +10,11 @@
  */
 namespace App\Models;
 
-class Filiere {
+class Specialty {
 
 
   /**
-   * Get Filiere name by ID
+   * Get Specialty name by ID
    *
    * @param bool $with_empty 
    * @return array $items 
@@ -23,7 +23,7 @@ class Filiere {
    */
   public static function findAll($with_empty = true)
   {
-    $items = getDB()->prepare("SELECT *, id_fili as value, filiere as text FROM prm_filieres");
+    $items = getDB()->prepare("SELECT *, id as value, name as text FROM prm_specialties ORDER BY sort_order ASC");
     if ($with_empty) {
       $items = ['' => ''] + $items;
     }
@@ -32,17 +32,17 @@ class Filiere {
 
 
   /**
-   * Get Filiere name by ID
+   * Get Specialty name by ID
    *
    * @param int $id 
-   * @return string $level_name 
+   * @return string $name 
    * 
    * @author Mhamed Chanchaf
    */
   public static function getNameById($id) 
   {
-    $filiere = getDB()->findOne('prm_filieres', 'id_fili', $id);
-    return (isset($filiere->filiere)) ? $filiere->filiere : null;
+    $result = getDB()->findOne('prm_specialties', 'id', $id);
+    return (isset($result->name)) ? $result->name : null;
   }
 
 }

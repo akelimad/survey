@@ -5,6 +5,7 @@
  * @author mchanchaf
  * @since 03/10/2017
  */
+use App\Controllers\Controller;
 
 /**
  * Get site url
@@ -47,4 +48,15 @@ function site_base($path='') {
 function get_current_url($path=''){
 	$scheme = (isset($_SERVER['REQUEST_SCHEME'])) ? $_SERVER['REQUEST_SCHEME'] : 'http';
 	return $scheme .'://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']  . $path;
+}
+
+/**
+ * Get param
+ *
+ * @param string $param
+ * 
+ * @return string $value
+ */
+function get_url_params($param = null, $url = null, $default = null){
+  return Controller::getUrlParms($param, $url, $default);
 }

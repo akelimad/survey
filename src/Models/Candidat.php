@@ -14,7 +14,28 @@ use App\File;
 
 class Candidat {
 
+  const PHOTO_PATH = 'apps/upload/frontend/photo_candidats/';
+  const PHOTO_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif'];
+
+  const RESUME_PATH = 'apps/upload/frontend/cv/';
+  const RESUME_EXTENSIONS = ['doc', 'docx', 'pdf'];
+
+  const MOTIVATION_PATH = 'apps/upload/frontend/lmotivation/';
+  const MOTIVATION_EXTENSIONS = ['doc', 'docx', 'pdf'];
+
+  const COPIE_DIPLOME_PATH = 'apps/upload/frontend/candidat/copie_diplome/';
+  const COPIE_DIPLOME_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'];
+
+  const COPIE_ATTESTATION_PATH = 'apps/upload/frontend/candidat/copie_attestation/';
+  const COPIE_ATTESTATION_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'];
+
+  const BULLETIN_PAIE_PATH = 'apps/upload/frontend/candidat/bulletin_paie/';
+  const BULLETIN_PAIE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'];
+
+  const PERMIS_CONDUIRE_PATH = 'apps/upload/frontend/candidat/permis_conduire/';
+  const PERMIS_CONDUIRE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'];
   
+
   /**
    * Get candidat display name
    *

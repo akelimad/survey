@@ -84,7 +84,8 @@ jQuery(document).ready(function($){
       form: {
         action: url,
         callback: 'chmForm.submit',
-        id: 'changeSatatusForm'
+        id: 'changeSatatusForm',
+        class: 'chm-simple-form'
       },
       footer: {
         label: trans("Appliquer les changements")
@@ -93,7 +94,7 @@ jQuery(document).ready(function($){
 	}
 
 	// Update candidature note ecrit
-	showNoteEcritPopup = function(id_candidature) {
+	showNoteEcritPopup = function(event, id_candidature) {
 		event.preventDefault()
 		showModal({
 			data: {
@@ -116,7 +117,7 @@ jQuery(document).ready(function($){
 	}
 
 	// Change candidature offre
-	showChangeOffrePopup = function(id_candidature, id_offre) {
+	showChangeOffrePopup = function(event, id_candidature, id_offre) {
 		event.preventDefault()
 		showModal({
 			data: {

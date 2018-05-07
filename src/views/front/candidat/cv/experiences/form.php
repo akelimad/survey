@@ -7,7 +7,7 @@
     $date_debut = '';
     if (isset($exp->date_debut) && $exp->date_debut != '') {
       $date_debut = (strlen($exp->date_debut) == 7) ? '01/'. $exp->date_debut : $exp->date_debut;
-      $date_debut = french_to_english_date($date_debut);
+      $date_debut = eta_date($date_debut, 'd/m/Y');
     }
     ?>
     <input readonly type="text" value="<?= $date_debut ?>" class="form-control" id="exp_date_debut" name="date_debut" required>
@@ -18,7 +18,7 @@
     $date_fin = '';
     if (isset($exp->date_fin) && $exp->date_fin != '') {
       $date_fin = (strlen($exp->date_fin) == 7) ? '01/'. $exp->date_fin : $exp->date_fin;
-      $date_fin = french_to_english_date($date_fin);
+      $date_fin = eta_date($date_fin, 'd/m/Y');
     }
     ?>
     <input readonly type="text" value="<?= $date_fin ?>" class="form-control" id="exp_date_fin" name="date_fin" style="max-width: 186px;float: left;margin-right: 10px;<?= (isset($exp->date_fin) && $exp->date_fin == '') ? 'display: none;"' : '" required' ?>>

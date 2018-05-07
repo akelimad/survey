@@ -10,8 +10,32 @@
  */
 namespace App\Controllers; 
 
+use App\Helpers\Form\Validator;
+
 class Controller
 {
+
+	public function validate($fields, $rules)
+	{
+		$this->setFieldNames($rules);
+		return Validator::is_valid($fields, $this->getRules($rules));
+	}
+
+
+	public function getRules($rules)
+	{
+		return array_map(function($rule) {
+			return trans($rule[0]);
+		}, $rules);
+	}
+
+
+	public function setFieldNames($rules)
+	{
+		Validator::set_field_names(array_map(function($rule) {
+			return trans($rule[1]);
+		}, $rules));
+	}
 	
 
 	/**
@@ -55,6 +79,20 @@ class Controller
 		$response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=". $secret ."&response=". $response);
 		$response = json_decode($response, true);
 		return ($response["success"] === true);
+	}
+
+
+	public function validateRecaptcha($params)
+	{
+		if(get_setting('google_recaptcha_enabled', 0) == 0) {
+			return true;
+		}
+
+		if (!isset($params['g-recaptcha-response'])) {
+			return false;
+		}
+
+		return $this->verifyGoogleRecaptcha($params['g-recaptcha-response']);
 	}
 
 
@@ -117,8 +155,12 @@ class Controller
 		return $files;
 	}
 
-	public function getUrlParms($url, $param = null, $default = null)
+	public static function getUrlParms($param = null, $url = null, $default = null)
 	{
+		if (is_null($url)) {
+			return (isset($_GET[$param])) ? $_GET[$param] : $default;
+		}
+
 		$parts = parse_url($url);
 		if (!isset($parts['query']))
 			return $default;
