@@ -862,13 +862,22 @@ function addLine(target) {
   		var id = $(this).attr('id').replace('_1_', '_'+ count +'_')
 	  	$(this).attr('name', name.replace('[1]', '['+ count +']'))
 	  	$(this).attr('id', id)
-  		$(this).prev('label').attr('for', id)
+
+	  	if($(this).is('input[type="checkbox"]') || $(this).is('input[type="radio"]')) {
+  			$(this).closest('label').attr('for', id)
+  			$(this).prop('checked', false)
+	  	} else {
+  			$(this).prev('label').attr('for', id)
+  			$(this).val('')
+	  	}
+
+	  	if ($(this).hasClass('hasDatepicker')) {
+	  		$(this).css('display', 'block')
+	  	}
 
   		if($(this).hasClass('hasDatepicker')) {
   			$(this).removeClass('hasDatepicker')
   		}
-
-  		$(this).val('')
   	}
   })
 
