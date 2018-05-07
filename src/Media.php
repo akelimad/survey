@@ -101,7 +101,7 @@ class Media {
                 }
 
                 if ($rule_files['size'][$k] > File::koToOctet($max_file_size)) {
-                    $return['errors'][$rule_name .'_size'] = sprintf(trans("Vous avez depassé la taille maximal <strong>(%sko)</strong> pour le champ <strong>%s</strong>"), $max_file_size, $rule['title']);
+                    $return['errors'][$rule_name .'_size'] = sprintf(trans("Vous avez depassé la taille maximale <strong>(%sko)</strong> pour le champ <strong>%s</strong>"), $max_file_size, $rule['title']);
                     $valid = false;
                 }
             }

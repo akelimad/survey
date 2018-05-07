@@ -9,7 +9,7 @@ $max_file_size = get_setting('max_file_size', 400);
 	<h1><?php trans_e("CRÉER MON ESPACE CANDIDAT"); ?></h1>
 	<div class="ligneBleu"></div>
 
-	<div class="mt-10 mb-10"><?php get_alert('warning', [trans("Les champs marqués par (*) sont obligatoires"), trans("La taille maximal de chaque fichiers est") .' '. $max_file_size .'ko.', trans("Pour reduire la taille du fichier, nous vous proposons de consulter le lien :") .' <a target="_blank" href="https://smallpdf.com/compress-pdf">https://smallpdf.com/compress-pdf</a>'], false) ?></div>
+	<div class="mt-10 mb-10"><?php get_alert('warning', [trans("Les champs marqués par (*) sont obligatoires"), trans("La taille maximale de chaque fichiers est") .' '. $max_file_size .'ko.', trans("Pour reduire la taille du fichier, nous vous proposons de consulter le lien :") .' <a target="_blank" href="https://smallpdf.com/compress-pdf">https://smallpdf.com/compress-pdf</a>'], false) ?></div>
 
 	<div class="styled-title mt-0 mb-10">
 	  <h3><?php trans_e("Intitulé du profil"); ?></h3>

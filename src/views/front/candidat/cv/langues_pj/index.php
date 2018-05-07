@@ -15,7 +15,7 @@ $hasCV = \App\Models\Candidat::hasCV(get_candidat_id());
 
 <?php get_flash_message() ?>
 
-<div class="mt-10 mb-10"><?php get_alert('warning', [trans("Les champs marqués par (*) sont obligatoires"), trans("La taille maximal de chaque fichiers est") . $max_file_size .'ko.'], false) ?></div>
+<div class="mt-10 mb-10"><?php get_alert('warning', [trans("Les champs marqués par (*) sont obligatoires"), trans("La taille maximale de chaque fichiers est") . $max_file_size .'ko.'], false) ?></div>
 
 <form method="POST" action="<?= site_url('candidat/cv/langues_pj'); ?>" class="chm-simple-form" enctype="multipart/form-data">
 
