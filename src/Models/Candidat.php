@@ -14,26 +14,26 @@ use App\File;
 
 class Candidat {
 
-  const PHOTO_PATH = 'apps/upload/frontend/photo_candidats/';
-  const PHOTO_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif'];
+  public static $photoPath = 'apps/upload/frontend/photo_candidats/';
+  public static $photoExtensions = ['png', 'jpg', 'jpeg', 'gif'];
 
-  const RESUME_PATH = 'apps/upload/frontend/cv/';
-  const RESUME_EXTENSIONS = ['doc', 'docx', 'pdf'];
+  public static $resumePath = 'apps/upload/frontend/cv/';
+  public static $resumeExtensions = ['doc', 'docx', 'pdf'];
 
-  const MOTIVATION_PATH = 'apps/upload/frontend/lmotivation/';
-  const MOTIVATION_EXTENSIONS = ['doc', 'docx', 'pdf'];
+  public static $motivationPath = 'apps/upload/frontend/lmotivation/';
+  public static $motivationExtensions = ['doc', 'docx', 'pdf'];
 
-  const COPIE_DIPLOME_PATH = 'apps/upload/frontend/candidat/copie_diplome/';
-  const COPIE_DIPLOME_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'];
+  public static $copieDiplomePath = 'apps/upload/frontend/candidat/copie_diplome/';
+  public static $copieDiplomeExtensions = ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'];
 
-  const COPIE_ATTESTATION_PATH = 'apps/upload/frontend/candidat/copie_attestation/';
-  const COPIE_ATTESTATION_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'];
+  public static $copieAttestationPath = 'apps/upload/frontend/candidat/copie_attestation/';
+  public static $copieAttestationExtensions = ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'];
 
-  const BULLETIN_PAIE_PATH = 'apps/upload/frontend/candidat/bulletin_paie/';
-  const BULLETIN_PAIE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'];
+  public static $bulletinPaiePath = 'apps/upload/frontend/candidat/bulletin_paie/';
+  public static $bulletinPaieExtensions = ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'];
 
-  const PERMIS_CONDUIRE_PATH = 'apps/upload/frontend/candidat/permis_conduire/';
-  const PERMIS_CONDUIRE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'];
+  public static $permisConduirePath = 'apps/upload/frontend/candidat/permis_conduire/';
+  public static $permisConduireExtensions = ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'];
   
 
   /**

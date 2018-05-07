@@ -384,7 +384,7 @@ class CandidatController extends Controller
         if(!in_array($extension, $rule['extensions'])) {
           $return['errors'][] = trans("Le champ") ." <strong>{$rule['name']}</strong> ". trans("doit avoir les extensions suivantes") ." (.". implode(', .', $rule['extensions']) .")";
         } elseif ($_FILES[$key]['size'] > $this->koToOctet($max_file_size)) {
-          $return['errors'][] = trans("Vous avez depassé la taille maximal") ." <strong>({$max_file_size}ko)</strong> ". trans("pour le champ") ." <strong>{$rule['name']}</strong>";
+          $return['errors'][] = trans("Vous avez depassé la taille maximale") ." <strong>({$max_file_size}ko)</strong> ". trans("pour le champ") ." <strong>{$rule['name']}</strong>";
         } elseif ($valid) {
           $upload = Media::upload($_FILES[$key], [
             'extensions' => $rule['extensions'],
@@ -779,50 +779,50 @@ class CandidatController extends Controller
         'name' => 'photo',
         'title' => trans("Photo"),
         'required' => Form::getFieldOption('required', 'register', 'photo'),
-        'uploadDir' => Candidat::PHOTO_PATH,
-        'extensions' => Candidat::PHOTO_EXTENSIONS
+        'uploadDir' => Candidat::$photoPath,
+        'extensions' => Candidat::$photoExtensions
       ],
       [
         'name' => 'cv',
         'title' => trans("CV"),
         'required' => Form::getFieldOption('required', 'register', 'cv'),
-        'uploadDir' => Candidat::RESUME_PATH,
-        'extensions' => Candidat::RESUME_EXTENSIONS
+        'uploadDir' => Candidat::$resumePath,
+        'extensions' => Candidat::$resumeExtensions
       ],
       [
         'name' => 'lm',
         'title' => trans("Lettre de motivation"),
         'required' => Form::getFieldOption('required', 'register', 'lm'),
-        'uploadDir' => Candidat::MOTIVATION_PATH,
-        'extensions' => Candidat::MOTIVATION_EXTENSIONS
+        'uploadDir' => Candidat::$motivationPath,
+        'extensions' => Candidat::$motivationExtensions
       ],
       [
         'name' => 'copie_diplome',
         'title' => trans("Copie du diplôme"),
         'required' => Form::getFieldOption('required', 'register', 'copie_diplome'),
-        'uploadDir' => Candidat::COPIE_DIPLOME_PATH,
-        'extensions' => Candidat::COPIE_DIPLOME_EXTENSIONS
+        'uploadDir' => Candidat::$copieDiplomePath,
+        'extensions' => Candidat::$copieDiplomeExtensions
       ],
       [
         'name' => 'copie_attestation',
         'title' => trans("Copie de l’attestation"),
         'required' => Form::getFieldOption('required', 'register', 'copie_attestation'),
-        'uploadDir' => Candidat::COPIE_ATTESTATION_PATH,
-        'extensions' => Candidat::COPIE_ATTESTATION_EXTENSIONS
+        'uploadDir' => Candidat::$copieAttestationPath,
+        'extensions' => Candidat::$copieAttestationExtensions
       ],
       [
         'name' => 'bulletin_paie',
         'title' => trans("Bulletin de paie"),
         'required' => Form::getFieldOption('required', 'register', 'bulletin_paie'),
-        'uploadDir' => Candidat::BULLETIN_PAIE_PATH,
-        'extensions' => Candidat::BULLETIN_PAIE_EXTENSIONS
+        'uploadDir' => Candidat::$bulletinPaiePath,
+        'extensions' => Candidat::$bulletinPaieExtensions
       ],
       [
         'name' => 'permis_conduire',
         'title' => trans("Permis de conduire"),
         'required' => Form::getFieldOption('required', 'register', 'permis_conduire'),
-        'uploadDir' => Candidat::PERMIS_CONDUIRE_PATH,
-        'extensions' => Candidat::PERMIS_CONDUIRE_EXTENSIONS
+        'uploadDir' => Candidat::$permisConduirePath,
+        'extensions' => Candidat::$permisConduireExtensions
       ],
     ]);
   }
