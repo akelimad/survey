@@ -11,6 +11,7 @@
 namespace App\Controllers; 
 
 use App\Helpers\Form\Validator;
+use Mpdf\Mpdf;
 
 class Controller
 {
@@ -201,6 +202,21 @@ class Controller
     	return $scv;
     }
 	}
+
+
+	public function htmlToPDF($html, $filename = null, $dest = 'I')
+  {
+    try {
+    	if (is_null($filename)) {
+    		$filename = date('dmY_Hi') .'.pdf';
+    	}
+      $mpdf = new Mpdf();
+      $mpdf->SetDisplayMode('fullpage');
+      $mpdf->setDefaultFont("Arial");
+      $mpdf->WriteHTML($html);
+      $mpdf->Output($filename, $dest);
+    } catch(\Exception $e) {}
+  }
 
 
 } // END Class

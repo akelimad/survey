@@ -28,7 +28,7 @@ $(document).ready(function () {
       var dateF = new Date(dateFin)
       if (dateF <= dateD) {
         row.find('[id$="date_fin"]').val('')
-        window.chmAlert.danger('La date de fin doit être supérieur à date de début.')
+        window.chmAlert.danger('La date de fin doit être supérieure à  la date de début.')
       }
     } else if (!dateDebut.startsWith(0) && dateDebut !== '') {
       dateD = new Date(dateDebut)

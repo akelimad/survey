@@ -15,8 +15,9 @@ use App\Event;
 use App\Session;
 use App\Mail\Mailer;
 use Modules\Candidatures\Models\Status;
+use App\Controllers\Controller;
 
-class ConfirmController
+class ConfirmController extends Controller
 {
 
 
@@ -70,9 +71,15 @@ class ConfirmController
   public function invitation($data)
   {
     $md5 = $data['params'][1];
-    $agenda = getDB()->prepare("SELECT * FROM agenda WHERE md5(id_agend)=?", [$md5], true);
-    if (isset($agenda->id_agend) && $agenda->confirmation_statu == 1) {
+    $data = getDB()->prepare("SELECT a.id_agend, a.start, a.lieu, a.confirmation_statu, c.nom, c.prenom, c.email, c.tel1 FROM agenda a JOIN candidats c ON c.candidats_id=a.candidats_id WHERE md5(a.id_agend)=?", [$md5], true);
+    if (isset($data->id_agend) && $data->confirmation_statu == 1) {
+      ini_set('memory_limit','512M');
 
+      ob_start();
+      echo get_view('front/confirm/invitation', compact('data'), __FILE__);
+      $html = ob_get_clean();
+
+      return $this->htmlToPDF($html);
 
     } else {
       die(trans("Impossible de trouver cette invitation!"));
@@ -95,8 +102,8 @@ class ConfirmController
     
     $lien = site_url("candidature/invitation/". md5($id_agend));
     $variables['invitation_link'] = '<a href="'. $lien .'">'. $lien .'</a>';
-    $variables['start_date'] = eta_date($agenda->start, 'd.m.Y H:i');
-    $variables['location'] = $agenda->lieu;
+    $variables['start_date'] = eta_date($agenda->start, '%A %d %B', true) .' '. eta_date($agenda->start, 'H:i');
+    $variables['location'] = (!empty($agenda->lieu)) ? $agenda->lieu : '';
 
     $subject = Mailer::renderMessage($template->objet, $variables);
     $message = Mailer::renderMessage($template->message, $variables);

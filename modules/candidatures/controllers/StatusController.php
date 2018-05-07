@@ -21,7 +21,6 @@ class StatusController
 
   public function saveStatus($data)
   {
-    var_dump($data['status']['id'], $ce_id, $co_id);exit;
   	$db = getDB();
   	$candidature = $db->findOne('candidature', 'id_candidature', $data['status']['id_candidature']);
   	if( !isset($candidature->id_candidature) ) return;
@@ -54,39 +53,31 @@ class StatusController
     $id_agend = 0;
     $agenda = $db->findOne('agenda', 'id_candidature', $candidature->id_candidature);
 
-    // update agenda
-    if (isBackend()) {
-
-    } else {
-
-    }
-
-
-    // TODO - check the logic
-
-    $ce_id = Status::getIdByRef(Status::STATUS_CONVOQUES_ECRIT_REF);
-    $co_id = Status::getIdByRef(Status::STATUS_CONVOQUES_ORAL_REF);
-    if (
-      isLogged('candidat') || 
-      (isBackend() && in_array($data['status']['id'], [$ce_id, $co_id]))
-    ) {
-    	$date = $data['status']['date'].' '.$data['status']['time'].':00';
-    	$agendaData = array(
-    		'candidats_id' => $candidature->candidats_id,
+    // Check if status is CONVOQUES_ECRIT OR CONVOQUES_ORAL
+    $convE_id = Status::getIdByRef(Status::STATUS_CONVOQUES_ECRIT_REF);
+    $convO_id = Status::getIdByRef(Status::STATUS_CONVOQUES_ORAL_REF);
+    $confE_id = Status::getIdByRef(Status::STATUS_CONFIRMES_ECRIT_REF);
+    $confO_id = Status::getIdByRef(Status::STATUS_CONFIRMES_ORAL_REF);
+    if (in_array($data['status']['id'], [$convE_id, $convO_id, $confE_id, $confO_id])) {
+      $date = $data['status']['date'].' '.$data['status']['time'].':00';
+      $agendaData = array(
+        'candidats_id' => $candidature->candidats_id,
         'id_candidature' => $candidature->id_candidature,
         'action' => $prm_statut->statut,
         'obs' => (isset($data['status']['comments'])) ? $data['status']['comments'] : null,
-        'lieu' => (isset($data['status']['lieu'])) ? $data['status']['lieu'] : null,
         'start' => $date,
         'end' => $date,
-        'confirmation_statu' => (isset($data['status']['agenda']['confirmation_statu'])) ? $data['status']['agenda']['confirmation_statu'] : 0,
+        'confirmation_statu' => (in_array($data['status']['id'], [$confE_id, $confO_id])) ? 1 : 0,
       );
-    	if( isset($agenda->id_agend) ) {
-    		$db->update('agenda', 'id_agend', $agenda->id_agend, $agendaData);
+      if (isset($data['status']['lieu']) && !empty($data['status']['lieu'])) {
+        $agendaData['lieu'] = $data['status']['lieu'];
+      }
+      if( isset($agenda->id_agend) ) {
+        $db->update('agenda', 'id_agend', $agenda->id_agend, $agendaData);
         $id_agend = $agenda->id_agend;
-    	} else {
-    		$id_agend = $db->create('agenda', $agendaData);
-    	}
+      } else {
+        $id_agend = $db->create('agenda', $agendaData);
+      }
     }
 
     // Fire event after saving new sattus
