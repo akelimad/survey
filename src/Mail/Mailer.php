@@ -134,7 +134,7 @@ class Mailer
 					'ref_filiale' => (isset($args['ref_filiale'])) ? $args['ref_filiale'] : ''
 				]);
 				
-				return array("response" => "success", "message" => trans("L'email a été bien envoyé."));
+				return array("response" => "success", "message" => trans("L'email a bien été envoyé."));
 			} else {
 				return array("response" => "error", "message" => trans("Une erreur est survenue lors d'envoi de l'email."));
 			}

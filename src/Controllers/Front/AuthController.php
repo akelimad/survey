@@ -52,7 +52,7 @@ class AuthController extends CandidatController
 			case '0':
 			return $this->jsonResponse(
 				'confirm_activation', 
-				trans("Votre compte a été désactivé, voulez vous le reactiver ?"), [
+				trans("Votre compte a été désactivé, voulez-vous le réactiver ?"), [
 					"candidat_id" => $candidat->candidats_id
 				]);
 			break;
@@ -116,7 +116,7 @@ class AuthController extends CandidatController
 				switch ($candidat->status) {
 					case '0':
 						$data['status'] = 'confirm_activation';
-						$data['message'] = trans("Votre compte a été désactivé, voulez vous le reactiver ?");
+						$data['message'] = trans("Votre compte a été désactivé, voulez-vous le réactiver ?");
 						$data['candidat_id'] = $candidat->candidats_id;
 					break;
 					case '1':

@@ -69,7 +69,7 @@ export default class chmForm {
 
         if (response.message !== '' && ['success', 'info', 'warning', 'danger', 'error'].indexOf(response.status) !== -1) {
           if (typeof response.message === 'object') {
-            if (response.status !== 'success') window.chmAlert.danger("L'opération est fini avec des erreurs.")
+            if (response.status !== 'success') window.chmAlert.danger("L’opération est finie avec des erreurs.")
             var dismissible = (response.data.dismissible && response.data.dismissible === true)
             window.chmForm.showMessagesBlock(response.status, response.message, target, dismissible)
           } else {

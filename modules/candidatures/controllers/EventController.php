@@ -46,7 +46,7 @@ class EventController
 				$data['status']['id_candidature'] = $parts[0];
 				$saveStatus = (new StatusController())->saveStatus($data);
 				if ($key == 0 && isset($saveStatus['candidature']->id_candidature)) {
-					Session::setFlash('success', trans("Le statut a été bien changé."));
+					Session::setFlash('success', trans("Le statut a bien été changé."));
 				}
 
 				// Send convocation email

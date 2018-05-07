@@ -240,7 +240,7 @@ class CandidatController extends Controller
 
       getDB()->update('candidats', 'candidats_id', get_candidat_id(), $data, false);
 
-      return $this->jsonResponse('success', trans("Vos informations personnalles ont été bien mis à jour."));
+      return $this->jsonResponse('success', trans("Vos informations personnelles ont bien été mises à jour."));
 
     } else {
       $this->data['layout'] = 'front';
@@ -417,7 +417,7 @@ class CandidatController extends Controller
     unlinkFile(site_base('apps/upload/frontend/photo_candidats/'. $data['photo']));
     getDB()->update('candidats', 'candidats_id', get_candidat_id(), ['photo' => null, 'dateMAJ' => date("Y-m-d H:i:s")]);
 
-    return $this->jsonResponse('success', trans("La photo a été bien supprimé."));
+    return $this->jsonResponse('success', trans("La photo est supprimée avec succès."));
   }
 
 
@@ -426,7 +426,7 @@ class CandidatController extends Controller
     unlinkFile(site_base('apps/upload/frontend/candidat/permis_conduire/'. $data['fname']));
     getDB()->update('candidats', 'candidats_id', get_candidat_id(), ['permis_conduire' => null, 'dateMAJ' => date("Y-m-d H:i:s")]);
 
-    return $this->jsonResponse('success', trans("La permis de conduire a été bien supprimé."));
+    return $this->jsonResponse('success', trans("La permis de conduire est supprimée avec succès."));
   }
 
 
@@ -435,7 +435,7 @@ class CandidatController extends Controller
     $cv = getDB()->prepare("SELECT * FROM cv WHERE id_cv=? AND candidats_id=?", [$data['id'], get_candidat_id()], true);
     if(isset($cv->id_cv) && getDB()->delete('cv', 'id_cv', $cv->id_cv)) {
       unlinkFile(site_base('apps/upload/frontend/cv/'. $cv->lien_cv));
-      return $this->jsonResponse('success', trans("Le CV a été bien supprimé."));
+      return $this->jsonResponse('success', trans("Le CV est supprimé avec succès."));
     }
     return $this->jsonResponse('error', trans("Impossible de supprimer le CV."));
   }
@@ -446,7 +446,7 @@ class CandidatController extends Controller
     $lm = getDB()->prepare("SELECT * FROM lettres_motivation WHERE id_lettre=? AND candidats_id=?", [$data['id'], get_candidat_id()], true);
     if(isset($lm->id_lettre) && getDB()->delete('lettres_motivation', 'id_lettre', $lm->id_lettre)) {
       unlinkFile(site_base('apps/upload/frontend/lmotivation/'. $lm->lettre));
-      return $this->jsonResponse('success', trans("La lettre de motivation a été bien supprimé."));
+      return $this->jsonResponse('success', trans("La lettre de motivation est supprimée avec succès."));
     }
     return $this->jsonResponse('error', trans("Impossible de supprimer La lettre de motivation."));
   }
@@ -511,7 +511,7 @@ class CandidatController extends Controller
         'dateMAJ' => date("Y-m-d H:i:s")
       ]);
 
-      return $this->jsonResponse('success', trans("Votre mot de passe a été bien mis à jour."));
+      return $this->jsonResponse('success', trans("Votre mot de passe abien été  mis à jour."));
     }
     $this->data['layout'] = 'front';
     $this->data['breadcrumbs'] = [trans("Accueil"), trans("Candidat"), trans("Mes identifiants")];

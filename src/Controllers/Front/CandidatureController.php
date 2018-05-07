@@ -153,7 +153,7 @@ class CandidatureController extends Controller
 
     getDB()->delete('candidature_spontanee', 'id_candidature', $data['id']);
 
-    return $this->jsonResponse('success', trans("La candidature a été bien supprimé."));
+    return $this->jsonResponse('success', trans("La candidature est supprimée avec succès."));
   }
 
 
@@ -170,7 +170,7 @@ class CandidatureController extends Controller
 
     getDB()->delete('candidature_stage', 'id_candidature', $data['id']);
 
-    return $this->jsonResponse('success', trans("La candidature a été bien supprimé."));
+    return $this->jsonResponse('success', trans("La candidature est supprimée avec succès."));
 	}
 
 	

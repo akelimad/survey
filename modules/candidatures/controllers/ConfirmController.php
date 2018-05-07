@@ -51,7 +51,7 @@ class ConfirmController
         }
 
         $type = 'success';
-        $message = trans("La convocation a été bien confirmé, merci.");
+        $message = trans("La convocation a bien été confirmée, merci.");
       }
     } else {
       $type = 'danger';
