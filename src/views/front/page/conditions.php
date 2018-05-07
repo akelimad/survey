@@ -1,4 +1,7 @@
-<h1>Conditions générales d'utilisation</h1>
+<h1><?php trans_e("Conditions générales d'utilisation") ?></h1>
+<?php if (get_setting('pages.conditions', '') != '') : ?>
+  <?= get_setting('pages.conditions'); ?>
+<?php else : ?>
 <p align="justify"><strong>1.</strong> La solution <strong><?= $terms_site_title; ?>
 </strong> et l'ensemble de son contenu, y compris textes, images fixes ou animées, bases de données, programmes, langage, jsp, cgi, etc., nommé ci-après <strong><?= $terms_site_title; ?>
 </strong>, est protégé par le droit d'auteur.</p>
@@ -17,3 +20,4 @@
 </strong> sera de la compétence exclusive des tribunaux marocains de Rabat faisant application de la loi marocaine.</p>
 <p align="justify">8. L'ensemble des éléments de cette solution est protégé par copyright © <?= $titre_site; ?> par - tous droits réservés. Tous les éléments de propriété intellectuelle, marques, noms commerciaux et logos sont la propriété de <?= $titre_site; ?>, sauf mentions contraires. Toute reproduction de la solution <strong><?= $terms_site_title; ?>
 </strong> est interdite.</p>
+<?php endif; ?>
