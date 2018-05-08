@@ -10,7 +10,7 @@
  */
 namespace App\Models;
 
-class Formation {
+class Formation extends Model {
 
 
   /**

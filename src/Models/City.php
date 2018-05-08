@@ -10,21 +10,10 @@
  */
 namespace App\Models;
 
-class City {
+class City extends Model {
 
-
-  /**
-   * Get City name by ID
-   *
-   * @param int $id 
-   * @return string $name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $v = getDB()->findOne('prm_villes', 'id_ville', $id);
-    return (isset($v->ville)) ? $v->ville : null;
-  }
+  public static $table = 'prm_villes';
+  public static $primaryKey = 'id_vill';
+  public static $NameField = 'ville';
 
 }

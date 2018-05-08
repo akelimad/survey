@@ -10,30 +10,10 @@
  */
 namespace App\Models;
 
-class Fonction {
+class Fonction extends Model {
 
-
-  /**
-   * Get Fonction name by ID
-   *
-   * @param int $id 
-   * @return string $name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $fonc = getDB()->findOne('prm_fonctions', 'id_fonc', $id);
-    return (isset($fonc->fonction)) ? $fonc->fonction : null;
-  }
-
-
-  public static function findAll($with_empty = true)
-  {
-    $items = getDB()->prepare("SELECT id_fonc, fonction, id_fonc as value, fonction as text FROM prm_fonctions");
-    if ($with_empty) $items = ['' => ''] + $items;
-    return $items;
-  }
-
+  public static $table = 'prm_fonctions';
+  public static $primaryKey = 'id_fonc';
+  public static $NameField = 'fonction';
 
 }

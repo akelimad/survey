@@ -10,20 +10,11 @@
  */
 namespace App\Models; 
 
-class MotivationLetter {
+class MotivationLetter extends Model {
 
-
-	/**
-   * Get CV by id
-   *
-   * @param int $id_lettre 
-   * @return array $data 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getByID($id_lettre) {
-    return getDB()->findOne('lettres_motivation', 'id_lettre', $id_lettre);
-  }
+  public static $table = 'lettres_motivation';
+  public static $primaryKey = 'id_lettre';
+  public static $NameField = 'titre';
 
 
   /**

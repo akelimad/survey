@@ -10,21 +10,10 @@
  */
 namespace App\Models;
 
-class Situation {
+class Situation extends Model {
 
-
-  /**
-   * Get Situation name by ID
-   *
-   * @param int $id 
-   * @return string $name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $situ = getDB()->findOne('prm_situation', 'id_situ', $id);
-    return (isset($situ->situation)) ? $situ->situation : null;
-  }
+  public static $table = 'prm_situation';
+  public static $primaryKey = 'id_situ';
+  public static $NameField = 'situation';
 
 }

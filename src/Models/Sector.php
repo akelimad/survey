@@ -10,30 +10,10 @@
  */
 namespace App\Models;
 
-class Sector {
+class Sector extends Model {
 
-  public static function findAll($with_empty = true)
-  {
-    $items = getDB()->prepare("SELECT *, id_sect as value, FR as text FROM prm_sectors ORDER BY id_sect ASC");
-    if ($with_empty) {
-      $items = ['' => ''] + $items;
-    }
-    return $items;
-  }
-
-
-  /**
-   * Get Sector name by ID
-   *
-   * @param int $id 
-   * @return string $name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $sector = getDB()->findOne('prm_sectors', 'id_sect', $id);
-    return (isset($sector->FR)) ? $sector->FR : null;
-  }
+  public static $table = 'prm_sectors';
+  public static $primaryKey = 'id_sect';
+  public static $NameField = 'FR';
 
 }

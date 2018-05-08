@@ -10,20 +10,11 @@
  */
 namespace App\Models; 
 
-class Resume {
+class Resume extends Model {
 
-
-  /**
-   * Get CV by id
-   *
-   * @param int $id_cv 
-   * @return array $data 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getByID($id_cv) {
-    return getDB()->findOne('cv', 'id_cv', $id_cv);
-  }
+  public static $table = 'cv';
+  public static $primaryKey = 'id_cv';
+  public static $NameField = 'titre_cv';
 
 
   /**

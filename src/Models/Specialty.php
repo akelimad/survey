@@ -10,39 +10,10 @@
  */
 namespace App\Models;
 
-class Specialty {
+class Specialty extends Model {
 
-
-  /**
-   * Get Specialty name by ID
-   *
-   * @param bool $with_empty 
-   * @return array $items 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function findAll($with_empty = true)
-  {
-    $items = getDB()->prepare("SELECT *, id as value, name as text FROM prm_specialties ORDER BY sort_order ASC");
-    if ($with_empty) {
-      $items = ['' => ''] + $items;
-    }
-    return $items;
-  }
-
-
-  /**
-   * Get Specialty name by ID
-   *
-   * @param int $id 
-   * @return string $name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $result = getDB()->findOne('prm_specialties', 'id', $id);
-    return (isset($result->name)) ? $result->name : null;
-  }
+  public static $table = 'prm_specialties';
+  public static $primaryKey = 'id';
+  public static $NameField = 'name';
 
 }

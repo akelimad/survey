@@ -10,39 +10,10 @@
  */
 namespace App\Models;
 
-class Filiere {
+class Filiere extends Model {
 
-
-  /**
-   * Get Filiere name by ID
-   *
-   * @param bool $with_empty 
-   * @return array $items 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function findAll($with_empty = true)
-  {
-    $items = getDB()->prepare("SELECT *, id_fili as value, filiere as text FROM prm_filieres");
-    if ($with_empty) {
-      $items = ['' => ''] + $items;
-    }
-    return $items;
-  }
-
-
-  /**
-   * Get Filiere name by ID
-   *
-   * @param int $id 
-   * @return string $level_name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $filiere = getDB()->findOne('prm_filieres', 'id_fili', $id);
-    return (isset($filiere->filiere)) ? $filiere->filiere : null;
-  }
-
+  public static $table = 'prm_filieres';
+  public static $primaryKey = 'id_fili';
+  public static $NameField = 'filiere';
+  
 }

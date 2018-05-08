@@ -10,29 +10,11 @@
  */
 namespace App\Models;
 
-class Experience {
+class Experience extends Model {
 
-  public static function findAll($with_empty = true)
-  {
-    $items = getDB()->prepare("SELECT id_expe, intitule, id_expe as value, intitule as text FROM prm_experience");
-    if ($with_empty) $items = ['' => ''] + $items;
-    return $items;
-  }
-
-
-  /**
-   * Get Filiere name by ID
-   *
-   * @param int $id 
-   * @return string $level_name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $exp = getDB()->findOne('prm_experience', 'id_expe', $id);
-    return (isset($exp->intitule)) ? $exp->intitule : null;
-  }
+  public static $table = 'prm_experience';
+  public static $primaryKey = 'id_expe';
+  public static $NameField = 'intitule';
 
 
   /**

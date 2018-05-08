@@ -10,29 +10,10 @@
  */
 namespace App\Models;
 
-class TypePoste {
+class TypePoste extends Model {
 
-
-  public static function findAll($with_empty = true)
-  {
-    $items = getDB()->prepare("SELECT id_tpost, designation, id_tpost as value, designation as text FROM prm_type_poste");
-    if ($with_empty) $items = ['' => ''] + $items;
-    return $items;
-  }
-
-
-  /**
-   * Get TypePoste name by ID
-   *
-   * @param int $id 
-   * @return string $name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $tpost = getDB()->findOne('prm_type_poste', 'id_tpost', $id);
-    return (isset($tpost->designation)) ? $tpost->designation : null;
-  }
+  public static $table = 'prm_type_poste';
+  public static $primaryKey = 'id_tpost';
+  public static $NameField = 'designation';
 
 }

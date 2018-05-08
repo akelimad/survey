@@ -10,7 +10,7 @@
  */
 namespace App\Models;
 
-class Candidature {
+class Candidature extends Model {
 
 
 	/**

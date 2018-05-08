@@ -10,18 +10,11 @@
  */
 namespace App\Models;
 
-class Offer {
+class Offer extends Model {
 
-
-  public static function findAll($with_empty = true)
-  {
-    $items = getDB()->prepare("SELECT *, id_offre as value, Name as text FROM offre");
-    if ($with_empty) {
-      $items = ['' => ''] + $items;
-    }
-    return $items;
-  }
-
+  public static $table = 'offre';
+  public static $primaryKey = 'id_offre';
+  public static $NameField = 'Name';
 
   public static function findActive($with_empty = true)
   {
@@ -30,21 +23,6 @@ class Offer {
       $items = ['' => ''] + $items;
     }
     return $items;
-  }
-
-
-  /**
-   * Get Offer name by ID
-   *
-   * @param int $id 
-   * @return string $name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $res = getDB()->findOne('offre', 'id_offre', $id);
-    return (isset($res->Name)) ? $res->Name : null;
   }
 
 }

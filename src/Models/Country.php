@@ -10,21 +10,10 @@
  */
 namespace App\Models;
 
-class Country {
+class Country extends Model {
 
-
-  /**
-   * Get Country name by ID
-   *
-   * @param int $id 
-   * @return string $name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $country = getDB()->findOne('prm_pays', 'id_pays', $id);
-    return (isset($country->pays)) ? $country->pays : null;
-  }
+  public static $table = 'prm_pays';
+  public static $primaryKey = 'id_pays';
+  public static $NameField = 'pays';
 
 }

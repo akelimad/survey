@@ -10,21 +10,10 @@
  */
 namespace App\Models;
 
-class Status {
+class Status extends Model {
 
-
-  /**
-   * Get Status name by ID
-   *
-   * @param int $id 
-   * @return string $name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $s = getDB()->findOne('prm_statut_candidature', 'id_prm_statut_c', $id);
-    return (isset($s->statut)) ? $s->statut : null;
-  }
+  public static $table = 'prm_statut_candidature';
+  public static $primaryKey = 'id_prm_statut_c';
+  public static $NameField = 'statut';
 
 }

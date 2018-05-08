@@ -10,21 +10,10 @@
  */
 namespace App\Models;
 
-class Salary {
+class Salary extends Model {
 
-
-  /**
-   * Get Salary name by ID
-   *
-   * @param int $id 
-   * @return string $name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $salr = getDB()->findOne('prm_salaires', 'id_salr', $id);
-    return (isset($salr->salaire)) ? $salr->salaire : null;
-  }
+  public static $table = 'prm_salaires';
+  public static $primaryKey = 'id_salr';
+  public static $NameField = 'salaire';
 
 }
