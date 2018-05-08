@@ -30,7 +30,9 @@ console.log(files) */
 import Language from './classes/language'
 import Survey from './classes/survey'
 import Group from './classes/group'
+import Question from './classes/question'
 
 window.Language = Language
 window.Survey = Survey
 window.Group = Group
+window.Question = Question

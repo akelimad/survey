@@ -2,7 +2,7 @@
 /**
  * Survey
  *
- * @author mchanchaf
+ * @author Imad
  *
  * @package modules.Survey.controllers
  * @version 1.0
@@ -14,9 +14,13 @@ use App\Controllers\Controller;
 
 class Survey {
 
-  public static function findAll()
+  public static function find($sid)
   {
-    return getDB()->read('surveys');
+    return getDB()->findOne('surveys', 'id', $sid);
+  }
+
+  public static function get_candidat_id() {
+    return read_session('abb_id_candidat', false);
   }
 
   public static function getAdminId()
@@ -24,7 +28,53 @@ class Survey {
     return read_session('id_role', false);
   }
 
+  public static function getSurveyGroups($sid)
+  {
+    $groups = getDB()->prepare("SELECT * FROM survey_groups as g WHERE g.survey_id = ? ", [$sid], false);
+    return $groups;
+  }
 
+  public static function getGroupeQuestions($gid)
+  {
+    $groups = getDB()->prepare("SELECT * FROM survey_questions as q WHERE q.group_id = ? ", [$gid], false);
+    return $groups;
+  }
+
+  public static function getQuestionChoices($qid)
+  {
+    $choices = getDB()->prepare("SELECT * FROM survey_question_answers as a WHERE a.survey_question_id = ? ", [$qid], false);
+    return $choices;
+  }
+
+  public static function getQuestionAttachmnts($qid)
+  {
+    $images = getDB()->prepare("SELECT * FROM survey_attachements as a WHERE a.object_id = ? ", [$qid], false);
+    return $images;
+  }
+
+  // Does string match this chars?
+  public static function unsafe( $string ) {
+    return preg_match("/[^a-zA-Z éèê'’àç:]+/i", $string);
+  }
+
+  public static function checkUserResponse($uid, $sid)
+  {
+    $response = getDB()->prepare("SELECT * FROM survey_tokens as r WHERE r.user_id = ? and r.survey_id = ? ", [$uid, $sid], false);
+    return $response;
+  }
+
+  public static function getUserResponse($qid)
+  {
+    $responses = getDB()->prepare("SELECT * FROM survey_responses as r WHERE r.survey_question_id = ? ", [$qid], false);
+    foreach ($responses as $response) {
+      $new_array[] = $response->answer;
+    }
+    if(count($responses)>0){
+      return $new_array;
+    }else{
+      return $responses[0];
+    }
+  }
 
 
 } // End Class

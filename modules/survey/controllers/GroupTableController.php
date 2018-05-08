@@ -12,14 +12,17 @@ namespace Modules\Survey\Controllers;
 
 use App\Controllers\Controller;
 use Modules\Survey\Models\Group;
+use Modules\Survey\Models\Survey;
 use App\Form;
 
 class GroupTableController extends Controller
 {
+  public $params = [];
 	public function getAll($data)
   {
+    $this->params['sid'] = $data['params'][1];
     $params = $_GET;
-
+    $survey = Survey::find($data['params'][1]);
     $table = new \App\Helpers\Table($this->buildQuery($params), 'id', [
       'bulk_actions' => false,
       'actions' => true,
@@ -41,29 +44,30 @@ class GroupTableController extends Controller
     });
     
     $table->addColumn('description', trans("Description"), function($row) {
-      return $row->description;
-    });
-
-    $table->addColumn('created_at', trans("Date de création"), function($row) {
-      return eta_date($row->created_at, 'd.m.Y');
-    });
-
-    $table->addColumn('updated_at', trans("Date de modification"), function($row) {
-      return eta_date($row->updated_at, 'd.m.Y');
+      return !empty($row->description) ? $row->description : '---';
     });
 
     $table->setAction('edit', [
+      'permission' => $survey->active == 0 ? true : false,
       'patern' => '#',
       'attributes' => [
-        'onclick' => 'Group.form({id})'
+        'onclick' => 'Group.form('.$data["params"][1].', {id})'
+      ]
+    ]);
+    $table->setAction('delete', [
+      'permission' => $survey->active == 0 ? true : false,
+      'patern' => '#',
+      'label' => trans("Supprimer ce groupe"),
+      'attributes' => [
+        'class' => 'btn btn-danger btn-xs mb-0',
+        'onclick' => "return chmModal.confirm('', '', '". trans("Êtes-vous sûr de vouloir supprimer ce groupe ?") ."', 'Group.delete', &#123;'sid': ".$data["params"][1].", 'gid':{id} &#125;, {width: 335})",
       ]
     ]);
 
-    $table->setAction('delete', [
-      'patern' => '#',
-      'attributes' => [
-        'onclick' => 'Group.delete({id})'
-      ]
+    $table->setAction('questions', [
+      'patern' => site_url('backend/survey/'.$data["params"][1].'/group/{id}/question/index'), 
+      'label' => trans("Liste des questions"),
+      'icon' => 'fa fa-list',
     ]);
 
     // Run table and get results
@@ -83,10 +87,8 @@ class GroupTableController extends Controller
       }
       $where_array[] = '('. implode(' AND ', $parts) .')';
     }
-
-    $where = (!empty($where_array)) ? "WHERE ". implode(' AND ', $where_array) : '';
-
-    return "SELECT * FROM groups as g {$where}";
+    $where = (!empty($where_array)) ? "WHERE ". implode(' AND ', $where_array) : 'where survey_id = '. $this->params['sid'];
+    return "SELECT * FROM survey_groups as g {$where}";
   }
 
 	

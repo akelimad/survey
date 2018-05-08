@@ -25,7 +25,8 @@ class SurveyTableController extends Controller
       'actions' => true,
       'show_footer' => true,
       'show_increment' => true,
-      'show_before_table_form' => false
+      'show_before_table_form' => false,
+      'head_actions_width' => '160'
     ]);
 
     $table->setTableClass(['accountTable', 'table']);
@@ -35,17 +36,18 @@ class SurveyTableController extends Controller
     $page = (isset($_GET['page'])) ? $_GET['page'] : 1;
     $table->setPage($page);
     $table->setPerpage(15);
+    // $table->setSortables(['name']);
 
     $table->addColumn('name', trans("Titre"), function($row) {
       return $row->name;
     });
     
     $table->addColumn('description', trans("Description"), function($row) {
-      return $row->description;
+      return !empty($row->description) ? $row->description : '---' ;
     });
     
     $table->addColumn('created_by', trans("Crée par"), function($row) {
-      return $row->created_by;
+      return $row->nom;
     });
 
     $table->addColumn('created_at', trans("Date de création"), function($row) {
@@ -72,10 +74,20 @@ class SurveyTableController extends Controller
       ]
     ]);
 
-    $table->setAction('groupes', [
+    $table->setAction('groups', [
       'patern' => site_url('backend/survey/{id}/group/index'), 
       'label' => trans("Liste des groupes"),
       'icon' => 'fa fa-list',
+    ]);
+
+    $table->setAction('show', [
+      'patern' => '#',
+      'label' => trans("Visualiser le questionnaire"),
+      'icon' => "fa fa-eye",
+      'attributes' => [
+        'onclick' => 'Survey.show({id})',
+        'class' => 'btn btn-info btn-xs mb-0'
+      ]
     ]);
 
     // Run table and get results
@@ -97,8 +109,7 @@ class SurveyTableController extends Controller
     }
 
     $where = (!empty($where_array)) ? "WHERE ". implode(' AND ', $where_array) : '';
-
-    return "SELECT * FROM surveys as s {$where}";
+    return "SELECT s.*, r.nom FROM surveys as s INNER JOIN root_roles as r ON s.created_by = r.id_role {$where}";
   }
 
 	
