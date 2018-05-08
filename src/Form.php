@@ -169,7 +169,7 @@ class Form
         $text  = $option;
       }
 
-      if ($value === '_other') {
+      if ($value == '_other') {
         $otherOptionLabel = $text;
         $dataOther = ' chm-form-other="'. $attrs['id'] .'_other"';
       } else {
@@ -177,7 +177,7 @@ class Form
       }
 
       $default = (is_null($default) && isset($_GET[$name])) ? $_GET[$name] : $default;
-      $selected = ($default === $value) ? ' selected' : '';
+      $selected = ($default == $value) ? ' selected' : '';
 
       $html .= '<option value="'. $value .'"'. $dataOther . $selected .'>'. $text .'</option>';
     endforeach;
