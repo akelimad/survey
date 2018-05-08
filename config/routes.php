@@ -21,6 +21,8 @@ Route::add('candidat/account/resent-email', 'App\Controllers\Front\AuthControlle
 // Formulaire Forum
 Route::add('candidat/forum', 'App\Controllers\Front\CandidatController@getForumForm', false, !$isLoggedCandidat);
 
+// Inscription Collaborateurs
+Route::add('candidat/collaborator/register', 'App\Controllers\Front\CollaboratorController@register', false, !$isLoggedCandidat);
 
 // Candidat account
 Route::add('candidat/account/confirm/[a-zA-Z0-9]+', 'App\Controllers\Front\CandidatController@confirmAccount');

@@ -12,6 +12,12 @@
 		"isVisible" => (!isLogged('candidat') && get_setting('left-sidebar-menu.show.forum_form', 0) == 1)
 	],
 	[
+		"label" => trans("Je suis un collaborateur"),
+		"route" => "candidat/collaborator/register",
+		"icon" => "fa fa-user-plus",
+		"isVisible" => (!isLogged('candidat') && get_setting('collaborator.domain') != null)
+	],
+	[
 		"label" => trans("Déposer une candidature spontanée"),
 		"route" => "",
 		"icon" => "fa fa-handshake-o",
