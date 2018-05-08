@@ -375,7 +375,7 @@ $max_file_size = get_setting('max_file_size', 400);
 			<div class="row mt-10">
 				<div class="col-sm-12 required">
 					<label for="formations_1_description"><?php trans_e("Description de la formation"); ?></label>
-					<textarea name="formations[1][description]" class="form-control" id="formations_1_description" required></textarea>
+					<textarea name="formations[1][description]" class="form-control ckeditor" id="formations_1_description" required></textarea>
 				</div>
 			</div>
 		</div>
@@ -524,7 +524,7 @@ $max_file_size = get_setting('max_file_size', 400);
 				<div class="row">
 					<div class="col-sm-12">
 						<label for="experiences_1_description"><?php trans_e("Description du poste"); ?></label>
-						<textarea name="experiences[1][description]" class="form-control" id="experiences_1_description"></textarea>
+						<textarea name="experiences[1][description]" class="form-control ckeditor" id="experiences_1_description"></textarea>
 					</div>
 				</div>
 			</div>

@@ -83,7 +83,7 @@ use Modules\Candidatures\Models\Candidature;
 <div class="row">
 	<label for="status_comments" class="col-md-4"><?php trans_e("Commentaire"); ?></label>
 	<div class="col-md-8">
-		<textarea name="status[comments]" class="form-control mb-0" style="height: 80px;" rows="4"></textarea>
+		<textarea name="status[comments]" class="form-control mb-0 ckeditor" style="height: 80px;" rows="4"></textarea>
 	</div>
 </div>
 
@@ -124,7 +124,7 @@ use Modules\Candidatures\Models\Candidature;
 			<label for="status_mail_message"><?php trans_e("Message"); ?></label>
 		</div>
 		<div class="col-md-12">
-			<textarea name="status[mail][message]" id="status_mail_message" class="form-control mb-0" class="ckeditor" cols="30" rows="5"></textarea>
+			<textarea name="status[mail][message]" id="status_mail_message" class="form-control mb-0 ckeditor" class="ckeditor" cols="30" rows="5"></textarea>
 			<p class="mb-0 mt-5" style="vertical-align: top; font-size: 11px; display: inline-block;"><?php trans_e("Utiliser la variable"); ?> <code style="display: inline-block;">{{lien_confirmation}}</code> <?php trans_e("pour afficher le lien de confirmation"); ?> <font style="color:red;"><?php trans_e("(obligatoire)"); ?></font>.</p>
 		</div>
 	</div>
