@@ -13,7 +13,7 @@ return array(
     'validate_numeric'              => trans("Le champ {field} doit seulement contenir des caractères numériques"),
     'validate_integer'              => trans("Le champ {field} doit être une valeur numérique"),
     'validate_boolean'              => trans("Le champ {field} doit être vrai ou faux"),
-    'validate_float'                => trans("Le champ {field} doit être une valeur déetaale"),
+    'validate_float'                => trans("Le champ {field} doit être une valeur decimal"),
     'validate_valid_url'            => trans("Le champ {field} doit être une URL valide"),
     'validate_url_exists'           => trans("L'URL {field} n'existe pas"),
     'validate_valid_ip'             => trans("Le champ {field} doit contenir une adresse IP valide"),
