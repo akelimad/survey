@@ -57,7 +57,7 @@ class FormationTableController extends Controller
 
     $table->setAction('copie_diplome',  [
       'label' => trans("Copie du diplôme"),
-      'patern' => site_url('apps/upload/frontend/candidat/copie_diplome/{copie_diplome}'),
+      'patern' => get_bulletin_paie_url('{copie_diplome}'),
       'icon' => 'fa fa-file-text-o',
       'bulk_action' => false,
       'attributes' => [

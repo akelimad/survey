@@ -81,7 +81,7 @@ class FormationController extends Controller
       if ($_FILES['copie_diplome']['size'] > 0) {
         $upload = Media::upload($_FILES['copie_diplome'], [
           'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
-          'uploadDir' => 'apps/upload/frontend/candidat/copie_diplome/'
+          'uploadDir' => get_copie_diplome_base()
         ]);
         if(isset($upload['files'][0]) && $upload['files'][0] != '') {
           $data['copie_diplome'] = $upload['files'][0];
@@ -122,7 +122,7 @@ class FormationController extends Controller
     }
 
     if ($formation->copie_diplome != '') {
-      unlinkFile(site_base('apps/upload/frontend/candidat/copie_diplome/'.$formation->copie_diplome));
+      unlinkFile(get_copie_diplome_base($formation->copie_diplome));
     }
     getDB()->delete('formations', 'id_formation', $data['id']);
     return $this->jsonResponse('success', trans("La formation a bien été supprimée."));
@@ -140,7 +140,7 @@ class FormationController extends Controller
     }
 
     if ($formation->copie_diplome != '') {
-      unlinkFile(site_base('apps/upload/frontend/candidat/copie_diplome/'.$formation->copie_diplome));
+      unlinkFile(get_copie_diplome_base($formation->copie_diplome));
     }
 
     getDB()->update('formations', 'id_formation', $data['id'], ['copie_diplome' => null]);

@@ -179,7 +179,7 @@ echo $rcc['FR']."<b> || </b>".$resultat['email']; ?> <br /><br />
 
 
      
-             echo '<a   href="'. site_url('apps/upload/frontend/cv/'. $result_cv['lien_cv']) .'">' . $img . '</a>';
+             echo '<a   href="'. get_resume_url($result_cv['lien_cv'], ['candidat_id' => $resultat['candidats_id']]) .'">' . $img . '</a>';
    
          ?>
 

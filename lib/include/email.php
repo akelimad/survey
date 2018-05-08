@@ -9,15 +9,10 @@ if( isset($_GET['exp']) && isset($_GET['dest']) && isset($_GET['attach']))
 		$filename = $_GET['attach'];
 			$filename2 = $_GET['attach2'];
 		$subject = 'Votre avis sur ce candidat';
-		$my_path = $_SERVER['DOCUMENT_ROOT']."/".$rep_path."apps/upload/cv/";
 	
-		$path = dirname(__FILE__)."/../../apps/upload/cv/".$filename."";
-		$path2 = $_SERVER['DOCUMENT_ROOT']."/".$rep_path."apps/upload/lmotivation/".$filename2."";
-		//$my_path = "http://192.168.1.15/dernierversionCIM/candidat/74b87337454200d4d33f80c4663dc5e5/";
+		$path = get_resume_base($filename); 
+		$path2 = get_motivation_letter_base($filename2);
 		$replyto = $expediteur;
-		//echo  $my_path."           ".$message;
-		
-		
 		
 			      // on génère une frontière
   $boundary = '-----=' . md5 ( uniqid  ( rand () ) );
@@ -34,7 +29,7 @@ if (file_exists($fichier)) {
 }
 else{
 
-$repertoire=dirname(__FILE__)."/../../apps/upload/cv/";
+$repertoire = get_resume_base();
     $le_repertoire = opendir($repertoire) or die("Erreur le repertoire $repertoire existe pas");
     while($file = @readdir($le_repertoire))
     {
@@ -43,7 +38,7 @@ $fichier1 = preg_replace("/[0-9]/", "", $filename);
         // enlever les traitements inutile
 if( $file1== $fichier1 )
 {
-$fichier=dirname(__FILE__)."/../../apps/upload/cv/".$file;
+$fichier= get_resume_base($file);
 $path=$fichier;
 }
 

@@ -93,7 +93,7 @@ class ExperienceController extends Controller
       if ($_FILES['copie_attestation']['size'] > 0) {
         $upload = Media::upload($_FILES['copie_attestation'], [
           'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
-          'uploadDir' => 'apps/upload/frontend/candidat/copie_attestation/'
+          'uploadDir' => get_copie_attestation_base()
         ]);
         if(isset($upload['files'][0]) && $upload['files'][0] != '') {
           $data['copie_attestation'] = $upload['files'][0];
@@ -107,7 +107,7 @@ class ExperienceController extends Controller
       if ($_FILES['bulletin_paie']['size'] > 0) {
         $upload = Media::upload($_FILES['bulletin_paie'], [
           'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
-          'uploadDir' => 'apps/upload/frontend/candidat/bulletin_paie/'
+          'uploadDir' => get_bulletin_paie_base()
         ]);
         if(isset($upload['files'][0]) && $upload['files'][0] != '') {
           $data['bulletin_paie'] = $upload['files'][0];
@@ -153,11 +153,11 @@ class ExperienceController extends Controller
     }
 
     if ($experience->copie_attestation != '') {
-      unlinkFile(site_base('apps/upload/frontend/candidat/copie_attestation/'. $experience->copie_attestation));
+      unlinkFile(get_copie_attestation_base($experience->copie_attestation));
     }
 
     if ($experience->bulletin_paie != '') {
-      unlinkFile(site_base('apps/upload/frontend/candidat/bulletin_paie/'. $experience->bulletin_paie));
+      unlinkFile(get_bulletin_paie_base($experience->bulletin_paie));
     }
 
     getDB()->delete('experience_pro', 'id_exp', $data['id']);
@@ -176,7 +176,7 @@ class ExperienceController extends Controller
     }
 
     if ($experience->copie_attestation != '') {
-      unlinkFile(site_base('apps/upload/frontend/candidat/copie_attestation/'.$experience->copie_attestation));
+      unlinkFile(get_copie_attestation_base($experience->copie_attestation));
     }
 
     getDB()->update('experience_pro', 'id_exp', $data['id'], ['copie_attestation' => null]);
@@ -196,7 +196,7 @@ class ExperienceController extends Controller
     }
 
     if ($experience->bulletin_paie != '') {
-      unlinkFile(site_base('apps/upload/frontend/candidat/bulletin_paie/'.$experience->bulletin_paie));
+      unlinkFile(get_bulletin_paie_base($experience->bulletin_paie));
     }
 
     getDB()->update('experience_pro', 'id_exp', $data['id'], ['bulletin_paie' => null]);

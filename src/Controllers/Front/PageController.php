@@ -13,7 +13,13 @@ namespace App\Controllers\Front;
 use App\Controllers\Controller;
 use App\Helpers\Form\Validator;
 use App\Media;
+use App\File;
 use App\Mail\Mailer;
+use App\Models\Candidat;
+use App\Models\Resume;
+use App\Models\MotivationLetter;
+use App\Models\Formation;
+use App\Models\Experience;
 
 class PageController extends Controller
 {
@@ -271,6 +277,90 @@ class PageController extends Controller
 		}
 	}
 	
+	public function migrateFiles()
+	{
+		foreach (Candidat::findAll() as $key => $c) {
+			$variables = ['candidat_id' => $c->candidats_id];
+			// copy photo
+			if (!empty($c->photo)) {
+				$photoPath = 'apps/upload/frontend/photo_candidats/';
+				$source = site_base($photoPath . $c->photo);
+				$distination = get_photo_base($c->photo, $variables);
+				if (!file_exists($distination)) {
+					File::copy($source, $distination);
+				}
+			}
+
+			// copy permis conduire
+			if (!empty($c->permis_conduire)) {
+				$permisConduirePath = 'apps/upload/frontend/candidat/permis_conduire/';
+				$source = site_base($permisConduirePath . $c->permis_conduire);
+				$distination = get_permis_conduire_base($c->permis_conduire, $variables);
+				if (!file_exists($distination)) {
+					File::copy($source, $distination);
+				}
+			}
+
+			// copy CVs
+			$resumes = Resume::getByCandidatId($c->candidats_id);
+			if (!empty($resumes)) : foreach ($resumes as $key => $resume) :
+				if (empty($resume->lien_cv)) continue;
+				$resumePath = 'apps/upload/frontend/cv/';
+				$source = site_base($resumePath . $resume->lien_cv);
+				$distination = get_resume_base($resume->lien_cv, $variables);
+				if (!file_exists($distination)) {
+					File::copy($source, $distination);
+				}
+			endforeach; endif;
+
+			// copy motivation letter
+			$motivations = MotivationLetter::getByCandidatId($c->candidats_id);
+			if (!empty($motivations)) : foreach ($motivations as $key => $motivation) :
+				if (empty($motivation->lettre)) continue;
+				$motivationPath = 'apps/upload/frontend/lmotivation/';
+				$source = site_base($motivationPath . $motivation->lettre);
+				$distination = get_motivation_letter_base($motivation->lettre, $variables);
+				if (!file_exists($distination)) {
+					File::copy($source, $distination);
+				}
+			endforeach; endif;
+
+			// copy copie_diplome
+			$formations = Formation::getByCandidatId($c->candidats_id);
+			if (!empty($formations)) : foreach ($formations as $key => $formation) :
+				if (empty($formation->copie_diplome)) continue;
+				$copieDiplomePath = 'apps/upload/frontend/candidat/copie_diplome/';
+				$source = site_base($copieDiplomePath . $formation->copie_diplome);
+				$distination = get_copie_diplome_base($formation->copie_diplome, $variables);
+				if (!file_exists($distination)) {
+					File::copy($source, $distination);
+				}
+			endforeach; endif;
+			
+			// copy copie_attestation && bulletin_paie
+			$experiences = Experience::getByCandidatId($c->candidats_id);
+			if (!empty($experiences)) : foreach ($experiences as $key => $experience) :
+				// copie_attestation
+				if (!empty($experience->copie_attestation)) {
+					$copieAttestationPath = 'apps/upload/frontend/candidat/copie_attestation/';
+					$source = site_base($copieAttestationPath . $experience->copie_attestation);
+					$distination = get_copie_diplome_base($experience->copie_attestation, $variables);
+					if (!file_exists($distination)) {
+						File::copy($source, $distination);
+					}
+				}
+				// bulletin_paie
+				if (!empty($experience->bulletin_paie)) {
+					$copieAttestationPath = 'apps/upload/frontend/candidat/bulletin_paie/';
+					$source = site_base($copieAttestationPath . $experience->bulletin_paie);
+					$distination = get_copie_diplome_base($experience->bulletin_paie, $variables);
+					if (!file_exists($distination)) {
+						File::copy($source, $distination);
+					}
+				}
+			endforeach; endif;
+		}
+	}
 
 	
 } // END Class

@@ -125,7 +125,7 @@ use App\Form;
         </label>
     </div>
     <?php if (isset($formation->copie_diplome) && $formation->copie_diplome != '') : ?>
-      <a href="<?= site_url('apps/upload/frontend/candidat/copie_diplome/'. $formation->copie_diplome); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
+      <a href="<?= get_copie_diplome_url($formation->copie_diplome); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
       <button class="btn btn-danger btn-xs" type="button" onclick="return chmModal.confirm('', '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer la copie de diplôme ?"); ?>', 'chmFormation.deleteDiplome', {'id': <?= $formation->id_formation; ?>, cd: '<?= $formation->copie_diplome; ?>'}, {width: 405})"><i class="fa fa-trash"></i>&nbsp;<?php trans_e("Supprimer"); ?></button>
     <?php endif; ?>
   </div>

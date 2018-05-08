@@ -601,7 +601,7 @@ elseif (strpos($_SESSION['page_courant '],'backend') !== false) {
 
 
 						$photo = (isset($reponse['photo']) && $reponse['photo'] == '') ? $reponse['photo'] : 'no-photo.png';
-						echo '<img class="img-responsive pull-left mb-xs-10" src="'. get_photo_url($photo) .'">';
+						echo '<img class="img-responsive pull-left mb-xs-10" src="'. get_photo_url($photo, ['candidat_id' => $reponse['candidats_id']]) .'">';
 						?>
 
 

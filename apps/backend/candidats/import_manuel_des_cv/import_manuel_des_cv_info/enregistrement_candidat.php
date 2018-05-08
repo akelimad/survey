@@ -647,7 +647,7 @@ $insertion_cv = mysql_query($insertion_cv1);*/
 										  // $file = 'assets/cv.pdf';
 										   //$newfile = 'assets/cv-copy.pdf';
 
-										   copy(site_base('apps/upload/backend/cv_import_uploads/'. basename($_SESSION['f_name'])), site_base('apps/upload/frontend/cv/'. $cvname));
+										   copy(site_base('apps/upload/backend/cv_import_uploads/'. basename($_SESSION['f_name'])), get_resume_base($cvname, ['candidat_id' => $id_max]));
 	
 								   
        

@@ -132,7 +132,7 @@ class AjaxController extends Controller
       'admin/candidature/popup/send-mail', [
         'candidatures' => [$candidature],
         'cv_name' => $cv->titre_cv,
-        'cv_path' => 'apps/upload/frontend/cv/'.$cv->lien_cv
+        'cv_path' => get_resume_base($cv->lien_cv, ['candidat_id' => $candidature->candidats_id])
     ]);
   }
 
