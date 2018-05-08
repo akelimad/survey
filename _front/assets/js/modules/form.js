@@ -100,18 +100,17 @@ export default class chmForm {
     var alert = window.chmAlert.getAlertBlock(type, messages, dismissible)
     var modal = $(target).closest('.chm-modal')
     var container = (modal.length > 0) ? modal : target
-    var messagesContainer = $('.chm-response-messages')
     if (modal.length > 0) {
-      if ($(messagesContainer).length < 1) {
+      if ($('.chm-response-messages').length < 1) {
         $(container).find('.modal-body').prepend('<div class="chm-response-messages"></div>')
       }
-      $(messagesContainer).empty().html(alert)
+      $('.chm-response-messages').empty().html(alert)
     } else {
-      if ($(messagesContainer).length === 0) {
+      if ($('.chm-response-messages').length === 0) {
         $(container).prepend('<div class="chm-response-messages"></div>')
       }
-      $(messagesContainer).empty().html(alert)
-      $('body, html').animate({scrollTop: $(messagesContainer).offset().top - 5}, 1000)
+      $('.chm-response-messages').empty().html(alert)
+      $('body, html').animate({scrollTop: $('.chm-response-messages').offset().top - 5}, 1000)
     }
   }
 
