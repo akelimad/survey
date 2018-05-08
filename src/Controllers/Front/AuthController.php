@@ -17,6 +17,9 @@ use App\Media;
 use App\Mail\Mailer;
 use App\Form;
 use App\Models\Sector;
+use App\Models\City;
+use App\Models\Country;
+use App\Models\FormationLevel;
 
 class AuthController extends CandidatController
 {
@@ -173,10 +176,12 @@ class AuthController extends CandidatController
 	public function register()
 	{
 		if(isLogged('candidat')) redirect('/');
-		$this->data['villes'] = getDB()->read('prm_villes');
-		$this->data['pays'] = getDB()->read('prm_pays');
-		$this->data['sectors'] = Sector::findAll(false);
-		$this->data['niv_formation'] = getDB()->read('prm_niv_formation');
+
+		$this->data['villes'] = City::findAll(false);
+    $this->data['pays'] = Country::findAll(false);
+    $this->data['sectors'] = Sector::findAll(false);
+    $this->data['niv_formation'] = FormationLevel::findAll(false);
+
 		$this->data['layout'] = 'front';
 		$this->data['breadcrumbs'] = [trans("Accueil"), trans("Candidat"), trans("Inscrivez-vous")];
 		return get_page('front/candidat/register', $this->data);

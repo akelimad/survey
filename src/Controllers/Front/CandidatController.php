@@ -12,8 +12,12 @@ namespace App\Controllers\Front;
 
 use App\Controllers\Controller;
 use App\Helpers\Form\Validator;
+use App\Models\City;
+use App\Models\Country;
+use App\Models\Sector;
 use App\Models\Candidat;
 use App\Models\Resume;
+use App\Models\FormationLevel;
 use App\Models\MotivationLetter;
 use App\Models\Formation;
 use App\Models\Experience;
@@ -246,10 +250,10 @@ class CandidatController extends Controller
       $this->data['layout'] = 'front';
       $this->data['breadcrumbs'] = [trans("Accueil"), trans("Candidat"), trans("Mon CV"), trans("Informations personnalles")];
 
-      $this->data['villes'] = getDB()->read('prm_villes');
-      $this->data['pays'] = getDB()->read('prm_pays');
-      $this->data['sectors'] = getDB()->read('prm_sectors');
-      $this->data['niv_formation'] = getDB()->read('prm_niv_formation');
+      $this->data['villes'] = City::findAll(false);
+      $this->data['pays'] = Country::findAll(false);
+      $this->data['sectors'] = Sector::findAll(false);
+      $this->data['niv_formation'] = FormationLevel::findAll(false);
 
       return get_page('front/candidat/cv/informations/index', $this->data);
     }
@@ -284,21 +288,23 @@ class CandidatController extends Controller
         'autre2' => 'eta_string',
         'autre2_n' => 'eta_string'
       ]);
+
       if(is_array($is_valid)) {
         set_flash_message('error', $is_valid);
       } else {
         // Upload attachements
         $upload = $this->uploadAttachements();
+
         if(isset($upload['errors']) && !empty($upload['errors'])) {
           set_flash_message('error', $upload['errors']);
         } else {
           $db = getDB();
           // Create CV
-          if (isset($upload['files']['cv'])) {
+          if (isset($upload['files']['cv'][0]['name'])) {
             $db->create('cv', [
               'candidats_id' => get_candidat_id(),
-              'titre_cv' => $upload['files']['cv']['title'],
-              'lien_cv' => $upload['files']['cv']['name'],
+              'titre_cv' => $upload['files']['cv'][0]['title'],
+              'lien_cv' => $upload['files']['cv'][0]['name'],
               'principal' => 0,
               'actif' => 1
             ], false);
@@ -306,19 +312,19 @@ class CandidatController extends Controller
           }
 
           // Create LM
-          if(isset($upload['files']['lm'])) {
+          if(isset($upload['files']['lm'][0]['name'])) {
             $db->create('lettres_motivation', [
               'candidats_id' => get_candidat_id(),
-              'titre' => $upload['files']['lm']['title'],
-              'lettre' => $upload['files']['lm']['name'],
+              'titre' => $upload['files']['lm'][0]['title'],
+              'lettre' => $upload['files']['lm'][0]['name'],
               'principal' => 0,
               'actif' => 1
             ], false);
           }
 
           // update candidat languages
-          if (isset($upload['files']['photo'])) $data['candidat']['photo'] = $upload['files']['photo']['name'];
-          if (isset($upload['files']['permis_conduire'])) $data['candidat']['permis_conduire'] = $upload['files']['permis_conduire']['name'];
+          if (isset($upload['files']['photo'][0]['name'])) $data['candidat']['photo'] = $upload['files']['photo'][0]['name'];
+          if (isset($upload['files']['permis_conduire'][0]['name'])) $data['candidat']['permis_conduire'] = $upload['files']['permis_conduire'][0]['name'];
           $data['candidat']['dateMAJ'] = date("Y-m-d H:i:s");
           $db->update('candidats', 'candidats_id', get_candidat_id(), $data['candidat'], false);
           set_flash_message('success', trans("Vos informations ont été bien mis à jour."));
@@ -338,83 +344,42 @@ class CandidatController extends Controller
 
   private function uploadAttachements()
   {
-    $return = [];
-    $rules = [
-      'photo' => [
-        'name' => trans("Photo"),
-        'path' => 'apps/upload/frontend/photo_candidats/',
+    return Media::uploadMultiple([
+      [
+        'name' => 'photo',
+        'title' => trans("Photo"),
         'required' => Form::getFieldOption('required', 'register', 'photo'),
-        'extensions' => ['png', 'jpg', 'jpeg', 'gif'],
+        'uploadDir' => get_photo_base(),
+        'extensions' => Candidat::$photoExtensions
       ],
-      'cv' => [
-        'name' => trans("CV"),
-        'path' => 'apps/upload/frontend/cv/',
-        'required' => !Candidat::hasResume(),
-        'extensions' => ['doc', 'docx', 'pdf'],
+      [
+        'name' => 'cv',
+        'title' => trans("CV"),
+        'required' => Form::getFieldOption('required', 'register', 'cv'),
+        'uploadDir' => get_resume_base(),
+        'extensions' => Candidat::$resumeExtensions
       ],
-      'lm' => [
-        'name' => trans("Lettre de motivation"),
-        'path' => 'apps/upload/frontend/lmotivation/',
+      [
+        'name' => 'lm',
+        'title' => trans("Lettre de motivation"),
         'required' => Form::getFieldOption('required', 'register', 'lm'),
-        'extensions' => ['doc', 'docx', 'pdf'],
+        'uploadDir' => get_motivation_letter_base(),
+        'extensions' => Candidat::$motivationExtensions
       ],
-      'permis_conduire' => [
-        'name' => trans("Permis de conduire"),
-        'path' => 'apps/upload/frontend/candidat/permis_conduire/',
+      [
+        'name' => 'permis_conduire',
+        'title' => trans("Permis de conduire"),
         'required' => Form::getFieldOption('required', 'register', 'permis_conduire'),
-        'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
-      ]
-    ];
-
-    // Store uploaded files paths to delete theme if errors
-    $upload_paths = [];
-
-    $max_file_size = get_setting('max_file_size');
-
-    foreach ($rules as $key => $rule) {
-      $valid = true;
-      if (!Form::getFieldOption('displayed', 'register', $key)) continue;
-
-      if($rule['required'] && $_FILES[$key]['size'] < 1) {
-        $return['errors'][] = trans("Le champs") ." <strong>{$rule['name']}</strong> ". trans("est obligatoire.");
-        $valid = false;
-      }
-      $extension = strtolower(pathinfo($_FILES[$key]['name'], PATHINFO_EXTENSION));
-      if ($_FILES[$key]['size'] > 0) {
-        if(!in_array($extension, $rule['extensions'])) {
-          $return['errors'][] = trans("Le champ") ." <strong>{$rule['name']}</strong> ". trans("doit avoir les extensions suivantes") ." (.". implode(', .', $rule['extensions']) .")";
-        } elseif ($_FILES[$key]['size'] > $this->koToOctet($max_file_size)) {
-          $return['errors'][] = trans("Vous avez depassé la taille maximale") ." <strong>({$max_file_size}ko)</strong> ". trans("pour le champ") ." <strong>{$rule['name']}</strong>";
-        } elseif ($valid) {
-          $upload = Media::upload($_FILES[$key], [
-            'extensions' => $rule['extensions'],
-            'uploadDir' => $rule['path']
-          ]);
-          if(isset($upload['files'][0]) && $upload['files'][0] != '') {
-            $return['files'][$key] = [
-              'name' => $upload['files'][0], 
-              'title' => str_replace('.'.$extension, '', $_FILES[$key]['name'])
-            ];
-            $upload_paths[] = $rule['path'] . $upload['files'][0];
-          } else {
-            $return['errors'][$key] = $upload['errors'][0];
-          }
-        }
-      }
-    }
-    // Remove uploaded files if errors
-    if (!empty($return['errors'])) {
-      foreach ($upload_paths as $key => $upath) {
-        unlinkFile(site_base($upath));
-      }
-    }
-    return $return;
+        'uploadDir' => get_permis_conduire_base(),
+        'extensions' => Candidat::$permisConduireExtensions
+      ],
+    ]);
   }
 
 
   public function deletePhoto($data)
   {
-    unlinkFile(site_base('apps/upload/frontend/photo_candidats/'. $data['photo']));
+    unlinkFile(get_photo_base($data['photo']));
     getDB()->update('candidats', 'candidats_id', get_candidat_id(), ['photo' => null, 'dateMAJ' => date("Y-m-d H:i:s")]);
 
     return $this->jsonResponse('success', trans("La photo est supprimée avec succès."));
@@ -423,7 +388,7 @@ class CandidatController extends Controller
 
   public function deletePermisConduire($data)
   {
-    unlinkFile(site_base('apps/upload/frontend/candidat/permis_conduire/'. $data['fname']));
+    unlinkFile(get_permis_conduire_base($data['fname']));
     getDB()->update('candidats', 'candidats_id', get_candidat_id(), ['permis_conduire' => null, 'dateMAJ' => date("Y-m-d H:i:s")]);
 
     return $this->jsonResponse('success', trans("La permis de conduire est supprimée avec succès."));
@@ -434,7 +399,7 @@ class CandidatController extends Controller
   {
     $cv = getDB()->prepare("SELECT * FROM cv WHERE id_cv=? AND candidats_id=?", [$data['id'], get_candidat_id()], true);
     if(isset($cv->id_cv) && getDB()->delete('cv', 'id_cv', $cv->id_cv)) {
-      unlinkFile(site_base('apps/upload/frontend/cv/'. $cv->lien_cv));
+      unlinkFile(get_resume_base($cv->lien_cv));
       return $this->jsonResponse('success', trans("Le CV est supprimé avec succès."));
     }
     return $this->jsonResponse('error', trans("Impossible de supprimer le CV."));
@@ -445,7 +410,7 @@ class CandidatController extends Controller
   {
     $lm = getDB()->prepare("SELECT * FROM lettres_motivation WHERE id_lettre=? AND candidats_id=?", [$data['id'], get_candidat_id()], true);
     if(isset($lm->id_lettre) && getDB()->delete('lettres_motivation', 'id_lettre', $lm->id_lettre)) {
-      unlinkFile(site_base('apps/upload/frontend/lmotivation/'. $lm->lettre));
+      unlinkFile(get_motivation_letter_base($lm->lettre));
       return $this->jsonResponse('success', trans("La lettre de motivation est supprimée avec succès."));
     }
     return $this->jsonResponse('error', trans("Impossible de supprimer La lettre de motivation."));
@@ -570,7 +535,7 @@ class CandidatController extends Controller
           'name' => 'cv',
           'title' => trans("CV"),
           'required' => true,
-          'uploadDir' => 'apps/upload/frontend/cv/',
+          'uploadDir' => get_resume_base(),
           'extensions' => ['doc', 'docx', 'pdf']
         ]
       ]);
@@ -779,49 +744,49 @@ class CandidatController extends Controller
         'name' => 'photo',
         'title' => trans("Photo"),
         'required' => Form::getFieldOption('required', 'register', 'photo'),
-        'uploadDir' => Candidat::$photoPath,
+        'uploadDir' => get_photo_base(),
         'extensions' => Candidat::$photoExtensions
       ],
       [
         'name' => 'cv',
         'title' => trans("CV"),
         'required' => Form::getFieldOption('required', 'register', 'cv'),
-        'uploadDir' => Candidat::$resumePath,
+        'uploadDir' => get_resume_base(),
         'extensions' => Candidat::$resumeExtensions
       ],
       [
         'name' => 'lm',
         'title' => trans("Lettre de motivation"),
         'required' => Form::getFieldOption('required', 'register', 'lm'),
-        'uploadDir' => Candidat::$motivationPath,
+        'uploadDir' => get_motivation_letter_base(),
         'extensions' => Candidat::$motivationExtensions
       ],
       [
         'name' => 'copie_diplome',
         'title' => trans("Copie du diplôme"),
         'required' => Form::getFieldOption('required', 'register', 'copie_diplome'),
-        'uploadDir' => Candidat::$copieDiplomePath,
+        'uploadDir' => get_copie_diplome_base(),
         'extensions' => Candidat::$copieDiplomeExtensions
       ],
       [
         'name' => 'copie_attestation',
         'title' => trans("Copie de l’attestation"),
         'required' => Form::getFieldOption('required', 'register', 'copie_attestation'),
-        'uploadDir' => Candidat::$copieAttestationPath,
+        'uploadDir' => get_copie_attestation_base(),
         'extensions' => Candidat::$copieAttestationExtensions
       ],
       [
         'name' => 'bulletin_paie',
         'title' => trans("Bulletin de paie"),
         'required' => Form::getFieldOption('required', 'register', 'bulletin_paie'),
-        'uploadDir' => Candidat::$bulletinPaiePath,
+        'uploadDir' => get_bulletin_paie_base(),
         'extensions' => Candidat::$bulletinPaieExtensions
       ],
       [
         'name' => 'permis_conduire',
         'title' => trans("Permis de conduire"),
         'required' => Form::getFieldOption('required', 'register', 'permis_conduire'),
-        'uploadDir' => Candidat::$permisConduirePath,
+        'uploadDir' => get_permis_conduire_base(),
         'extensions' => Candidat::$permisConduireExtensions
       ],
     ]);
