@@ -18,7 +18,7 @@ class FormBuilder {
    * @access protected
    * @var    string
    */
-  protected $name;
+  protected static $name;
 
   /**
    * Model
@@ -26,7 +26,15 @@ class FormBuilder {
    * @access protected
    * @var    object
    */
-  protected $model;
+  protected static $model;
+
+  /**
+   * Field HTML Template
+   *
+   * @access protected
+   * @var    string
+   */
+  protected static $template = '<div {attributes}>{html_label}{html_field}{help_block}</div>';
 
   /**
    * Array of options
@@ -34,14 +42,27 @@ class FormBuilder {
    * @access protected
    * @var    array
    */
-  protected $options = [
+  protected static $options = [
     'method' => 'POST',
-    'action' => '',
-    'template' => '',
-    'attributes' => [
-      'class' => 'chm-simple-form',
-      'id' => ''
-    ]
+    'action' => ''
+  ];
+
+  /**
+   * Array of settings
+   *
+   * @access protected
+   * @var    array
+   */
+  protected static $settings = [];
+
+  /**
+   * Array of HTML attributes
+   *
+   * @access protected
+   * @var    array
+   */
+  protected static $attributes = [
+    'class' => 'chm-simple-form'
   ];
 
   /**
@@ -50,96 +71,136 @@ class FormBuilder {
    * @access protected
    * @var    array
    */
-  protected $fields = [];
+  protected static $fields = [];
 
   /**
-   * Array of sections
+   * Array of fieldsets
    *
    * @access protected
    * @var    array
    */
-  protected $sections = [];
+  protected static $fieldsets = [];
+
+  /**
+   * Array of fieldsetsFields
+   *
+   * @access protected
+   * @var    array
+   */
+  protected static $fieldsetsFields = [];
+
+  /**
+   * Array of events
+   *
+   * @access protected
+   * @var    array
+   */
+  protected static $events = [];
+
+  /**
+   * Array of triggered events
+   *
+   * @access protected
+   * @var    array
+   */
+  protected static $triggeredEvents = [];
 
 
   /**
    * Constructor
    *
-   * @access  public
    * @param   string $name Form name
    * @param   array $options An array of options
    * @param   array $model Object contain fields values
+   *
+   * @access  public
    * 
    * @return  void
+   *
+   * @author mchanchaf
    */
   public function __construct($name, $options = [], $model = null)
   {
-    $this->name = $name;
-    $this->model = $model;
+    static::$name = $name;
+    static::$model = (array) $model;
 
-    $this->options['attributes']['id'] = $name .'Form';
-    $this->options = array_replace_recursive($this->options, $options);
+    static::$attributes['id'] = $name .'Form';
+    static::$options = array_replace_recursive(static::$options, $options);
   }
+
 
   /**
    * Add new field
    *
-   * @access  public
    * @param   string $name
    * @param   string $type
    * @param   array $options
+   *
+   * @access  public
    * 
    * @return  FormBuilder
+   *
+   * @author mchanchaf
    */
   public function add($name, $type, $options = [])
   {
     // Create ID from name
     $id = str_replace('[', '_', $name);
 
-    // Get field column name
-    preg_match('/\[([a-zA-Z0-9_-]+)]/', $name, $matches);
-    $column = (isset($matches[1])) ? $matches[1] : $name;
+    // Get field MySql column name
+    $column = static::getFieldName($name);
 
-    // Get value
+    // Get field value
     $value = null;
     if (isset($_POST[$column])) {
       $value = $_POST[$column];
     } else if (isset($_GET[$column])) {
       $value = $_GET[$column];
-    } else if (isset($this->model->$column)) {
-      $value = $this->model->$column;
+    } else if (isset(static::$model[$column])) {
+      $value = static::$model[$column];
     }
 
+    $fieldset = (isset($options['fieldset'])) ? $options['fieldset'] : 'NA';
+
     // Add to fields list
-    $this->fields[$name] = array_replace_recursive([
+    $options = array_replace_recursive([
       'name'       => $name,
       'type'       => $type,
       'label'      => null,
       'value'      => $value,
-      'section'    => 'NA',
+      'fieldset'   => $fieldset,
       'template'   => null,
       'options'    => [],
+      'option_tpl' => null,
       'with_other' => false,
+      'inline' => false,
       'attributes' => [
-        'value' => $value,
-        'id' => trim(str_replace(']', '', $id), '_'),
-        'class' => 'form-control mb-0',
-        'inline' => false,
+        'value'  => $value,
+        'id'     => trim(str_replace(']', '', $id), '_'),
+        'class'  => 'form-control mb-0',
       ],
       'columns'    => 4,
       'offset'     => 0,
-      'order'      => (count($this->fields) + 1),
+      'order'      => (count(static::$fields) + 1),
       'rules'      => null,
       'help'       => null,
       'required'   => false,
       'displayed'  => true,
     ], $options);
 
-    // Set field section
-    $sectionName = $this->fields[$name]['section'];
-    if (!isset($this->sections[$sectionName])) {
-      $this->sections[$sectionName] = [
+    // Add ability to get value as closure
+    $options['value'] = static::execute($options['value'], $value);
+
+    static::$fields[$name] = $options;
+    static::$fieldsetsFields[$fieldset][$name] = $options;
+
+    // Set field fieldset
+    if (!isset(static::$fieldsets[$fieldset])) {
+      $order = ($fieldset == 'NA') ? 0 : (count(static::$fieldsets) + 1);
+      static::$fieldsets[$fieldset] = [
+        'name' => $fieldset,
         'label' => null,
-        'order' => (count($this->sections) + 1)
+        'order' => $order
       ];
     }
 
@@ -148,37 +209,26 @@ class FormBuilder {
 
 
   /**
-   * Set section attributes
+   * Set fieldsets
+   *
+   * @param   array $fieldsets
    *
    * @access  public
-   * @param   string $name
-   * @param   array $options
    * 
-   * @return  FormBuilder
+   * @return void
+   *
+   * @author mchanchaf
    */
-  public function setSection($name, $options = [])
+  public function setFieldsets($fieldsets = [])
   {
-    $this->sections[$name] = array_merge([
-      'label' => null,
-      'order' => (count($this->sections) + 1)
-    ], $options);
-
-    return $this;
-  }
-
-
-  private function sortFields()
-  {
-    $sorted_fields = [];
-    foreach ($this->fields as $key => $field) {
-      $section = $field['section'];
-      if (!isset($this->sections[$section])) continue;
-
-      unset($field['section']);
-
-      $sorted_fields[$section][] = $field;
+    foreach ($fieldsets as $key => $options) {
+      static::$fieldsets[ $options['name'] ] = array_merge([
+        'name' => null,
+        'label' => null,
+        'order' => (count(static::$fieldsets) + 1)
+      ], $options);
     }
-    return $sorted_fields;
+    return $this;
   }
 
 
@@ -188,44 +238,70 @@ class FormBuilder {
    * @access  public
    * 
    * @return  string $form
+   *
+   * @author mchanchaf
    */
   public function render()
   {
     $html = null;
-    $sortedFields = $this->sortFields();
+    usort(static::$fieldsets, static::usort('order', 'asc'));
 
-    foreach ($this->sections as $section_name => $section) {
+    foreach (static::$fieldsets as $key => $fieldset) {
+      $fieldset_name = $fieldset['name'];
+      if (empty(static::$fieldsetsFields[$fieldset_name])) continue;
+
       // Reset columns counter
-      $row_cols = 0;
+      $countCols = 0;
 
-      if (!isset($sortedFields[$section_name])) continue;
-
-      // Print fields group name
-      if (!is_null($section['label'])) {
-        $html .= '<div class="styled-title mt-0 mb-10"><h3>'. $section['label'] .'</h3></div>';
-      }
-
-      // Generate fields
+      $html .= '<fieldset>';
+      if ($fieldset_name != 'NA') $html .= '<legend>'. $fieldset['label'] .'</legend>';
       $html .= '<div class="row">';
-      // TODO - sort fields
-      foreach ($sortedFields[$section_name] as $key => $field) {
-        if (!$this->isDisplayed($field)) continue;
+      usort(static::$fieldsetsFields[$fieldset_name], static::usort('order', 'asc'));
+      foreach (static::$fieldsetsFields[$fieldset_name] as $key => $field) {
+        if (!static::getFieldOption('displayed', static::$name, $field['name'])) continue;
 
+        $countCols = ($countCols + $field['columns'] + $field['offset']);
+        if ($countCols > 12) {
+          $countCols = 0;
+          $html .= '</div><div class="row">';
+        }
 
-
+        $html .= static::getTemplate($field);
       }
       $html .= '</div>';
+      $html .= '</fieldset>';
     }
 
-
     return $html;
-
-    // echo $this->getTemplate($this->fields['offer[Name]']);exit;
-    // // return $this->model->Name;
-    // return $this->getTemplate($this->fields['offer[Name]']);
+  }
 
 
-    // return $this->execute('App\Models\City@findAll');
+  /**
+   * Sort a multi-domensional array of objects by key value
+   * Usage: usort($array, arrSortObjsByKey('VALUE_TO_SORT_BY'));
+   * Expects an array of objects. 
+   *
+   * @param array   $array
+   * @param string  $key  The name of the parameter to sort by
+   * @param string  $order the sort order
+   * @return void
+   *
+   * @author mchanchaf
+   */ 
+  public static function usort($key, $order = 'DESC')
+  {
+    return function($a, $b) use ($key, $order) {
+      // Swap order if necessary
+      if ($order == 'DESC') {
+        list($a, $b) = array($b, $a);
+      } 
+      // Check data type
+      if (is_numeric($a[$key])) {
+        return $a[$key] - $b[$key]; // compare numeric
+      } else {
+        return strnatcasecmp($a[$key], $b[$key]); // compare string
+      }
+    };
   }
 
 
@@ -236,115 +312,102 @@ class FormBuilder {
    *
    * @access  public
    * 
-   * @return  string $field
-   */
-  public function renderField($field)
-  {
-    switch ($field['type']) {
-      case 'select':
-        return $this->select($field);
-        break;
-      case 'textarea':
-        return $this->textarea($field);
-        break;
-      default:
-        return $this->input($field);
-        break;
-    }
-  }
-
-
-  /**
-   * Input
+   * @return  string $html
    *
-   * @param array $field
-   *
-   * @access  public
-   * 
-   * @return  string $input
+   * @author mchanchaf
    */
-  public function input($field)
+  public static function field($field)
   {
     $html = '';
-    $type = $field['type'];
-    if (in_array($type, ['checkbox', 'radio'])) {
-      $inline = ($this->execute($field['attributes']['inline'])) ? $type .'-inline' : '';
-      $html .= '<div class="mt-10">';
-      foreach ($field['options'] as $key => $value) {
-        $html .= '<label class="'. $inline .'">';
-        $html .= '<input type="'. $type .'" name="'. $field['name'] .'" value="'. $key .'">&nbsp;'. $value;
-        $html .= '</label>';
-      }
-      $html .= '</div>';
-    } else {
-      $html .= '<input '. $this->getAttributes($field) .'>';
+    $attributes = static::getFieldAttributes($field);
+
+    switch ($field['type']) {
+      case 'select':
+        $is_selected = false;
+        $fieldId = $field['attributes']['id'] .'_other';
+        $html = '<select '. $attributes .'>';
+        foreach (static::execute($field['options']) as $value => $text) :
+          if (is_object($text)) {
+            $value = (isset($text->value)) ? $text->value : null;
+            $text  = (isset($text->text)) ? $text->text : null;
+          }
+          $selected = '';
+          if ($field['value'] === $value) {
+            $selected = ' selected';
+            $is_selected = true;
+          }
+
+          if (!empty($field['option_tpl'])) {
+            $html .= static::parseTemplate($field['option_tpl'], [
+              'value' => $value,
+              'text' => $text,
+              'attributes' => $selected,
+            ]);
+          } else {
+            $html .= '<option value="'. $value .'"'. $selected .'>'. $text .'</option>';
+          }
+        endforeach;
+        if($field['with_other']) {
+          $selected = ($is_selected) ? ' selected' : '';
+          $html .= '<option value="_other" chm-form-other="'. $fieldId .'"'. $selected .'>'. trans("Autres (à péciser)") .'</option>';
+        }
+        $html .= '</select>';
+        // Add other input
+        if($field['with_other']) {
+          $html .= static::field([
+            'name'       => $fieldId,
+            'type'       => 'text',
+            'attributes' => [
+              'value' => (isset(static::$model[$fieldId])) ? static::$model[$fieldId] : null,
+              'name' => $fieldId,
+              'type' => 'text',
+              'title' => trans("Autres (à péciser)"),
+              'class' => 'form-control mt-10 mb-0',
+              'id' => $fieldId,
+              'style' => (!$is_selected) ? 'display:none;' : '',
+            ]
+          ]);
+        }
+        break;
+      case 'textarea':
+        $html .= '<textarea '. $attributes .'>'. $field['value'] .'</textarea>';
+        break;
+      default:
+        $html = '';
+        $type = $field['type'];
+        if (in_array($type, ['checkbox', 'radio'])) {
+          $inline = (static::execute($field['inline'])) ? ' class="'. $type .'-inline"' : '';
+          $html .= '<div class="mt-10">';
+          foreach ($field['options'] as $key => $value) {
+            $checked = ($key == $field['value']) ? ' checked' : '';
+            $html .= '<label'. $inline .'>';
+            $html .= '<input type="'. $type .'" name="'. $field['name'] .'" value="'. $key .'"'. $checked .'>&nbsp;'. $value;
+            $html .= '</label>';
+          }
+          $html .= '</div>';
+        } else {
+          $html .= '<input '. $attributes .'>';
+        }
+        break;
     }
+
     return $html;
   }
 
 
   /**
-   * Select
+   * Get Help Block markup
    *
-   * @param array $field
-   *
+   * @param string $text
    * @access  public
    * 
-   * @return  string $select
-   */
-  public function select($field)
-  {
-    $is_selected = false;
-    $fieldId = $field['attributes']['id'] .'_other';
-    $html = '<select '. $this->getAttributes($field) .'>';
-    foreach (self::execute($field['options']) as $value => $text) :
-      if (is_object($text)) {
-        $value = (isset($text->value)) ? $text->value : null;
-        $text  = (isset($text->text)) ? $text->text : null;
-      }
-      $selected = '';
-      if ($field['value'] === $value) {
-        $selected = ' selected';
-        $is_selected = true;
-      }
-      $html .= '<option value="'. $value .'"'. $selected .'>'. $text .'</option>';
-    endforeach;
-    if($field['with_other']) {
-      $selected = ($is_selected) ? ' selected' : '';
-      $html .= '<option value="_other" chm-form-other="'. $fieldId .'"'. $selected .'>'. trans("Autres (à péciser)") .'</option>';
-    }
-    $html .= '</select>';
-    // Add other input
-    if($field['with_other']) {
-      $html .= $this->input([
-        'type' => 'text',
-        'attributes' => [
-          'name' => $fieldId,
-          'type' => 'text',
-          'title' => trans("Autres (à péciser)"),
-          'class' => 'form-control mt-10 mb-0',
-          'id' => $fieldId,
-          'style' => 'display:none;',
-          // TODO - Set value
-        ]
-      ]);
-    }
-    return $html;
-  }
-
-
-  /**
-   * Textarea
+   * @return  string $help_block
    *
-   * @param array $field
-   *
-   * @access  public
-   * 
-   * @return  string $textarea
+   * @author mchanchaf
    */
-  public function textarea($field)
+  public static function getHelpBlock($text)
   {
-    return '<textarea '. $this->getAttributes($field) .'>'. $field['value'] .'</textarea>';
+    return "<p class=\"help-block\">{$text}</p>";
   }
 
 
@@ -353,11 +416,13 @@ class FormBuilder {
    *
    * @param array  $field
    *
+   * @access  public
+   *
    * @return string $attributes
    *
-   * @author Mhamed Chanchaf
+   * @author mchanchaf
    */
-  private function getAttributes($field)
+  public static function getFieldAttributes($field)
   {
     $attributes = [];
 
@@ -370,10 +435,13 @@ class FormBuilder {
     if (in_array($field['type'], ['select', 'textarea', 'file'])) {
       unset($field['attributes']['value']);
     }
+    $field['attributes']['type'] = $field['type'];
+    $field['attributes']['name'] = $field['name'];
+    if(isset($field['value'])) $field['attributes']['value'] = $field['value'];
+    if(isset($field['required'])) $field['attributes']['required'] = $field['required'];
 
-    unset($field['attributes']['inline']);
     foreach ($field['attributes'] as $k => $v) {
-      $value = $this->execute($v, $this);
+      $value = static::execute($v);
       $attributes[] = (is_numeric($k)) ? $value : $k .'="'. $value .'"';
     }
 
@@ -382,15 +450,224 @@ class FormBuilder {
 
 
   /**
+   * Set form settings
+   *
+   * @param array  $settings
+   *
+   * @access  public
+   *
+   * @return void
+   *
+   * @author mchanchaf
+   */
+  public static function setSettings($settings)
+  {
+    static::$settings = array_replace_recursive(static::$settings, $settings);
+  }
+
+
+  /**
+   * Set form attributes
+   *
+   * @param array  $attributes
+   *
+   * @access  public
+   *
+   * @return void
+   *
+   * @author mchanchaf
+   */
+  public static function setAttributes($attributes)
+  {
+    static::$attributes = array_replace_recursive(static::$attributes, $attributes);
+  }
+
+
+  /**
+   * Get field template
+   *
+   * @param array|null $field
+   *
+   * @access  public
+   * 
+   * @return  string $field
+   *
+   * @author mchanchaf
+   */
+  public static function getTemplate($field = null)
+  {
+    // Get template 
+    $template = (!empty($field['template'])) ? $field['template'] : static::$template;
+
+    // Prepare template variables
+    $isRequired = static::getFieldOption('required', static::$name, $field['name']);
+    $label = (!empty($field['label'])) ? '<label for="'. $field['attributes']['id'] .'">'. $field['label'] .'</label>' : '';
+    $variables['html_label'] = $label;
+    $variables['help_block'] = (!empty($field['help'])) ? static::getHelpBlock($field['help']) : '';
+    $variables['html_field'] = static::field($field);
+    $required = ($isRequired) ? ' required' : '';
+    $variables['attributes'] ='class="form-group'.$required.'"';
+
+    // Parse template
+    $fieldHtml = static::parseTemplate($template, $variables);
+
+    if (intval($field['columns']) > 0) {
+      $offset = (intval($field['offset']) > 0) ? ' col-md-offset-'. $field['offset'] : '';
+      $fieldHtml = '<div class="col-md-'. $field['columns'] . $offset. '">'. $fieldHtml .'</div>';
+    }
+
+    return $fieldHtml;
+  }
+
+
+  /**
+   * Set global template
+   * This will be applied for all form fields
+   *
+   * @param string $template
+   *
+   * @access  public
+   * 
+   * @return void
+   *
+   * @author mchanchaf
+   */
+  public static function setTemplate($template)
+  {
+    static::$template = $template;
+  }
+
+
+  /**
+   * Returns the Parsed Field Template
+   *
+   * @param string $template
+   * @param array  $variables
+   * @param string $openingTag
+   * @param string $closingTag
+   *
+   * @access  public
+   * 
+   * @return string HTML with any matching variables {{varName}} replaced with there values.
+   *
+   * @author mchanchaf
+   */
+  public static function parseTemplate($template, $variables = [], $openingTag = '{', $closingTag = '}') {
+    foreach ($variables as $key => $variable) :
+      $template = str_replace($openingTag. $key . $closingTag, $variable, $template);
+    endforeach;
+
+    return $template;
+  }
+
+  /**
+   * Get field MySql column name
+   *
+   * @param string $field_name
+   *
+   * @access  public
+   * 
+   * @return  string $name
+   *
+   * @author mchanchaf
+   */
+  public static function getFieldName($field_name)
+  {
+    preg_match('/\[([a-zA-Z0-9_-]+)]/', $field_name, $matches);
+    return (isset($matches[1])) ? $matches[1] : $field_name;
+  }
+
+
+  /**
+   * Get field option by name
+   *
+   * @param string $option_name
+   * @param string $form_id
+   * @param string $field_name
+   *
+   * @access  public
+   * 
+   * @return  string $option value
+   *
+   * @author mchanchaf
+   */
+  public static function getFieldOption($option_name, $form_id, $field_name, $type = 'fields')
+  {
+    // Trigger form setting event to get settings from a resource
+    static::triggerEvent('chmFormSetting', $form_id);
+
+    $fname = static::getFieldName($field_name);
+    if ($option_name == 'required' && !static::getFieldOption('displayed', $form_id, $fname)) {
+      return false;
+    }
+
+    if (!isset(static::$settings[$fname][$option_name])) {
+      if (isset(static::$fields[$field_name][$option_name])) {
+        return static::execute(static::$fields[$field_name][$option_name]);
+      } else {
+        return true;
+      }
+    }
+
+    return static::$settings[$fname][$option_name];
+  }
+
+
+  /** 
+   * Add new event
+   *
+   * @param string $name
+   * @param array $callable
+   *
+   * @access  public
+   * 
+   * @return void
+   *
+   * @author mchanchaf
+   */
+  public static function addEvent($name, $callable)
+  {
+    static::$events[$name][] = $callable;
+  }
+
+
+  /**
+   * Trigger form event
+   *
+   * @param string $name
+   * @param array $args
+   *
+   * @access  public
+   * 
+   * @return void
+   *
+   * @author mchanchaf
+   */
+  public static function triggerEvent($name, $args = [])
+  {
+    if (empty(static::$events) || in_array($name, static::$triggeredEvents)) return;
+
+    foreach (static::$events[$name] as $key => $callback) {
+      static::execute($callback, $args);
+    }
+
+    static::$triggeredEvents[] = $name;
+  }
+
+
+  /**
    * Execute
    *
    * @param string|callable $name
+   * @param array $args
    *
-   * @access  private
+   * @access  public
    * 
    * @return  string $value
+   *
+   * @author mchanchaf
    */
-  private function execute($name, $args = [])
+  public static function execute($name, $args = [])
   {
     // Check if is a callback function
     if (is_callable($name)) {
@@ -406,131 +683,6 @@ class FormBuilder {
     }
 
     return $name;
-  }
-
-
-  /**
-   * Get field template
-   *
-   * @access  public
-   * 
-   * @return  string $form
-   */
-  private function getTemplate($field)
-  {
-    // Default template
-    $template = '<div class="form-group{required_class}">{html_label}{html_field}{help_block}</div>';
-    if (!empty($field['template'])) {
-      // Custom field template
-      $template = $field['template'];
-    } else if (!empty($this->options['template'])) {
-      // Global form template
-      $template = $this->options['template'];
-    }
-
-    $variables = [
-      'html_field' => $this->renderField($field),
-      'required_class' => ($this->isRequired($field)) ? ' required' : '',
-      'html_label' => '',
-      'help_block' => '',
-    ];
-
-    // add label
-    if (!empty($field['label'])) {
-      $variables['html_label'] = '<label for="'. $field['attributes']['id'] .'">'. $field['label'] .'</label>';
-    }
-
-    // add help block
-    if (!empty($field['help'])) {
-      $variables['help_block'] = $this->getHelpBlock($field['help']);
-    }
-
-    // Render template
-    return preg_replace_callback('#{([^}]+)}#', function($m) use ($template, $variables){
-      if(isset($variables[$m[1]])){
-        return $variables[$m[1]];
-      }else{
-        return $m[0];
-      }
-    }, $template);
-  }
-
-
-  /**
-   * Check if field required
-   *
-   * @param string $field
-   * @access  public
-   * 
-   * @return   bool $required
-   */
-  private function isRequired($field)
-  {
-    if (isset($field['attributes']['required'])) {
-      return $this->execute($field['attributes']['required']);
-    }
-
-    if (in_array('required', $field['attributes'])) {
-      return true;
-    }
-
-    return self::getFieldOption('displayed', $this->name, $field['name']);
-  }
-
-
-  /**
-   * Check if field displayed
-   *
-   * @param string $field
-   * @access  public
-   * 
-   * @return   bool $displayed
-   */
-  private function isDisplayed($field)
-  {
-    if (isset($field['attributes']['displayed'])) {
-      return $this->execute($field['attributes']['displayed']);
-    }
-
-    if (in_array('displayed', $field['attributes'])) {
-      return true;
-    }
-
-    return self::getFieldOption('displayed', $this->name, $field['name']);
-  }
-
-
-  /**
-   * Get Help Block
-   *
-   * @param string $text
-   * @access  public
-   * 
-   * @return  string $help_block
-   */
-  private function getHelpBlock($text)
-  {
-    return "<p class=\"help-block\">{$text}</p>";
-  }
-
-
-  public static function getFieldOption($option_name, $form_id, $field_name)
-  {
-    $settings = get_setting('form.fields.'. $form_id, '{}');
-    $settings = json_decode($settings, true) ?: [];
-
-    if (
-      $option_name == 'required' && 
-      !self::getFieldOption('displayed', $form_id, $field_name)
-    ) {
-      return false;
-    }
-
-    if (!isset($settings[$field_name][$option_name])) {
-      return true;
-    }
-
-    return $settings[$field_name][$option_name];
   }
 
 

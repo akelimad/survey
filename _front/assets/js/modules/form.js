@@ -137,4 +137,9 @@ $(document).ready(function () {
       $($otherInput).hide()
     }
   })
+
+  // Set date picker for all inputs with chmDate class
+  $('[chm-date]').each(function (event) {
+    window.cimDatepicker($(this), $(this).attr('chm-date'))
+  })
 })
