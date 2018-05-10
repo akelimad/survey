@@ -16,7 +16,7 @@
     <div class="mt-10 mb-10"><?php get_alert('warning', trans("P.S: les champs marqués par (*) sont obligatoires"), false) ?></div>
 
     <form chm-form method="POST" action="backend/offer/store" class="chm-simple-form">
-      <?= \App\Form::draw($formFields, $offer); ?>
+      <?= $form->render(); ?>
     </form>
   </div>
 </div>
