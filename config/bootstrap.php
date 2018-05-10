@@ -39,3 +39,6 @@ setlocale (LC_TIME, 'fr_FR.utf8','fra');
 
 // Initialise modules
 \App\Module::init();
+
+// Fire app events
+\App\Controllers\Front\EventController::getInstance();
