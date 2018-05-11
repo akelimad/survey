@@ -279,7 +279,7 @@ class PageController extends Controller
 	
 	public function migrateFiles()
 	{
-		foreach (Candidat::findAll() as $key => $c) {
+		foreach (Candidat::findAll(false) as $key => $c) {
 			$variables = ['candidat_id' => $c->candidats_id];
 			// copy photo
 			if (!empty($c->photo)) {
