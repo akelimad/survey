@@ -79,13 +79,13 @@ use Modules\Candidat\Models\Candidat AS Module_Candidat;
             </div>
             <div class="col-sm-8 custom col-xs-12 column-body">
                 <?php if (isLogged('candidat') && Module_Candidat::canUpdateAccount()) :
-                    $alerts = [trans("<strong style=\"font-size: 12px;\">Nous vous prions de bien vouloir compléter votre compte,</strong>")];
+                    $alerts = [trans("<strong style='font-size: 12px;'>Nous vous prions de bien vouloir compléter votre compte,</strong>")];
                     if (!Candidat::hasFormation()) {
-                        $alerts[] = sprintf(trans("Pour ajouter une formation <a href=\"javascript:void(0)\" onclick=\"return chmFormation.getForm()\">cliquer içi</a>"));
+                        $alerts[] = sprintf(trans("Pour ajouter une formation <a href='javascript:void(0)' onclick='return chmFormation.getForm()'>cliquer içi</a>"));
                     }
 
                     if (!Candidat::hasExperience()) {
-                        $alerts[] = sprintf(trans("Pour ajouter une expérience professionnelle <a href=\"javascript:void(0)\" onclick=\"return chmExperience.getForm()\">cliquer içi</a>"));
+                        $alerts[] = sprintf(trans("Pour ajouter une expérience professionnelle <a href='javascript:void(0)' onclick='return chmExperience.getForm()'>cliquer içi</a>"));
                     }
 
                     if (count($alerts) > 1) : ?>
