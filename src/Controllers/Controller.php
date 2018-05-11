@@ -204,15 +204,26 @@ class Controller
 	}
 
 
-	public function htmlToPDF($html, $filename = null, $dest = 'I')
+	public function htmlToPDF($html, $filename = null, $dest = 'I', $args = [])
   {
     try {
+    	$args = array_replace_recursive([
+    		'config' => [],
+    		'displayMode' => 'fullpage',
+    		'defaultFont' => 'Arial',
+    	], $args);
+
     	if (is_null($filename)) {
     		$filename = date('dmY_Hi') .'.pdf';
     	}
-      $mpdf = new Mpdf();
-      $mpdf->SetDisplayMode('fullpage');
-      $mpdf->setDefaultFont("Arial");
+
+    	if (strpos($filename, '.pdf') === false) {
+    		$filename = $filename .'.pdf';
+    	}
+
+      $mpdf = new Mpdf($args['config']);
+      $mpdf->SetDisplayMode($args['displayMode']);
+      $mpdf->setDefaultFont($args['defaultFont']);
       $mpdf->WriteHTML($html);
       $mpdf->Output($filename, $dest);
     } catch(\Exception $e) {}
