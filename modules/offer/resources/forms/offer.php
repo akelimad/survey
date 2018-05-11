@@ -1,7 +1,7 @@
 <?php
 /*
 pl int null
-section int null
+cost_center_jde int null
 poste_budgetisee tinyint 0
 num_demande varchar
 recruteur_manager varchar

@@ -10,6 +10,8 @@
  */
 namespace App\Helpers;
 
+use App\File;
+
 class FormBuilder {
 
   /**
@@ -43,6 +45,7 @@ class FormBuilder {
    * @var    array
    */
   protected static $options = [
+    'with_wrapper' => true,
     'method' => 'POST',
     'action' => ''
   ];
@@ -62,7 +65,7 @@ class FormBuilder {
    * @var    array
    */
   protected static $attributes = [
-    'class' => 'chm-simple-form'
+    'class' => 'chm-simple-form mb-15'
   ];
 
   /**
@@ -82,12 +85,12 @@ class FormBuilder {
   protected static $fieldsets = [];
 
   /**
-   * Array of fieldsetsFields
+   * Array of buttons
    *
    * @access protected
    * @var    array
    */
-  protected static $fieldsetsFields = [];
+  protected static $buttons = [];
 
   /**
    * Array of events
@@ -121,11 +124,11 @@ class FormBuilder {
    */
   public function __construct($name, $options = [], $model = null)
   {
-    static::$name = $name;
-    static::$model = (array) $model;
+    self::$name = $name;
+    self::$model = (array) $model;
 
-    static::$attributes['id'] = $name .'Form';
-    static::$options = array_replace_recursive(static::$options, $options);
+    self::$attributes['id'] = $name .'Form';
+    self::$options = array_replace_recursive(self::$options, $options);
   }
 
 
@@ -148,7 +151,7 @@ class FormBuilder {
     $id = str_replace('[', '_', $name);
 
     // Get field MySql column name
-    $column = static::getFieldName($name);
+    $column = self::getFieldName($name);
 
     // Get field value
     $value = null;
@@ -156,11 +159,15 @@ class FormBuilder {
       $value = $_POST[$column];
     } else if (isset($_GET[$column])) {
       $value = $_GET[$column];
-    } else if (isset(static::$model[$column])) {
-      $value = static::$model[$column];
+    } else if (isset(self::$model[$column])) {
+      $value = self::$model[$column];
     }
 
     $fieldset = (isset($options['fieldset'])) ? $options['fieldset'] : 'NA';
+
+    if ($name == 'button' && !isset($options['attributes']['class'])) {
+      $options['attributes']['class'] = 'btn btn-primary pull-right btn-sm';
+    }
 
     // Add to fields list
     $options = array_replace_recursive([
@@ -171,6 +178,10 @@ class FormBuilder {
       'fieldset'   => $fieldset,
       'template'   => null,
       'options'    => [],
+      'extensions'    => [],
+      'keys_as_values' => false,
+      'delete_callback' => null,
+      'delete_args' => '{}',
       'option_tpl' => null,
       'with_other' => false,
       'inline' => false,
@@ -181,28 +192,54 @@ class FormBuilder {
       ],
       'columns'    => 4,
       'offset'     => 0,
-      'order'      => (count(static::$fields) + 1),
+      'order'      => (count(self::$fields) + 1),
       'rules'      => null,
       'help'       => null,
       'required'   => false,
       'displayed'  => true,
     ], $options);
 
-    // Add ability to get value as closure
-    $options['value'] = static::execute($options['value'], $value);
+    if ($name == 'button') {
+      self::$buttons[] = $options;
+    } else {
+      self::$fields[$name] = $options;
 
-    static::$fields[$name] = $options;
-    static::$fieldsetsFields[$fieldset][$name] = $options;
+      // Add ability to get value as closure
+      self::$fields[$name]['value'] = self::execute($options['value'], ['form' => $this, 'model' => self::$model, 'value' => $value]);
+      $options = self::execute($options['options'], ['form' => $this, 'model' => self::$model]);
+      self::$fields[$name]['options'] = $options;
 
-    // Set field fieldset
-    if (!isset(static::$fieldsets[$fieldset])) {
-      $order = ($fieldset == 'NA') ? 0 : (count(static::$fieldsets) + 1);
-      static::$fieldsets[$fieldset] = [
-        'name' => $fieldset,
-        'label' => null,
-        'order' => $order
-      ];
+      // Set field fieldset
+      if (!isset(self::$fieldsets[$fieldset])) {
+        $order = ($fieldset == 'NA') ? 0 : (count(self::$fieldsets) + 1);
+        self::$fieldsets[$fieldset] = [
+          'name' => $fieldset,
+          'label' => null,
+          'order' => $order
+        ];
+      }
     }
+
+    return $this;
+  }
+
+
+  /**
+   * Change field option
+   *
+   * @param   string $field_name
+   * @param   string $option_name
+   * @param   string $value
+   *
+   * @access  public
+   * 
+   * @return  FormBuilder
+   *
+   * @author mchanchaf
+   */
+  public function setFieldOptions($field_name, $option_name, $value)
+  {
+    self::$fields[$field_name][$option_name] = $value;
 
     return $this;
   }
@@ -222,10 +259,10 @@ class FormBuilder {
   public function setFieldsets($fieldsets = [])
   {
     foreach ($fieldsets as $key => $options) {
-      static::$fieldsets[ $options['name'] ] = array_merge([
+      self::$fieldsets[ $options['name'] ] = array_merge([
         'name' => null,
         'label' => null,
-        'order' => (count(static::$fieldsets) + 1)
+        'order' => (count(self::$fieldsets) + 1)
       ], $options);
     }
     return $this;
@@ -243,12 +280,18 @@ class FormBuilder {
    */
   public function render()
   {
+    // Before render event
+    $form_id = self::$name;
+    self::triggerEvent($form_id .'BeforeRender', $form_id);
+    
     $html = null;
-    usort(static::$fieldsets, static::usort('order', 'asc'));
+    $fieldsetsFields = self::getFieldsetsFields();
 
-    foreach (static::$fieldsets as $key => $fieldset) {
+    usort(self::$fieldsets, self::usort('order', 'asc'));
+    foreach (self::$fieldsets as $key => $fieldset) {
       $fieldset_name = $fieldset['name'];
-      if (empty(static::$fieldsetsFields[$fieldset_name])) continue;
+      if (!isset($fieldsetsFields[$fieldset_name]) || empty($fieldsetsFields[$fieldset_name])) 
+        continue;
 
       // Reset columns counter
       $countCols = 0;
@@ -256,20 +299,40 @@ class FormBuilder {
       $html .= '<fieldset>';
       if ($fieldset_name != 'NA') $html .= '<legend>'. $fieldset['label'] .'</legend>';
       $html .= '<div class="row">';
-      usort(static::$fieldsetsFields[$fieldset_name], static::usort('order', 'asc'));
-      foreach (static::$fieldsetsFields[$fieldset_name] as $key => $field) {
-        if (!static::getFieldOption('displayed', static::$name, $field['name'])) continue;
-
+      usort($fieldsetsFields[$fieldset_name], self::usort('order', 'asc'));
+      foreach ($fieldsetsFields[$fieldset_name] as $key => $field) {
+        // Count grid columns
         $countCols = ($countCols + $field['columns'] + $field['offset']);
+
+        // Close row if grid is full
         if ($countCols > 12) {
           $countCols = 0;
           $html .= '</div><div class="row">';
         }
 
-        $html .= static::getTemplate($field);
+        $html .= self::getTemplate($field);
+
+        // Close row if grid is full
+        if ($countCols == 12) {
+          $countCols = 0;
+          $html .= '</div><div class="row">';
+        }
       }
       $html .= '</div>';
       $html .= '</fieldset>';
+    }
+
+    // Buttons
+    if (!empty(self::$buttons)) {
+      $html .= '<div class="row"><div class="col-md-12"><div class="ligneBleu mt-10"></div>';
+      foreach (self::$buttons as $key => $button) {
+        $html .= self::field($button);
+      }
+      $html .= '</div></div>';
+    }
+
+    if (self::$options['with_wrapper']) {
+      $html = '<form method="'. self::$options['method'] .'" action="'. self::$options['action'] .'" '. self::getAttributes(self::$attributes) .'>'. $html .'</form>';
     }
 
     return $html;
@@ -305,6 +368,19 @@ class FormBuilder {
   }
 
 
+  private static function getFieldsetsFields()
+  {
+    $fieldsetsFields = [];
+    foreach (self::$fields as $key => $field) {
+      if (!self::getFieldOption('displayed', self::$name, $field['name'])) continue;
+
+      $fieldset = $field['fieldset'];
+      $fieldsetsFields[$fieldset][] = $field;
+    }
+    return $fieldsetsFields;
+  }
+
+
   /**
    * Render field HTML
    *
@@ -319,26 +395,31 @@ class FormBuilder {
   public static function field($field)
   {
     $html = '';
-    $attributes = static::getFieldAttributes($field);
+    $attributes = self::getFieldAttributes($field);
 
     switch ($field['type']) {
       case 'select':
-        $is_selected = false;
+        $otherSelected = false;
         $fieldId = $field['attributes']['id'] .'_other';
+        $otherValue = (isset(self::$model[$fieldId])) ? self::$model[$fieldId] : null;
+
         $html = '<select '. $attributes .'>';
-        foreach (static::execute($field['options']) as $value => $text) :
+        foreach ($field['options'] as $value => $text) :
           if (is_object($text)) {
             $value = (isset($text->value)) ? $text->value : null;
             $text  = (isset($text->text)) ? $text->text : null;
           }
           $selected = '';
-          if ($field['value'] === $value) {
+          if ($field['value'] == $value) {
             $selected = ' selected';
-            $is_selected = true;
+          }
+
+          if ($field['keys_as_values']) {
+            $value = $text;
           }
 
           if (!empty($field['option_tpl'])) {
-            $html .= static::parseTemplate($field['option_tpl'], [
+            $html .= self::parseTemplate($field['option_tpl'], [
               'value' => $value,
               'text' => $text,
               'attributes' => $selected,
@@ -347,24 +428,26 @@ class FormBuilder {
             $html .= '<option value="'. $value .'"'. $selected .'>'. $text .'</option>';
           }
         endforeach;
+        if (!empty($otherValue)) $otherSelected = true;
         if($field['with_other']) {
-          $selected = ($is_selected) ? ' selected' : '';
+          $selected = ($otherSelected) ? ' selected' : '';
           $html .= '<option value="_other" chm-form-other="'. $fieldId .'"'. $selected .'>'. trans("Autres (à péciser)") .'</option>';
         }
         $html .= '</select>';
+
         // Add other input
         if($field['with_other']) {
-          $html .= static::field([
+          $html .= self::field([
             'name'       => $fieldId,
             'type'       => 'text',
             'attributes' => [
-              'value' => (isset(static::$model[$fieldId])) ? static::$model[$fieldId] : null,
-              'name' => $fieldId,
-              'type' => 'text',
+              'value' => $otherValue,
+              'name'  => $fieldId,
+              'type'  => 'text',
               'title' => trans("Autres (à péciser)"),
-              'class' => 'form-control mt-10 mb-0',
-              'id' => $fieldId,
-              'style' => (!$is_selected) ? 'display:none;' : '',
+              'class' => 'form-control mt-5 mb-0',
+              'id'    => $fieldId,
+              'style' => ($otherSelected) ? 'display:block;' : 'display:none;',
             ]
           ]);
         }
@@ -372,16 +455,53 @@ class FormBuilder {
       case 'textarea':
         $html .= '<textarea '. $attributes .'>'. $field['value'] .'</textarea>';
         break;
+      case 'file':
+        $value = $field['value'];
+        $display = (!empty($value)) ? ' style="display:none;"' : '';
+        $html .= '<div class="input-group file-upload"'. $display .'>
+          <input type="text" class="form-control" readonly>
+          <label class="input-group-btn">
+            <span class="btn btn-success btn-sm">
+              <i class="fa fa-upload"></i>
+              <input '. $attributes .'>
+            </span>
+          </label>
+        </div>';
+        if (!empty($value)) {
+          $delete_args = self::parseTemplate($field['delete_args'], self::$model, '$', '$');
+          $confirm = "return chmModal.confirm('', 'Alert!', '". trans("Êtes-vous sûr?") ."', '". $field['delete_callback'] ."', ". htmlentities($delete_args) .", {width: 300})";
+          $html .= '<div class="btn-group" role="group">
+          <a href="javascript:void(0)" class="btn btn-danger" style="padding: 3px 8px;" title="'. trans("Supprimer") .'" onclick="'. $confirm .'"><i class="fa fa-trash"></i></a>
+          <a href="'. $value .'" target="_blank" class="btn btn-default" style="padding: 3px 8px;" title="'. trans("Télécharger") .'"><i class="'. File::getIconClass($value) .'"></i></a>';
+          $html .= '</div>';
+        }
+        break;
+      case (in_array($field['type'], ['submit', 'reset', 'button'])):
+        $html .= '<button type="'. $field['type'] .'" '. $attributes .'>'. $field['label'] .'</button>';
+        break;
       default:
         $html = '';
         $type = $field['type'];
         if (in_array($type, ['checkbox', 'radio'])) {
-          $inline = (static::execute($field['inline'])) ? ' class="'. $type .'-inline"' : '';
+          $inline = (self::execute($field['inline'], self::$model)) ? ' class="'. $type .'-inline"' : '';
           $html .= '<div class="mt-10">';
-          foreach ($field['options'] as $key => $value) {
-            $checked = ($key == $field['value']) ? ' checked' : '';
+          foreach ($field['options'] as $value => $text) {
+            if (is_object($text)) {
+              $value = (isset($text->value)) ? $text->value : null;
+              $text  = (isset($text->text)) ? $text->text : null;
+            }
+
+            // Tell if field is checked
+            $checked = '';
+            if (
+              (is_array($field['value']) && in_array($value, $field['value'])) || 
+              ($value == $field['value'])
+            ) {
+              $checked = ' checked';
+            }
+
             $html .= '<label'. $inline .'>';
-            $html .= '<input type="'. $type .'" name="'. $field['name'] .'" value="'. $key .'"'. $checked .'>&nbsp;'. $value;
+            $html .= '<input type="'. $type .'" name="'. $field['name'] .'" value="'. $value .'"'. $checked .'>&nbsp;'. $text;
             $html .= '</label>';
           }
           $html .= '</div>';
@@ -412,6 +532,29 @@ class FormBuilder {
 
 
   /**
+   * Get attributes
+   *
+   * @param array  $attributes
+   *
+   * @access  public
+   *
+   * @return string $attributes
+   *
+   * @author mchanchaf
+   */
+  public static function getAttributes($attributes)
+  {
+    $attr_arr = [];
+    foreach ($attributes as $k => $v) {
+      if ($k == 'value' && is_array($v)) continue;
+      $value = self::execute($v, self::$model);
+      $attr_arr[] = (is_numeric($k)) ? $value : $k .'="'. $value .'"';
+    }
+    return implode(' ', $attr_arr);
+  }
+
+
+  /**
    * Get field attributes
    *
    * @param array  $field
@@ -438,10 +581,12 @@ class FormBuilder {
     $field['attributes']['type'] = $field['type'];
     $field['attributes']['name'] = $field['name'];
     if(isset($field['value'])) $field['attributes']['value'] = $field['value'];
-    if(isset($field['required'])) $field['attributes']['required'] = $field['required'];
+    if(isset($field['required']) && $field['required'] == true) $field['attributes'][] = 'required';
 
     foreach ($field['attributes'] as $k => $v) {
-      $value = static::execute($v);
+      if (!empty($field['value']) && $field['type'] == 'file' && $k == 'id') continue;
+      if ($k == 'value' && is_array($v)) continue;
+      $value = self::execute($v, self::$model);
       $attributes[] = (is_numeric($k)) ? $value : $k .'="'. $value .'"';
     }
 
@@ -462,7 +607,7 @@ class FormBuilder {
    */
   public static function setSettings($settings)
   {
-    static::$settings = array_replace_recursive(static::$settings, $settings);
+    self::$settings = array_replace_recursive(self::$settings, $settings);
   }
 
 
@@ -479,7 +624,7 @@ class FormBuilder {
    */
   public static function setAttributes($attributes)
   {
-    static::$attributes = array_replace_recursive(static::$attributes, $attributes);
+    self::$attributes = array_replace_recursive(self::$attributes, $attributes);
   }
 
 
@@ -497,21 +642,21 @@ class FormBuilder {
   public static function getTemplate($field = null)
   {
     // Get template 
-    $template = (!empty($field['template'])) ? $field['template'] : static::$template;
+    $template = (!empty($field['template'])) ? $field['template'] : self::$template;
 
     // Prepare template variables
-    $isRequired = static::getFieldOption('required', static::$name, $field['name']);
+    $isRequired = (!empty($field)) ? self::getFieldOption('required', self::$name, $field['name']) : false;
     $label = (!empty($field['label'])) ? '<label for="'. $field['attributes']['id'] .'">'. $field['label'] .'</label>' : '';
     $variables['html_label'] = $label;
-    $variables['help_block'] = (!empty($field['help'])) ? static::getHelpBlock($field['help']) : '';
-    $variables['html_field'] = static::field($field);
+    $variables['help_block'] = (!empty($field['help'])) ? self::getHelpBlock($field['help']) : '';
+    $variables['html_field'] = (!empty($field)) ? self::field($field) : '';
     $required = ($isRequired) ? ' required' : '';
-    $variables['attributes'] ='class="form-group'.$required.'"';
+    $variables['attributes'] ='class="form-group'.$required.'" id="'. $field['attributes']['id'] .'Container"';
 
     // Parse template
-    $fieldHtml = static::parseTemplate($template, $variables);
+    $fieldHtml = self::parseTemplate($template, $variables);
 
-    if (intval($field['columns']) > 0) {
+    if (isset($field['columns']) && intval($field['columns']) > 0) {
       $offset = (intval($field['offset']) > 0) ? ' col-md-offset-'. $field['offset'] : '';
       $fieldHtml = '<div class="col-md-'. $field['columns'] . $offset. '">'. $fieldHtml .'</div>';
     }
@@ -534,7 +679,7 @@ class FormBuilder {
    */
   public static function setTemplate($template)
   {
-    static::$template = $template;
+    self::$template = $template;
   }
 
 
@@ -594,22 +739,22 @@ class FormBuilder {
   public static function getFieldOption($option_name, $form_id, $field_name, $type = 'fields')
   {
     // Trigger form setting event to get settings from a resource
-    static::triggerEvent('chmFormSetting', $form_id);
+    self::triggerEvent('chmFormSetting', $form_id);
 
-    $fname = static::getFieldName($field_name);
-    if ($option_name == 'required' && !static::getFieldOption('displayed', $form_id, $fname)) {
+    $fname = self::getFieldName($field_name);
+    if ($option_name == 'required' && !self::getFieldOption('displayed', $form_id, $fname)) {
       return false;
     }
 
-    if (!isset(static::$settings[$fname][$option_name])) {
-      if (isset(static::$fields[$field_name][$option_name])) {
-        return static::execute(static::$fields[$field_name][$option_name]);
+    if (!isset(self::$settings[$fname][$option_name])) {
+      if (isset(self::$fields[$field_name][$option_name])) {
+        return self::execute(self::$fields[$field_name][$option_name]);
       } else {
         return true;
       }
     }
 
-    return static::$settings[$fname][$option_name];
+    return self::$settings[$fname][$option_name];
   }
 
 
@@ -627,7 +772,7 @@ class FormBuilder {
    */
   public static function addEvent($name, $callable)
   {
-    static::$events[$name][] = $callable;
+    self::$events[$name][] = $callable;
   }
 
 
@@ -645,13 +790,13 @@ class FormBuilder {
    */
   public static function triggerEvent($name, $args = [])
   {
-    if (empty(static::$events) || in_array($name, static::$triggeredEvents)) return;
+    if (!isset(self::$events[$name]) || in_array($name, self::$triggeredEvents)) return;
 
-    foreach (static::$events[$name] as $key => $callback) {
-      static::execute($callback, $args);
+    foreach (self::$events[$name] as $key => $callback) {
+      self::execute($callback, $args);
     }
 
-    static::$triggeredEvents[] = $name;
+    self::$triggeredEvents[] = $name;
   }
 
 
@@ -669,8 +814,10 @@ class FormBuilder {
    */
   public static function execute($name, $args = [])
   {
+    $excluded_func = ['file', 'date'];
+
     // Check if is a callback function
-    if (is_callable($name)) {
+    if (is_callable($name) && !in_array($name, $excluded_func)) {
       return call_user_func($name, $args);
     }
 

@@ -73,7 +73,7 @@ class Model
    * 
    * @author Mhamed Chanchaf
    */
-  public static function findAll($with_empty = false)
+  public static function findAll($with_empty = true)
   {
     if (!isset(static::$table) || !isset(static::$primaryKey) || !isset(static::$NameField)) {
       throw new \Exception("Model must have a table and primary key methods.", 1);
@@ -84,6 +84,46 @@ class Model
     $NameField  = static::$NameField;
 
     $items = getDB()->prepare("SELECT *, {$primaryKey} as value, {$NameField} as text FROM {$table} ORDER BY {$primaryKey} ASC");
+
+    if (empty($items)) return [];
+
+    // Add an emty row to the start
+    if ($with_empty) {
+      $empty = [];
+      foreach ($items[0] as $key => $value) {
+        $empty[$key] = null;
+      }
+      array_unshift($items, (object) $empty);
+    }
+
+    return $items;
+  }
+
+
+  /**
+   * Find by columns
+   *
+   * @param array $columns
+   * @param bool $with_empty
+   *
+   * @return array $items 
+   * 
+   * @author Mhamed Chanchaf
+   */
+  public static function findby($columns = [], $with_empty = true)
+  {
+    $attributes = $wheres = [];
+    if (!empty($columns)) : foreach ($columns as $name => $value) :
+      $attributes[] = $value;
+      $wheres[] = $name .'=?';
+    endforeach; endif;
+
+    $where = (!empty($wheres)) ? ' WHERE '. implode(' AND ', $wheres) : '';
+
+    $table = static::$table;
+    $primaryKey = static::$primaryKey;
+    $NameField  = static::$NameField;
+    $items = getDB()->prepare("SELECT *, {$primaryKey} as value, {$NameField} as text FROM {$table} {$where} ORDER BY {$primaryKey} ASC", $attributes);
 
     if (empty($items)) return [];
 
