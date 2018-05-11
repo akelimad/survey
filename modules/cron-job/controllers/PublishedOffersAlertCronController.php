@@ -30,18 +30,7 @@ class PublishedOffersAlertCronController
       $offers = $this->getOffers($candidat->id);
       if (empty($offers)) continue;
 
-      $site_name = get_setting('nom_site');
-      if (count($offers) > 1) {
-        $subject = $site_name ." vient de publier de nouvelles offres";
-      } else {
-        $subject = $site_name ." vient de publier une nouvelle offre";
-      }
-
-      $send = Mailer::send(
-        $candidat->email, 
-        $subject, 
-        $this->getMessage($candidat, $offers)
-      );
+      $send = $this->sendEmail($candidat, $offers);
 
       if ($send['response'] == 'success') {
         foreach ($offers as $key => $offer) {
@@ -60,33 +49,35 @@ class PublishedOffersAlertCronController
   }
 
 
-  private function getMessage($candidat, $offers)
+  private function sendEmail($candidat, $offers)
   {
-    $displayName = Candidat::getDisplayName($candidat, true);
-    $message = "<p>Bonjour";
-    if ($displayName != '') {
-      $message .= "&nbsp;<strong>{$displayName}</strong>";
-    }
-    $message .= ",</p>";
+    // Get email template
+    $template = getDB()->findOne('root_email_auto', 'ref', 'alert_published_offers');
+    if(!isset($template->id_email)) return false;
 
-    $message .= "<p>Vous trouverez ci-après des offres susceptibles de vous intéresser</p>";
-    $message .= "<table border=\"1\" width=\"600\" cellspacing=\"0\" cellpadding=\"5\">";
+    $table .= "<table border=\"1\" width=\"600\" cellspacing=\"0\" cellpadding=\"5\">";
     foreach ($offers as $key => $offer) {
-      $message .= "<tr>";
-      $message .= "<td>". $offer->Name ."</td>";
-      $message .= "<td width=\"40\"><a href=\"". site_url('offre/'.$offer->id) ."\">Consulter</a></td>";
-      $message .= "</tr>";
+      $table .= "<tr>";
+      $table .= "<td>". $offer->Name ."</td>";
+      $table .= "<td width=\"40\"><a href=\"". site_url('offre/'.$offer->id) ."\">Consulter</a></td>";
+      $table .= "</tr>";
     }
-    $message .= "</table>";
+    $table .= "</table>";
 
-    $message .= "<p>Vous pouvez gérer vos alertes sur votre compte: ";
-    $message .= "<a href=\"". site_url('candidat/compte') ."\">". site_url('candidat/compte') ."</a></p>";
+    $variables = Mailer::getVariables($candidat->candidats_id);
+    $variables['site_name'] = get_setting('nom_site');
+    $variables['offers_table'] = $table;
+    $variables['account_link'] = site_url('candidat/compte');
+    $variables['unsubscribe_link'] = site_url('candidat/unsubscribe/'.md5($candidat->email));
 
-    $message .= "<p>Cordialement<br><strong>L’équipe RH</strong></p>";
+    $subject = Mailer::renderMessage($template->objet, $variables);
+    $message = Mailer::renderMessage($template->message, $variables);
 
-    $message .= "<p><b style=\"color:red;\">* Si vous ne désirez plus recevoir d'e-mail de notre part, <a href=\"". site_url('candidat/unsubscribe/'.md5($candidat->email)) ."\" style=\"color:red;text-decoration:underline;\">cliquez ici.</a></p>";
-
-    return $message;
+    return Mailer::send($candidat->email, $subject, $message, [
+      'titre' => $template->titre,
+      'coresp_nom' => Candidat::getDisplayName($candidat, false) .' ('. $candidat->email .')',
+      'type_email' => 'Envoi automatique'
+    ]);
   }
 
   private function getCandidats()

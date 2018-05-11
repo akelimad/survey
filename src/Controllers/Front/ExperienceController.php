@@ -29,14 +29,14 @@ class ExperienceController extends Controller
   public function getForm($data)
   {
     $experience = new \stdClass;
-    $title = trans("Créer une experience");
+    $title = trans("Créer une expérience");
     if (intval($data['id']) > 0) {
       $experience = getDB()->prepare("SELECT * FROM experience_pro WHERE candidats_id=? AND id_exp=?", [
         get_candidat_id(),
         $data['id']
       ], true);
       if (!isset($experience->id_exp)) return;
-      $title = trans("Modifier l'experience");
+      $title = trans("Modifier l'expérience");
     }
     $data['exp'] = $experience;
     $data['villes'] = getDB()->read('prm_villes');
@@ -93,7 +93,7 @@ class ExperienceController extends Controller
       if ($_FILES['copie_attestation']['size'] > 0) {
         $upload = Media::upload($_FILES['copie_attestation'], [
           'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
-          'uploadDir' => 'apps/upload/frontend/candidat/copie_attestation/'
+          'uploadDir' => get_copie_attestation_base()
         ]);
         if(isset($upload['files'][0]) && $upload['files'][0] != '') {
           $data['copie_attestation'] = $upload['files'][0];
@@ -107,7 +107,7 @@ class ExperienceController extends Controller
       if ($_FILES['bulletin_paie']['size'] > 0) {
         $upload = Media::upload($_FILES['bulletin_paie'], [
           'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
-          'uploadDir' => 'apps/upload/frontend/candidat/bulletin_paie/'
+          'uploadDir' => get_bulletin_paie_base()
         ]);
         if(isset($upload['files'][0]) && $upload['files'][0] != '') {
           $data['bulletin_paie'] = $upload['files'][0];
@@ -130,13 +130,13 @@ class ExperienceController extends Controller
     }
     if (intval($id_exp) > 0) {
       if (getDB()->update('experience_pro', 'id_exp', $id_exp, $data, false)) {
-        return $this->jsonResponse('success', trans("L'experience a été bien mis à jour."));
+        return $this->jsonResponse('success', trans("L’expérience a bien été mis à jour."));
       }
     } else {
       $data['candidats_id'] = get_candidat_id();
       if (getDB()->create('experience_pro', $data, false)) {
         $action = (str_replace(site_url(), '', $_SERVER['HTTP_REFERER']) == 'candidat/cv') ? 'reload' : 'refresh';
-        return $this->jsonResponse('success', trans("L'experience a été bien créer."), ['action' => $action]);
+        return $this->jsonResponse('success', trans("L’expérience a bien été créée."), ['action' => $action]);
       }
     }
   }
@@ -149,19 +149,19 @@ class ExperienceController extends Controller
     ], true);
 
     if (!isset($experience->id_exp)) {
-      return $this->jsonResponse('error', trans("Impossible de supprimer l'experience."));
+      return $this->jsonResponse('error', trans("Impossible de supprimer l'expérience."));
     }
 
     if ($experience->copie_attestation != '') {
-      unlinkFile(site_base('apps/upload/frontend/candidat/copie_attestation/'. $experience->copie_attestation));
+      unlinkFile(get_copie_attestation_base($experience->copie_attestation));
     }
 
     if ($experience->bulletin_paie != '') {
-      unlinkFile(site_base('apps/upload/frontend/candidat/bulletin_paie/'. $experience->bulletin_paie));
+      unlinkFile(get_bulletin_paie_base($experience->bulletin_paie));
     }
 
     getDB()->delete('experience_pro', 'id_exp', $data['id']);
-    return $this->jsonResponse('success', trans("L'experience a été bien supprimé."));
+    return $this->jsonResponse('success', trans("L’expérience a bien été supprimée."));
   }
 
   public function deleteCertificate($data)
@@ -176,12 +176,12 @@ class ExperienceController extends Controller
     }
 
     if ($experience->copie_attestation != '') {
-      unlinkFile(site_base('apps/upload/frontend/candidat/copie_attestation/'.$experience->copie_attestation));
+      unlinkFile(get_copie_attestation_base($experience->copie_attestation));
     }
 
     getDB()->update('experience_pro', 'id_exp', $data['id'], ['copie_attestation' => null]);
 
-    return $this->jsonResponse('success', trans("La copie de l’attestation a été bien supprimé."));
+    return $this->jsonResponse('success', trans("La copie de l’attestation a bien été supprimée."));
   }
 
   public function deleteBulletinPaie($data)
@@ -196,12 +196,12 @@ class ExperienceController extends Controller
     }
 
     if ($experience->bulletin_paie != '') {
-      unlinkFile(site_base('apps/upload/frontend/candidat/bulletin_paie/'.$experience->bulletin_paie));
+      unlinkFile(get_bulletin_paie_base($experience->bulletin_paie));
     }
 
     getDB()->update('experience_pro', 'id_exp', $data['id'], ['bulletin_paie' => null]);
 
-    return $this->jsonResponse('success', trans("La bulletin de paie a été bien supprimé."));
+    return $this->jsonResponse('success', trans("La bulletin de paie a bien été supprimée."));
   }
 
 	

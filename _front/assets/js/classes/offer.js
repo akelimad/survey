@@ -105,7 +105,6 @@ export default class chmOffer {
       form: {
         action: window.chmSite.url('offre/' + id + '/postuler/store'),
         method: 'POST',
-        callback: 'chmForm.submit',
         id: 'offer-postuler',
         class: 'chm-simple-form'
       },

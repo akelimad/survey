@@ -7,7 +7,7 @@
     $date_debut = '';
     if (isset($exp->date_debut) && $exp->date_debut != '') {
       $date_debut = (strlen($exp->date_debut) == 7) ? '01/'. $exp->date_debut : $exp->date_debut;
-      $date_debut = french_to_english_date($date_debut);
+      $date_debut = eta_date($date_debut, 'd/m/Y');
     }
     ?>
     <input readonly type="text" value="<?= $date_debut ?>" class="form-control" id="exp_date_debut" name="date_debut" required>
@@ -18,7 +18,7 @@
     $date_fin = '';
     if (isset($exp->date_fin) && $exp->date_fin != '') {
       $date_fin = (strlen($exp->date_fin) == 7) ? '01/'. $exp->date_fin : $exp->date_fin;
-      $date_fin = french_to_english_date($date_fin);
+      $date_fin = eta_date($date_fin, 'd/m/Y');
     }
     ?>
     <input readonly type="text" value="<?= $date_fin ?>" class="form-control" id="exp_date_fin" name="date_fin" style="max-width: 186px;float: left;margin-right: 10px;<?= (isset($exp->date_fin) && $exp->date_fin == '') ? 'display: none;"' : '" required' ?>>
@@ -140,7 +140,7 @@
         </label>
     </div>
     <?php if (isset($exp->copie_attestation) && $exp->copie_attestation != '') : ?>
-      <a href="<?= site_url('apps/upload/frontend/candidat/copie_attestation/'. $exp->copie_attestation); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download" style="margin: 3px 0;"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
+      <a href="<?= get_copie_attestation_url($exp->copie_attestation); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download" style="margin: 3px 0;"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
       <button class="btn btn-danger btn-xs" type="button" onclick="return chmModal.confirm('', '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer la copie de l’attestation ?"); ?>', 'chmExperience.deleteCertificate', {'id': <?= $exp->id_exp; ?>, cd: '<?= $exp->copie_attestation; ?>'}, {width: 431})"><i class="fa fa-trash"></i>&nbsp;<?php trans_e("Supprimer"); ?></button>
     <?php endif; ?>
   </div>
@@ -162,7 +162,7 @@
         </label>
     </div>
     <?php if (isset($exp->bulletin_paie) && $exp->bulletin_paie != '') : ?>
-      <a href="<?= site_url('apps/upload/frontend/candidat/bulletin_paie/'. $exp->bulletin_paie); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download" style="margin: 3px 0;"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
+      <a href="<?= get_bulletin_paie_url($exp->bulletin_paie); ?>" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-download" style="margin: 3px 0;"></i>&nbsp;<?php trans_e("Télécharger"); ?></a>
       <button class="btn btn-danger btn-xs" type="button" onclick="return chmModal.confirm('', '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer la copie de la bulletin de paie?"); ?>', 'chmExperience.deleteBulletinPaie', {'id': <?= $exp->id_exp; ?>, cd: '<?= $exp->bulletin_paie; ?>'}, {width: 431})"><i class="fa fa-trash"></i>&nbsp;<?php trans_e("Supprimer"); ?></button>
     <?php endif; ?>
   </div>

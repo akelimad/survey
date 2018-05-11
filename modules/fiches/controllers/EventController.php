@@ -66,14 +66,22 @@ class EventController
 		if( !isset($data['id_offre']) || empty($data['data']['offre_fiche_type']) ) return;
 
 		$db = getDB();
-		foreach ($data['data']['offre_fiche_type'] as $key => $id_fiche) {
-			if( $id_fiche == '' || !is_numeric($id_fiche) ) continue;
-			$count = $db->prepare("SELECT COUNT(*) AS nbr FROM fiche_offre WHERE id_fiche=? AND id_offre=?", [$id_fiche, $data['id_offre']], true);
-			if( $count->nbr == 0 ) {
-				$db->create('fiche_offre', [
-					'id_fiche' => $id_fiche,
-					'id_offre' => $data['id_offre']
-				]);
+		$id_offre = $data['id_offre'];
+		foreach ($data['data']['offre_fiche_type'] as $fiche_type => $id_fiche) {
+			if( $id_fiche == '' || !is_numeric($id_fiche) ) {
+				if (Fiche::canChangeOffreFiche($id_offre, $fiche_type)) {
+					$fid = Fiche::getOffreFicheByType($id_offre, $fiche_type);
+					if (!is_null($fid)) {
+						$db->prepare("DELETE FROM fiche_offre WHERE id_fiche=? AND id_offre=?", [$fid, $id_offre]);
+					}
+				} else {
+					set_flash_message('warning', sprintf(trans("Impossible de détacher la fiche N°%s parce qu'elle a déja utilisé."), $fid));
+				}
+			} else {
+				$count = $db->prepare("SELECT COUNT(*) AS nbr FROM fiche_offre WHERE id_fiche=? AND id_offre=?", [$id_fiche, $id_offre], true);
+				if( $count->nbr == 0 ) {
+					$db->create('fiche_offre', ['id_fiche' => $id_fiche, 'id_offre' => $id_offre]);
+				}
 			}
 		}
 	}
@@ -151,7 +159,7 @@ class EventController
 			// update note orale
 			if(isset($data['fiche']['type']) && $data['fiche']['type'] == 1) $this->updateNoteOrale($id_candidature);
 
-			Session::setFlash('success', trans("La fiche a été bien sauvegardé."));
+			Session::setFlash('success', trans("La fiche a bien été sauvegardée."));
 		else :
 			Session::setFlash('danger', trans("Impossible de sauvegarder la fiche."));
 		endif;

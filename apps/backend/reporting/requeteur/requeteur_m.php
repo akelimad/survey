@@ -74,7 +74,7 @@ include('menu_requeteur.php');
 
 
 
-            if($_SESSION["i_val_requet"]!="" ){      
+            if(isset($_SESSION["i_val_requet"]) && $_SESSION["i_val_requet"]!="" ){      
 
                 $requet =  " where  historique.status ='".$_SESSION["i_val_requet"]."' ";  
 

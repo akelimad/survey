@@ -50,7 +50,7 @@ $('.etaTable .email-condidat').click(function(event){
 	popup_send_email([$(this).data('cid')])
 });
 
-$('body').on('click', '#bulk-wrap [type="submit"]', function(){
+$('body').on('click', '#bulk-wrap [type="submit"]', function(event){
 	var selectedBulk = $('#bulk-wrap select').val()
 	var bulkCallable = $('#bulk-wrap select option:selected').data('callback')
 	if( $('.etaTable_cb:checked').length == 0 ) {

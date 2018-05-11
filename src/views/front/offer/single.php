@@ -1,4 +1,4 @@
-<script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="<?= site_url('assets/vendors/html2canvas/html2canvas.min.js'); ?>"></script>
 
 <div id="offer-container">
   <h1 class="mb-10"><?= $offer->Name ?></h1>

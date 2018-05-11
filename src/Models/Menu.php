@@ -12,7 +12,7 @@ namespace App\Models;
 
 use App\Route;
 
-class Menu {
+class Menu extends Model {
 
 
   

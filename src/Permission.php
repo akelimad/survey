@@ -10,7 +10,7 @@
  */
 namespace App;
 
-use Modules\Candidatures\Models\Candidatures;
+use Modules\Candidatures\Models\Candidature;
 use Modules\Offer\Models\Offer;
 use App\Route;
 
@@ -65,7 +65,7 @@ class Permission
         }
       }
     }
-    return array_merge($allowedRoutes, Candidatures::getUserStatusUrls(), Offer::getSharedOffersUrls());
+    return array_merge($allowedRoutes, Candidature::getUserStatusUrls(), Offer::getSharedOffersUrls());
   }
 
 }

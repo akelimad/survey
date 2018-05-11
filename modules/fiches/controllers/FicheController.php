@@ -105,7 +105,7 @@ class FicheController extends \App\Controllers\Controller
     $db->delete('fiches', 'id_fiche', $id_fiche);
     $db->delete('fiche_items', 'id_fiche', $id_fiche);
     
-    Session::setFlash('success', trans("La fiche a été bien supprimée."));
+    Session::setFlash('success', trans("La fiche a bien été supprimée."));
     
     redirect('backend/module/fiches/fiche');
   }
@@ -128,7 +128,7 @@ class FicheController extends \App\Controllers\Controller
   {
     if( form_submited() ) {
       if( $this->saveFiche() ) {
-        Session::setFlash('success', trans("La fiche a été bien sauvegardé."));
+        Session::setFlash('success', trans("La fiche a bien été sauvegardée."));
         redirect('backend/module/fiches/fiche');
       }
     }

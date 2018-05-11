@@ -28,7 +28,7 @@ $(document).ready(function () {
       var dateF = new Date(dateFin)
       if (dateF <= dateD) {
         row.find('[id$="date_fin"]').val('')
-        window.chmAlert.danger('La date de fin doit être supérieur à date de début.')
+        window.chmAlert.danger('La date de fin doit être supérieure à  la date de début.')
       }
     } else if (!dateDebut.startsWith(0) && dateDebut !== '') {
       dateD = new Date(dateDebut)
@@ -44,7 +44,9 @@ $(document).ready(function () {
 
   // set dial_code
   $('body').on('change', '#candidat_pays', function () {
-    $('.dial_code').val($(this).find('option:selected').data('code'))
+    var code = $(this).find('option:selected').data('code')
+    var dialCode = (code !== undefined) ? code : ''
+    $('.dial_code').val(dialCode)
   })
 
   // mobilite
@@ -62,12 +64,12 @@ $(document).ready(function () {
     if ($(this).is(':checked')) {
       $(dateFin).hide()
       $(dateFin).val('')
-      if ($(this).is('#forma_today')) {
+      if ($(this).is('.forma_today')) {
         $(dateFin).prop('required', false)
       }
     } else {
       $(dateFin).show()
-      if ($(this).is('#forma_today')) {
+      if ($(this).is('.forma_today')) {
         $(dateFin).prop('required', true)
       }
     }

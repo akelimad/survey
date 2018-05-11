@@ -18,6 +18,7 @@ use App\Ajax;
 use App\Route;
 use App\Mail\Mailer;
 use App\Models\Candidat;
+use Modules\Candidatures\Models\Candidature;
 
 class OfferController extends Controller
 {
@@ -137,7 +138,7 @@ class OfferController extends Controller
 
       $send = Mailer::send($data['email'], $subject, $message, [
         'titre' => trans("Envoyer l'offre à un ami"),
-        'coresp_nom' => Candidat::getDisplayName($sender, true),
+        'coresp_nom' => Candidat::getDisplayName($sender, false) .' ('. $sender->email .')',
         'from' => [
           'name'  => $from_name,
           'email' => $sender->email
@@ -224,6 +225,22 @@ class OfferController extends Controller
     $offer = $db->findOne('offre', 'id_offre', $id_offre);
     if(!isset($offer->id_offre)) {
       return $this->jsonResponse('error', trans("Impossible de trouver l'offre oû vous voulez postuler."));
+    }
+
+    // Check required files
+    if(!empty($offer->required_files)) {
+      $filesError = [];
+      $requiredFiles = json_decode($offer->required_files, true) ?: [];
+      $cFiles = Candidature::$candidatureFiles;
+      foreach ($cFiles as $name => $file) {
+        if (in_array($name, $requiredFiles) && !\App\Form::execute($cFiles[$name]['action'], [$candidat_id])) {
+          $filesError[] = $file['title'];
+        }        
+      }
+      if (!empty($filesError)) {
+        $message = sprintf(trans("Vous devez avoir les fichiers (%s) pour postuler à cette offre."), implode(', ', $filesError));
+        return $this->jsonResponse('error', $message);
+      }
     }
 
     // Check if candidat already applied to this offer

@@ -6,7 +6,7 @@
       $route = str_replace(site_url(), '', strtok($_SERVER['HTTP_REFERER'], '?'));
       switch ($route) {
         case 'offres':
-          $label = trans("offre(s) d'emploi trouvé(s)");
+          $label = trans("offre(s) d'emploi trouvée(s)");
           break;
         case 'offres/stage':
           $label = trans("offre(s) de stage trouvé(s)");

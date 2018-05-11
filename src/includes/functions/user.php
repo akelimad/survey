@@ -16,7 +16,7 @@ function isAdmin() {
 function get_admin($name = null, $dafault = null) {
   $admin = (isset($GLOBALS['etalent']->admin)) ? $GLOBALS['etalent']->admin : new \stdClass;
   if( !isset($admin->id_role) ) {
-    $admin = getDB()->findOne('root_roles', 'id_role', read_session('id_role'));
+    $admin = getDB()->prepare("SELECT r.*, tr.name as role_name, tr.role as role_title FROM root_roles r JOIN root_type_role tr ON tr.id_type_role=r.id_type_role WHERE r.id_role=?", [read_session('id_role')], true);
     if( !isset($admin->id_role) ) return $dafault;
     $GLOBALS['etalent']->admin = $admin;
   }

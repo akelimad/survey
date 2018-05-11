@@ -10,31 +10,10 @@
  */
 namespace App\Models;
 
-class Currency {
+class Currency extends Model {
 
-
-  public static function findAll($with_empty = true)
-  {
-    $items = getDB()->prepare("SELECT *, id as value, iso_code as text FROM prm_currencies");
-    if ($with_empty) {
-      $items = ['' => ''] + $items;
-    }
-    return $items;
-  }
-
-
-  /**
-   * Get Currency name by ID
-   *
-   * @param int $id 
-   * @return string $name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $res = getDB()->findOne('prm_currencies', 'id', $id);
-    return (isset($res->name)) ? $res->name : null;
-  }
+  public static $table = 'prm_currencies';
+  public static $primaryKey = 'id';
+  public static $NameField = 'iso_code';
 
 }

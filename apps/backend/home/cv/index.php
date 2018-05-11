@@ -177,7 +177,7 @@ elseif (strpos($_SESSION['page_courant '],'backend') !== false) {
 
                                     <div style=" float: right; margin: -5px 10px 0px 0px;">
 
-                                     <a href="<?php echo $_SESSION['page_courant ']; ?>" style=" border-bottom: none; ">
+                                     <a href="<?php echo $_SERVER['HTTP_REFERER']; ?>" style=" border-bottom: none; ">
 
                                             <img src="<?php echo $imgurl ?>/arrow_ltr.png" title="Retour"/><strong style="color:#fff">Retour</strong>
 
@@ -601,7 +601,7 @@ elseif (strpos($_SESSION['page_courant '],'backend') !== false) {
 
 
 						$photo = (isset($reponse['photo']) && $reponse['photo'] == '') ? $reponse['photo'] : 'no-photo.png';
-						echo '<img class="img-responsive pull-left mb-xs-10" src="'. get_photo_url($photo) .'">';
+						echo '<img class="img-responsive pull-left mb-xs-10" src="'. get_photo_url($photo, ['candidat_id' => $reponse['candidats_id']]) .'">';
 						?>
 
 

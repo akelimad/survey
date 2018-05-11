@@ -50,6 +50,7 @@ class FormationController extends Controller
       'date_debut' => trans("Date de début"),
       'date_fin' => trans("Date de fin"),
       'diplome' => trans("Diplôme"),
+      'specialty_id' => trans("Spécialité"),
       'nivformation' => trans("Nombre d’année de formation"),
       'description' => trans("Description de la formation"),
       'ecole' => trans("Autre école ou établissement")
@@ -65,6 +66,7 @@ class FormationController extends Controller
       'date_debut' => 'required|date',
       'date_fin' => 'date',
       'diplome' => 'required|numeric',
+      'specialty_id' => 'required|numeric',
       'nivformation' => 'required|numeric',
       'description' => 'required|eta_alpha_numeric',
       'ecole' => 'eta_string'
@@ -79,7 +81,7 @@ class FormationController extends Controller
       if ($_FILES['copie_diplome']['size'] > 0) {
         $upload = Media::upload($_FILES['copie_diplome'], [
           'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'],
-          'uploadDir' => 'apps/upload/frontend/candidat/copie_diplome/'
+          'uploadDir' => get_copie_diplome_base()
         ]);
         if(isset($upload['files'][0]) && $upload['files'][0] != '') {
           $data['copie_diplome'] = $upload['files'][0];
@@ -97,13 +99,13 @@ class FormationController extends Controller
     }
     if (intval($id_formation) > 0) {
       if (getDB()->update('formations', 'id_formation', $id_formation, $data, false)) {
-        return $this->jsonResponse('success', trans("La formation a été bien mis à jour."));
+        return $this->jsonResponse('success', trans("La formation a bien été mise à jour."));
       }
     } else { // Create formation
       $data['candidats_id'] = get_candidat_id();
       if (getDB()->create('formations', $data, false)) {
         $action = (str_replace(site_url(), '', $_SERVER['HTTP_REFERER']) == 'candidat/cv') ? 'reload' : 'refresh';
-        return $this->jsonResponse('success', trans("La formation a été bien créer."), ['action' => $action]);
+        return $this->jsonResponse('success', trans("La formation a bien été créée."), ['action' => $action]);
       }
     }
   }
@@ -120,10 +122,10 @@ class FormationController extends Controller
     }
 
     if ($formation->copie_diplome != '') {
-      unlinkFile(site_base('apps/upload/frontend/candidat/copie_diplome/'.$formation->copie_diplome));
+      unlinkFile(get_copie_diplome_base($formation->copie_diplome));
     }
     getDB()->delete('formations', 'id_formation', $data['id']);
-    return $this->jsonResponse('success', trans("La formation a été bien supprimé."));
+    return $this->jsonResponse('success', trans("La formation a bien été supprimée."));
   }
 
   public function deleteDiplome($data)
@@ -138,12 +140,12 @@ class FormationController extends Controller
     }
 
     if ($formation->copie_diplome != '') {
-      unlinkFile(site_base('apps/upload/frontend/candidat/copie_diplome/'.$formation->copie_diplome));
+      unlinkFile(get_copie_diplome_base($formation->copie_diplome));
     }
 
     getDB()->update('formations', 'id_formation', $data['id'], ['copie_diplome' => null]);
 
-    return $this->jsonResponse('success', trans("La copie du diplôme a été bien supprimé."));
+    return $this->jsonResponse('success', trans("La copie du diplôme est supprimée avec succès."));
   }
 
 	

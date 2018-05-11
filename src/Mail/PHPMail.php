@@ -45,7 +45,7 @@ class PHPMail
 
 		// Send email
 		if ( function_exists( 'mail' ) && mail($receiver, $subject, $message, $headers) ) {
-			return array('response' => 'success', 'message' => trans("L'email a été bien envoyé."));
+			return array('response' => 'success', 'message' => trans("L'email a bien été envoyé."));
 		}
 
 		// Function mail() has been disabled or send error

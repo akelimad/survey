@@ -96,7 +96,7 @@ class WorkflowController extends Controller
             ]);            
           }
 
-          set_flash_message('success', trans("Le statut a été bien changé."));
+          set_flash_message('success', trans("Le statut a bien été changé."));
         }
       // } else {
       //   set_flash_message('danger', 'Vous n\'avez pas le droit de changer le statut.');

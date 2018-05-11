@@ -13,7 +13,7 @@ namespace Modules\Candidatures\Controllers;
 use App\Event;
 use App\Controllers\Controller;
 use Modules\Candidatures\Models\Candidat;
-use Modules\Candidatures\Models\Candidatures;
+use Modules\Candidatures\Models\Status;
 use Modules\Fiches\Models\Fiche;
 
 use App\Models\Resume;
@@ -21,9 +21,6 @@ use App\Models\MotivationLetter;
 
 class TableController extends Controller
 {
-
-  const STATUS_ARCHIVED = 53;
-  const STATUS_PRESENTES_ECRIT = 35;
 
 	private $andWhere = [
 		'motcle' 		 => ['c' => 'motcle'], 
@@ -39,13 +36,14 @@ class TableController extends Controller
 		'ville'			 => ['c' => 'ville'],
 		'ref_offre'  => ['cand' => 'id_offre'],
 		'pertinence' => ['cand' => 'pertinence'],
-		'ecole' 		 => ['f' => 'id_ecol'],
+    'ecole'      => ['f' => 'id_ecol'],
+		'dip' 		   => ['f' => 'diplome'],
     'campagne'   => ['co' => 'id_compagne'],
-		'age' 	 => ['c' => 'date_n'],
+		'age_min'    => ['c' => 'date_n'],
 	];
 
 	private $joints = [
-		'JOIN formations f ON f.candidats_id=cand.candidats_id' => ['motcle', 'ecole'], 
+		'JOIN formations f ON f.candidats_id=cand.candidats_id' => ['motcle', 'ecole', 'dip'], 
 		'JOIN compagne_offres co ON co.id_offre=cand.id_offre' => ['campagne']
 	];
 
@@ -92,7 +90,7 @@ class TableController extends Controller
       'bulk_action' => false,
       'attributes' => [
         'class' => 'btn btn-primary btn-xs',
-        'onclick' => 'return showNoteEcritPopup({id_candidature})'
+        'onclick' => 'return showNoteEcritPopup(event, {id_candidature})'
       ],
       'permission' => 'can_view_action'
     ],
@@ -137,7 +135,7 @@ class TableController extends Controller
       'bulk_action' => false,
       'attributes' => [
         'class' => 'btn btn-warning btn-xs',
-        'onclick' => 'return showChangeOffrePopup({id_candidature}, {id_offre})'
+        'onclick' => 'return showChangeOffrePopup(event, {id_candidature}, {id_offre})'
       ],
       'permission' => 'can_view_action'
     ],
@@ -173,6 +171,9 @@ class TableController extends Controller
 		]
 	];
 
+  private $statusArchivedId;
+  private $statusPresentesEcritId;
+  
 
 	public function __construct($options=[], $andWhere=[], $joints=[])
 	{
@@ -191,7 +192,10 @@ class TableController extends Controller
 	 */
   public function getTable($id)
   {
-    $this->params['options']['actions'] = (is_null($id) || $id != self::STATUS_ARCHIVED);
+    $this->statusArchivedId = Status::getIdByRef(Status::STATUS_ARCHIVED_REF);
+    $this->statusPresentesEcritId = Status::getIdByRef(Status::STATUS_PRESENTES_ECRIT_REF);
+
+    $this->params['options']['actions'] = (is_null($id) || $id != $this->statusArchivedId);
 
   	$query = $this->buildQuery($id);
   	$table = new \App\Helpers\Table($query, 'id_candidature', $this->params['options']);
@@ -200,7 +204,7 @@ class TableController extends Controller
   	$table->removeActions(['edit', 'delete']);
   	$table->setTrigger('table_notes', [$this, 'getPertinenceNotice']);
 
-    if( $id == self::STATUS_PRESENTES_ECRIT ) {
+    if( $id == $this->statusPresentesEcritId ) {
   	  $table->setOrderby('cand.note_ecrit'); 
     } else {
       $table->setOrderby('cand.id_candidature');
@@ -242,6 +246,10 @@ class TableController extends Controller
 
           if (!empty($h->commentaire)) {
             $html .= '<span class="btn btn-default btn-xs" data-toggle="tooltip" title="'. $h->commentaire .'" style="cursor:pointer;"><i class="fa fa-commenting"></i></span>';
+          }
+
+          if (!empty($h->motif_rejet)) {
+            $html .= '<span class="btn btn-default btn-xs ml-5" data-toggle="tooltip" title="Motif de rejet: '. $h->motif_rejet .'" style="cursor:pointer;"><i class="fa fa-ban"></i></span>';
           }
 
           if( in_array($h->status, ['Préselectionnés', 'Présélectionné', 'Non présélectionné', 'Non préselectionnés']) ) {
@@ -349,7 +357,7 @@ class TableController extends Controller
     			$style = '';
     			$tooltip = 'data-toggle="tooltip" title="'. trans("Non défini.") .'"';
     		}
-        if($id != self::STATUS_ARCHIVED) {
+        if($id != $this->statusArchivedId) {
           return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteEcritPopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
         } else {
     		  return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" '.$tooltip.'>'.$value.'</i>';
@@ -370,7 +378,7 @@ class TableController extends Controller
           $style = '';
           $tooltip = 'data-toggle="tooltip" title="'. trans("Non défini.") .'"';
         }
-        if($id != self::STATUS_ARCHIVED) {
+        if($id != $this->statusArchivedId) {
           return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" onclick="return showNoteOralePopup('.$row->id_candidature.')" '.$tooltip.'>'.$value.'</i>';
         } else {
           return '<span class="badge" style="'.$style.'padding: 1px 5px 2px;" '.$tooltip.'>'.$value.'</i>';
@@ -409,12 +417,12 @@ class TableController extends Controller
     $field_date = $this->getDateField($id);
     $table = $this->getTableName($id);
     
-    $status = ($id == self::STATUS_ARCHIVED) ? trans("Archivée") : trans("En cours");
+    $status = ($id == $this->statusArchivedId) ? trans("Archivée") : trans("En cours");
     $condition = " WHERE o.status='". $status ."'";
 
     if (is_null($id)) {
       $condition .= " AND cand.status != 0";
-    } else if($id != self::STATUS_ARCHIVED) {
+    } else if($id != $this->statusArchivedId) {
       $condition .= " AND cand.status=". $id;
     }
 
@@ -510,7 +518,7 @@ class TableController extends Controller
   {
   	$andWhere_array = [];
   	foreach ($this->andWhere as $key => $column) {
-  		if( !isset($_GET[$key]) || empty($_GET[$key]) ) continue;
+  		if( !isset($_GET[$key]) || $_GET[$key] == '' ) continue;
   		switch ($key) {
   			case 'motcle':
   			$keywords = explode(" ", mysql_real_escape_string(htmlspecialchars($_GET[$key])));
@@ -536,15 +544,18 @@ class TableController extends Controller
   				break;
   			}
         break;
-        case 'age':
-        $parts = explode('-', $_GET[$key]);
-        if (isset($parts[1])) {
-          if ($parts[0] == 0) {
-            $andWhere_array[] = "TIMESTAMPDIFF(YEAR, date_n, CURDATE()) <= ". $parts[1];
-          } else if ($parts[1] == 0) {
-            $andWhere_array[] = "TIMESTAMPDIFF(YEAR, date_n, CURDATE()) >= ". $parts[0];
+        case 'age_min':
+        $age_min = (isset($_GET['age_min'])) ? intval($_GET['age_min']) : 0;
+        $age_max = (isset($_GET['age_max'])) ? intval($_GET['age_max']) : 0;
+        if ($age_min != 0 || $age_max != 0) {
+          $sdate = (isset($_GET['age_date']) && !empty($_GET['age_date'])) ? "'". $_GET['age_date'] ."'" : 'CURDATE()';
+
+          if ($age_min == 0) {
+            $andWhere_array[] = "TIMESTAMPDIFF(YEAR, date_n, {$sdate}) <= ". $age_max;
+          } else if ($age_max == 0) {
+            $andWhere_array[] = "TIMESTAMPDIFF(YEAR, date_n, {$sdate}) >= ". $age_min;
           } else {
-            $andWhere_array[] = "TIMESTAMPDIFF(YEAR, date_n, CURDATE()) BETWEEN ". $parts[0] ." AND ". $parts[1];
+            $andWhere_array[] = "TIMESTAMPDIFF(YEAR, date_n, {$sdate}) BETWEEN ". $age_min ." AND ". $age_max;
           }
         }
   			break;

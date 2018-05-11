@@ -112,7 +112,7 @@ class PartnerController extends \App\Controllers\Controller
         ]);
       }
     }
-    die(json_encode(['status' => 'success', 'message' => trans("Le dossier de candidat a été bien enregistré.")]));
+    die(json_encode(['status' => 'success', 'message' => trans("Le dossier de candidat a bie étén enregistré.")]));
   }
 
   // TODO - run this action

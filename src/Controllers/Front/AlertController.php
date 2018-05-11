@@ -11,6 +11,7 @@
 namespace App\Controllers\Front;
 
 use App\Controllers\Controller;
+use App\Helpers\Form\Validator;
 use App\Ajax;
 
 class AlertController extends Controller
@@ -22,6 +23,18 @@ class AlertController extends Controller
   {
     $id = intval($data['id']);
     if ( form_submited() && $data['titre'] != '' ) {
+      Validator::set_field_names([
+        'titre' => trans("Description de l'alerte")
+      ]);
+
+      $is_valid = Validator::is_valid($data, [
+        'titre' => 'eta_string'
+      ]);
+      
+      if(is_array($is_valid)) {
+        return $this->jsonResponse('error', $is_valid);
+      }
+
       if ($id > 0) {
         if ($this->isOwner($data['id'])) {
           getDB()->update('alert', 'id_alert', $data['id'], ['titre' => $data['titre']]);
@@ -36,7 +49,7 @@ class AlertController extends Controller
           'date' => date('d/m/Y', time()),
           'activate' => 1
         ]);
-        return $this->jsonResponse('success', trans("L'alerte a été bien créé."));
+        return $this->jsonResponse('success', trans("L'alerte a été créée avec succès."));
       }
     } else {
       $title = trans("Créer une alerte");
@@ -54,7 +67,7 @@ class AlertController extends Controller
     if ($this->isOwner($data['id'])) {
       $status = ($data['curStatus'] == 1) ? 0 : 1;
       getDB()->update('alert', 'id_alert', $data['id'], ['activate' => $status]);
-      return $this->jsonResponse('success', trans("Le status a été mis à jour."));
+      return $this->jsonResponse('success', trans("Le statut a bien été mis à jour."));
     } else {
       return $this->jsonResponse('error', trans("Vous n'avez pas les permissions de mettre à jour le status."));
     }

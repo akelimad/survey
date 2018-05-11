@@ -12,9 +12,34 @@ namespace App\Models;
 
 use App\File;
 
-class Candidat {
+class Candidat extends Model {
 
+  public static $table = 'candidats';
+  public static $primaryKey = 'candidats_id';
+  public static $NameField = 'nom';
+
+  public static $photoPath = 'uploads/candidat/{candidat_id}/photo/';
+  public static $photoExtensions = ['png', 'jpg', 'jpeg', 'gif'];
+
+  public static $resumePath = 'uploads/candidat/{candidat_id}/resume/';
+  public static $resumeExtensions = ['doc', 'docx', 'pdf'];
+
+  public static $motivationPath = 'uploads/candidat/{candidat_id}/motivation/';
+  public static $motivationExtensions = ['doc', 'docx', 'pdf'];
+
+  public static $copieDiplomePath = 'uploads/candidat/{candidat_id}/copie_diplome/';
+  public static $copieDiplomeExtensions = ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'];
+
+  public static $copieAttestationPath = 'uploads/candidat/{candidat_id}/copie_attestation/';
+  public static $copieAttestationExtensions = ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'];
+
+  public static $bulletinPaiePath = 'uploads/candidat/{candidat_id}/bulletin_paie/';
+  public static $bulletinPaieExtensions = ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'];
+
+  public static $permisConduirePath = 'uploads/candidat/{candidat_id}/permis_conduire/';
+  public static $permisConduireExtensions = ['png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pdf'];
   
+
   /**
    * Get candidat display name
    *
@@ -105,6 +130,25 @@ class Candidat {
 
 
   /**
+   * Check if candidat has photo
+   *
+   * @return bool
+   *
+   * @author Mhamed Chanchaf
+   */
+  public static function hasPhoto($candidat_id = null)
+  {
+    if (is_null($candidat_id)) $candidat_id = get_candidat_id();
+
+    $candidat = self::getByID($candidat_id);
+    if (!isset($candidat->photo) || $candidat->photo == '')
+      return false;
+
+    return file_exists(get_photo_base($candidat->photo, ['candidat_id' => $candidat_id]));
+  }
+
+
+  /**
    * Check if candidat has at least one resume
    *
    * @return bool
@@ -116,7 +160,96 @@ class Candidat {
     if (is_null($candidat_id)) $candidat_id = get_candidat_id();
     
     $count = getDB()->prepare("SELECT COUNT(*) as nbr FROM cv WHERE candidats_id=?", [$candidat_id], true);
+
     return (intval($count->nbr) > 0);
+  }
+
+
+  /**
+   * Check if candidat has at least one motivation letter
+   *
+   * @return bool
+   *
+   * @author Mhamed Chanchaf
+   */
+  public static function hasMotivationLetter($candidat_id = null)
+  {
+    if (is_null($candidat_id)) $candidat_id = get_candidat_id();
+    
+    $count = getDB()->prepare("SELECT COUNT(*) as nbr FROM lettres_motivation WHERE candidats_id=?", [$candidat_id], true);
+
+    return (intval($count->nbr) > 0);
+  }
+
+
+  /**
+   * Check if candidat has copie diplome
+   *
+   * @return bool
+   *
+   * @author Mhamed Chanchaf
+   */
+  public static function hasCopieDiplome($candidat_id = null)
+  {
+    if (is_null($candidat_id)) $candidat_id = get_candidat_id();
+    
+    $count = getDB()->prepare("SELECT COUNT(*) as nbr FROM formations WHERE candidats_id=? AND copie_diplome <> ''", [$candidat_id], true);
+    
+    return (intval($count->nbr) > 0);
+  }
+
+
+  /**
+   * Check if candidat has copie attestation
+   *
+   * @return bool
+   *
+   * @author Mhamed Chanchaf
+   */
+  public static function hasCopieAttestation($candidat_id = null)
+  {
+    if (is_null($candidat_id)) $candidat_id = get_candidat_id();
+    
+    $count = getDB()->prepare("SELECT COUNT(*) as nbr FROM experience_pro WHERE candidats_id=? AND copie_attestation <> ''", [$candidat_id], true);
+    
+    return (intval($count->nbr) > 0);
+  }
+
+
+  /**
+   * Check if candidat has bulletin paie
+   *
+   * @return bool
+   *
+   * @author Mhamed Chanchaf
+   */
+  public static function hasBulletinPaie($candidat_id = null)
+  {
+    if (is_null($candidat_id)) $candidat_id = get_candidat_id();
+    
+    $count = getDB()->prepare("SELECT COUNT(*) as nbr FROM experience_pro WHERE candidats_id=? AND bulletin_paie <> ''", [$candidat_id], true);
+    
+    return (intval($count->nbr) > 0);
+  }
+
+
+  /**
+   * Check if candidat has permis conduire
+   *
+   * @return bool
+   *
+   * @author Mhamed Chanchaf
+   */
+  public static function hasPermisConduire($candidat_id = null)
+  {
+    if (is_null($candidat_id)) $candidat_id = get_candidat_id();
+
+    $candidat = self::getByID($candidat_id);
+
+    if (!isset($candidat->permis_conduire) || $candidat->permis_conduire == '')
+      return false;
+
+    return file_exists(get_permis_conduire_base($candidat->permis_conduire, ['candidat_id' => $candidat_id]));
   }
 
 
@@ -132,6 +265,7 @@ class Candidat {
     if (is_null($candidat_id)) $candidat_id = get_candidat_id();
     
     $count = getDB()->prepare("SELECT COUNT(*) as nbr FROM formations WHERE candidats_id=?", [$candidat_id], true);
+
     return (intval($count->nbr) > 0);
   }
 
@@ -294,27 +428,6 @@ class Candidat {
 		return (isset($experience->name)) ? $experience->name : '';
 	}
 
- 	/**
-	 * Tell if candidats has cv
-	 *
-	 * @author Mhamed Chanchaf
-	 */
-	public static function hasCV($id_candidat) 
-	{
-		$candidat = getDB()->findByColumn('cv', 'candidats_id', $id_candidat, ['limit'=>1]);
-		return ( isset($candidat->candidats_id) );
-	}
-
- 	/**
-	 * Tell if candidats has lettre de motivation
-	 *
-	 * @author Mhamed Chanchaf
-	 */
-	public static function hasLM($id_candidat) 
-	{
-		$candidat = getDB()->findByColumn('lettres_motivation', 'candidats_id', $id_candidat, ['limit'=>1]);
-		return ( isset($candidat->candidats_id) );
-	}
 
   public static function deleteAccount($candidat_id)
   {
@@ -324,7 +437,7 @@ class Candidat {
 
     // Delete candidat photo
     if (!empty($candidat->photo)) {
-      File::delete(site_base('apps/upload/frontend/photo_candidats/'. $candidat->photo));
+      File::delete(get_photo_base($candidat->photo, ['candidat_id' => $candidat_id]));
     }
 
     $db->delete('agenda', 'candidats_id', $candidat_id);
@@ -399,11 +512,11 @@ class Candidat {
 
     foreach ($experiences as $key => $exp) {
       if (!empty($exp->copie_attestation)) {
-        File::delete(site_base('apps/upload/frontend/candidat/copie_attestation/'. $exp->copie_attestation));
+        File::delete(get_copie_attestation_base($exp->copie_attestation, ['candidat_id' => $candidat_id]));
       }
 
       if (!empty($exp->bulletin_paie)) {
-        File::delete(site_base('apps/upload/frontend/candidat/bulletin_paie/'. $exp->bulletin_paie));
+        File::delete(get_bulletin_paie_base($exp->bulletin_paie, ['candidat_id' => $candidat_id]));
       }
     }
 
@@ -419,7 +532,7 @@ class Candidat {
 
     foreach ($formations as $key => $formation) {
       if (!empty($formation->copie_diplome)) {
-        File::delete(site_base('apps/upload/frontend/candidat/copie_diplome/'. $formation->copie_diplome));
+        File::delete(get_copie_diplome_base($formation->copie_diplome, ['candidat_id' => $candidat_id]));
       }
     }
 
@@ -434,7 +547,7 @@ class Candidat {
     if (empty($resumes)) return;
 
     foreach ($resumes as $key => $resume) {
-      File::delete(site_base('apps/upload/frontend/cv/'. $resume->lien_cv));
+      File::delete(get_resume_base($resume->lien_cv, ['candidat_id' => $candidat_id]));
     }
 
     $db->delete('cv', 'candidats_id', $candidat_id);
@@ -451,7 +564,7 @@ class Candidat {
     if (empty($motivations)) return;
 
     foreach ($motivations as $key => $m) {
-      File::delete(site_base('apps/upload/frontend/lmotivation/'. $m->lettre));
+      File::delete(get_motivation_letter_base($m->lettre, ['candidat_id' => $candidat_id]));
     }
 
     $db->delete('lettres_motivation', 'candidats_id', $candidat_id);

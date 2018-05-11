@@ -31,6 +31,11 @@ class RouteController
     );
 
     Route::add(
+      'candidature/invitation/([a-f0-9]{32}$)',
+      'Modules\Candidatures\Controllers\ConfirmController@invitation'
+    );
+
+    Route::add(
       'backend/candidatures/spontanees',
       'Modules\Candidatures\Controllers\CandidatureController@spontanees'
     );

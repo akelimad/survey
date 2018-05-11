@@ -26,23 +26,29 @@ class Media {
     public static function upload($files=array(), $options=array())
     {
         $default = array(
-            'extensions' => null, // array('jpg', 'gif', 'png', 'doc', 'ppt', 'odt', 'docx', 'xlsx', 'pptx', 'psd' , 'rar', 'zip')
-            'uploadDir' => 'apps/upload/',
+            'extensions' => null,
+            'uploadDir' => 'uploads/',
             'title' => array('auto', 15)
         );
+
         $args = array_merge($default, $options);
-        $uploadDir = SITE_BASE .'/'. $args['uploadDir'];
+        if (strpos($args['uploadDir'], site_base()) === false) {
+            $args['uploadDir'] = site_base($args['uploadDir']);
+        }
+        
         //Create directory if not exist
-        if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
-        $args['uploadDir'] = $uploadDir;
+        if (!file_exists($args['uploadDir'])) mkdir($args['uploadDir'], 0777, true);
+
         //Start uploading files
         $uploader = new Uploader();
         $upload = $uploader->upload($files, $args);
+
         if($upload['hasErrors']){
             $return['errors'] = $upload['errors'];
         } else if($upload['isComplete']){
             $return['files'] = str_replace($args['uploadDir'], '', $upload['data']['files']);
         }
+
         return $return;
     }
 
@@ -64,7 +70,11 @@ class Media {
     public static function uploadMultiple($rules = [])
     {
         $max_file_size = get_setting('max_file_size');
-        $return = $upload_paths = [];
+        $return = [
+            'files' => [], 
+            'errors' => []
+        ];
+        $upload_paths = [];
 
         foreach ($rules as $key => $rule) {
             $valid = true;
@@ -72,9 +82,12 @@ class Media {
             $rule_name = $rule['name'];
 
             // Check if file is required
-            if(!isset($_FILES[$rule_name]) || ($required && $_FILES[$rule_name]['size'] < 1)) {
-                $return['errors'][] = sprintf(trans("Le champs <strong>%s</strong> est obligatoire."), $rule['title']);
-                $valid = false;
+            if ($required) {
+                $size = (is_array($_FILES[$rule_name]['size'])) ? $_FILES[$rule_name]['size'][0] : $_FILES[$rule_name]['size'];
+                if(!isset($_FILES[$rule_name]) || $size < 1) {
+                    $return['errors'][] = sprintf(trans("Le champs <strong>%s</strong> est obligatoire."), $rule['title']);
+                    $valid = false;
+                }
             }
 
             if(!isset($_FILES[$rule_name])) continue;
@@ -94,7 +107,7 @@ class Media {
                 }
 
                 if ($rule_files['size'][$k] > File::koToOctet($max_file_size)) {
-                    $return['errors'][$rule_name .'_size'] = sprintf(trans("Vous avez depassé la taille maximal <strong>(%sko)</strong> pour le champ <strong>%s</strong>"), $max_file_size, $rule['title']);
+                    $return['errors'][$rule_name .'_size'] = sprintf(trans("Vous avez depassé la taille maximale <strong>(%sko)</strong> pour le champ <strong>%s</strong>"), $max_file_size, $rule['title']);
                     $valid = false;
                 }
             }
@@ -111,8 +124,8 @@ class Media {
             if(isset($upload['files']) && !empty($upload['files'])) {
                 foreach ($upload['files'] as $fk => $fname) {
                     $return['files'][$rule_name][$fk]['name'] = $fname;
+                    $return['files'][$rule_name][$fk]['path'] = site_base($rule['uploadDir'] . $fname);
                     $return['files'][$rule_name][$fk]['title'] = File::getName($rule_files['name'][$fk]);
-                    $upload_paths[] = $rule['uploadDir'] . $fname;
                 }
             } else {
                 $return['errors'][$rule_name] = $upload['errors'][0];
@@ -120,11 +133,17 @@ class Media {
         }
 
         // Remove uploaded files if errors
-        if(isset($return['errors']) && !empty($return['errors'])) {
-            foreach ($upload_paths as $key => $upath) {
-                unlinkFile(site_base($upath));
+        if(!empty($return['errors'])) {
+            if(!empty($return['files'])) {
+                foreach ($return['files'] as $key => $files) {
+                    foreach ($files as $key => $file) {
+                        unlinkFile($file['path']);
+                    }
+                }
             }
             unset($return['files']);
+        } else {
+            unset($return['errors']);
         }
 
         return $return;
@@ -142,6 +161,18 @@ class Media {
             return $_files;
         }
         return $files;
+    }
+
+
+    public function deleteUploadedFiles($upload = [])
+    {
+        if (!isset($upload['files']) || empty($upload['files'])) return;
+
+        foreach ($upload['files'] as $key => $files) {
+            foreach ($files as $key => $file) {
+                unlinkFile($file['path']);
+            }
+        }
     }
 
 

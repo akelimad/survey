@@ -61,7 +61,7 @@ if (file_exists($fichier)) {
 else{
 
 // $repertoire=dirname(__FILE__).$file_cv3;
-$repertoire = site_base('apps/upload/frontend/cv/');
+$repertoire = get_resume_base();
     $le_repertoire = opendir($repertoire) or die("Erreur le repertoire $repertoire existe pas");
     while($file = @readdir($le_repertoire))
     {
@@ -70,7 +70,7 @@ $fichier1 = preg_replace("/[0-9]/", "", $filename);
         // enlever les traitements inutile
 if( $file1== $fichier1 )
 {
-$fichier=site_base('apps/upload/frontend/cv/'.$file);
+$fichier = get_resume_base($file);
 $path=$fichier;
 }
  
@@ -229,7 +229,7 @@ if ( mail ($destinataire,$subject,$message,$headers)) {
 						
         echo  '<font color="#277405">Email envoy&eacute; avec succ&egrave;s </font>'; 
 			
-		echo '  <meta http-equiv="refresh" content="1;'.$_SESSION['page_courant '] .'" />   ';
+		echo '  <meta http-equiv="refresh" content="1;'.$_SESSION['page_courant'] .'" />   ';
 		 
 		}
     else 

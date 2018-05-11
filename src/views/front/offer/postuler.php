@@ -65,5 +65,17 @@ jQuery(document).ready(function(){
   // editors
   CKEDITOR.replace('motivation', {height: 200});
 
+  // Confirm applay
+  $('#offer-postuler').submit(function(event){
+    event.preventDefault()
+    <?php if (get_setting('offer.apply.confirm_before_submit', 0) == 1) : ?>
+      if (confirm("<?php trans_e("Je déclare sur l'honneur de l'exactitude des informations renseignées."); ?>")) {
+        chmForm.submit(event)
+      }
+    <?php else : ?>
+      chmForm.submit(event)
+    <?php endif; ?>
+  }) // End form submit
+
 })
 </script>

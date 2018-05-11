@@ -122,7 +122,7 @@ class Mailer
 			// Send email
 			if( $mail->Send() ) {
 				$nom = (isset($args['coresp_nom'])) ? $args['coresp_nom'] : 'NA';
-				$nom = (isLogged('admin')) ? read_session('abb_admin') : $nom;
+				$nom = (isBackend()) ? get_admin('nom') .' ('. get_admin('email') .')' : $nom;
 				
 				getDB()->create('corespondances', [
 					'sujet' => $subject,
@@ -134,7 +134,7 @@ class Mailer
 					'ref_filiale' => (isset($args['ref_filiale'])) ? $args['ref_filiale'] : ''
 				]);
 				
-				return array("response" => "success", "message" => trans("L'email a été bien envoyé."));
+				return array("response" => "success", "message" => trans("L'email a bien été envoyé."));
 			} else {
 				return array("response" => "error", "message" => trans("Une erreur est survenue lors d'envoi de l'email."));
 			}
@@ -188,6 +188,7 @@ class Mailer
 			'lieu_statut' => null,
 			'lien_confirmation' => null,
 			'message' => null,
+			'site_name' => get_setting('nom_site'),
 			'site' => site_url()
 		];
 

@@ -69,7 +69,7 @@ export default class chmForm {
 
         if (response.message !== '' && ['success', 'info', 'warning', 'danger', 'error'].indexOf(response.status) !== -1) {
           if (typeof response.message === 'object') {
-            if (response.status !== 'success') window.chmAlert.danger("L'opération est fini avec des erreurs.")
+            if (response.status !== 'success') window.chmAlert.danger("L’opération est finie avec des erreurs.")
             var dismissible = (response.data.dismissible && response.data.dismissible === true)
             window.chmForm.showMessagesBlock(response.status, response.message, target, dismissible)
           } else {
@@ -104,13 +104,13 @@ export default class chmForm {
       if ($('.chm-response-messages').length < 1) {
         $(container).find('.modal-body').prepend('<div class="chm-response-messages"></div>')
       }
-      $('.chm-response-messages').html(alert)
+      $('.chm-response-messages').empty().html(alert)
     } else {
       if ($('.chm-response-messages').length === 0) {
         $(container).prepend('<div class="chm-response-messages"></div>')
       }
-      $('.chm-response-messages').html(alert)
-      $('body, html').animate({scrollTop: $(target).offset().top}, 1000)
+      $('.chm-response-messages').empty().html(alert)
+      $('body, html').animate({scrollTop: $('.chm-response-messages').offset().top - 5}, 1000)
     }
   }
 
@@ -119,34 +119,27 @@ export default class chmForm {
 // Initialise forms
 $(document).ready(function () {
   // Select all Forms occurences
-  var chmForms = document.querySelectorAll('[chm-form]')
-  if (chmForms.length > 0) {
-    // Loop for each Table
-    for (var i = 0; i < chmForms.length; ++i) {
-      // Add event listener
-      $(chmForms[i]).on('submit', function (event) {
-        event.preventDefault()
-        chmForm.submit(event, this)
-      })
-    }
-  }
+  $('body').on('submit', '[chm-form]', function (event) {
+    event.preventDefault()
+    chmForm.submit(event, this)
+  })
 
   // Show hide other field
-  var chmFormOther = document.querySelectorAll('[chm-form-other]')
-  if (chmFormOther.length > 0) {
-    for (var o = 0; o < chmFormOther.length; ++o) {
-      var id = $(chmFormOther[o]).attr('chm-form-other')
-      $(chmFormOther[o]).closest('select').on('change', function (event) {
-        var $otherInput = $('input#' + id)
-        $($otherInput).val('')
-        if ($(this).val() === '_other') {
-          $($otherInput).prop('required', true)
-          $($otherInput).show()
-        } else {
-          $($otherInput).prop('required', false)
-          $($otherInput).hide()
-        }
-      })
+  $('body').on('change', 'select:has([chm-form-other])', function (event) {
+    var otherOption = $(this).find('[chm-form-other]')
+    var $otherInput = $('input#' + otherOption.attr('chm-form-other'))
+    $($otherInput).val('')
+    if ($(this).val() === '_other') {
+      $($otherInput).prop('required', true)
+      $($otherInput).show()
+    } else {
+      $($otherInput).prop('required', false)
+      $($otherInput).hide()
     }
-  }
+  })
+
+  // Set date picker for all inputs with chmDate class
+  $('[chm-date]').each(function (event) {
+    window.cimDatepicker($(this), $(this).attr('chm-date'))
+  })
 })

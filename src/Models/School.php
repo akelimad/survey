@@ -10,23 +10,11 @@
  */
 namespace App\Models;
 
-class School {
+class School extends Model {
 
-
-  /**
-   * Get School name by ID
-   *
-   * @param int $id 
-   * @return string $name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $school = getDB()->findOne('prm_ecoles', 'id_ecole', $id);
-    return (isset($school->nom_ecole)) ? $school->nom_ecole : null;
-  }
-
+  public static $table = 'prm_ecoles';
+  public static $primaryKey = 'id_ecole';
+  public static $NameField = 'nom_ecole';
 
   /**
    * Get Country name by school ID

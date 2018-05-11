@@ -43,7 +43,7 @@
 	<div class="row mb-5">
 		<div class="col-md-12">
 			<strong><?php trans_e("Suite du message"); ?></strong>
-			<textarea class="mt-5" style="width: 100%;min-height:110px;padding: 20px;" disabled><?php trans_e("Vos identifiants de connexion sur notre site web:"); ?> {{site}}&#10;<?php trans_e("Votre email:"); ?> {{email}}&#10;<?php trans_e("Mot de passe:"); ?> {{mot_passe}}&#10;<?php trans_e("Ces identifiants vous permettront de consulter des candidatures ciblées."); ?></textarea>
+			<textarea class="mt-5 ckeditor" style="width: 100%;min-height:110px;padding: 20px;" disabled><?php trans_e("Vos identifiants de connexion sur notre site web:"); ?> {{site}}&#10;<?php trans_e("Votre email:"); ?> {{email}}&#10;<?php trans_e("Mot de passe:"); ?> {{mot_passe}}&#10;<?php trans_e("Ces identifiants vous permettront de consulter des candidatures ciblées."); ?></textarea>
 		</div>
 	</div>
 

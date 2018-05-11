@@ -10,7 +10,7 @@
  */
 namespace App\Models;
 
-class Mobilite {
+class Mobilite extends Model {
 
 
   /**

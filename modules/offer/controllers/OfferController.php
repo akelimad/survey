@@ -12,6 +12,8 @@ namespace Modules\Offer\Controllers;
 
 use App\Ajax;
 use App\Mail\Mailer;
+use App\Helpers\FormBuilder;
+use Modules\Offer\Models\Offer;
 
 class OfferController extends \App\Controllers\Controller
 {
@@ -25,12 +27,15 @@ class OfferController extends \App\Controllers\Controller
 
   public function getForm($data)
   {
-    $offer = new \stdClass; 
+    $offer = new \stdClass;
+    $offer_id = null;
     if (isset($data['params'][1])) {
-      $offer = getDB()->findOne('offre', 'id_offre', $data['params'][1]);
+      $offer_id = $data['params'][1];
+      $offer = getDB()->findOne('offre', 'id_offre', $offer_id);
     }
 
     $this->data['offer'] = $offer;
+    $this->data['form']  = Offer::getForm($offer_id);
     $this->data['formFields'] = require(module_base(__FILE__, 'resources/forms/offer.php'));
     $this->data['layout'] = 'admin';
     $this->data['breadcrumbs'][] = trans("Offre");
@@ -40,7 +45,7 @@ class OfferController extends \App\Controllers\Controller
     } else {
       $this->data['breadcrumbs'][] = trans("Créer une offre");
     }
-
+    
     return get_page('admin/offer/form', $this->data, __FILE__);
   }
 

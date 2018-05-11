@@ -58,6 +58,9 @@ class File
     {
         if (file_exists($source) && is_file($source) && is_readable($source)) {
             try {
+                if (!file_exists(dirname($distination))) {
+                    mkdir(dirname($distination), 0777, true);
+                }
                 chown($distination, 666);
                 return copy($source, $distination);
             } catch (\Exception $e) {}

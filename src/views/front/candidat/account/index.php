@@ -6,7 +6,7 @@ use App\Models\Status;
 use Modules\Message\Models\Message;
 ?>
 
-<script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="<?= site_url('assets/vendors/html2canvas/html2canvas.min.js'); ?>"></script>
 
 <style>
 #alertsTable .actions {
@@ -247,7 +247,7 @@ use Modules\Message\Models\Message;
 
   <div class="styled-title mt-10 mb-0">
     <h3 class="pull-left"><?php trans_e("Mes alertes"); ?></h3>
-    <a href="javascript:void(0)" class="pull-right mr-10" onclick="return chmJobAlerts.form()" style="color: #fff;margin-top: -1px;"><i class="fa fa-plus"></i>&nbsp;<?php trans_e("Créer une nouvelle alerte candidat"); ?></a>
+    <a href="javascript:void(0)" class="btn btn-info btn-xs pull-right" onclick="return chmJobAlerts.form()" style="margin: -5px -1px 0 0;min-height: 23px;"><i class="fa fa-plus"></i>&nbsp;<?php trans_e("Créer une nouvelle alerte"); ?></a>
   </div>
   <div chm-table="candidat/account/alert/table" id="alertsTable"></div>
 

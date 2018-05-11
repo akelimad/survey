@@ -1,7 +1,7 @@
 <?php
 /*
 pl int null
-section int null
+cost_center_jde int null
 poste_budgetisee tinyint 0
 num_demande varchar
 recruteur_manager varchar
@@ -21,7 +21,15 @@ return [
       'name' => 'offer[pl]',
       'label' => trans("P&L"),
       'type' => 'select',
-      'options' => [],
+      'options' => [
+        '',
+        'CVD',
+        'CVD',
+        'MBC',
+        'MBC',
+        'SFC',
+        'SFC',
+      ],
       'group_name' => 'financial_infos',
       'columns' => 4,
       'show' => function($column) {
@@ -279,7 +287,11 @@ return [
       'name' => 'offer[type_profil]',
       'label' => trans("Type de profil"),
       'type' => 'select',
-      'options' => [],
+      'options' => [
+        '',
+        'Profils technicien expérimenté',
+        'Profils ingénieur / spécialiste / manager expérimentés'
+      ],
       'group_name' => 'job_infos',
       'columns' => 3,
       'show' => function($column) {

@@ -1,6 +1,6 @@
 <?php
 
-if($_SESSION["i_val_requet"]!='')    {
+if(isset($_SESSION["i_val_requet"]) && $_SESSION["i_val_requet"]!='')    {
 
 $req  =  mysql_query($query);
 

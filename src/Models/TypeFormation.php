@@ -10,21 +10,10 @@
  */
 namespace App\Models;
 
-class TypeFormation {
+class TypeFormation extends Model {
 
-
-  /**
-   * Get Type Formation name by ID
-   *
-   * @param int $id 
-   * @return string $name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $tfor = getDB()->findOne('prm_type_formation', 'id_tfor', $id);
-    return (isset($tfor->formation)) ? $tfor->formation : null;
-  }
+  public static $table = 'prm_type_formation';
+  public static $primaryKey = 'id_tfor';
+  public static $NameField = 'formation';
 
 }

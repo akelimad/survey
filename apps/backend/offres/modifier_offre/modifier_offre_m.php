@@ -233,7 +233,8 @@ if(isset($messages) and !empty($messages))  {
             'resultats_concours' => $formData['resultats_concours'],
             'avis_modification' => $formData['avis_modification'],
             'avis_report' => $formData['avis_report'],
-            'attachements' => json_encode($formData['attachements'])
+            'attachements' => json_encode($formData['attachements']),
+            'required_files' => (isset($_POST['required_files'])) ? json_encode($_POST['required_files']) : null
         ]);
 
         // Fire after offre form submit event
@@ -277,7 +278,7 @@ if(isset($messages) and !empty($messages))  {
                          while ($ecol = mysql_fetch_array($req_exp)) { 
                              $ecol_id = $ecol['id_ecole'];
 							 
-						 if($_POST[$ecol_id."_e"]!='0') {
+						 if(isset($_POST[$ecol_id."_e"]) && $_POST[$ecol_id."_e"]!='0') {
 							 //echo '<br>$_POST['.$ecol_id.'_e]'.$_POST[$ecol_id."_e"].'<br>'; 
 							 $sql_o_e="INSERT INTO offre_necole VALUES ('".$id_off_m."','".$ecol_id."','".$_POST[$ecol_id."_e"]."')";
 							//echo '<br>'.$sql;
@@ -291,7 +292,7 @@ if(isset($messages) and !empty($messages))  {
                          while ($fili = mysql_fetch_array($req_exp)) {
                              $fili_id = $fili['id_fili'];
 							 
-						 if($_POST[$fili_id."_f"]!='0') {
+						 if(isset($_POST[$fili_id."_f"]) && $_POST[$fili_id."_f"]!='0') {
 							 //echo '<br>$_POST['.$fili_id.'_f]'.$_POST[$fili_id."_f"].'<br>';  
 							 $sql_o_f="INSERT INTO offre_nfiliere VALUES ('".$id_off_m."','".$fili_id."','".$_POST[$fili_id."_f"]."')";
 							//echo '<br>'.$sql;
@@ -833,6 +834,37 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
       <?php endif; ?>
     <?php endif; ?><br></td>
   </tr>
+
+  <tr>
+      <td colspan="2">
+          <div class="subscription" style="margin: 10px 0 5px;">
+              <h1>Pièces obligatoires lors de la postulation</h1>
+          </div>
+      </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <ul>
+        <?php
+          $required_files = [];
+          if (isset($r01['required_files']) && !empty($r01['required_files'])) {
+            $required_files = json_decode($r01['required_files'], true) ?: [];
+          }
+          foreach (Modules\Candidatures\Models\Candidature::$candidatureFiles as $name => $file) : 
+          if (!\App\Form::getFieldOption('displayed', 'register', $name)) continue;
+          $checked = (in_array($name, $required_files)) ? 'checked' : '';
+        ?>
+        <li style="display: inline-block;">
+          <label>
+            <input type="checkbox" name="required_files[]" value="<?= $name; ?>" <?= $checked; ?> style="vertical-align: sub;">
+            <?= $file['title']; ?>
+          </label>
+        </li>
+        <?php endforeach ?>
+      </ul>
+    </td>
+  </tr>
+  
 
   <?php 
   $id_offre = (isset($_POST['id'])) ? $_POST['id'] : 0;

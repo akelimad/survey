@@ -10,21 +10,10 @@
  */
 namespace App\Models;
 
-class Availability {
+class Availability extends Model {
 
-
-  /**
-   * Get Availability name by ID
-   *
-   * @param int $id 
-   * @return string $name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $dispo = getDB()->findOne('prm_disponibilite', 'id_dispo', $id);
-    return (isset($dispo->intitule)) ? $dispo->intitule : null;
-  }
+  public static $table = 'prm_disponibilite';
+  public static $primaryKey = 'id_dispo';
+  public static $NameField = 'intitule';
 
 }

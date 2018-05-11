@@ -175,8 +175,8 @@ function createCookie(name,value,days=365,path='') {
   window.chmCookie.create(name, value, days, path)
 }
 
-function readCookie(name) {
-  return window.chmCookie.read(name);
+function readCookie(name, _default = null) {
+  return window.chmCookie.read(name, _default);
 }
 
 function eraseCookie(name) {

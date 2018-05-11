@@ -32,7 +32,7 @@ class CandidatController extends Controller
         'unsubscribe_reason' => $raison_other
       ]);
 
-      return json_encode(['message' => trans("Votre email a été bien désabonné.")]);
+      return json_encode(['message' => trans("Votre email a bien été désabonné.")]);
     } else {
       $this->data['layout'] = 'front';
       $this->data['breadcrumbs'] = [

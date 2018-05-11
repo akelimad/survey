@@ -7,3 +7,11 @@ if (!isModuleEnabled('language')) {
     echo trans($msgid);
   }
 }
+
+
+function getCurrentLanguage($key = null, $default = null) {
+  if (isModuleEnabled('language')) {
+    return \Modules\Language\Models\Language::getCurrentLanguage($key, $default);
+  }
+  return $default;
+}

@@ -10,21 +10,10 @@
  */
 namespace App\Models;
 
-class Filiere {
+class Filiere extends Model {
 
-
-  /**
-   * Get Filiere name by ID
-   *
-   * @param int $id 
-   * @return string $level_name 
-   * 
-   * @author Mhamed Chanchaf
-   */
-  public static function getNameById($id) 
-  {
-    $filiere = getDB()->findOne('prm_filieres', 'id_fili', $id);
-    return (isset($filiere->filiere)) ? $filiere->filiere : null;
-  }
-
+  public static $table = 'prm_filieres';
+  public static $primaryKey = 'id_fili';
+  public static $NameField = 'filiere';
+  
 }

@@ -1,4 +1,4 @@
-<?php use Modules\Candidatures\Models\Candidatures; ?>
+<?php use Modules\Candidatures\Models\Candidature; ?>
 
 <?php if(\App\Session::get('id_type_role') == 2) : ?>
 <table width="100%" border="0">
@@ -170,8 +170,8 @@ echo '<span class="badge badge-error">'.$accept.'</span> ';?>
 
 
 <?php
-	foreach (Candidatures::getStatus() as $key => $status) : 
-	$count = Candidatures::countByStatus($status->id_prm_statut_c);
+	foreach (Candidature::getStatus() as $key => $status) : 
+	$count = Candidature::countByStatus($status->id_prm_statut_c);
 	if(($count == 0 && !isAdmin()) || ($status->id_prm_statut_c == 53 && !isAdmin())) continue;
 	?>
 	<tr>  

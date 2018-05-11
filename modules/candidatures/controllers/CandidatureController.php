@@ -13,7 +13,6 @@ namespace Modules\Candidatures\Controllers;
 use App\Event;
 use App\Ajax;
 use App\Controllers\Controller;
-use Modules\Candidatures\Models\Candidatures;
 
 class CandidatureController extends Controller
 {

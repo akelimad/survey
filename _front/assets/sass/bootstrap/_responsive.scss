@@ -26,6 +26,14 @@
 
 /* For phones */
 @media (max-width: 767px) {
+  /* form */
+  .chm-simple-form {
+    .row {
+      div[class^=col-]:not(:first-child) {
+        padding-left: 15px !important;
+      }
+    }
+  }
 
   #footer-navbar li:not(:first-child) a:before, #top-navbar li:not(:first-child) a:before {
     content: ''

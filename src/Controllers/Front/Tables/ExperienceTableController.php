@@ -53,7 +53,7 @@ class ExperienceTableController extends Controller
 
     $table->setAction('copie_attestation',  [
       'label' => trans("Copie de l’attestation"),
-      'patern' => site_url('apps/upload/frontend/candidat/copie_attestation/{copie_attestation}'),
+      'patern' =>  get_copie_attestation_url('{copie_attestation}'),
       'icon' => 'fa fa-file-text-o',
       'bulk_action' => false,
       'attributes' => [
@@ -67,7 +67,7 @@ class ExperienceTableController extends Controller
 
     $table->setAction('bulletin_paie',  [
       'label' => trans("Bulletin de paie"),
-      'patern' => site_url('apps/upload/frontend/candidat/bulletin_paie/{bulletin_paie}'),
+      'patern' =>  get_bulletin_paie_url('{bulletin_paie}'),
       'icon' => 'fa fa-file-text-o',
       'bulk_action' => false,
       'attributes' => [

@@ -226,7 +226,7 @@ if($rst_pagination)
 
                                             <th width="25%" ><b>Titre de poste</b></th>
 
-                                            <th  width="15%" ><b>Status</b></th>
+                                            <th  width="15%" ><b>Statut</b></th>
 
                                             <th width="12%" ><b>Date et Heure</b></th>			
 

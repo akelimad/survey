@@ -21,6 +21,8 @@ Route::add('candidat/account/resent-email', 'App\Controllers\Front\AuthControlle
 // Formulaire Forum
 Route::add('candidat/forum', 'App\Controllers\Front\CandidatController@getForumForm', false, !$isLoggedCandidat);
 
+// Inscription Collaborateurs
+Route::add('candidat/collaborator/register', 'App\Controllers\Front\CollaboratorController@register', false, !$isLoggedCandidat);
 
 // Candidat account
 Route::add('candidat/account/confirm/[a-zA-Z0-9]+', 'App\Controllers\Front\CandidatController@confirmAccount');
@@ -225,6 +227,7 @@ Route::add('conditions', 'App\Controllers\Front\PageController@conditions');
 Route::add('sitemap', 'App\Controllers\Front\PageController@sitemap');
 Route::add('contact', 'App\Controllers\Front\PageController@contact');
 Route::add('bug-report', 'App\Controllers\Front\PageController@bugReport');
+Route::add('migrate-files', 'App\Controllers\Front\PageController@migrateFiles');
 
 // Advanced search
 Route::add('offres', 'App\Controllers\Front\OfferController@index');

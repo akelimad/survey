@@ -599,6 +599,32 @@ echo "<option value=\"$m_id\" " . $sf . ">$obj</option>";}
                 <td colspan="2"><input type="file" id="avis_report" name="avis_report" /></td>
             </tr>
 
+
+            <tr>
+                <td colspan="2">
+                    <div class="subscription" style="margin: 10px 0 5px;">
+                        <h1>Pièces obligatoires lors de la postulation</h1>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <ul>
+                        <?php
+                          foreach (Modules\Candidatures\Models\Candidature::$candidatureFiles as $name => $file) : 
+                          if (!\App\Form::getFieldOption('displayed', 'register', $name)) continue;
+                        ?>
+                        <li style="display: inline-block;">
+                          <label>
+                            <input type="checkbox" name="required_files[]" value="<?= $name; ?>" style="vertical-align: sub;width: auto;">
+                            <?= $file['title']; ?>
+                          </label>
+                        </li>
+                        <?php endforeach ?>
+                    </ul>
+                </td>
+            </tr>
+
             <?php \App\Event::trigger('after_offre_fields'); ?>
             
 

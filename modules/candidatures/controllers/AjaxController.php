@@ -132,7 +132,7 @@ class AjaxController extends Controller
       'admin/candidature/popup/send-mail', [
         'candidatures' => [$candidature],
         'cv_name' => $cv->titre_cv,
-        'cv_path' => 'apps/upload/frontend/cv/'.$cv->lien_cv
+        'cv_path' => get_resume_base($cv->lien_cv, ['candidat_id' => $candidature->candidats_id])
     ]);
   }
 
@@ -417,7 +417,7 @@ class AjaxController extends Controller
 
     return [
       'status' => 'success',
-      'message' => trans("Le titre a été bien mise à jour."),
+      'message' => trans("Le titre a bien été mise à jour."),
       'updated_at' => date ("d.m.Y H:i", strtotime($updated_at))
     ];
   }
@@ -454,7 +454,7 @@ class AjaxController extends Controller
     
     return [
       'status' => 'success',
-      'message' => trans("La pièce jointe a été supprimé.")
+      'message' => trans("La pièce jointe a été supprimée.")
     ];
   }
 

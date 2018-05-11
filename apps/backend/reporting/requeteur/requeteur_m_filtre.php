@@ -72,7 +72,7 @@ echo ' selected="selected"'; ?>>
 
                             
 
-<?php if($_SESSION["i_val_requet"]!="" ){  ?>                  
+<?php if(isset($_SESSION["i_val_requet"]) && $_SESSION["i_val_requet"]!="" ){  ?>                  
 
                             <tr>
 

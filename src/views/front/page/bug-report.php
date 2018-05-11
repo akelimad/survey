@@ -7,7 +7,6 @@
   ], false) ?>
 </div>
 
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <form method="POST" action="" class="chm-simple-form" onsubmit="return window.chmForm.submit(event)" enctype="multipart/form-data">
 
   <div class="row">
@@ -86,6 +85,7 @@
 
   <div class="row">
     <div class="col-sm-9 col-sm-offset-3 pl-0 pl-xs-15">
+      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
       <div class="g-recaptcha" data-sitekey="<?= get_setting('google_recaptcha_sitekey') ?>"></div>
     </div>
   </div>
