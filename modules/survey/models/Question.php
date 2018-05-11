@@ -14,9 +14,9 @@ use App\Controllers\Controller;
 
 class Question {
     
-    public static function All()
+    public static function All($sid)
     {
-        return getDB()->read('survey_questions');
+        return getDB()->findByColumn('survey_questions', 'survey_id', $sid);
     }
 
     public static function find($qid)

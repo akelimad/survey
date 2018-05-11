@@ -15,6 +15,7 @@ use Modules\Survey\Models\Survey;
 use Modules\Survey\Models\Group;
 use Modules\Survey\Models\Question;
 use App\Ajax;
+use App\Route;
 use App\Mail\Mailer;
 use App\Models\Candidat;
 
@@ -91,7 +92,8 @@ class SurveyController extends Controller
     $survey = new \stdClass;
     $title = trans("Visualiser le questionnaire");
     $survey = Survey::find($data['params'][1]);
-    return Ajax::renderAjaxView($title, 'admin/survey/show', ['survey'=>$survey], __FILE__);
+    $route = Route::getRoute();
+    return Ajax::renderAjaxView($title, 'admin/survey/show', compact('survey', 'route'), __FILE__);
   }
 
   public function delete($data)
@@ -263,7 +265,7 @@ class SurveyController extends Controller
   {
     $db = getDB();
     if(!Survey::checkUserResponse($data['params'][2])){
-      $questions = Question::All();
+      $questions = Question::All($data['params'][1]);
       $countQuestions = Survey::countQuestions($data['params'][1]);
       if((count($data) - 1) != $countQuestions){
         return $this->jsonResponse('error', trans("Veuillez répondre sur toutes les questions !!!"));
@@ -304,8 +306,6 @@ class SurveyController extends Controller
       return $this->jsonResponse('error', trans("Vous avez déjà répondu sur ce questionnaire !"));
     }
 
-
-
   }
 
   public function quizzResult($data)
@@ -321,6 +321,18 @@ class SurveyController extends Controller
       $this->data['token'] = $token;
     }
     return Ajax::renderAjaxView(trans("Résultat du questionnaire"), 'admin/survey/quizz-result', $this->data, __FILE__);
+  }
+
+  public function generatePDF($data)
+  {
+    $survey = new \stdClass;
+    $survey = Survey::find($data['params'][1]);
+    $route = Route::getRoute();
+    ob_start();
+    echo get_view('admin/survey/show', compact('survey', 'route'), __FILE__);
+    $html = ob_get_clean();
+    return $this->htmlToPDF($html, "questionnaire_".date('dmY_Hi'), 'D');
+    exit();
   }
 
 } // END Class

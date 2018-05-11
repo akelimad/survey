@@ -88,7 +88,7 @@ use App\Form;
             <div class="form-group mb-10" >
                 <label class="col-md-2 control-label required pl-0"><?= trans_e("Choix") ?> : <span class="badge"> </span></label>
                 <div class="col-md-8 answer">
-                    <input type="text" class="form-control" name="<?= (!empty($question->id) && $key != 0) ? "answers[$choice->id][choice]":"answers[0][choice]" ?>" value="<?php if (!empty($question->id) and $question->type=='file'){ echo $choice->title; }elseif(!empty($question->id) and in_array($question->type, ['radio', 'select', 'checkbox']) ){ echo $choice->name; }  ?> "  required />
+                    <input type="text" class="form-control" name="<?= (!empty($question->id) && $key != 0) ? "answers[$choice->id][choice]":"answers[0][choice]" ?>" value="<?php if (!empty($question->id) and $question->type=='file'){echo$choice->title;}elseif(!empty($question->id) and in_array($question->type, ['radio', 'select', 'checkbox']) ){echo$choice->name;}  ?>"  required />
                 </div>
                 <div class="col-md-1 isCorrect pl-5" >
                     <input type="radio" class="form-control" name="<?= (!empty($question->id) and $key != 0 and !in_array($question->type,["radio", "select"]) ) ? "answers[$choice->id][isCorrect]":"answers[0][isCorrect]" ?>" title="<?= trans_e("Cochez si ce choix fait partie de la bonne réponse") ?>" <?= !empty($question->id) && $question->type != 'file' && $choice->is_correct == 1 ? 'checked':'' ?> value="<?php echo (!empty($question->id)) ? $choice->id : 0  ?>" />
@@ -150,10 +150,12 @@ use App\Form;
 
 <script>
 $(function() {
+    <?php if(!empty($question->id)){ ?>
     $('select#questionType').attr('disabled', 'disabled');
     $(':submit').on('click', function() {
         $('select#questionType').removeAttr('disabled');
     });
+    <?php } ?>
 
     $("#questionType").change(function(){
         value = $(this).val()
@@ -185,7 +187,8 @@ $(function() {
             $(".imageTypeRow").hide()
             $("#addLine-wrap .isCorrect input:first-of-type").attr('type', 'radio')
             $("#addLine-wrap .imageTypeRow input.attachments").prop('required', false)
-            $("#addLine-wrap .answer input, #addLine-wrap2 .answer input").prop('required', false)
+            $("#addLine-wrap2 .answer input").prop('required', false)
+            $("#addLine-wrap .answer input").prop('required', true)
         }else if(value == "checkbox"){
             $(".answerBy").hide()
             $("#addLine-wrap .imageTypeRow input.attachments").prop('required', false)
@@ -219,10 +222,11 @@ $(function() {
         var uid = uuidv4()
         $.each(copy.find('input'), function(){
             var name = $(this).attr('name')
-            if($(this).attr("type") != "radio"){
+            console.log(value)
+            if($(this).attr("type") != "radio" ){
                 $(this).attr('name', name.replace('[0]', '['+uid+']'))  
             }else{
-                $(this).val(uid);
+                $(this).val(uid)
             }
         })
         $('#addLine-wrap').append(copy)

@@ -22,7 +22,9 @@ export default class Survey {
   }
 
   static show (id) {
-    window.chmModal.show({type: 'GET', url: window.chmSite.url('backend/survey/' + id + '/show')})
+    window.chmModal.show({type: 'GET', url: window.chmSite.url('backend/survey/' + id + '/show')}, {
+      width: 700
+    })
   }
 
   static delete (params) {

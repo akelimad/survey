@@ -85,13 +85,15 @@ class QuestionController extends Controller
 
   public function store($data)
   {
-    // dump($_FILES);
 
     if($this->atLeastOneChecked($data) == false){
       return $this->jsonResponse('error', trans("Veuillez choisir la bonne réponse !"));
     }
     if(Survey::unsafe($data['name'])){
       return $this->jsonResponse('error', trans("Le champs nom est invalide, veuillez ne saisir que des caractères.")); 
+    }
+    if(in_array($data['type'], ['radio', 'checkbox', 'select']) and count($data['answers'])<1){
+      return $this->jsonResponse('error', trans("Veuillez saisir au moins deux choix")); 
     }
     if (!isset($data['name']) || !isset($data['type'])) return false;
     $db = getDB();
@@ -102,7 +104,7 @@ class QuestionController extends Controller
         $db->update('survey_questions', 'id', $question->id, [
           'name' => $data['name'], 
         ]);
-        if(count($data['answers'])>1){
+        if(isset($answers) and count($data['answers'])>1){
           foreach ($data['answers'] as $key => $value) {
             $answerId = $question->type == "file" ? $data['firstKeyWordId'] : $data['firstanswerId'];
             if($key === 0){
@@ -176,8 +178,6 @@ class QuestionController extends Controller
               ]);
             }
           }
-        }else{
-          return $this->jsonResponse('error', trans("Veuillez saisir au moins deux choix !!!"));
         }
       } else {
         return $this->jsonResponse('error', trans("Impossible de mettre à jour la question."));
@@ -188,6 +188,7 @@ class QuestionController extends Controller
         'type' => $data['type'],
         'group_id' => $data['params'][2],
         'survey_id' => $data['params'][1],
+        'answerBy' => 'selection'
       ]);
       // save questions answers
       if(count($data['answers'])>1){
@@ -222,8 +223,6 @@ class QuestionController extends Controller
             ]);
           }
         } 
-      }else{
-        return $this->jsonResponse('error', trans("Veuillez saisir au moins deux choix !!!"));
       }
       // upload attachement to directory
       $attachments = [];

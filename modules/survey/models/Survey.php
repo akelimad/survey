@@ -84,7 +84,7 @@ class Survey {
 
   // Does string match this chars?
   public static function unsafe( $string ) {
-    return preg_match("/[^a-zA-Z éèê'’àç:]+/i", $string);
+    return preg_match("/[^a-zA-Z éèê'à’,ç?\-:]+/i", $string); //we use \ to escape 
   }
 
   public static function checkUserResponse($token)

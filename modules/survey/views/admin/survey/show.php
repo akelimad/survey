@@ -10,14 +10,23 @@ use App\Form;
         width: 3% !important;
     }
     .groupeTitle{
-        background: #efefef;
+        background: #676767;
         padding: 5px;
         font-weight: bold;
         text-transform: capitalize;
+        color: white;
     }
     .questionTitle{
-        text-decoration: underline;
         font-weight: bold;
+        padding: 6px 0;
+        color: black;
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+    .question-wrap {
+        border: 1px solid #d6d1d1;
+        margin-bottom: 10px;
+        padding: 0 20px;
     }
     textarea{
         height: 7em !important;
@@ -29,15 +38,60 @@ use App\Form;
     .imgBox img{
         max-height: 100%;
     }
+    .table {
+        display: table;
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+        background-color: transparent;
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+    .table-bordered{
+        border: 2px solid #ddd;
+    }
+    .table thead tr td{
+        padding: 8px;
+        line-height: 1.42857;
+        vertical-align: top;
+        border-top: 1px solid #ddd;
+    }
+    .text-center{
+        text-align: center;
+    }
 
 </style>
 <div class="content chm-simple-form">
     <?php if( count(Survey::getSurveyGroups($survey->id))>=1 ) { ?>
+        <div class="header-infos">
+            <div class="col-md-10 text-center">
+                <h3 style="color: #e1a04e"><?= $survey->name ?></h3>
+            </div>
+            <?php if($route == "backend/survey/".$survey->id."/show"){ ?>
+            <div class="col-md-2">
+                <a href="<?= site_url('survey/'.$survey->id.'/generatePDF') ?>" class="btn btn-primary btn-xs pull-right mb-10" target="_blank"> <i class="fa fa-file-pdf-o"></i> <?php trans_e('Télécharger') ?></a>
+            </div>
+            <?php } ?>
+            <div class="cleafix"></div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td><?php trans_e("Nom & Prénom : ") ?></td>
+                        <td><?php trans_e("Manger : ") ?></td>
+                    </tr>
+                    <tr>
+                        <td><?php trans_e("Date d'entrée : ") ?></td>
+                        <td><?php trans_e("Service : ") ?></td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
         <?php foreach (Survey::getSurveyGroups($survey->id) as $group) { ?>
         <div class="form-group mb-0">
             <p class="groupeTitle"> <?= $group->name; ?> </p>
             <?php foreach (Survey::getGroupeQuestions($group->id) as $key => $question) { ?>
-                <p class="questionTitle"> <?= $question->name ?> </p>
+                <div class="question-wrap">
+                <p class="questionTitle"> <i class="fa fa-caret-right"></i> <?= $question->name ?> </p>
                 <?php if($question->type == "textarea" ) { ?>
                     <textarea name="" id="" rows="30" class="form-control" disabled></textarea> 
                 <?php }elseif($question->type == "text"){ ?>
@@ -77,6 +131,7 @@ use App\Form;
                     <p> <input type="<?= $question->type ?>" <?= $choice->is_correct == 1 ? 'checked':'' ?> disabled> <?= $choice->name ?> </p>
                     <?php } ?>
                 <?php } ?>
+                </div>
             <?php } ?>
         </div>
         <?php } ?>

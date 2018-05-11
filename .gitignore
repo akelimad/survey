@@ -1,13 +1,13 @@
 .phpintel
 export_git_diff.bat
 /_front/node_modules
-/config/parameters.php
-/config/database.php
+config/parameters.php
+config/database.php
 /apps/upload
 /messages
 /uploads
 /public/uploads
-/public/assets/dynamic
+public/assets/dynamic
 /vendor
 /node_modules
 composer.lock

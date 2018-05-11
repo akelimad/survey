@@ -35,6 +35,7 @@ class RouteController
     Route::add('survey/([0-9]+)/([a-f0-9]{32}$)', 'Modules\Survey\Controllers\SurveyController@quiz');
     Route::add('survey/([0-9]+)/([a-f0-9]{32})/storeAnswers', 'Modules\Survey\Controllers\SurveyController@storeQuizz');
     Route::add('survey/([0-9]+)/result', 'Modules\Survey\Controllers\SurveyController@quizzResult', true);
+    Route::add('survey/([0-9]+)/generatePDF', 'Modules\Survey\Controllers\SurveyController@generatePDF');
 
     Route::add('backend/survey/([0-9]+)/group/index', 'Modules\Survey\Controllers\GroupController@index');
     Route::add('backend/survey/([0-9]+)/group/table', 'Modules\Survey\Controllers\GroupTableController@getAll');
