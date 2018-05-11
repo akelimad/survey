@@ -15,9 +15,15 @@ use App\Form;
     label{
         padding-left: 0 !important;
     }
-    label input{
+    .chm-modal input[type=radio]{
         float: left;
         position: static !important;
+        display: inline-block;
+        float: left;
+        width: 16% !important;
+    }
+    .chm-modal label{
+        margin-top: 0;
     }
 </style>
 <div class="content">
@@ -33,13 +39,16 @@ use App\Form;
     <div class="form-group mb-0">
         <label for="format" class="control-label"><?= trans_e('Format'); ?></label>
         <div class="col-md-4 pl-0">
-            <label class="radio-inline"><input type="radio" name="format" value="byGroup" <?= (isset($survey->format) and $survey->format == "byGroup") ? 'checked':'' ?> disabled><?php trans_e("Par groupe"); ?></label>
+            <label class="radio-inline" for="byGroup"><?php trans_e("Par groupe"); ?></label>
+            <input type="radio" name="format" id="byGroup" value="byGroup" <?= (isset($survey->format) and $survey->format == "byGroup") ? 'checked':'' ?> >
         </div>
         <div class="col-md-4">
-            <label class="radio-inline"><input type="radio" name="format" value="byQst" <?= (isset($survey->format) and $survey->format == "byQst") ? 'checked':'' ?> disabled><?php trans_e("Par question "); ?></label>
+            <label class="radio-inline" for="byQst"><?php trans_e("Par question "); ?></label>
+            <input type="radio" name="format" id="byQst" value="byQst" <?= (isset($survey->format) and $survey->format == "byQst") ? 'checked':'' ?> >
         </div>
         <div class="col-md-4">
-            <label class="radio-inline"><input type="radio" name="format" value="all" <?= (isset($survey->format) and $survey->format == "all") ? 'checked':'' ?> ><?php trans_e("Tout en un "); ?></label>
+            <label class="radio-inline" for="all"><?php trans_e("Tout en un "); ?></label>
+            <input type="radio" name="format" id="all" value="all" <?= (isset($survey->format) and $survey->format == "all") ? 'checked':'' ?> >
         </div>
         <div class="cleafix"></div>
     </div>

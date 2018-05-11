@@ -11,6 +11,7 @@
 namespace Modules\Survey\Controllers;
 
 use App\Event;
+use Modules\Survey\Models\Survey;
 
 class EventController
 {
@@ -46,10 +47,43 @@ class EventController
 		      'class' => 'btn btn-default btn-xs',
 		    ],
 		    'permission' => function ($row) {
-		    	if (!can_view_action($row)) {
+		    	if (Survey::checkCandidatResponse($row->id_candidature) || Survey::rememberCandidat($row->id_candidature)) {
 		    		return false;
 		    	}
-		    	// Other conditions
+				return true;
+		    }
+		]);
+		$table->setAction('getResult_survey', [
+		    'label' => trans("Voir le résultat"),
+		    'patern' => '#',
+		    'icon' => 'fa fa-eye',
+		    'sort_order' => 7,
+		    'bulk_action' => false,
+		    'callback' => 'Survey.getResult',
+		    'attributes' => [
+		      'class' => 'btn btn-default btn-xs',
+		    ],
+		    'permission' => function ($row) {
+		    	if (!Survey::checkCandidatResponse($row->id_candidature)) {
+		    		return false;
+		    	}
+				return true;
+		    }
+		]);
+		$table->setAction('remember_candidat', [
+		    'label' => trans("Relancer le candidat"),
+		    'patern' => '#',
+		    'icon' => 'fa fa-refresh',
+		    'sort_order' => 7,
+		    'bulk_action' => true,
+		    'callback' => 'Survey.send',
+		    'attributes' => [
+		      'class' => 'btn btn-default btn-xs',
+		    ],
+		    'permission' => function ($row) {
+		    	if (!Survey::rememberCandidat($row->id_candidature)) {
+		    		return false;
+		    	}
 				return true;
 		    }
 		]);

@@ -51,6 +51,9 @@ class GroupController extends Controller
     if(Survey::unsafe($data['name'])){
       return $this->jsonResponse('error', trans("Le champs nom est invalide, veuillez ne saisir que des caractères.")); 
     }
+    if(Survey::unsafe($data['description'])){
+      return $this->jsonResponse('error', trans("Le champs description est invalide, veuillez ne saisir que des caractères.")); 
+    }
     if (!isset($data['name']) || !isset($data['description'])) return false;
     $db = getDB();
     if (intval($data['gid']) > 0) {

@@ -46,7 +46,7 @@ class SurveyTableController extends Controller
       return !empty($row->description) ? $row->description : '---' ;
     });
     
-    $table->addColumn('created_by', trans("Crée par"), function($row) {
+    $table->addColumn('created_by', trans("Créé par"), function($row) {
       return $row->nom;
     });
 

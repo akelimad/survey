@@ -57,4 +57,10 @@ export default class Survey {
     })
   }
 
+  static getResult (event, entityId) {
+    window.chmModal.show({type: 'GET', url: window.chmSite.url('survey/' + entityId + '/result')}, {
+      width: 800
+    })
+  }
+
 }

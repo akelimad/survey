@@ -14,6 +14,8 @@ use App\Form;
         font-weight: bold;
         padding: 6px 0;
         color: black;
+        margin-bottom: 0;
+        margin-top: 0;
     }
     .question-wrap {
         border: 1px solid #d6d1d1;
@@ -32,8 +34,9 @@ use App\Form;
         margin: auto;
     }
     label{
-        display: inline-block !important;
+        display: inline !important;
         cursor: pointer;
+        margin-left: 7px
     }
     label:hover{
         color: #e88435;
@@ -98,8 +101,17 @@ use App\Form;
 
 </style>
 <div class="content chm-simple-form">
-    <?php if(!Survey::checkUserResponse($token)) { ?>
+    <?php if(!Survey::checkUserResponse($token->token)) { ?>
         <?php if( isset($survey) ) { ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <p> 
+                        <span class="mr-10"><i class="fa fa-edit"></i> <strong><?php trans_e("Questionnaire : ") ?></strong> <?= $survey->name ?></span>
+                        <span class="mr-10"><i class="fa fa-user"></i> <strong><?php trans_e("Nom du candidat : ") ?></strong> <?= $token->firstname ?></span>
+                        <span class="mr-10"><i class="fa fa-user"></i> <strong><?php trans_e("Prénom du candidat : ") ?></strong> <?= $token->lastname ?></span>
+                    </p>
+                </div>
+            </div>
             <div class="errorForm mb-10">
                 <?php get_alert('danger', trans("Veuillez cocher au moins un choix pour chaque question")) ?>
             </div>
@@ -120,7 +132,7 @@ use App\Form;
                                 <?php if( $survey->format == "byQst" ) { $c += 1; ?>
                                 <div class="tab">
                                 <?php } ?>
-                                <div class="question-wrap" id="q-<?= $question->id ?>">
+                                <div class="question-wrap <?php if($question->type == 'radio'){ echo 'radio-wrap';}else if($question->type == 'checkbox'){echo 'checkbox-wrap';} ?>" id="q-<?= $question->id ?>">
                                 <p class="questionTitle"> <i class="fa fa-caret-right"></i> <?= $question->name ?> </p>
                                 <?php if($question->type == "textarea" ) { ?>
                                     <textarea name="<?= $question->id ?>" id="" rows="30" class="form-control" ></textarea> 
@@ -142,7 +154,7 @@ use App\Form;
                                                 <?php } ?>
                                             </select>
                                         </div>
-                                        <?php if(($key+1) % 3 == 0 ) { ?>
+                                        <?php if(($key ++) % 4 == 0 ) { ?>
                                         <div class="clearfix"></div> 
                                         <?php } ?>
                                     <?php } ?>
@@ -159,7 +171,7 @@ use App\Form;
                                     <div class="clearfix"></div>
                                 <?php }else{ ?> <!-- checkbox or radio -->
                                     <?php foreach (Survey::getQuestionChoices($question->id) as $key => $choice) { ?>
-                                    <p class="mb-0"> <input type="<?= $question->type ?>" data-id="<?= $question->id ?>" name="<?= $question->id."[]" ?>" class="check-radio" value="<?= $choice->id ?>" id="answer-<?= $choice->id ?>" > <label for="answer-<?= $choice->id ?>"> <?= $choice->name ?> </label> </p>
+                                    <p class="mb-0 mt-0"> <input type="<?= $question->type ?>" data-id="<?= $question->id ?>" name="<?= $question->id."[]" ?>" class="check-radio" value="<?= $choice->id ?>" id="answer-<?= $choice->id ?>" > <label for="answer-<?= $choice->id ?>"> <?= $choice->name ?> </label> </p>
                                     <?php } ?>
                                 <?php } ?>
                                 <?php if( $survey->format == "byQst" ) { ?>
@@ -201,20 +213,23 @@ use App\Form;
 
 <script>
     $(document).ready(function() {
-        $('form').on('chmFormSuccess', function(event){
-            $(this).remove()
-            $(".success").show().slideDown()
-            $(".errorForm").hide()
-        })
-        $("#sendBtn").on("click", function(){
-            if (!validateForm()){
-                $(this).attr('type', 'button')
-                return false;
-            }else{
-                $(this).attr('type', 'submit')
-                return true
+        $('form').on('chmFormSuccess', function(event, response){
+            if(response.status == "success"){
+                $(this).remove()
+                $(".success").show().slideDown()
+                $(".errorForm").hide()
             }
         })
+
+        // $("#sendBtn").on("click", function(){
+        //     if (!validateForm()){
+        //         $(this).attr('type', 'button')
+        //         return false;
+        //     }else{
+        //         $(this).attr('type', 'submit')
+        //         return true
+        //     }
+        // })
     })
     var currentTab = 0; // Current tab is set to be the first tab (0)
     showTab(currentTab); // Display the crurrent tab
@@ -234,6 +249,8 @@ use App\Form;
             $("#sendBtn").show()
             $(".errorForm").fadeOut()
         } else {
+            $("#nextBtn").show()
+            $("#sendBtn").hide()
             document.getElementById("nextBtn").innerHTML = "Suivant";
         }
         //... and run a function that will display the correct step indicator:
@@ -245,7 +262,7 @@ use App\Form;
         // This function will figure out which tab to display
         var tab = document.getElementsByClassName("tab");
         // Exit the function if any field in the current tab is invalid:
-        if ( n == 1 && !validateForm()) return false;
+        // if ( n == 1 && !validateForm()) return false;
         // Hide the current tab:
         tab[currentTab].style.display = "none";
         // Increase or decrease the current tab by 1:
@@ -262,40 +279,40 @@ use App\Form;
     }
 
     function validateForm() {
-        var tabs, y, i, j, valid = false;
+        var tabs, y, i, j, valid = true;
         tabs = document.getElementsByClassName("tab");
         step = document.getElementsByClassName("step");
-        input = tabs[currentTab].getElementsByTagName("input");
+        input = tabs[currentTab].getElementsByClassName("input");
+        inputRadio = tabs[currentTab].getElementsByClassName("radio-wrap");
+        inputCheckbox = tabs[currentTab].getElementsByClassName("checkbox-wrap");
         select = tabs[currentTab].getElementsByTagName("select");
         var checkInput = true;
-        var checkCheckbox = false;
-        var checkRadio = false;
-        var checkSelect = false;
-        // if(tabs.length <= 1){
-        //     $('.question-wrap').each(function() {
-        //         if( $(this).find(':radio').length > 0){
-        //             if ($(this).find(':radio:checked').length == 0) {
-        //                 checkRadio = false;
-        //             }
-        //         }
-        //     });
-        // }
+        var checkCheckbox = true;
+        var checkRadio = true;
+        var checkSelect = true;
+        var checkedradiocount = 0
+        var checkedCheckboxcount = 0
+        radioLength = $('.tab .radio-wrap').length
+        $('.tab .radio-wrap').each(function(){
+            if($(this).find('input[type="radio"]:checked').length > 0){
+                checkedradiocount ++
+            }
+        });
+        checkboxLength = $('.tab .checkbox-wrap').length
+        $('.tab .checkbox-wrap').each(function(){
+            if($(this).find('input[type="checkbox"]:checked').length > 0){
+                checkedCheckboxcount ++
+            }
+        });
         for (i = 0; i < input.length; i++) {
             if (input[i].type == "text" && input[i].value == "" ) {
                 valid = false;
                 checkInput = false;
                 input[i].className += " invalid";
-            }
-            else if(input[i].type == "checkbox"){
-                valid = true;
-                checkCheckbox = true;
-            }else if(input[i].type == "radio" && input[i].checked == false){
-                valid = false;
-                checkRadio = false;
-                input[i].className += " invalid";
+            }else if(input[i].type == "text"){
+                console.log()
             }
         }
-        var c=0
         for (i = 0; i < select.length; i++) {
             if(select[i].value == ""){
                 select[i].className += " invalid";
@@ -303,26 +320,26 @@ use App\Form;
                 checkSelect = false
             }
         }
-        if(c == select.length){
-            valid = true;
-            checkSelect = true;
+        if(checkedradiocount != radioLength){
+            checkRadio = false;
+            valid = false
         }
-        console.log('text: '+ checkInput)
-        console.log('radio: '+ checkRadio)
-        console.log('select: '+ checkSelect)
-        if(!checkInput || !checkRadio || !checkCheckbox || !checkSelect ){
-            $(".errorForm").fadeIn()
-            $('html, body').animate({
-                scrollTop: $(".errorForm").offset().top
-            }, 1000);
-        }else{
-            valid = true;
+        if(checkedCheckboxcount != checkboxLength){
+            checkCheckbox = false;
+            valid = false
         }
+        // if(checkSelect && checkRadio && checkCheckbox){
+        //     valid = true;
+        // }else{
+        //     $(".errorForm").fadeIn()
+        //     $('html, body').animate({
+        //         scrollTop: $(".errorForm").offset().top
+        //     }, 1000);
+        // }
         if (valid) {
             if(step.length>0){
                 document.getElementsByClassName("step")[currentTab].className += " finish";
             }
-            // $(".errorForm").fadeOut()
         }
         return valid;
     }

@@ -85,6 +85,8 @@ class QuestionController extends Controller
 
   public function store($data)
   {
+    // dump($_FILES);
+
     if($this->atLeastOneChecked($data) == false){
       return $this->jsonResponse('error', trans("Veuillez choisir la bonne réponse !"));
     }
@@ -100,15 +102,13 @@ class QuestionController extends Controller
         $db->update('survey_questions', 'id', $question->id, [
           'name' => $data['name'], 
         ]);
-        if(isset($data['answers']) and count($data['answers'])>0){
+        if(count($data['answers'])>1){
           foreach ($data['answers'] as $key => $value) {
             $answerId = $question->type == "file" ? $data['firstKeyWordId'] : $data['firstanswerId'];
             if($key === 0){
               $id = $answerId;
-              //var_dump($key." = 0  id= ".$id);
             }else{
               $id = $key;
-              //var_dump($key." != 0  id= ". $id);
             }
             $answer = Question::findAnswer( $id );
             if( in_array($question->type, ['radio', 'checkbox', 'select']) and isset($value['choice']) ){
@@ -141,6 +141,34 @@ class QuestionController extends Controller
                 ]);
               }
             }
+            // dump($_FILES);
+            $attachments = [];
+            if ( isset($_FILES['attachments']) ) {
+              $uploadDir = 'uploads/survey/questions/'. $question->id .'/';
+              $upload = Media::upload($_FILES['attachments'], [    
+              'extensions' => ['jpg', 'jpeg', 'png'],        
+              'uploadDir' => $uploadDir
+              ]);
+              if ( isset($upload['files']) ) {
+                $attachments = $upload['files'];
+              }
+            }
+            // dump($attachments);
+            // var_dump($data['attachmentsId']);
+            //dump($upload);
+            if(isset($attachmentsId) and count($data['attachmentsId'])>0 and count($attachments)>0){
+              $updatedAttachments[] = array_combine($data['attachmentsId'], $attachments);
+            }
+            // var_dump($updatedAttachments);
+            // die();
+            if(isset($updatedAttachments[0])){
+              foreach ($updatedAttachments[0] as $id => $fileName) {
+                $attachment = Question::findAttachment($id);
+                $db->update('survey_attachements', 'id', $attachment->id, [
+                  'file_name' => $fileName
+                ]);
+              }
+            }
             $attachment = Question::findAttachment($key);
             if($attachment and isset($value['attachmentLabels'])){
               $db->update('survey_attachements', 'id', $key, [
@@ -148,6 +176,8 @@ class QuestionController extends Controller
               ]);
             }
           }
+        }else{
+          return $this->jsonResponse('error', trans("Veuillez saisir au moins deux choix !!!"));
         }
       } else {
         return $this->jsonResponse('error', trans("Impossible de mettre à jour la question."));
@@ -160,7 +190,7 @@ class QuestionController extends Controller
         'survey_id' => $data['params'][1],
       ]);
       // save questions answers
-      if(isset($data['answers']) and count($data['answers'])>0){
+      if(count($data['answers'])>1){
         foreach ($data['answers'] as $key => $value) {
           if($data['type'] == "checkbox" and isset($value['isCorrect'])){
             $atLeastOneChecked = true;
@@ -192,36 +222,34 @@ class QuestionController extends Controller
             ]);
           }
         } 
+      }else{
+        return $this->jsonResponse('error', trans("Veuillez saisir au moins deux choix !!!"));
       }
-    }
-    // upload attachement to directory
-    $attachments = [];
-    if ( isset($_FILES['attachments']) and $_FILES['attachments']['size'][0] > 0 ) {
-      $uploadDir = 'uploads/survey/questions/'. $lastInsertedId .'/';
-      $upload = Media::upload($_FILES['attachments'], [    
-      'extensions' => ['jpg', 'jpeg', 'png'],        
-      'uploadDir' => $uploadDir
-      ]);
-      if ( isset($upload['files']) ) {
-        $attachments = $upload['files'];
-      } else {
-        foreach ($this->getDirectoryFiles( site_base($uploadDir) ) as $key => $file) {          
-          File::deleteFile($file);        
-        }
-        return $this->jsonResponse('error', $upload['errors'][0]);      
-      }
-    }
-    // save attachement with their names
-    if($attachments and $data['attachmentLabels']){
-      $fileDetails = array_combine($attachments, $data['attachmentLabels']);
-      foreach ($fileDetails as $key => $value) {
-        $db->create('survey_attachements', [
-          'object_id' => $lastInsertedId,
-          'file_name' => $key,
-          'title' => $value
+      // upload attachement to directory
+      $attachments = [];
+      if ( isset($_FILES['attachments']) and $_FILES['attachments']['size'][0] > 0 ) {
+        $uploadDir = 'uploads/survey/questions/'. $lastInsertedId .'/';
+        $upload = Media::upload($_FILES['attachments'], [    
+        'extensions' => ['jpg', 'jpeg', 'png'],        
+        'uploadDir' => $uploadDir
         ]);
+        if ( isset($upload['files']) ) {
+          $attachments = $upload['files'];
+        }
+      }
+      // save attachement with their names
+      if($attachments and $data['attachmentLabels']){
+        $fileDetails = array_combine($attachments, $data['attachmentLabels']);
+        foreach ($fileDetails as $key => $value) {
+          $db->create('survey_attachements', [
+            'object_id' => $lastInsertedId,
+            'file_name' => $key,
+            'title' => $value
+          ]);
+        }
       }
     }
+    
     return $this->jsonResponse('success', trans("Les données ont été sauvegardées avec succès !"));
   }
 
@@ -261,6 +289,22 @@ class QuestionController extends Controller
       if (is_dir($file)) {self::deleteDir($file);} else {unlink($file);}
     }
     rmdir($dirPath);
+  }
+
+  public function deleteImage ($data)
+  {
+    $attachment = Question::findAttachment($data['attachmentId']);
+    $db = getDB();
+    $db->update('survey_attachements', 'id', $data['attachmentId'], [
+      'file_name' => ""
+    ]);
+    $imagePath = "./uploads/survey/questions/". $data['qid']."/".$attachment->file_name;
+    if(isset($imagePath)){
+      unlink(site_base($imagePath));
+    }else{
+      echo "file dosnt exist";
+    }
+
   }
 
 } // END Class

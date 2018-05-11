@@ -53,6 +53,9 @@ class SurveyController extends Controller
     if(Survey::unsafe($data['name'])){
       return $this->jsonResponse('error', trans("Le champs nom est invalide, veuillez ne saisir que des caractères.")); 
     }
+    if(Survey::unsafe($data['description'])){
+      return $this->jsonResponse('error', trans("Le champs description est invalide, veuillez ne saisir que des caractères.")); 
+    }
     $created_by = Survey::getAdminId();
     if (!isset($data['name']) || !isset($data['description'])) return false;
     $db = getDB();
@@ -192,25 +195,22 @@ class SurveyController extends Controller
 
           // Check if token already exist
           $sToken = $db->prepare("SELECT COUNT(*) as count FROM survey_tokens WHERE token=?", [md5($candidat->email.$candId)], true);
-          if ($sToken->count != "0") {
-            $errors[] = sprintf(trans("Le candidat <strong>%s</strong> a déjà reçu l'invitation pour ce questionnaire."), $cDisplayName);
-            continue;
+          if ($sToken->count == "0") {
+            // Add canddiat to tokens table
+            $db->create('survey_tokens', [
+              'survey_id' => $data['survey_id'],
+              'participant_id' => $candidat->candidats_id,
+              'entity_id' => $candId,
+              'entity_name' => 'candidature',
+              'firstname' => $candidat->prenom,
+              'lastname' => $candidat->nom,
+              'token' => md5($candidat->email.$candId),
+              'completed' => 0,
+              'expired_at' => null,
+              'created_at' => date('Y-m-d H:i:s'),
+              'updated_at' => null,
+            ]);
           }
-
-          // Add canddiat to tokens table
-          $db->create('survey_tokens', [
-            'survey_id' => $data['survey_id'],
-            'participant_id' => $candidat->candidats_id,
-            'entity_id' => $candId,
-            'entity_name' => 'candidature',
-            'firstname' => $candidat->prenom,
-            'lastname' => $candidat->nom,
-            'token' => md5($candidat->email.$candId),
-            'completed' => 0,
-            'expired_at' => null,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => null,
-          ]);
 
           // Send email
           $send = $this->sendSurveyInvitation($candidat, $cDisplayName, $candidat->offer_id, $candId, $data['survey_id']);
@@ -242,8 +242,8 @@ class SurveyController extends Controller
   public function quiz($data)
   {
     $survey = Survey::find($data['params'][1]);
+    $token = Survey::getToken($data['params'][2])[0];
     $this->data['sid'] = $data['params'][1];
-    $this->data['token'] = $data['params'][2];
     $this->data['data'] = $data;
     $this->data['layout'] = 'admin';
     $this->data['breadcrumbs'] = [
@@ -253,6 +253,7 @@ class SurveyController extends Controller
     $survey = Survey::find($data['params'][1]);
     if($survey){
       $this->data['survey'] = $survey;
+      $this->data['token'] = $token;
     }
     return get_page('admin/survey/quiz', $this->data, __FILE__);
   }
@@ -260,67 +261,66 @@ class SurveyController extends Controller
 
   public function storeQuizz($data)
   {
-    // dump($data);
     $db = getDB();
     if(!Survey::checkUserResponse($data['params'][2])){
       $questions = Question::All();
-      foreach ($questions as $question) {
-        if(in_array($question->type, ["text", "textarea", "select"] )){
-          $db->create('survey_responses', [
-            'survey_question_id' => $question->id,
-            'answer' => $data[$question->id],
-            'token'  => $data['params'][2],
-          ]);
-        }else if(in_array($question->type, ["checkbox", "radio"] )){
-          foreach ($data[$question->id] as $key => $value) {
+      $countQuestions = Survey::countQuestions($data['params'][1]);
+      if((count($data) - 1) != $countQuestions){
+        return $this->jsonResponse('error', trans("Veuillez répondre sur toutes les questions !!!"));
+      }else{
+        foreach ($questions as $question) {
+          if(in_array($question->type, ["text", "textarea", "select"] )){
             $db->create('survey_responses', [
               'survey_question_id' => $question->id,
-              'answer' => $value,
+              'answer' => $data[$question->id],
               'token'  => $data['params'][2],
             ]);
-          }
-        }else if($question->type =="file" ){
-          foreach ($data[$question->id] as $key => $value) {
-            $db->create('survey_responses', [
-              'survey_question_id' => $question->id,
-              'survey_question_answer_id' => $key,
-              'answer' => $value,
-              'token'  => $data['params'][2],
-            ]);
+          }else if(in_array($question->type, ["checkbox", "radio"] )){
+            foreach ($data[$question->id] as $key => $value) {
+              $db->create('survey_responses', [
+                'survey_question_id' => $question->id,
+                'answer' => $value,
+                'token'  => $data['params'][2],
+              ]);
+            }
+          }else if($question->type =="file" ){
+            foreach ($data[$question->id] as $key => $value) {
+              $db->create('survey_responses', [
+                'survey_question_id' => $question->id,
+                'survey_question_answer_id' => $key,
+                'answer' => $value,
+                'token'  => $data['params'][2],
+              ]);
+            }
           }
         }
+        $db->update('survey_tokens', 'token', $data['params'][2], [
+          'completed' => 1,
+          'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+        return $this->jsonResponse('success', trans("Merci pour votre réponse !"));
       }
     }else{
       return $this->jsonResponse('error', trans("Vous avez déjà répondu sur ce questionnaire !"));
     }
 
-    $db->update('survey_tokens', 'token', $data['params'][2], [
-      'completed' => 1,
-      'updated_at' => date('Y-m-d H:i:s'),
-    ]);
 
-    return $this->jsonResponse('success', trans("Merci pour votre réponse !"));
 
   }
 
   public function quizzResult($data)
   {
-    // dump(Survey::calculateSurveyNote($data['params'][1], $data['params'][2]));
-    $survey = Survey::find($data['params'][1]);
-    $countQuestions = Survey::countQuestions($data['params'][1]);
+    $token = Survey::getTokenByEntityId($data['params'][1])[0];
+    $survey = Survey::find($token->survey_id);
+    $countQuestions = Survey::countQuestions($token->survey_id);
     $this->data['countQuestions'] = $countQuestions;
-    $this->data['sid'] = $data['params'][1];
-    $this->data['token'] = $data['params'][2];
+    $this->data['sid'] = $token->survey_id;
     $this->data['layout'] = 'admin';
-    $this->data['breadcrumbs'] = [
-      trans("Questionnaire"),
-      isset($survey->name) ? $survey->name : trans("Introuvable"),
-      trans("Resultats")
-    ];
     if($survey){
       $this->data['survey'] = $survey;
+      $this->data['token'] = $token;
     }
-    return get_page('admin/survey/quizz-result', $this->data, __FILE__);
+    return Ajax::renderAjaxView(trans("Résultat du questionnaire"), 'admin/survey/quizz-result', $this->data, __FILE__);
   }
 
 } // END Class

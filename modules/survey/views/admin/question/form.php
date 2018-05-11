@@ -95,20 +95,24 @@ use App\Form;
                 </div>
                 <div class="imageTypeRow">
                     <div class="col-md-5">
-                        <div class="input-group file-upload" id="<?= (!empty($question->id) and $question->type == "file") ? $choice->id:'' ?>" <?= (!empty($question->id) and $question->type == "file") ? 'style="display:none" ':'' ?> >
-                            <input type="text" class="form-control" name="fileName[0]" disabled placeholder="<?= trans_e("Choisissez l'image") ?>">
-                            <label class="input-group-btn">
-                            <span class="btn btn-success btn-sm">
-                                <i class="fa fa-upload"></i>
-                                <input type="file" class="form-control attachments" name="attachments[]" accept="image/*">
-                            </span>
-                            </label>
-                        </div>
-                        <?php if(!empty($question->id) and $question->type == "file"){ ?>
-                        <div class="answerImage" id="<?= (!empty($question->id) and $question->type == "file") ? $choice->id:'' ?>">
-                            <img src="<?= site_url("uploads/survey/questions/".$question->id."/".$choice->file_name) ?>" class="img-responsive" width="50" alt="image choice" required>
-                            <span class="deleteImage" data-id="<?= !empty($question->id) ? $choice->id : '' ?>"> <i class="fa fa-close"></i> </span>
-                        </div>
+                        <?php if(!empty($question->id) and $question->type == "file" and !empty($choice->file_name)){ ?>
+                            <div class="answerImage" id="<?= (!empty($question->id) and $question->type == "file") ? $choice->id:'' ?>">
+                                <img src="<?= site_url("uploads/survey/questions/".$question->id."/".$choice->file_name) ?>" class="img-responsive" width="50" alt="image choice" required>
+                                <span class="deleteImage" data-id="<?= !empty($question->id) ? $choice->id : '' ?>" onclick="return chmModal.confirm('', '', '<?php trans_e("Êtes-vous sûr de vouloir supprimer cette question ?") ?>', 'Question.deleteImage', &#123;'sid': <?= $sid ?>, 'gid':<?= $gid ?>, 'qid':<?= $question->id ?>, 'attachmentId':<?= $choice->id ?> &#125;, {width: 335})" >
+                                    <i class="fa fa-close"></i> 
+                                </span>
+                            </div>
+                        <?php }else{ ?>
+                            <div class="input-group file-upload" id="<?= (!empty($question->id) and $question->type == "file") ? $choice->id:'' ?>" >
+                                <input type="text" class="form-control" name="fileName[0]" disabled placeholder="<?= trans_e("Choisissez l'image") ?>">
+                                <label class="input-group-btn">
+                                <span class="btn btn-success btn-sm">
+                                    <i class="fa fa-upload"></i>
+                                    <input type="file" class="form-control attachments" name="attachments[]" accept=".png, .jpg, .jpeg">
+                                    <input type="hidden" name="<?php if((!empty($question->id) and $question->type == "file")){echo "attachmentsId[]";} ?>" value="<?= (!empty($question->id) and $question->type == "file") ? $choice->id:'' ?>">
+                                </span>
+                                </label>
+                            </div>
                         <?php } ?>
                     </div>
                     <div class="col-md-4">
@@ -146,6 +150,11 @@ use App\Form;
 
 <script>
 $(function() {
+    $('select#questionType').attr('disabled', 'disabled');
+    $(':submit').on('click', function() {
+        $('select#questionType').removeAttr('disabled');
+    });
+
     $("#questionType").change(function(){
         value = $(this).val()
         if(value == "text" || value == "textarea" ){
@@ -247,6 +256,7 @@ $(function() {
     $('form').on('chmFormSuccess', function(){
         chmTable.refresh('#questionsTable')
     })
+    
 
     $(".deleteLine ,.deleteLine2").on('click', function(){
         var $this = $(this);

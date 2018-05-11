@@ -36,4 +36,16 @@ export default class Question {
     })
   }
 
+  static deleteImage (params) {
+    window.chmModal.show({
+      type: 'POST',
+      url: window.chmSite.url('backend/survey/' + params.sid + '/group/' + params.gid + '/question/' + params.qid + '/attachments/' + params.attachmentId + '/deleteImage'),
+      data: params
+    }, {
+      onSuccess: (response) => {
+        this.form({'sid': params.sid, 'gid': params.gid, 'qid': params.qid})
+      }
+    })
+  }
+
 }

@@ -1,8 +1,8 @@
 .phpintel
 export_git_diff.bat
 /_front/node_modules
-config/parameters.php
-config/database.php
+/config/parameters.php
+/config/database.php
 /apps/upload
 /messages
 /uploads

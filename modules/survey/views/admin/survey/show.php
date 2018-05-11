@@ -58,7 +58,7 @@ use App\Form;
                                 <?php } ?>
                             </select> 
                         </div>
-                        <?php if(($key+1) % 4 == 0 ) { ?>
+                        <?php if(($key ++) % 4 == 0 ) { ?>
                             <div class="clearfix"></div> 
                         <?php } ?>
                     <?php } ?>

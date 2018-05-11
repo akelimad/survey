@@ -45,7 +45,7 @@ class Survey {
 
   public static function countQuestions($sid)
   {
-    $survey = getDB()->prepare("SELECT count(*) as count FROM survey_questions as q WHERE q.survey_id = ? ", [$sid], true);
+    $survey = getDB()->prepare("SELECT count(*) as count FROM survey_questions as q WHERE q.type != 'text' and q.type != 'textarea' and q.survey_id = ? ", [$sid], true);
     return $survey->count;
   }
 
@@ -118,19 +118,34 @@ class Survey {
     }
   }
 
-  public static function calculateSurveyNote($sid, $token)
+  public static function questionCorrectAnswer($qid)
   {
-    $answers = getDB()->prepare("SELECT COUNT(*) as count FROM survey_question_answers a where a.is_correct = 1 group by a.survey_question_id");
+    $correctAnswers = getDB()->prepare("SELECT * FROM survey_question_answers a where a.survey_question_id = ? and a.is_correct = 1", [$qid]);
+    return $correctAnswers;
+  }
 
-    $responses = getDB()->prepare("SELECT COUNT(*) as count FROM survey_responses r where r.survey_question_answer_id is NULL and r.answer REGEXP '^[0-9]+$' group by r.survey_question_id");
-    $new_array=[];
-    foreach ($answers as $key => $value) {
-      $new_array[$key] = $value;
-    }
-    foreach ($responses as $key => $value) {
-      $new_array[$key] = $value;
-    }
-    return $new_array;
+  public static function getTokenByEntityId($entityId)
+  {
+    $token = getDB()->findByColumn("survey_tokens", "entity_id", $entityId);
+    return $token;
+  }
+
+  public static function checkCandidatResponse($entityId)
+  {
+    $check = getDB()->prepare("SELECT * FROM survey_tokens as t WHERE t.completed = 1 AND t.entity_id = ? and t.updated_at IS NOT NULL", [$entityId], true);
+    return $check;
+  }
+
+  public static function getToken($token)
+  {
+    $token = getDB()->findByColumn("survey_tokens", "token", $token);
+    return $token;
+  }
+
+  public static function rememberCandidat($entityId)
+  {
+    $remember = getDB()->prepare("SELECT * FROM survey_tokens as t WHERE t.completed = 0 AND t.entity_id = ? and t.updated_at IS NULL", [$entityId], true);
+    return $remember;
   }
 
 
